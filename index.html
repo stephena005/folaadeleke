@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fola Adeleke®</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --black: #000;
+      --white: #fff;
+      --grey-light: #eee;
+      --grey-mid: #999;
+      --font: 'Courier New', Courier, monospace;
+      --spacing: 0.2em;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      font-family: var(--font);
+      background: var(--white);
+      color: var(--black);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* ── MAIN ── */
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+      text-align: center;
+    }
+
+    /* ── BRAND ── */
+    .brand {
+      font-family: var(--font);
+      font-size: clamp(16px, 3vw, 22px);
+      font-weight: normal;
+      letter-spacing: 0.35em;
+      margin-bottom: 48px;
+    }
+
+    /* ── DIVIDER ── */
+    .rule {
+      width: 48px;
+      border: none;
+      border-top: 1px solid var(--black);
+      margin: 0 auto 48px;
+    }
+
+    /* ── TAGLINE ── */
+    .tagline {
+      font-family: var(--font);
+      font-size: clamp(11px, 2vw, 13px);
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--grey-mid);
+      margin-bottom: 56px;
+    }
+
+    /* ── FORM ── */
+    .email-form {
+      width: 100%;
+      max-width: 380px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .email-form input[type="email"] {
+      width: 100%;
+      border: 1px solid var(--black);
+      border-radius: 0;
+      padding: 14px 16px;
+      font-family: var(--font);
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      outline: none;
+      background: var(--white);
+      color: var(--black);
+      -webkit-appearance: none;
+    }
+
+    .email-form input[type="email"]::placeholder {
+      color: var(--grey-mid);
+    }
+
+    .email-form input[type="email"]:focus {
+      border-color: var(--black);
+    }
+
+    .btn-submit {
+      width: 100%;
+      background: var(--black);
+      color: var(--white);
+      border: none;
+      padding: 14px;
+      font-family: var(--font);
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+
+    .btn-submit:hover:not(:disabled) {
+      opacity: 0.75;
+    }
+
+    .btn-submit:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    /* ── MESSAGES ── */
+    .form-message {
+      font-family: var(--font);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      min-height: 18px;
+    }
+
+    .form-message.error {
+      color: #c00;
+    }
+
+    .form-message.success {
+      color: var(--grey-mid);
+    }
+
+    /* ── SUCCESS STATE ── */
+    .success-state {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .success-state.visible {
+      display: flex;
+    }
+
+    .success-state p {
+      font-family: var(--font);
+      font-size: 12px;
+      letter-spacing: 0.15em;
+      color: var(--grey-mid);
+      line-height: 1.8;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--grey-light);
+      padding: 20px;
+      text-align: center;
+    }
+
+    footer p {
+      font-family: var(--font);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      color: var(--grey-mid);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 480px) {
+      .email-form {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <main>
+    <h1 class="brand">Fola Adeleke®</h1>
+    <hr class="rule" />
+    <p class="tagline">Launching Soon</p>
+
+    <!-- Email form -->
+    <form class="email-form" id="emailForm" novalidate>
+      <!-- Honeypot: hidden from humans, traps bots -->
+      <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
+      <input
+        type="email"
+        name="email"
+        id="emailInput"
+        placeholder="Your email address"
+        autocomplete="email"
+        required
+      />
+      <button type="submit" class="btn-submit" id="submitBtn">Notify Me</button>
+      <span class="form-message" id="formMessage"></span>
+    </form>
+
+    <!-- Success state (shown after submission) -->
+    <div class="success-state" id="successState">
+      <p>You're on the list.<br>We'll be in touch.</p>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2026 Fola Adeleke. All rights reserved.</p>
+  </footer>
+
+  <script>
+    var form       = document.getElementById('emailForm');
+    var input      = document.getElementById('emailInput');
+    var submitBtn  = document.getElementById('submitBtn');
+    var message    = document.getElementById('formMessage');
+    var success    = document.getElementById('successState');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      var email = input.value.trim();
+
+      // Basic client-side validation
+      if (!email || !email.includes('@')) {
+        message.textContent = 'Please enter a valid email address.';
+        message.className = 'form-message error';
+        input.focus();
+        return;
+      }
+
+      // Disable form during submission
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Submitting...';
+      message.textContent = '';
+      message.className = 'form-message';
+
+      fetch('https://formspree.io/f/xbdqgpda', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({ email: email })
+      })
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        if (data.ok || data.next) {
+          // Success — swap form for success message
+          form.style.display = 'none';
+          success.classList.add('visible');
+        } else {
+          // Formspree returned an error
+          var errMsg = (data.errors && data.errors[0] && data.errors[0].message)
+            ? data.errors[0].message
+            : 'Something went wrong. Please try again.';
+          message.textContent = errMsg;
+          message.className = 'form-message error';
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Notify Me';
+        }
+      })
+      .catch(function() {
+        message.textContent = 'Network error. Please check your connection and try again.';
+        message.className = 'form-message error';
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Notify Me';
+      });
+    });
+  </script>
+
+</body>
+</html>
