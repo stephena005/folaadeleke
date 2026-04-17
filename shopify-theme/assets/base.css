@@ -1,0 +1,287 @@
+/* ── FOLA ADELEKE — BASE STYLES ── */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --black: #000;
+  --white: #fff;
+  --grey-light: #eee;
+  --grey-mid: #999;
+  --grey-bg: #ccc;
+  --nav-height: 56px;
+  --font: 'Courier New', Courier, monospace;
+  --spacing: 0.2em;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font);
+  background: var(--white);
+  color: var(--black);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── NAVIGATION ── */
+.site-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--nav-height);
+  background: var(--white);
+  border-bottom: 1px solid var(--grey-light);
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 0 20px;
+  z-index: 100;
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+}
+
+.hamburger {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  padding: 4px 8px 4px 0;
+  color: var(--black);
+  line-height: 1;
+}
+
+.nav-brand {
+  text-align: center;
+}
+
+.nav-brand-logo {
+  height: 28px;
+  width: auto;
+  display: block;
+  object-fit: contain;
+}
+
+.nav-brand-logo-link {
+  display: block;
+}
+
+.nav-brand-text {
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: normal;
+  letter-spacing: var(--spacing);
+  text-decoration: none;
+  color: var(--black);
+}
+
+.nav-right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 20px;
+}
+
+.nav-contact {
+  font-family: var(--font);
+  font-size: 11px;
+  letter-spacing: var(--spacing);
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--black);
+}
+
+.nav-contact:hover {
+  text-decoration: underline;
+}
+
+/* ── CART ICON ── */
+.cart-icon-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  font-family: var(--font);
+  font-size: 11px;
+  letter-spacing: var(--spacing);
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--black);
+}
+
+.cart-count {
+  font-family: var(--font);
+  font-size: 9px;
+  letter-spacing: 0;
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  background: var(--black);
+  color: var(--white);
+  width: 14px;
+  height: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cart-count:empty,
+.cart-count[data-count="0"] {
+  display: none;
+}
+
+/* ── DRAWER ── */
+.drawer-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 200;
+}
+
+.drawer-overlay.open {
+  display: block;
+}
+
+.drawer {
+  position: fixed;
+  top: 0;
+  left: -260px;
+  width: 240px;
+  height: 100%;
+  background: var(--white);
+  border-right: 1px solid var(--grey-light);
+  z-index: 201;
+  transition: left 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  padding: 80px 32px 40px;
+}
+
+.drawer.open {
+  left: 0;
+}
+
+.drawer a {
+  font-family: var(--font);
+  font-size: 12px;
+  letter-spacing: var(--spacing);
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--black);
+  padding: 14px 0;
+  border-bottom: 1px solid var(--grey-light);
+}
+
+.drawer a:last-child {
+  border-bottom: none;
+}
+
+.drawer-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  font-size: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--black);
+  line-height: 1;
+}
+
+@media (max-width: 768px) {
+  .site-nav {
+    padding: 0 14px;
+  }
+}
+
+/* ── MAIN CONTENT OFFSET ── */
+.main-content {
+  padding-top: var(--nav-height);
+}
+
+/* ── FOOTER ── */
+.site-footer {
+  border-top: 1px solid var(--grey-light);
+  padding: 20px;
+  text-align: center;
+}
+
+.site-footer p {
+  font-family: var(--font);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--grey-mid);
+}
+
+.footer-instagram {
+  display: inline-block;
+  margin-bottom: 10px;
+  font-family: var(--font);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--grey-mid);
+  text-decoration: none;
+}
+
+.footer-instagram:hover {
+  color: var(--black);
+}
+
+/* ── BUTTONS ── */
+.btn-primary {
+  display: block;
+  width: 100%;
+  background: var(--black);
+  color: var(--white);
+  border: none;
+  padding: 14px;
+  font-family: var(--font);
+  font-size: 11px;
+  letter-spacing: var(--spacing);
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: opacity 0.15s;
+  text-align: center;
+  text-decoration: none;
+}
+
+.btn-primary:hover:not(:disabled) {
+  opacity: 0.75;
+}
+
+.btn-primary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  display: block;
+  width: 100%;
+  background: var(--white);
+  color: var(--black);
+  border: 1px solid var(--black);
+  padding: 13px;
+  font-family: var(--font);
+  font-size: 11px;
+  letter-spacing: var(--spacing);
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: opacity 0.15s;
+  text-align: center;
+  text-decoration: none;
+}
+
+.btn-secondary:hover {
+  background: var(--black);
+  color: var(--white);
+}

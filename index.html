@@ -3,7 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Fola Adeleke®</title>
+  <title>Fola Adeleke® — Limited Edition Fine Art Prints</title>
+  <meta name="description" content="Limited edition fine art prints by Fola Adeleke. Dropping soon." />
+
+  <!-- Open Graph -->
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://www.folaadeleke.com/" />
+  <meta property="og:title"       content="Fola Adeleke® — Limited Edition Fine Art Prints" />
+  <meta property="og:description" content="Limited edition fine art prints by Fola Adeleke. Dropping soon." />
+  <meta property="og:image"       content="https://www.folaadeleke.com/home-page.png" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card"        content="summary_large_image" />
+  <meta name="twitter:title"       content="Fola Adeleke® — Limited Edition Fine Art Prints" />
+  <meta name="twitter:description" content="Limited edition fine art prints by Fola Adeleke. Dropping soon." />
+  <meta name="twitter:image"       content="https://www.folaadeleke.com/home-page.png" />
   <style>
     *, *::before, *::after {
       box-sizing: border-box;
@@ -143,6 +157,15 @@
     .form-message.error   { color: #c00; }
     .form-message.success { color: var(--grey-mid); }
 
+    .privacy-notice {
+      font-family: var(--font);
+      font-size: 9px;
+      letter-spacing: 0.05em;
+      color: var(--grey-mid);
+      text-align: center;
+      line-height: 1.6;
+    }
+
     .success-state {
       display: none;
       flex-direction: column;
@@ -278,6 +301,7 @@
       />
       <button type="submit" class="btn-submit" id="submitBtn">Notify Me</button>
       <span class="form-message" id="formMessage"></span>
+      <p class="privacy-notice">By signing up you agree to receive occasional emails from Fola Adeleke. No spam, unsubscribe anytime.</p>
     </form>
 
     <div class="success-state" id="successState">

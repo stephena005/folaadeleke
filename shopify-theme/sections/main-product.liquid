@@ -1,0 +1,179 @@
+{{ 'product.css' | asset_url | stylesheet_tag }}
+
+<section class="product-page" id="product-{{ product.id }}">
+
+  <!-- ── IMAGE GALLERY ── -->
+  <div class="product-gallery">
+    {%- if product.images.size > 0 -%}
+      <div class="gallery-main" id="gallery-main">
+        <img
+          src="{{ product.featured_image | image_url: width: 1200 }}"
+          alt="{{ product.featured_image.alt | escape }}"
+          id="main-image"
+          loading="eager"
+          width="1200"
+          height="{{ 1200 | divided_by: product.featured_image.aspect_ratio | round }}"
+        />
+      </div>
+
+      {%- if product.images.size > 1 -%}
+        <div class="gallery-thumbs" id="gallery-thumbs">
+          {%- for image in product.images -%}
+            <button
+              class="thumb-btn{% if forloop.first %} active{% endif %}"
+              data-src="{{ image | image_url: width: 1200 }}"
+              data-alt="{{ image.alt | escape }}"
+              aria-label="View image {{ forloop.index }}"
+            >
+              <img
+                src="{{ image | image_url: width: 200 }}"
+                alt="{{ image.alt | escape }}"
+                loading="lazy"
+                width="200"
+                height="{{ 200 | divided_by: image.aspect_ratio | round }}"
+              />
+            </button>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    {%- else -%}
+      <div class="gallery-main gallery-placeholder">
+        <span>{{ product.title }}</span>
+      </div>
+    {%- endif -%}
+  </div>
+
+  <!-- ── PRODUCT DETAILS ── -->
+  <div class="product-details">
+
+    <!-- Breadcrumb -->
+    <p class="product-breadcrumb">
+      <a href="{{ routes.collections_url }}">Shop</a>
+      <span>/</span>
+      <span>{{ product.title }}</span>
+    </p>
+
+    <!-- Title -->
+    <h1 class="product-title">{{ product.title }}</h1>
+
+    <!-- Price -->
+    <p class="product-price" id="product-price">
+      {%- if product.compare_at_price > product.price -%}
+        <span class="price-original">{{ product.compare_at_price | money }}</span>
+        <span class="price-sale">{{ product.price | money }}</span>
+      {%- else -%}
+        {{ product.price | money }}
+      {%- endif -%}
+    </p>
+
+    <!-- Spec row: A1 only -->
+    <div class="product-spec-row">
+      <span class="spec-label">Size</span>
+      <span class="spec-value">A1 — 594 × 841 mm / 23.4 × 33.1 in</span>
+    </div>
+
+    <div class="product-spec-row">
+      <span class="spec-label">Edition</span>
+      <span class="spec-value">
+        {%- if product.metafields.custom.edition != blank -%}
+          {{ product.metafields.custom.edition }}
+        {%- else -%}
+          Limited Edition
+        {%- endif -%}
+      </span>
+    </div>
+
+    <!-- Divider -->
+    <hr class="product-rule" />
+
+    <!-- Add to Cart Form -->
+    {%- form 'product', product, id: 'product-form', novalidate: 'novalidate' -%}
+      <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" />
+
+      {%- if product.available -%}
+        <button
+          type="submit"
+          class="btn-primary"
+          id="add-to-cart-btn"
+          {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}
+        >
+          {%- if product.selected_or_first_available_variant.available -%}
+            Add to Cart
+          {%- else -%}
+            Sold Out
+          {%- endif -%}
+        </button>
+      {%- else -%}
+        <button type="button" class="btn-primary" disabled>Sold Out</button>
+      {%- endif -%}
+
+    {%- endform -%}
+
+    <!-- Description -->
+    {%- if product.description != blank -%}
+      <div class="product-description">
+        {{ product.description }}
+      </div>
+    {%- endif -%}
+
+    <!-- Shipping / Details accordion -->
+    <div class="product-accordion">
+      <button class="accordion-trigger" aria-expanded="false" data-accordion="shipping">
+        <span>Shipping & Delivery</span>
+        <span class="accordion-icon">+</span>
+      </button>
+      <div class="accordion-body" id="accordion-shipping" hidden>
+        <p>Prints are shipped flat, wrapped in acid-free tissue, and packaged in a rigid mailer. Dispatch within 3–5 business days. Tracked shipping worldwide.</p>
+      </div>
+
+<button class="accordion-trigger" aria-expanded="false" data-accordion="returns">
+        <span>Returns</span>
+        <span class="accordion-icon">+</span>
+      </button>
+      <div class="accordion-body" id="accordion-returns" hidden>
+        <p>Each print is made to order and part of a limited edition. We take great care with every order. If your print arrives damaged or not as described, please contact us within 7 days of receipt and we will make it right.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+  // ── Thumbnail gallery swap ──
+  var thumbs = document.querySelectorAll('.thumb-btn');
+  var mainImg = document.getElementById('main-image');
+
+  thumbs.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      mainImg.src = btn.dataset.src;
+      mainImg.alt = btn.dataset.alt;
+      thumbs.forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+    });
+  });
+
+  // ── Accordion ──
+  var triggers = document.querySelectorAll('.accordion-trigger');
+
+  triggers.forEach(function(trigger) {
+    trigger.addEventListener('click', function() {
+      var key = trigger.dataset.accordion;
+      var body = document.getElementById('accordion-' + key);
+      var expanded = trigger.getAttribute('aria-expanded') === 'true';
+      var icon = trigger.querySelector('.accordion-icon');
+
+      trigger.setAttribute('aria-expanded', !expanded);
+      body.hidden = expanded;
+      icon.textContent = expanded ? '+' : '−';
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Product",
+  "tag": "section",
+  "class": "section-product",
+  "settings": []
+}
+{% endschema %}
