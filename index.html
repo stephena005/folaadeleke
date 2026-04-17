@@ -284,6 +284,8 @@
       <p>You're on the list.<br>We'll be in touch.</p>
     </div>
 
+    <a class="shop-link" id="shopLink" href="https://shop.folaadeleke.com" style="display:none;">Shop Now</a>
+
   </main>
 
   <footer>
@@ -299,12 +301,10 @@
       function tick() {
         var diff = target - Date.now();
         if (diff <= 0) {
-          document.getElementById('cd-days').textContent  = '00';
-          document.getElementById('cd-hours').textContent = '00';
-          document.getElementById('cd-mins').textContent  = '00';
-          document.getElementById('cd-secs').textContent  = '00';
-          document.getElementById('cd-ms').textContent    = '000';
-          document.querySelector('.tagline').textContent  = 'Available Now';
+          document.querySelector('.countdown').style.display = 'none';
+          document.querySelector('.tagline').textContent     = 'Available Now';
+          document.getElementById('emailForm').style.display = 'none';
+          document.getElementById('shopLink').style.display  = 'inline-block';
           return;
         }
         document.getElementById('cd-days').textContent  = pad2(Math.floor(diff / 86400000));

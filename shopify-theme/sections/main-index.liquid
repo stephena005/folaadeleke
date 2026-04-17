@@ -1,0 +1,74 @@
+{{ 'collection.css' | asset_url | stylesheet_tag }}
+
+{%- assign prints = collections['all'] -%}
+
+<section class="collection-page">
+
+  <!-- ── HEADER ── -->
+  <div class="collection-header">
+    <h1 class="collection-title">Prints</h1>
+    <p class="collection-description">Limited edition fine art prints</p>
+  </div>
+
+  <!-- ── PRODUCT COUNT ── -->
+  <div class="collection-meta">
+    <span>{{ prints.products_count }} {{ prints.products_count | pluralize: 'print', 'prints' }}</span>
+  </div>
+
+  <!-- ── GRID ── -->
+  {%- if prints.products.size > 0 -%}
+    <div class="collection-grid">
+      {%- for product in prints.products -%}
+        <div class="product-card">
+
+          <!-- Image -->
+          <a class="product-card-image-link" href="{{ product.url }}">
+            <div class="product-card-image">
+              {%- if product.featured_image -%}
+                <img
+                  src="{{ product.featured_image | image_url: width: 800 }}"
+                  alt="{{ product.featured_image.alt | escape }}"
+                  loading="lazy"
+                  width="{{ product.featured_image.width }}"
+                  height="{{ product.featured_image.height }}"
+                >
+              {%- else -%}
+                <span class="placeholder-label">No image</span>
+              {%- endif -%}
+              {%- unless product.available -%}
+                <span class="sold-out-badge">Sold out</span>
+              {%- endunless -%}
+            </div>
+          </a>
+
+          <!-- Info -->
+          <div class="product-card-info">
+            <a class="product-card-name" href="{{ product.url }}">{{ product.title }}</a>
+            {%- if product.description != blank -%}
+              <p class="product-card-caption">{{ product.description | strip_html | truncate: 160 }}</p>
+            {%- endif -%}
+            <span class="product-card-price">{{ product.price | money }}</span>
+          </div>
+
+          <!-- Button -->
+          {%- if product.available -%}
+            <a class="btn-cart" href="{{ product.url }}">View Print</a>
+          {%- else -%}
+            <span class="btn-cart btn-cart--sold-out">Sold Out</span>
+          {%- endif -%}
+
+        </div>
+      {%- endfor -%}
+    </div>
+  {%- else -%}
+    <p class="collection-empty">No prints available</p>
+  {%- endif -%}
+
+</section>
+
+{% schema %}
+{
+  "name": "Homepage",
+  "settings": []
+}
+{% endschema %}
