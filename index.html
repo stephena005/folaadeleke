@@ -67,6 +67,24 @@
       margin-bottom: 56px;
     }
 
+    .shop-link {
+      display: inline-block;
+      margin-top: 32px;
+      font-family: var(--font);
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--black);
+      text-decoration: none;
+      border-bottom: 1px solid var(--black);
+      padding-bottom: 2px;
+    }
+
+    .shop-link:hover {
+      color: var(--grey-mid);
+      border-color: var(--grey-mid);
+    }
+
     .email-form {
       width: 100%;
       max-width: 380px;
@@ -155,8 +173,62 @@
       color: var(--grey-mid);
     }
 
+    /* ── COUNTDOWN ── */
+    .countdown {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 0;
+      margin-bottom: 48px;
+    }
+
+    .cd-unit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 64px;
+    }
+
+    .cd-num {
+      font-family: var(--font);
+      font-size: clamp(28px, 6vw, 52px);
+      font-weight: normal;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .cd-unit--ms .cd-num {
+      font-size: clamp(16px, 3vw, 26px);
+      color: var(--grey-mid);
+    }
+
+    .cd-label {
+      font-family: var(--font);
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--grey-mid);
+      margin-top: 6px;
+    }
+
+    .cd-sep {
+      font-family: var(--font);
+      font-size: clamp(24px, 5vw, 44px);
+      line-height: 1;
+      color: var(--grey-light);
+      padding: 0 4px;
+    }
+
+    .cd-sep--ms {
+      font-size: clamp(14px, 2.5vw, 22px);
+      padding-top: 6px;
+    }
+
     @media (max-width: 480px) {
       .email-form { max-width: 100%; }
+      .cd-unit { min-width: 44px; }
+      .cd-sep { padding: 0 2px; }
     }
   </style>
 </head>
@@ -165,7 +237,34 @@
   <main>
     <h1 class="brand">Fola Adeleke®</h1>
     <hr class="rule" />
-    <p class="tagline">Launching Soon</p>
+    <p class="tagline">Dropping Sunday — 12PM GMT</p>
+
+    <div class="countdown">
+      <div class="cd-unit">
+        <span class="cd-num" id="cd-days">00</span>
+        <span class="cd-label">Days</span>
+      </div>
+      <span class="cd-sep">:</span>
+      <div class="cd-unit">
+        <span class="cd-num" id="cd-hours">00</span>
+        <span class="cd-label">Hrs</span>
+      </div>
+      <span class="cd-sep">:</span>
+      <div class="cd-unit">
+        <span class="cd-num" id="cd-mins">00</span>
+        <span class="cd-label">Mins</span>
+      </div>
+      <span class="cd-sep">:</span>
+      <div class="cd-unit">
+        <span class="cd-num" id="cd-secs">00</span>
+        <span class="cd-label">Secs</span>
+      </div>
+      <span class="cd-sep cd-sep--ms">:</span>
+      <div class="cd-unit cd-unit--ms">
+        <span class="cd-num" id="cd-ms">000</span>
+        <span class="cd-label">Ms</span>
+      </div>
+    </div>
 
     <form class="email-form" id="emailForm" novalidate>
       <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
@@ -184,6 +283,7 @@
     <div class="success-state" id="successState">
       <p>You're on the list.<br>We'll be in touch.</p>
     </div>
+
   </main>
 
   <footer>
@@ -191,6 +291,32 @@
   </footer>
 
   <script>
+    // ── COUNTDOWN ──
+    (function() {
+      var target = new Date('2026-04-19T12:00:00Z').getTime();
+      function pad2(n) { return String(Math.floor(n)).padStart(2, '0'); }
+      function pad3(n) { return String(Math.floor(n)).padStart(3, '0'); }
+      function tick() {
+        var diff = target - Date.now();
+        if (diff <= 0) {
+          document.getElementById('cd-days').textContent  = '00';
+          document.getElementById('cd-hours').textContent = '00';
+          document.getElementById('cd-mins').textContent  = '00';
+          document.getElementById('cd-secs').textContent  = '00';
+          document.getElementById('cd-ms').textContent    = '000';
+          document.querySelector('.tagline').textContent  = 'Available Now';
+          return;
+        }
+        document.getElementById('cd-days').textContent  = pad2(Math.floor(diff / 86400000));
+        document.getElementById('cd-hours').textContent = pad2(Math.floor((diff % 86400000) / 3600000));
+        document.getElementById('cd-mins').textContent  = pad2(Math.floor((diff % 3600000) / 60000));
+        document.getElementById('cd-secs').textContent  = pad2(Math.floor((diff % 60000) / 1000));
+        document.getElementById('cd-ms').textContent    = pad3(diff % 1000);
+        requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    })();
+
     var form      = document.getElementById('emailForm');
     var input     = document.getElementById('emailInput');
     var submitBtn = document.getElementById('submitBtn');
