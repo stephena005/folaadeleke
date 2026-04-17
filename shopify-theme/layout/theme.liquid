@@ -34,11 +34,11 @@
 
       <div class="nav-brand">
         {%- if settings.logo != blank -%}
-          <a href="{{ routes.root_url }}" class="nav-brand-logo-link">
+          <a href="https://www.folaadeleke.com" class="nav-brand-logo-link">
             {{ settings.logo | image_url: width: 200 | image_tag: class: 'nav-brand-logo', alt: shop.name }}
           </a>
         {%- else -%}
-          <a href="{{ routes.root_url }}" class="nav-brand-text">{{ shop.name }}</a>
+          <a href="https://www.folaadeleke.com" class="nav-brand-text">{{ shop.name }}</a>
         {%- endif -%}
       </div>
 
@@ -60,7 +60,7 @@
   <!-- ── DRAWER ── -->
   <div class="drawer" id="drawer" aria-hidden="true">
     <button class="drawer-close" id="drawer-close" aria-label="Close menu">&times;</button>
-    <a href="{{ routes.root_url }}">Home</a>
+    <a href="https://www.folaadeleke.com">Home</a>
     <a href="{{ routes.collections_url }}">Prints</a>
     <a href="https://www.folaadeleke.com/site.html#contact">Contact</a>
   </div>
