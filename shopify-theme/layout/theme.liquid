@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="{{ request.locale.iso_code }}">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#ffffff" />
+
+  <title>
+    {%- if page_title == blank -%}
+      {{ shop.name }}
+    {%- else -%}
+      {{ page_title }} — {{ shop.name }}
+    {%- endif -%}
+  </title>
+
+  {%- if page_description -%}
+    <meta name="description" content="{{ page_description | escape }}" />
+  {%- endif -%}
+
+  {{ content_for_header }}
+
+  {{ 'base.css' | asset_url | stylesheet_tag }}
+</head>
+
+<body>
+
+  <!-- ── NAVIGATION ── -->
+  <header>
+    <nav class="site-nav">
+      <div class="nav-left">
+        <button class="hamburger" id="hamburger-btn" aria-label="Menu" aria-expanded="false">&#9776;</button>
+      </div>
+
+      <div class="nav-brand">
+        {%- if settings.logo != blank -%}
+          <a href="https://www.folaadeleke.com/site.html" class="nav-brand-logo-link">
+            {{ settings.logo | image_url: width: 200 | image_tag: class: 'nav-brand-logo', alt: shop.name }}
+          </a>
+        {%- else -%}
+          <a href="https://www.folaadeleke.com/site.html" class="nav-brand-text">{{ shop.name }}</a>
+        {%- endif -%}
+      </div>
+
+      <div class="nav-right">
+        <a href="https://www.folaadeleke.com/site.html#contact" class="nav-contact">Contact</a>
+        <a href="{{ routes.cart_url }}" class="cart-icon-wrap" aria-label="Cart">
+          Cart
+          <span class="cart-count" data-count="{{ cart.item_count }}">
+            {%- if cart.item_count > 0 -%}{{ cart.item_count }}{%- endif -%}
+          </span>
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ── DRAWER OVERLAY ── -->
+  <div class="drawer-overlay" id="drawer-overlay"></div>
+
+  <!-- ── DRAWER ── -->
+  <div class="drawer" id="drawer" aria-hidden="true">
+    <button class="drawer-close" id="drawer-close" aria-label="Close menu">&times;</button>
+    <a href="https://www.folaadeleke.com/site.html">Home</a>
+    <a href="{{ routes.collections_url }}">Prints</a>
+    <a href="https://www.folaadeleke.com/site.html#contact">Contact</a>
+  </div>
+
+  <script>
+    var hamburger = document.getElementById('hamburger-btn');
+    var overlay   = document.getElementById('drawer-overlay');
+    var drawer    = document.getElementById('drawer');
+    var closeBtn  = document.getElementById('drawer-close');
+
+    function openDrawer() {
+      drawer.classList.add('open');
+      overlay.classList.add('open');
+      hamburger.setAttribute('aria-expanded', 'true');
+      drawer.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeDrawer() {
+      drawer.classList.remove('open');
+      overlay.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', 'false');
+      drawer.setAttribute('aria-hidden', 'true');
+    }
+
+    hamburger.addEventListener('click', openDrawer);
+    closeBtn.addEventListener('click', closeDrawer);
+    overlay.addEventListener('click', closeDrawer);
+  </script>
+
+  <!-- ── PAGE CONTENT ── -->
+  <main class="main-content" id="MainContent" role="main" tabindex="-1">
+    {{ content_for_layout }}
+  </main>
+
+  <!-- ── FOOTER ── -->
+  <footer class="site-footer">
+    <p>© {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>
