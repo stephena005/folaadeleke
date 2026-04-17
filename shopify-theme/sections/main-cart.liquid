@@ -1,0 +1,197 @@
+{{ 'cart.css' | asset_url | stylesheet_tag }}
+
+<section class="cart-page">
+
+  <div class="cart-header">
+    <h1 class="cart-title">Your Cart</h1>
+  </div>
+
+  {%- if cart.item_count > 0 -%}
+
+    <form action="{{ routes.cart_url }}" method="post" id="cart-form" novalidate>
+
+      <!-- ── LINE ITEMS ── -->
+      <div class="cart-items">
+        <div class="cart-items-head">
+          <span>Print</span>
+          <span class="cart-col-price">Price</span>
+          <span class="cart-col-qty">Qty</span>
+          <span class="cart-col-total">Total</span>
+          <span class="cart-col-remove"></span>
+        </div>
+
+        {%- for item in cart.items -%}
+          <div class="cart-item" data-key="{{ item.key }}">
+
+            <!-- Image -->
+            <div class="cart-item-image">
+              <a href="{{ item.url }}">
+                {%- if item.image -%}
+                  <img
+                    src="{{ item.image | image_url: width: 200 }}"
+                    alt="{{ item.image.alt | default: item.product.title | escape }}"
+                    loading="lazy"
+                    width="200"
+                    height="{{ 200 | divided_by: item.image.aspect_ratio | round }}"
+                  />
+                {%- endif -%}
+              </a>
+            </div>
+
+            <!-- Title + meta -->
+            <div class="cart-item-details">
+              <a href="{{ item.url }}" class="cart-item-title">{{ item.product.title }}</a>
+              <span class="cart-item-spec">A1 — 594 × 841 mm</span>
+              {%- if item.selling_plan_allocation -%}
+                <span class="cart-item-spec">{{ item.selling_plan_allocation.selling_plan.name }}</span>
+              {%- endif -%}
+            </div>
+
+            <!-- Unit price -->
+            <div class="cart-col-price cart-item-price">
+              {{ item.original_price | money }}
+            </div>
+
+            <!-- Quantity -->
+            <div class="cart-col-qty cart-item-qty-wrap">
+              <div class="qty-control">
+                <button
+                  type="button"
+                  class="qty-btn"
+                  data-action="decrease"
+                  data-key="{{ item.key }}"
+                  aria-label="Decrease quantity"
+                >−</button>
+                <input
+                  type="number"
+                  name="updates[]"
+                  value="{{ item.quantity }}"
+                  min="0"
+                  max="99"
+                  class="qty-input"
+                  data-key="{{ item.key }}"
+                  aria-label="Quantity"
+                />
+                <button
+                  type="button"
+                  class="qty-btn"
+                  data-action="increase"
+                  data-key="{{ item.key }}"
+                  aria-label="Increase quantity"
+                >+</button>
+              </div>
+            </div>
+
+            <!-- Line total -->
+            <div class="cart-col-total cart-item-line-price">
+              {{ item.final_line_price | money }}
+            </div>
+
+            <!-- Remove -->
+            <div class="cart-col-remove">
+              <button
+                type="button"
+                class="cart-remove-btn"
+                data-key="{{ item.key }}"
+                aria-label="Remove {{ item.product.title }}"
+              >×</button>
+            </div>
+
+          </div>
+        {%- endfor -%}
+      </div>
+
+      <!-- ── SUMMARY ── -->
+      <div class="cart-summary">
+        <div class="cart-summary-inner">
+
+          {%- if cart.cart_level_discount_applications.size > 0 -%}
+            {%- for discount in cart.cart_level_discount_applications -%}
+              <div class="cart-summary-row">
+                <span>Discount ({{ discount.title }})</span>
+                <span>−{{ discount.total_allocated_amount | money }}</span>
+              </div>
+            {%- endfor -%}
+          {%- endif -%}
+
+          <div class="cart-summary-row cart-summary-subtotal">
+            <span>Subtotal</span>
+            <span id="cart-subtotal">{{ cart.total_price | money }}</span>
+          </div>
+
+          <p class="cart-summary-note">
+            Shipping and taxes calculated at checkout.
+          </p>
+
+          <button
+            type="submit"
+            name="checkout"
+            class="btn-primary"
+            id="checkout-btn"
+          >
+            Checkout
+          </button>
+
+          <a href="{{ routes.root_url }}" class="btn-secondary cart-continue">
+            Continue Shopping
+          </a>
+
+        </div>
+      </div>
+
+    </form>
+
+  {%- else -%}
+
+    <!-- ── EMPTY CART ── -->
+    <div class="cart-empty">
+      <p class="cart-empty-message">Your cart is empty.</p>
+      <a href="{{ routes.root_url }}" class="btn-primary cart-empty-cta">
+        Shop Prints
+      </a>
+    </div>
+
+  {%- endif -%}
+
+</section>
+
+<script>
+(function() {
+  // ── Qty buttons ──
+  document.querySelectorAll('.qty-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var key    = btn.dataset.key;
+      var action = btn.dataset.action;
+      var input  = document.querySelector('.qty-input[data-key="' + key + '"]');
+      var val    = parseInt(input.value, 10) || 0;
+
+      if (action === 'increase') {
+        input.value = val + 1;
+      } else if (action === 'decrease') {
+        input.value = Math.max(0, val - 1);
+      }
+    });
+  });
+
+  // ── Remove buttons ──
+  document.querySelectorAll('.cart-remove-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var key   = btn.dataset.key;
+      var input = document.querySelector('.qty-input[data-key="' + key + '"]');
+      if (input) {
+        input.value = 0;
+        document.getElementById('cart-form').submit();
+      }
+    });
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Cart",
+  "tag": "section",
+  "class": "section-cart",
+  "settings": []
+}
+{% endschema %}
