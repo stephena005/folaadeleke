@@ -57,12 +57,13 @@
     <h1 class="product-title">{{ product.title }}</h1>
 
     <!-- Price -->
+    {%- assign current_variant = product.selected_or_first_available_variant -%}
     <p class="product-price" id="product-price">
-      {%- if product.compare_at_price > product.price -%}
-        <span class="price-original">{{ product.compare_at_price | money }}</span>
-        <span class="price-sale">{{ product.price | money }}</span>
+      {%- if current_variant.compare_at_price > current_variant.price -%}
+        <span class="price-original">{{ current_variant.compare_at_price | money }}</span>
+        <span class="price-sale">{{ current_variant.price | money }}</span>
       {%- else -%}
-        {{ product.price | money }}
+        {{ current_variant.price | money }}
       {%- endif -%}
     </p>
 
