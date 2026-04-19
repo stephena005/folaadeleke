@@ -66,6 +66,8 @@
       {%- endif -%}
     </p>
 
+    <p class="product-currency-note">Prices in GBP. International orders billed in £ — your bank converts at the current rate.</p>
+
     <!-- Size selector -->
     {%- assign size_option = nil -%}
     {%- for option in product.options_with_values -%}
@@ -243,8 +245,10 @@
     'A2': 'A2 — {{ dim_a2 }}'
   };
 
+  var currencySymbol = '{{ cart.currency.symbol }}';
+
   function formatMoney(cents) {
-    return '£' + (cents / 100).toFixed(2);
+    return currencySymbol + (cents / 100).toFixed(2);
   }
 
   var addToCartBtn = document.getElementById('add-to-cart-btn');
