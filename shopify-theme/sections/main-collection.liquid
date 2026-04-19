@@ -1,0 +1,103 @@
+{{ 'collection.css' | asset_url | stylesheet_tag }}
+
+<section class="collection-page">
+
+  <!-- ── HEADER ── -->
+  <div class="collection-header">
+    <h1 class="collection-title">
+      {%- if collection.title == 'All' or collection.handle == 'all' -%}
+        Prints
+      {%- else -%}
+        {{ collection.title }}
+      {%- endif -%}
+    </h1>
+    {%- if collection.description != blank -%}
+      <p class="collection-description">{{ collection.description }}</p>
+    {%- else -%}
+      <p class="collection-description">Limited edition fine art prints</p>
+    {%- endif -%}
+  </div>
+
+  <!-- ── PRODUCT COUNT ── -->
+  <div class="collection-meta">
+    <span>{{ collection.products_count }} {{ collection.products_count | pluralize: 'print', 'prints' }}</span>
+  </div>
+
+  <!-- ── GRID ── -->
+  {%- if collection.products.size > 0 -%}
+    <div class="collection-grid">
+      {%- for product in collection.products -%}
+        <div class="product-card">
+
+          <!-- Image -->
+          <a href="{{ product.url }}" class="product-card-image-link" tabindex="-1" aria-hidden="true">
+            <div class="product-card-image">
+              {%- if product.featured_image -%}
+                <img
+                  src="{{ product.featured_image | image_url: width: 800 }}"
+                  alt="{{ product.featured_image.alt | default: product.title | escape }}"
+                  loading="lazy"
+                  width="800"
+                  height="{{ 800 | divided_by: product.featured_image.aspect_ratio | round }}"
+                />
+              {%- else -%}
+                <span class="placeholder-label">[ Image ]</span>
+              {%- endif -%}
+
+              {%- unless product.available -%}
+                <div class="sold-out-badge">Sold Out</div>
+              {%- endunless -%}
+            </div>
+          </a>
+
+          <!-- Info -->
+          <div class="product-card-info">
+            <a href="{{ product.url }}" class="product-card-name">{{ product.title }}</a>
+            {%- if product.metafields.custom.caption != blank -%}
+              <p class="product-card-caption">
+                <em><small>{{ product.metafields.custom.caption }}</small></em>
+              </p>
+            {%- elsif product.description != blank -%}
+              <p class="product-card-caption">
+                <em><small>{{ product.description | strip_html | truncate: 180 }}</small></em>
+              </p>
+            {%- endif -%}
+            <span class="product-card-price">
+              {%- if product.price_varies -%}
+                From {{ product.price_min | money }}
+              {%- else -%}
+                {{ product.price | money }}
+              {%- endif -%}
+            </span>
+          </div>
+
+          <!-- Add to Cart / View -->
+          {%- if product.available -%}
+            {%- form 'product', product, class: 'product-card-form' -%}
+              <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" />
+              <button type="submit" class="btn-cart">Add to Cart</button>
+            {%- endform -%}
+          {%- else -%}
+            <a href="{{ product.url }}" class="btn-cart btn-cart--sold-out">View Print</a>
+          {%- endif -%}
+
+        </div>
+      {%- endfor -%}
+    </div>
+
+  {%- else -%}
+    <div class="collection-empty">
+      <p>No prints available yet.</p>
+    </div>
+  {%- endif -%}
+
+</section>
+
+{% schema %}
+{
+  "name": "Collection",
+  "tag": "section",
+  "class": "section-collection",
+  "settings": []
+}
+{% endschema %}

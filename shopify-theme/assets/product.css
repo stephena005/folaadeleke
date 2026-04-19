@@ -297,3 +297,33 @@
   line-height: 1.7;
   margin-top: 4px;
 }
+
+/* Size picker */
+.size-picker {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.size-btn {
+  font-family: var(--font);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border: 1px solid var(--grey-light);
+  background: transparent;
+  color: var(--black);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.size-btn:hover {
+  border-color: var(--black);
+}
+
+.size-btn.selected {
+  border-color: var(--black);
+  background: var(--black);
+  color: #fff;
+}
