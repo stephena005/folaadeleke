@@ -98,8 +98,8 @@
         </div>
       </div>
       {%- if product.handle == 'loud-celebration' -%}
-        {%- assign dim_a1 = '594 × 594 mm' -%}
-        {%- assign dim_a2 = '500 × 500 mm' -%}
+        {%- assign dim_a1 = '594 × 594 mm / 23.4 × 23.4 in' -%}
+        {%- assign dim_a2 = '500 × 500 mm / 19.7 × 19.7 in' -%}
       {%- else -%}
         {%- assign dim_a1 = product.metafields.custom.a1_dimensions | default: '594 × 841 mm / 23.4 × 33.1 in' -%}
         {%- assign dim_a2 = product.metafields.custom.a2_dimensions | default: '420 × 594 mm / 16.5 × 23.4 in' -%}
