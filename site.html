@@ -838,37 +838,10 @@
     <div class="countdown-section">
       <p class="countdown-label-top">Available now</p>
 
-      <div class="countdown-timer" id="countdownTimer">
-        <div class="countdown-unit">
-          <span class="countdown-number" id="cd-days">00</span>
-          <span class="countdown-unit-label">Days</span>
-        </div>
-        <span class="countdown-sep">:</span>
-        <div class="countdown-unit">
-          <span class="countdown-number" id="cd-hours">00</span>
-          <span class="countdown-unit-label">Hrs</span>
-        </div>
-        <span class="countdown-sep">:</span>
-        <div class="countdown-unit">
-          <span class="countdown-number" id="cd-mins">00</span>
-          <span class="countdown-unit-label">Mins</span>
-        </div>
-        <span class="countdown-sep">:</span>
-        <div class="countdown-unit">
-          <span class="countdown-number" id="cd-secs">00</span>
-          <span class="countdown-unit-label">Secs</span>
-        </div>
-        <span class="countdown-sep countdown-sep-ms">:</span>
-        <div class="countdown-unit countdown-ms">
-          <span class="countdown-number" id="cd-ms">000</span>
-          <span class="countdown-unit-label">Ms</span>
-        </div>
-      </div>
-
-      <div class="countdown-email">
+<div class="countdown-email">
         <input type="text" id="cdHoneypot" style="display:none" tabindex="-1" autocomplete="off" />
         <input type="email" id="cdEmail" placeholder="YOUR EMAIL" autocomplete="email" />
-        <button onclick="handleCdJoin()">Notify Me</button>
+        <button onclick="handleCdJoin()">Join the List</button>
       </div>
       <span class="countdown-msg" id="cdMsg"></span>
     </div>
@@ -1136,46 +1109,7 @@
     });
 
 
-    // ── COUNTDOWN TIMER ────────────────────────────────────
-    (function() {
-      var target = new Date('2026-04-19T11:00:00Z').getTime();
-
-      function pad2(n) { return String(Math.floor(n)).padStart(2, '0'); }
-      function pad3(n) { return String(Math.floor(n)).padStart(3, '0'); }
-
-      function tick() {
-        var now  = Date.now();
-        var diff = target - now;
-
-        if (diff <= 0) {
-          document.getElementById('cd-days').textContent  = '00';
-          document.getElementById('cd-hours').textContent = '00';
-          document.getElementById('cd-mins').textContent  = '00';
-          document.getElementById('cd-secs').textContent  = '00';
-          document.getElementById('cd-ms').textContent    = '000';
-          document.querySelector('.countdown-label-top').textContent = 'Available now';
-          return;
-        }
-
-        var days  = Math.floor(diff / 86400000);
-        var hours = Math.floor((diff % 86400000) / 3600000);
-        var mins  = Math.floor((diff % 3600000)  / 60000);
-        var secs  = Math.floor((diff % 60000)    / 1000);
-        var ms    = diff % 1000;
-
-        document.getElementById('cd-days').textContent  = pad2(days);
-        document.getElementById('cd-hours').textContent = pad2(hours);
-        document.getElementById('cd-mins').textContent  = pad2(mins);
-        document.getElementById('cd-secs').textContent  = pad2(secs);
-        document.getElementById('cd-ms').textContent    = pad3(ms);
-
-        requestAnimationFrame(tick);
-      }
-
-      requestAnimationFrame(tick);
-    })();
-
-    function handleCdJoin() {
+        function handleCdJoin() {
       var email    = document.getElementById('cdEmail').value.trim();
       var honeypot = document.getElementById('cdHoneypot').value;
       var msg      = document.getElementById('cdMsg');
