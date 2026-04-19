@@ -66,11 +66,55 @@
       {%- endif -%}
     </p>
 
-    <!-- Spec row: A1 only -->
-    <div class="product-spec-row">
-      <span class="spec-label">Size</span>
-      <span class="spec-value">A1 — 594 × 841 mm / 23.4 × 33.1 in</span>
-    </div>
+    <!-- Size selector -->
+    {%- assign size_option = nil -%}
+    {%- for option in product.options_with_values -%}
+      {%- if option.name == 'Size' -%}
+        {%- assign size_option = option -%}
+      {%- endif -%}
+    {%- endfor -%}
+
+    {%- if size_option -%}
+      <div class="product-spec-row product-size-row">
+        <span class="spec-label">Size</span>
+        <div class="size-picker" id="size-picker">
+          {%- for value in size_option.values -%}
+            {%- assign variant_for_size = nil -%}
+            {%- for v in product.variants -%}
+              {%- for opt in v.options -%}
+                {%- if opt == value -%}
+                  {%- assign variant_for_size = v -%}
+                {%- endif -%}
+              {%- endfor -%}
+            {%- endfor -%}
+            <button
+              type="button"
+              class="size-btn{% if forloop.first %} selected{% endif %}"
+              data-variant-id="{{ variant_for_size.id }}"
+              data-price="{{ variant_for_size.price }}"
+              data-size="{{ value | escape }}"
+            >{{ value }}</button>
+          {%- endfor -%}
+        </div>
+      </div>
+      {%- assign dim_a1 = product.metafields.custom.a1_dimensions | default: '594 × 841 mm / 23.4 × 33.1 in' -%}
+      {%- assign dim_a2 = product.metafields.custom.a2_dimensions | default: '420 × 594 mm / 16.5 × 23.4 in' -%}
+      <div class="product-spec-row">
+        <span class="spec-label">Dimensions</span>
+        <span class="spec-value" id="size-dimensions">
+          {%- case size_option.values.first -%}
+            {%- when 'A1' -%}{{ dim_a1 }}
+            {%- when 'A2' -%}{{ dim_a2 }}
+            {%- else -%}{{ size_option.values.first }}
+          {%- endcase -%}
+        </span>
+      </div>
+    {%- else -%}
+      <div class="product-spec-row">
+        <span class="spec-label">Size</span>
+        <span class="spec-value">A1 — 594 × 841 mm / 23.4 × 33.1 in</span>
+      </div>
+    {%- endif -%}
 
     <div class="product-spec-row">
       <span class="spec-label">Edition</span>
@@ -88,7 +132,7 @@
 
     <!-- Add to Cart Form -->
     {%- form 'product', product, id: 'product-form', novalidate: 'novalidate' -%}
-      <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" />
+      <input type="hidden" name="id" id="variant-id" value="{{ product.selected_or_first_available_variant.id }}" />
 
       {%- if product.available -%}
         <button
@@ -150,12 +194,15 @@
           <tbody>
             <tr>
               <td>A1</td>
-              <td>59.4 × 84.1 cm</td>
-              <td>23.4 × 33.1 in</td>
+              <td colspan="2">{{ dim_a1 }}</td>
+            </tr>
+            <tr>
+              <td>A2</td>
+              <td colspan="2">{{ dim_a2 }}</td>
             </tr>
           </tbody>
         </table>
-        <p class="size-guide-note">Prints are unframed. We recommend a standard A1 frame, available from most framing studios.</p>
+        <p class="size-guide-note">Prints are unframed. Both sizes correspond to standard international paper formats — frames are widely available from most framing studios.</p>
       </div>
     </div>
 
@@ -173,6 +220,31 @@
       mainImg.alt = btn.dataset.alt;
       thumbs.forEach(function(b) { b.classList.remove('active'); });
       btn.classList.add('active');
+    });
+  });
+
+  // ── Size picker ──
+  var sizeBtns = document.querySelectorAll('.size-btn');
+  var variantInput = document.getElementById('variant-id');
+  var priceEl = document.getElementById('product-price');
+  var dimensionsEl = document.getElementById('size-dimensions');
+
+  var sizeDimensions = {
+    'A1': 'A1 — {{ dim_a1 }}',
+    'A2': 'A2 — {{ dim_a2 }}'
+  };
+
+  function formatMoney(cents) {
+    return '£' + (cents / 100).toFixed(2);
+  }
+
+  sizeBtns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      sizeBtns.forEach(function(b) { b.classList.remove('selected'); });
+      btn.classList.add('selected');
+      if (variantInput) variantInput.value = btn.dataset.variantId;
+      if (priceEl) priceEl.textContent = formatMoney(parseInt(btn.dataset.price, 10));
+      if (dimensionsEl) dimensionsEl.textContent = sizeDimensions[btn.dataset.size] || btn.dataset.size;
     });
   });
 

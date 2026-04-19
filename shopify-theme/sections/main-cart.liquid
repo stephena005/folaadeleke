@@ -41,7 +41,16 @@
             <!-- Title + meta -->
             <div class="cart-item-details">
               <a href="{{ item.url }}" class="cart-item-title">{{ item.product.title }}</a>
-              <span class="cart-item-spec">A1 — 594 × 841 mm</span>
+              {%- assign size_val = item.variant.title -%}
+              {%- if size_val == 'A1' -%}
+                <span class="cart-item-spec">A1 — 594 × 841 mm</span>
+              {%- elsif size_val == 'A2' -%}
+                <span class="cart-item-spec">A2 — 420 × 594 mm</span>
+              {%- elsif size_val != blank and size_val != 'Default Title' -%}
+                <span class="cart-item-spec">{{ size_val }}</span>
+              {%- else -%}
+                <span class="cart-item-spec">A1 — 594 × 841 mm</span>
+              {%- endif -%}
               {%- if item.selling_plan_allocation -%}
                 <span class="cart-item-spec">{{ item.selling_plan_allocation.selling_plan.name }}</span>
               {%- endif -%}
