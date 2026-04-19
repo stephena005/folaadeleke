@@ -318,34 +318,8 @@
   </footer>
 
   <script>
-    // ── LAUNCH REDIRECT ──
-    // If past launch time on page load, go straight to the main site
-    var LAUNCH = new Date('2026-04-19T11:00:00Z').getTime();
-    if (Date.now() >= LAUNCH) {
-      window.location.replace('/site.html');
-    }
-
-    // ── COUNTDOWN ──
-    (function() {
-      var target = LAUNCH;
-      function pad2(n) { return String(Math.floor(n)).padStart(2, '0'); }
-      function pad3(n) { return String(Math.floor(n)).padStart(3, '0'); }
-      function tick() {
-        var diff = target - Date.now();
-        if (diff <= 0) {
-          // Redirect to main site when countdown expires
-          window.location.replace('/site.html');
-          return;
-        }
-        document.getElementById('cd-days').textContent  = pad2(Math.floor(diff / 86400000));
-        document.getElementById('cd-hours').textContent = pad2(Math.floor((diff % 86400000) / 3600000));
-        document.getElementById('cd-mins').textContent  = pad2(Math.floor((diff % 3600000) / 60000));
-        document.getElementById('cd-secs').textContent  = pad2(Math.floor((diff % 60000) / 1000));
-        document.getElementById('cd-ms').textContent    = pad3(diff % 1000);
-        requestAnimationFrame(tick);
-      }
-      requestAnimationFrame(tick);
-    })();
+    // ── LIVE — redirect immediately ──
+    window.location.replace('/site.html');
 
     var form      = document.getElementById('emailForm');
     var input     = document.getElementById('emailInput');
