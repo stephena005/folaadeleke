@@ -93,6 +93,7 @@
               data-variant-id="{{ variant_for_size.id }}"
               data-price="{{ variant_for_size.price }}"
               data-size="{{ value | escape }}"
+              data-available="{{ variant_for_size.available }}"
             >{{ value }}</button>
           {%- endfor -%}
         </div>
@@ -192,8 +193,7 @@
           <thead>
             <tr>
               <th>Format</th>
-              <th>Centimetres</th>
-              <th>Inches</th>
+              <th colspan="2">Dimensions</th>
             </tr>
           </thead>
           <tbody>
@@ -207,7 +207,11 @@
             </tr>
           </tbody>
         </table>
-        <p class="size-guide-note">Prints are unframed. Both sizes correspond to standard international paper formats — frames are widely available from most framing studios.</p>
+        {%- if product.handle == 'loud-celebration' -%}
+          <p class="size-guide-note">Prints are unframed. These are custom square formats — we recommend consulting a framing studio for a made-to-measure frame.</p>
+        {%- else -%}
+          <p class="size-guide-note">Prints are unframed. Both sizes correspond to standard international paper formats — frames are widely available from most framing studios.</p>
+        {%- endif -%}
       </div>
     </div>
 
@@ -243,6 +247,8 @@
     return '£' + (cents / 100).toFixed(2);
   }
 
+  var addToCartBtn = document.getElementById('add-to-cart-btn');
+
   sizeBtns.forEach(function(btn) {
     btn.addEventListener('click', function() {
       sizeBtns.forEach(function(b) { b.classList.remove('selected'); });
@@ -250,6 +256,11 @@
       if (variantInput) variantInput.value = btn.dataset.variantId;
       if (priceEl) priceEl.textContent = formatMoney(parseInt(btn.dataset.price, 10));
       if (dimensionsEl) dimensionsEl.textContent = sizeDimensions[btn.dataset.size] || btn.dataset.size;
+      if (addToCartBtn) {
+        var available = btn.dataset.available === 'true';
+        addToCartBtn.disabled = !available;
+        addToCartBtn.textContent = available ? 'Add to Cart' : 'Sold Out';
+      }
     });
   });
 

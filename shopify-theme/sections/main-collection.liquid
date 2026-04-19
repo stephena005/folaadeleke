@@ -71,14 +71,11 @@
             </span>
           </div>
 
-          <!-- Add to Cart / View -->
+          <!-- View Print -->
           {%- if product.available -%}
-            {%- form 'product', product, class: 'product-card-form' -%}
-              <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" />
-              <button type="submit" class="btn-cart">Add to Cart</button>
-            {%- endform -%}
+            <a href="{{ product.url }}" class="btn-cart">View Print</a>
           {%- else -%}
-            <a href="{{ product.url }}" class="btn-cart btn-cart--sold-out">View Print</a>
+            <a href="{{ product.url }}" class="btn-cart btn-cart--sold-out">Sold Out</a>
           {%- endif -%}
 
         </div>
