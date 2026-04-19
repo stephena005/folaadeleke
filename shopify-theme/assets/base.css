@@ -237,6 +237,20 @@ body {
   color: var(--black);
 }
 
+.footer-main-site {
+  display: block;
+  margin-top: 10px;
+  font-family: var(--font);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--grey-mid);
+  text-decoration: none;
+}
+
+.footer-main-site:hover {
+  color: var(--black);
+}
+
 /* ── BUTTONS ── */
 .btn-primary {
   display: block;
