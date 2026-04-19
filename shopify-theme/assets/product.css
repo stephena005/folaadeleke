@@ -137,6 +137,16 @@
   color: var(--black);
 }
 
+/* Currency note */
+.product-currency-note {
+  font-family: var(--font);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: var(--grey-mid);
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+
 /* Spec rows */
 .product-spec-row {
   display: flex;
