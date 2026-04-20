@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7ZCQ4YEN6"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-K7ZCQ4YEN6');
+  </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -809,19 +817,32 @@
 
       <!-- Default state -->
       <div id="modalForm">
-        <h2>Join Our Mailing List</h2>
-        <p>Be the first to know about exclusive drops,<br>new collections, and updates.</p>
+        <p style="font-family:'Courier New',Courier,monospace; font-size:9px; letter-spacing:0.35em; text-transform:uppercase; color:#999; margin-bottom:16px;">The Edit — Newsletter</p>
+        <h2>Stay in the loop</h2>
+        <p>First access to every drop.<br>Studio updates. Direct from Fola.</p>
         <!-- Honeypot: hidden from humans, traps bots -->
         <input type="text" id="modalHoneypot" style="display:none" tabindex="-1" autocomplete="off" />
-        <input type="email" id="emailInput" placeholder="EMAIL" autocomplete="email" />
-        <button class="btn-primary" id="joinBtn" onclick="handleJoin()">Join</button>
-        <span id="modalMessage" style="display:block;margin-top:10px;font-size:10px;letter-spacing:0.1em;min-height:16px;"></span>
+        <!-- Inline row: email + button side by side -->
+        <div style="display:flex; gap:0; margin-bottom:10px;">
+          <input type="email" id="emailInput" placeholder="Your email" autocomplete="email"
+            style="flex:1; min-width:0; border:1px solid #000; border-right:none; border-radius:0; padding:12px 14px; font-family:'Courier New',Courier,monospace; font-size:10px; letter-spacing:0.2em; text-transform:uppercase; outline:none; background:#fff; color:#000;" />
+          <button class="btn-primary" id="joinBtn" onclick="handleJoin()"
+            style="padding:12px 18px; font-size:10px; letter-spacing:0.2em; white-space:nowrap; flex-shrink:0; width:auto;">
+            Subscribe
+          </button>
+        </div>
+        <span id="modalMessage" style="display:block; font-family:'Courier New',Courier,monospace; font-size:9px; letter-spacing:0.1em; min-height:14px; text-align:center; color:#999;"></span>
+        <p style="font-family:'Courier New',Courier,monospace; font-size:8px; letter-spacing:0.06em; color:#999; margin-top:12px; line-height:1.8;">
+          By subscribing you agree to receive emails from Fola Adeleke.
+          <a href="/unsubscribe.html" style="color:#999; text-decoration:underline;">Unsubscribe</a> any time.
+        </p>
       </div>
 
       <!-- Success state -->
       <div id="modalSuccess" style="display:none;">
-        <h2>You're on the list.</h2>
-        <p>We'll be in touch with exclusive drops<br>and new collections.</p>
+        <p style="font-family:'Courier New',Courier,monospace; font-size:9px; letter-spacing:0.35em; text-transform:uppercase; color:#999; margin-bottom:16px;">The Edit</p>
+        <h2>You're in.</h2>
+        <p>Welcome to The Edit.<br>Watch your inbox.</p>
       </div>
     </div>
   </div>
@@ -1021,25 +1042,21 @@
       btn.textContent = 'Joining...';
       msg.textContent = '';
 
-      fetch('https://formspree.io/f/xbdqgpda', {
+      // ── BEEHIIV SUBSCRIBE ──
+      // Get your Publication ID from Beehiiv → Settings → Publication Details
+      // It looks like: pub_xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+      fetch('https://embeds.beehiiv.com/api/subscribe', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify({ email: email })
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: 'email=' + encodeURIComponent(email) + '&publication_id=pub_8076a54d-cd98-4a0e-bc50-5092ae40992d'
       })
-      .then(function(res) { return res.json(); })
-      .then(function(data) {
-        if (data.ok || data.next) {
+      .then(function(res) {
+        if (res.ok || res.redirected) {
           document.getElementById('modalForm').style.display = 'none';
           document.getElementById('modalSuccess').style.display = 'block';
         } else {
-          var errMsg = (data.errors && data.errors[0] && data.errors[0].message)
-            ? data.errors[0].message
-            : 'Something went wrong. Please try again.';
           msg.style.color = '#c00';
-          msg.textContent = errMsg;
+          msg.textContent = 'Something went wrong. Please try again.';
           btn.disabled = false;
           btn.textContent = 'Join';
         }

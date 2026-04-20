@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7ZCQ4YEN6"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-K7ZCQ4YEN6');
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Unsubscribe — Fola Adeleke®</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --black: #000;
+      --white: #fff;
+      --grey-light: #eee;
+      --grey-mid: #999;
+      --font: 'Courier New', Courier, monospace;
+      --spacing: 0.2em;
+      --nav-height: 56px;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      font-family: var(--font);
+      background: var(--white);
+      color: var(--black);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* ── NAV ── */
+    .site-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--nav-height);
+      background: var(--white);
+      border-bottom: 1px solid var(--grey-light);
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      padding: 0 20px;
+      z-index: 100;
+    }
+
+    .nav-brand {
+      text-align: center;
+    }
+
+    .nav-brand a {
+      font-family: var(--font);
+      font-size: 13px;
+      font-weight: normal;
+      letter-spacing: var(--spacing);
+      text-decoration: none;
+      color: var(--black);
+    }
+
+    .nav-back {
+      font-family: var(--font);
+      font-size: 11px;
+      letter-spacing: var(--spacing);
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--black);
+    }
+
+    .nav-back:hover {
+      text-decoration: underline;
+    }
+
+    /* ── MAIN ── */
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: calc(var(--nav-height) + 60px) 24px 80px;
+      max-width: 520px;
+      margin: 0 auto;
+      width: 100%;
+      text-align: center;
+    }
+
+    .page-eyebrow {
+      font-family: var(--font);
+      font-size: 9px;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--grey-mid);
+      margin-bottom: 24px;
+    }
+
+    .rule {
+      width: 48px;
+      border: none;
+      border-top: 1px solid var(--black);
+      margin: 0 auto 40px;
+    }
+
+    .page-title {
+      font-family: var(--font);
+      font-size: clamp(15px, 3vw, 20px);
+      font-weight: normal;
+      letter-spacing: 0.35em;
+      margin-bottom: 20px;
+    }
+
+    .page-copy {
+      font-family: var(--font);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      line-height: 2;
+      color: var(--grey-mid);
+      margin-bottom: 48px;
+      max-width: 360px;
+    }
+
+    /* ── FORM ── */
+    .unsub-form {
+      width: 100%;
+      max-width: 380px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .unsub-form input[type="email"],
+    .unsub-form input[type="text"] {
+      width: 100%;
+      border: 1px solid var(--black);
+      border-radius: 0;
+      padding: 14px 16px;
+      font-family: var(--font);
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      outline: none;
+      background: var(--white);
+      color: var(--black);
+      -webkit-appearance: none;
+    }
+
+    .unsub-form input[type="email"]::placeholder,
+    .unsub-form input[type="text"]::placeholder {
+      color: var(--grey-mid);
+    }
+
+    .unsub-form input[type="email"]:focus {
+      border-color: var(--black);
+    }
+
+    .btn-unsub {
+      width: 100%;
+      background: var(--white);
+      color: var(--black);
+      border: 1px solid var(--black);
+      padding: 13px;
+      font-family: var(--font);
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s, opacity 0.15s;
+    }
+
+    .btn-unsub:hover:not(:disabled) {
+      background: var(--black);
+      color: var(--white);
+    }
+
+    .btn-unsub:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .form-message {
+      font-family: var(--font);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      min-height: 18px;
+      text-align: center;
+    }
+
+    .form-message.error   { color: #c00; }
+    .form-message.success { color: var(--grey-mid); }
+
+    /* ── SUCCESS STATE ── */
+    .success-state {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      text-align: center;
+    }
+
+    .success-state.visible { display: flex; }
+
+    .success-state .success-title {
+      font-family: var(--font);
+      font-size: 13px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+    }
+
+    .success-state p {
+      font-family: var(--font);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      color: var(--grey-mid);
+      line-height: 2;
+    }
+
+    .success-state a {
+      font-family: var(--font);
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--black);
+      text-decoration: none;
+      border-bottom: 1px solid var(--black);
+      padding-bottom: 2px;
+      margin-top: 8px;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--grey-light);
+      padding: 20px;
+      text-align: center;
+    }
+
+    footer p {
+      font-family: var(--font);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      color: var(--grey-mid);
+    }
+
+    @media (max-width: 480px) {
+      .unsub-form { max-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="site-nav">
+    <div class="nav-left">
+      <a href="/" class="nav-back">&larr; Back</a>
+    </div>
+    <div class="nav-brand">
+      <a href="/">Fola Adeleke®</a>
+    </div>
+    <div></div>
+  </nav>
+
+  <main>
+
+    <p class="page-eyebrow">The Edit</p>
+    <hr class="rule" />
+    <h1 class="page-title">Unsubscribe</h1>
+
+    <p class="page-copy">
+      Enter your email below and we'll remove you from the list.
+      You won't hear from us again.
+    </p>
+
+    <form class="unsub-form" id="unsubForm" novalidate>
+      <!-- honeypot -->
+      <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
+      <input type="hidden" name="_subject" value="Unsubscribe Request — Fola Adeleke" />
+      <input type="hidden" name="type" value="unsubscribe" />
+
+      <input
+        type="email"
+        name="email"
+        id="emailInput"
+        placeholder="Your email address"
+        autocomplete="email"
+        required
+      />
+      <button type="submit" class="btn-unsub" id="submitBtn">Unsubscribe</button>
+      <span class="form-message" id="formMessage"></span>
+    </form>
+
+    <div class="success-state" id="successState">
+      <p class="success-title">Done.</p>
+      <p>
+        You've been removed from the list.<br>
+        Sorry to see you go.
+      </p>
+      <a href="/">Return home</a>
+    </div>
+
+  </main>
+
+  <footer>
+    <p>© 2026 Fola Adeleke. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Pre-fill email if passed as a URL query param
+    // e.g. /unsubscribe.html?email=user@example.com
+    (function() {
+      var params = new URLSearchParams(window.location.search);
+      var prefill = params.get('email');
+      if (prefill) {
+        document.getElementById('emailInput').value = decodeURIComponent(prefill);
+      }
+    })();
+
+    var form      = document.getElementById('unsubForm');
+    var input     = document.getElementById('emailInput');
+    var submitBtn = document.getElementById('submitBtn');
+    var message   = document.getElementById('formMessage');
+    var success   = document.getElementById('successState');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      var email = input.value.trim();
+
+      if (!email || !email.includes('@')) {
+        message.textContent = 'Please enter a valid email address.';
+        message.className = 'form-message error';
+        input.focus();
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Processing...';
+      message.textContent = '';
+      message.className = 'form-message';
+
+      // Submit unsubscribe request to Formspree.
+      // IMPORTANT: Replace YOUR_UNSUBSCRIBE_FORM_ID with a second Formspree
+      // form you create at formspree.io specifically for unsubscribe requests.
+      // This keeps subscribe and unsubscribe submissions separated in your dashboard.
+      fetch('https://formspree.io/f/YOUR_UNSUBSCRIBE_FORM_ID', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          email: email,
+          type: 'unsubscribe',
+          _subject: 'Unsubscribe Request — Fola Adeleke'
+        })
+      })
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        if (data.ok || data.next) {
+          form.style.display = 'none';
+          success.classList.add('visible');
+        } else {
+          var errMsg = (data.errors && data.errors[0] && data.errors[0].message)
+            ? data.errors[0].message
+            : 'Something went wrong. Please try again.';
+          message.textContent = errMsg;
+          message.className = 'form-message error';
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Unsubscribe';
+        }
+      })
+      .catch(function() {
+        message.textContent = 'Network error. Please check your connection and try again.';
+        message.className = 'form-message error';
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Unsubscribe';
+      });
+    });
+  </script>
+
+</body>
+</html>
