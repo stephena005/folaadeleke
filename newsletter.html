@@ -328,10 +328,14 @@
       </li>
     </ul>
 
+    <!-- Pre-fill note (shown when arriving from site subscribe form) -->
+    <p id="prefilledNote" style="display:none; font-family:'Courier New',Courier,monospace; font-size:10px; letter-spacing:0.15em; color:#999; margin-bottom:16px; text-align:center;"></p>
+
     <!-- Beehiiv subscribe embed -->
     <div style="width:100%; max-width:560px;">
       <script async src="https://subscribe-forms.beehiiv.com/embed.js"></script>
       <iframe
+        id="beehiivFrame"
         src="https://subscribe-forms.beehiiv.com/b64503cb-8e19-4aec-9d50-a7a707588ca5"
         class="beehiiv-embed"
         data-test-id="beehiiv-embed"
@@ -352,49 +356,27 @@
   </footer>
 
   <script>
-    var form      = document.getElementById('signupForm');
-    var input     = document.getElementById('emailInput');
-    var submitBtn = document.getElementById('submitBtn');
-    var message   = document.getElementById('formMessage');
-    var success   = document.getElementById('successState');
+    // Pre-fill email in Beehiiv iframe when arriving from site subscribe form
+    // e.g. /newsletter.html?email=user@example.com
+    (function() {
+      var params = new URLSearchParams(window.location.search);
+      var email  = params.get('email');
+      if (!email) return;
 
-    form.addEventListener('submit', function(e) {
-      e.preventDefault();
-
-      var email = input.value.trim();
-
-      if (!email || !email.includes('@')) {
-        message.textContent = 'Please enter a valid email address.';
-        message.className = 'form-message error';
-        input.focus();
-        return;
+      // Pass email to Beehiiv embed via src query param (pre-fills their field)
+      var iframe = document.getElementById('beehiivFrame');
+      if (iframe) {
+        iframe.src = 'https://subscribe-forms.beehiiv.com/b64503cb-8e19-4aec-9d50-a7a707588ca5'
+                   + '?email=' + encodeURIComponent(email);
       }
 
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'Subscribing...';
-      message.textContent = '';
-      message.className = 'form-message';
-
-      // ── BEEHIIV SUBSCRIBE ──
-      // no-cors: Beehiiv's embed endpoint is cross-origin restricted.
-      // The request fires silently; on resolve we show success optimistically.
-      fetch('https://embeds.beehiiv.com/api/subscribe', {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: 'email=' + encodeURIComponent(email) + '&publication_id=pub_8076a54d-cd98-4a0e-bc50-5092ae40992d'
-      })
-      .then(function() {
-        form.style.display = 'none';
-        success.classList.add('visible');
-      })
-      .catch(function() {
-        message.textContent = 'Network error. Please check your connection and try again.';
-        message.className = 'form-message error';
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Subscribe';
-      });
-    });
+      // Show a helpful note above the form
+      var note = document.getElementById('prefilledNote');
+      if (note) {
+        note.textContent = 'Your email (' + email + ') has been carried over — just click Subscribe below to confirm.';
+        note.style.display = 'block';
+      }
+    })();
   </script>
 
 </body>
