@@ -1039,33 +1039,27 @@
 
       // Disable button during submission
       btn.disabled = true;
-      btn.textContent = 'Joining...';
+      btn.textContent = 'Subscribing...';
       msg.textContent = '';
 
       // ── BEEHIIV SUBSCRIBE ──
-      // Get your Publication ID from Beehiiv → Settings → Publication Details
-      // It looks like: pub_xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+      // no-cors: Beehiiv's embed endpoint is cross-origin restricted.
+      // The request fires silently; on resolve we show success optimistically.
       fetch('https://embeds.beehiiv.com/api/subscribe', {
         method: 'POST',
+        mode: 'no-cors',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: 'email=' + encodeURIComponent(email) + '&publication_id=pub_8076a54d-cd98-4a0e-bc50-5092ae40992d'
       })
-      .then(function(res) {
-        if (res.ok || res.redirected) {
-          document.getElementById('modalForm').style.display = 'none';
-          document.getElementById('modalSuccess').style.display = 'block';
-        } else {
-          msg.style.color = '#c00';
-          msg.textContent = 'Something went wrong. Please try again.';
-          btn.disabled = false;
-          btn.textContent = 'Join';
-        }
+      .then(function() {
+        document.getElementById('modalForm').style.display = 'none';
+        document.getElementById('modalSuccess').style.display = 'block';
       })
       .catch(function() {
         msg.style.color = '#c00';
         msg.textContent = 'Network error. Please try again.';
         btn.disabled = false;
-        btn.textContent = 'Join';
+        btn.textContent = 'Subscribe';
       });
     }
 
