@@ -390,23 +390,17 @@
       message.className = 'form-message';
 
       // ── BEEHIIV SUBSCRIBE ──
-      // Get your Publication ID from Beehiiv → Settings → Publication Details
-      // It looks like: pub_xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+      // no-cors: Beehiiv's embed endpoint is cross-origin restricted.
+      // The request fires silently; on resolve we show success optimistically.
       fetch('https://embeds.beehiiv.com/api/subscribe', {
         method: 'POST',
+        mode: 'no-cors',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: 'email=' + encodeURIComponent(email) + '&publication_id=pub_8076a54d-cd98-4a0e-bc50-5092ae40992d'
       })
-      .then(function(res) {
-        if (res.ok || res.redirected) {
-          form.style.display = 'none';
-          success.classList.add('visible');
-        } else {
-          message.textContent = 'Something went wrong. Please try again.';
-          message.className = 'form-message error';
-          submitBtn.disabled = false;
-          submitBtn.textContent = 'Subscribe';
-        }
+      .then(function() {
+        form.style.display = 'none';
+        success.classList.add('visible');
       })
       .catch(function() {
         message.textContent = 'Network error. Please check your connection and try again.';

@@ -322,26 +322,21 @@
       status.textContent = '';
       status.className   = 'form-status';
 
+      // no-cors: Beehiiv's embed endpoint is cross-origin restricted.
+      // The request fires silently; on resolve we show success optimistically.
       fetch('https://embeds.beehiiv.com/api/subscribe', {
         method:  'POST',
+        mode:    'no-cors',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body:    'email=' + encodeURIComponent(email)
                + '&publication_id=pub_8076a54d-cd98-4a0e-bc50-5092ae40992d'
       })
-      .then(function(res) {
-        if (res.ok || res.redirected) {
-          // Tell parent page (if inside an iframe) that signup succeeded
-          if (window.parent !== window) {
-            window.parent.postMessage({ type: 'beehiiv:subscribed', email: email }, '*');
-          }
-          document.getElementById('formState').style.display   = 'none';
-          document.getElementById('successState').classList.add('visible');
-        } else {
-          status.textContent = 'Something went wrong. Please try again.';
-          status.className   = 'form-status error';
-          btn.disabled    = false;
-          btn.textContent = 'Subscribe';
+      .then(function() {
+        if (window.parent !== window) {
+          window.parent.postMessage({ type: 'beehiiv:subscribed', email: email }, '*');
         }
+        document.getElementById('formState').style.display   = 'none';
+        document.getElementById('successState').classList.add('visible');
       })
       .catch(function() {
         status.textContent = 'Network error. Please try again.';
