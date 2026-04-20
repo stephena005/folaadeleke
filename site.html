@@ -241,12 +241,11 @@
     .modal {
       background: var(--white);
       border: 1px solid var(--grey-light);
-      padding: 0;
-      max-width: 560px;
+      padding: 40px 36px 32px;
+      max-width: 420px;
       width: 100%;
       text-align: center;
       position: relative;
-      overflow: hidden;
     }
 
     .modal-close {
@@ -816,22 +815,32 @@
     <div class="modal" id="modal">
       <button class="modal-close" onclick="closeModal()" aria-label="Close">✕</button>
 
-      <!-- Beehiiv subscribe embed -->
-      <script async src="https://subscribe-forms.beehiiv.com/embed.js"></script>
-      <iframe
-        src="https://subscribe-forms.beehiiv.com/b64503cb-8e19-4aec-9d50-a7a707588ca5"
-        class="beehiiv-embed"
-        data-test-id="beehiiv-embed"
-        frameborder="0"
-        scrolling="no"
-        style="width:100%; height:315px; margin:0; border-radius:0 !important; background-color:transparent; box-shadow:0 0 #0000; max-width:100%; display:block;">
-      </iframe>
-      <!-- Consent footer -->
-      <div style="padding:10px 24px 16px; border-top:1px solid #eee;">
-        <p style="font-family:'Courier New',Courier,monospace; font-size:8px; letter-spacing:0.07em; color:#999; line-height:1.9; margin:0;">
+      <!-- subscribe form -->
+      <div id="modalForm">
+        <p style="font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.35em;text-transform:uppercase;color:#999;margin-bottom:14px;">The Edit — Newsletter</p>
+        <h2 style="font-family:'Courier New',Courier,monospace;font-size:14px;font-weight:normal;letter-spacing:0.3em;text-transform:uppercase;margin-bottom:10px;">Stay in the loop</h2>
+        <p style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.08em;line-height:1.9;color:#999;margin-bottom:28px;">First access to every drop.<br>Studio updates. Direct from Fola.</p>
+        <input type="text" id="modalHoneypot" style="display:none" tabindex="-1" autocomplete="off" />
+        <div style="display:flex;width:100%;margin-bottom:10px;">
+          <input type="email" id="modalEmail" placeholder="YOUR EMAIL" autocomplete="email"
+            style="flex:1;min-width:0;border:1px solid #000;border-right:none;padding:13px 14px;font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;outline:none;background:#fff;color:#000;border-radius:0;-webkit-appearance:none;" />
+          <button onclick="handleJoin()" id="joinBtn"
+            style="background:#000;color:#fff;border:1px solid #000;padding:13px 18px;font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;cursor:pointer;white-space:nowrap;border-radius:0;flex-shrink:0;">
+            Subscribe
+          </button>
+        </div>
+        <p id="modalMessage" style="font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.1em;color:#999;min-height:14px;margin-bottom:12px;"></p>
+        <p style="font-family:'Courier New',Courier,monospace;font-size:8px;letter-spacing:0.06em;color:#999;line-height:1.9;">
           By subscribing you agree to receive emails from Fola Adeleke.
-          <a href="/unsubscribe.html" style="color:#999; text-decoration:underline;">Unsubscribe</a> any time.
+          <a href="/unsubscribe.html" style="color:#999;text-decoration:underline;">Unsubscribe</a> any time.
         </p>
+      </div>
+
+      <!-- success -->
+      <div id="modalSuccess" style="display:none;">
+        <p style="font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.35em;text-transform:uppercase;color:#999;margin-bottom:14px;">The Edit</p>
+        <p style="font-family:'Courier New',Courier,monospace;font-size:14px;letter-spacing:0.3em;text-transform:uppercase;margin-bottom:12px;">You're in.</p>
+        <p style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.08em;line-height:1.9;color:#999;">Welcome to The Edit.<br>Watch your inbox.</p>
       </div>
     </div>
   </div>
@@ -1010,7 +1019,7 @@
     }
 
     function handleJoin() {
-      var email    = document.getElementById('emailInput').value.trim();
+      var email    = document.getElementById('modalEmail').value.trim();
       var honeypot = document.getElementById('modalHoneypot').value;
       var btn      = document.getElementById('joinBtn');
       var msg      = document.getElementById('modalMessage');
@@ -1018,27 +1027,30 @@
       // Reject bots
       if (honeypot) { closeModal(); return; }
 
-      // Basic validation
-      if (!email || !email.includes('@')) {
+      // Validate
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
         msg.style.color = '#c00';
         msg.textContent = 'Please enter a valid email address.';
-        document.getElementById('emailInput').focus();
+        document.getElementById('modalEmail').focus();
         return;
       }
 
-      // Disable button during submission
       btn.disabled = true;
       btn.textContent = 'Subscribing...';
       msg.textContent = '';
+      msg.style.color = '#999';
 
-      // ── BEEHIIV SUBSCRIBE ──
-      // no-cors: Beehiiv's embed endpoint is cross-origin restricted.
-      // The request fires silently; on resolve we show success optimistically.
-      fetch('https://embeds.beehiiv.com/api/subscribe', {
+      // ── BEEHIIV subscribe-forms endpoint ──
+      // Posts to the same form ID as the iframe embed.
+      // no-cors mode: cross-origin, response is opaque — show success optimistically.
+      fetch('https://subscribe-forms.beehiiv.com/api/v1/subscriptions', {
         method: 'POST',
         mode: 'no-cors',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: 'email=' + encodeURIComponent(email) + '&publication_id=pub_8076a54d-cd98-4a0e-bc50-5092ae40992d'
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: email,
+          subscribe_form_id: 'b64503cb-8e19-4aec-9d50-a7a707588ca5'
+        })
       })
       .then(function() {
         document.getElementById('modalForm').style.display = 'none';
