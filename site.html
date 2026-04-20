@@ -1033,11 +1033,8 @@
         return;
       }
 
-      // Open Beehiiv's hosted subscribe form in a new tab with email pre-filled.
-      // This is the only guaranteed-working approach — no guessed API endpoints.
-      var beehiivUrl = 'https://subscribe-forms.beehiiv.com/b64503cb-8e19-4aec-9d50-a7a707588ca5'
-                     + '?email=' + encodeURIComponent(email);
-      window.open(beehiivUrl, '_blank');
+      // Open our own newsletter page with email pre-filled in the Beehiiv embed.
+      window.open('/newsletter.html?email=' + encodeURIComponent(email), '_blank');
       document.getElementById('modalForm').style.display = 'none';
       document.getElementById('modalSuccess').style.display = 'block';
     }
@@ -1113,10 +1110,8 @@
         return;
       }
 
-      // Open Beehiiv's hosted form in a new tab with email pre-filled
-      var beehiivUrl = 'https://subscribe-forms.beehiiv.com/b64503cb-8e19-4aec-9d50-a7a707588ca5'
-                     + '?email=' + encodeURIComponent(email);
-      window.open(beehiivUrl, '_blank');
+      // Open our own newsletter page with email pre-filled in the Beehiiv embed.
+      window.open('/newsletter.html?email=' + encodeURIComponent(email), '_blank');
       msg.style.color = 'rgba(255,255,255,0.9)';
       msg.textContent = 'Check the new tab to confirm your subscription.';
       document.getElementById('cdEmail').value = '';
