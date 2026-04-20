@@ -1024,10 +1024,8 @@
       var btn      = document.getElementById('joinBtn');
       var msg      = document.getElementById('modalMessage');
 
-      // Reject bots
       if (honeypot) { closeModal(); return; }
 
-      // Validate
       if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
         msg.style.color = '#c00';
         msg.textContent = 'Please enter a valid email address.';
@@ -1040,17 +1038,14 @@
       msg.textContent = '';
       msg.style.color = '#999';
 
-      // ── BEEHIIV subscribe-forms endpoint ──
-      // Posts to the same form ID as the iframe embed.
-      // no-cors mode: cross-origin, response is opaque — show success optimistically.
+      // Posts to Beehiiv's subscribe-forms API using the subscribe form ID
+      // from the official embed code. no-cors + url-encoded (CORS-safe headers).
       fetch('https://subscribe-forms.beehiiv.com/api/v1/subscriptions', {
         method: 'POST',
         mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: email,
-          subscribe_form_id: 'b64503cb-8e19-4aec-9d50-a7a707588ca5'
-        })
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: 'email=' + encodeURIComponent(email)
+            + '&subscribe_form_id=b64503cb-8e19-4aec-9d50-a7a707588ca5'
       })
       .then(function() {
         document.getElementById('modalForm').style.display = 'none';
