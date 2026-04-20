@@ -839,8 +839,8 @@
       <!-- success -->
       <div id="modalSuccess" style="display:none;">
         <p style="font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.35em;text-transform:uppercase;color:#999;margin-bottom:14px;">The Edit</p>
-        <p style="font-family:'Courier New',Courier,monospace;font-size:14px;letter-spacing:0.3em;text-transform:uppercase;margin-bottom:12px;">You're in.</p>
-        <p style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.08em;line-height:1.9;color:#999;">Welcome to The Edit.<br>Watch your inbox.</p>
+        <p style="font-family:'Courier New',Courier,monospace;font-size:14px;letter-spacing:0.3em;text-transform:uppercase;margin-bottom:12px;">Almost there.</p>
+        <p style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.08em;line-height:1.9;color:#999;">Check the new tab to confirm<br>your subscription.</p>
       </div>
     </div>
   </div>
@@ -1033,30 +1033,13 @@
         return;
       }
 
-      btn.disabled = true;
-      btn.textContent = 'Subscribing...';
-      msg.textContent = '';
-      msg.style.color = '#999';
-
-      // Posts to Beehiiv's subscribe-forms API using the subscribe form ID
-      // from the official embed code. no-cors + url-encoded (CORS-safe headers).
-      fetch('https://subscribe-forms.beehiiv.com/api/v1/subscriptions', {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: 'email=' + encodeURIComponent(email)
-            + '&subscribe_form_id=b64503cb-8e19-4aec-9d50-a7a707588ca5'
-      })
-      .then(function() {
-        document.getElementById('modalForm').style.display = 'none';
-        document.getElementById('modalSuccess').style.display = 'block';
-      })
-      .catch(function() {
-        msg.style.color = '#c00';
-        msg.textContent = 'Network error. Please try again.';
-        btn.disabled = false;
-        btn.textContent = 'Subscribe';
-      });
+      // Open Beehiiv's hosted subscribe form in a new tab with email pre-filled.
+      // This is the only guaranteed-working approach — no guessed API endpoints.
+      var beehiivUrl = 'https://subscribe-forms.beehiiv.com/b64503cb-8e19-4aec-9d50-a7a707588ca5'
+                     + '?email=' + encodeURIComponent(email);
+      window.open(beehiivUrl, '_blank');
+      document.getElementById('modalForm').style.display = 'none';
+      document.getElementById('modalSuccess').style.display = 'block';
     }
 
 
