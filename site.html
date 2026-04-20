@@ -241,11 +241,12 @@
     .modal {
       background: var(--white);
       border: 1px solid var(--grey-light);
-      padding: 48px 40px 40px;
-      max-width: 420px;
+      padding: 0;
+      max-width: 560px;
       width: 100%;
       text-align: center;
       position: relative;
+      overflow: hidden;
     }
 
     .modal-close {
@@ -815,34 +816,22 @@
     <div class="modal" id="modal">
       <button class="modal-close" onclick="closeModal()" aria-label="Close">✕</button>
 
-      <!-- Default state -->
-      <div id="modalForm">
-        <p style="font-family:'Courier New',Courier,monospace; font-size:9px; letter-spacing:0.35em; text-transform:uppercase; color:#999; margin-bottom:16px;">The Edit — Newsletter</p>
-        <h2>Stay in the loop</h2>
-        <p>First access to every drop.<br>Studio updates. Direct from Fola.</p>
-        <!-- Honeypot: hidden from humans, traps bots -->
-        <input type="text" id="modalHoneypot" style="display:none" tabindex="-1" autocomplete="off" />
-        <!-- Inline row: email + button side by side -->
-        <div style="display:flex; gap:0; margin-bottom:10px;">
-          <input type="email" id="emailInput" placeholder="Your email" autocomplete="email"
-            style="flex:1; min-width:0; border:1px solid #000; border-right:none; border-radius:0; padding:12px 14px; font-family:'Courier New',Courier,monospace; font-size:10px; letter-spacing:0.2em; text-transform:uppercase; outline:none; background:#fff; color:#000;" />
-          <button class="btn-primary" id="joinBtn" onclick="handleJoin()"
-            style="display:inline-flex; align-items:center; justify-content:center; width:auto; flex-shrink:0; padding:0 20px; font-size:10px; letter-spacing:0.2em; white-space:nowrap;">
-            Subscribe
-          </button>
-        </div>
-        <span id="modalMessage" style="display:block; font-family:'Courier New',Courier,monospace; font-size:9px; letter-spacing:0.1em; min-height:14px; text-align:center; color:#999;"></span>
-        <p style="font-family:'Courier New',Courier,monospace; font-size:8px; letter-spacing:0.06em; color:#999; margin-top:12px; line-height:1.8;">
+      <!-- Beehiiv subscribe embed -->
+      <script async src="https://subscribe-forms.beehiiv.com/embed.js"></script>
+      <iframe
+        src="https://subscribe-forms.beehiiv.com/b64503cb-8e19-4aec-9d50-a7a707588ca5"
+        class="beehiiv-embed"
+        data-test-id="beehiiv-embed"
+        frameborder="0"
+        scrolling="no"
+        style="width:100%; height:315px; margin:0; border-radius:0 !important; background-color:transparent; box-shadow:0 0 #0000; max-width:100%; display:block;">
+      </iframe>
+      <!-- Consent footer -->
+      <div style="padding:10px 24px 16px; border-top:1px solid #eee;">
+        <p style="font-family:'Courier New',Courier,monospace; font-size:8px; letter-spacing:0.07em; color:#999; line-height:1.9; margin:0;">
           By subscribing you agree to receive emails from Fola Adeleke.
           <a href="/unsubscribe.html" style="color:#999; text-decoration:underline;">Unsubscribe</a> any time.
         </p>
-      </div>
-
-      <!-- Success state -->
-      <div id="modalSuccess" style="display:none;">
-        <p style="font-family:'Courier New',Courier,monospace; font-size:9px; letter-spacing:0.35em; text-transform:uppercase; color:#999; margin-bottom:16px;">The Edit</p>
-        <h2>You're in.</h2>
-        <p>Welcome to The Edit.<br>Watch your inbox.</p>
       </div>
     </div>
   </div>
