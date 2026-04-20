@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+  ═══════════════════════════════════════════════════════════
+  FOLA ADELEKE® — BEEHIIV SUBSCRIBE WIDGET
+  ═══════════════════════════════════════════════════════════
+
+  HOW TO EMBED ON ANY PAGE
+  ────────────────────────
+  Drop this anywhere you want a subscribe form:
+
+    <iframe
+      src="/subscribe-embed.html"
+      width="100%"
+      height="200"
+      frameborder="0"
+      scrolling="no"
+      title="Subscribe to The Edit"
+      style="border:none; max-width:420px; display:block; margin:0 auto;">
+    </iframe>
+
+  OR use it as a standalone page at /subscribe-embed.html
+
+  VARIANTS (via URL param)
+  ────────────────────────
+  Default (white bg):   /subscribe-embed.html
+  Transparent bg:       /subscribe-embed.html?bg=transparent
+  Dark mode:            /subscribe-embed.html?theme=dark
+
+  ═══════════════════════════════════════════════════════════
+-->
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Subscribe — Fola Adeleke®</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --black:      #000000;
+      --white:      #ffffff;
+      --grey-light: #eeeeee;
+      --grey-mid:   #999999;
+      --font:       'Courier New', Courier, monospace;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      font-family: var(--font);
+      background: var(--white);
+      color: var(--black);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 24px;
+      /* transparent variant applied via JS below */
+    }
+
+    /* ── WIDGET SHELL ── */
+    .widget {
+      width: 100%;
+      max-width: 420px;
+    }
+
+    /* ── EYEBROW ── */
+    .widget-eyebrow {
+      font-size: 9px;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--grey-mid);
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
+    /* ── HEADLINE ── */
+    .widget-headline {
+      font-size: 13px;
+      font-weight: normal;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    /* ── SUBTEXT ── */
+    .widget-sub {
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      line-height: 1.9;
+      color: var(--grey-mid);
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    /* ── FORM ROW ── */
+    .form-row {
+      display: flex;
+      gap: 0;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    .form-row input[type="email"] {
+      flex: 1;
+      border: 1px solid var(--black);
+      border-right: none;
+      border-radius: 0;
+      padding: 13px 14px;
+      font-family: var(--font);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      outline: none;
+      background: var(--white);
+      color: var(--black);
+      -webkit-appearance: none;
+      min-width: 0;
+    }
+
+    .form-row input[type="email"]::placeholder {
+      color: var(--grey-mid);
+    }
+
+    .form-row input[type="email"]:focus {
+      border-color: var(--black);
+    }
+
+    .form-row .btn-sub {
+      background: var(--black);
+      color: var(--white);
+      border: 1px solid var(--black);
+      padding: 13px 20px;
+      font-family: var(--font);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: opacity 0.15s;
+      flex-shrink: 0;
+    }
+
+    .form-row .btn-sub:hover:not(:disabled) { opacity: 0.75; }
+    .form-row .btn-sub:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* ── STATUS MESSAGE ── */
+    .form-status {
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      text-align: center;
+      min-height: 14px;
+      color: var(--grey-mid);
+    }
+
+    .form-status.error { color: #cc0000; }
+
+    /* ── CONSENT ── */
+    .form-consent {
+      font-size: 8px;
+      letter-spacing: 0.06em;
+      color: var(--grey-mid);
+      text-align: center;
+      margin-top: 10px;
+      line-height: 1.8;
+    }
+
+    .form-consent a {
+      color: var(--grey-mid);
+      text-decoration: underline;
+    }
+
+    /* ── SUCCESS STATE ── */
+    .widget-success {
+      display: none;
+      text-align: center;
+    }
+
+    .widget-success.visible {
+      display: block;
+    }
+
+    .success-mark {
+      font-size: 11px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--black);
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .success-sub {
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      color: var(--grey-mid);
+      line-height: 1.9;
+    }
+
+    /* ── DARK THEME ── */
+    body.dark {
+      background: var(--black);
+      color: var(--white);
+    }
+
+    body.dark .widget-headline,
+    body.dark .success-mark { color: var(--white); }
+
+    body.dark .form-row input[type="email"] {
+      background: var(--black);
+      color: var(--white);
+      border-color: #444;
+    }
+
+    body.dark .form-row input[type="email"]::placeholder { color: #666; }
+    body.dark .form-row input[type="email"]:focus { border-color: var(--white); }
+
+    body.dark .form-row .btn-sub {
+      background: var(--white);
+      color: var(--black);
+      border-color: var(--white);
+    }
+
+    @media (max-width: 400px) {
+      .form-row {
+        flex-direction: column;
+      }
+
+      .form-row input[type="email"] {
+        border-right: 1px solid var(--black);
+        border-bottom: none;
+      }
+
+      body.dark .form-row input[type="email"] {
+        border-right: 1px solid #444;
+      }
+
+      .form-row .btn-sub {
+        padding: 13px;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="widget" id="widget">
+
+    <!-- FORM STATE -->
+    <div id="formState">
+      <p class="widget-eyebrow">The Edit — Newsletter</p>
+      <h2 class="widget-headline">Stay in the loop</h2>
+      <p class="widget-sub">
+        First access to drops. Studio updates.<br>Direct from Fola.
+      </p>
+
+      <!-- Honeypot: hidden from humans, traps bots -->
+      <input type="text" id="hp" style="display:none" tabindex="-1" autocomplete="off" />
+
+      <div class="form-row">
+        <input
+          type="email"
+          id="emailField"
+          placeholder="Your email"
+          autocomplete="email"
+          required
+        />
+        <button class="btn-sub" id="subBtn" onclick="handleSubmit()">Subscribe</button>
+      </div>
+
+      <p class="form-status" id="statusMsg"></p>
+
+      <p class="form-consent">
+        By subscribing you agree to receive emails from Fola Adeleke.
+        <a href="/unsubscribe.html" target="_parent">Unsubscribe</a> any time.
+      </p>
+    </div>
+
+    <!-- SUCCESS STATE -->
+    <div class="widget-success" id="successState">
+      <span class="success-mark">You're in.</span>
+      <p class="success-sub">Welcome to The Edit.<br>Watch your inbox.</p>
+    </div>
+
+  </div>
+
+  <script>
+    // ── THEME / BACKGROUND VARIANTS ──────────────────────────────────
+    (function() {
+      var params = new URLSearchParams(window.location.search);
+      if (params.get('bg') === 'transparent') {
+        document.body.style.background = 'transparent';
+      }
+      if (params.get('theme') === 'dark') {
+        document.body.classList.add('dark');
+      }
+    })();
+
+    // ── FORM SUBMIT ───────────────────────────────────────────────────
+    function handleSubmit() {
+      // Bot trap
+      if (document.getElementById('hp').value) { return; }
+
+      var email   = document.getElementById('emailField').value.trim();
+      var btn     = document.getElementById('subBtn');
+      var status  = document.getElementById('statusMsg');
+
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        status.textContent = 'Please enter a valid email address.';
+        status.className   = 'form-status error';
+        document.getElementById('emailField').focus();
+        return;
+      }
+
+      btn.disabled    = true;
+      btn.textContent = '...';
+      status.textContent = '';
+      status.className   = 'form-status';
+
+      fetch('https://embeds.beehiiv.com/api/subscribe', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body:    'email=' + encodeURIComponent(email)
+               + '&publication_id=pub_8076a54d-cd98-4a0e-bc50-5092ae40992d'
+      })
+      .then(function(res) {
+        if (res.ok || res.redirected) {
+          // Tell parent page (if inside an iframe) that signup succeeded
+          if (window.parent !== window) {
+            window.parent.postMessage({ type: 'beehiiv:subscribed', email: email }, '*');
+          }
+          document.getElementById('formState').style.display   = 'none';
+          document.getElementById('successState').classList.add('visible');
+        } else {
+          status.textContent = 'Something went wrong. Please try again.';
+          status.className   = 'form-status error';
+          btn.disabled    = false;
+          btn.textContent = 'Subscribe';
+        }
+      })
+      .catch(function() {
+        status.textContent = 'Network error. Please try again.';
+        status.className   = 'form-status error';
+        btn.disabled    = false;
+        btn.textContent = 'Subscribe';
+      });
+    }
+
+    // ── ENTER KEY ────────────────────────────────────────────────────
+    document.getElementById('emailField').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') { e.preventDefault(); handleSubmit(); }
+    });
+  </script>
+
+</body>
+</html>
