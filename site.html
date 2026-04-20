@@ -1106,36 +1106,20 @@
 
       if (honeypot) return;
 
-      if (!email || !email.includes('@')) {
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
         msg.style.color = 'rgba(255,80,80,0.9)';
         msg.textContent = 'Please enter a valid email address.';
         document.getElementById('cdEmail').focus();
         return;
       }
 
-      msg.style.color = 'rgba(255,255,255,0.6)';
-      msg.textContent = 'Submitting...';
-
-      fetch('https://formspree.io/f/mwpepzwb', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify({ email: email })
-      })
-      .then(function(res) { return res.json(); })
-      .then(function(data) {
-        if (data.ok || data.next) {
-          msg.style.color = 'rgba(255,255,255,0.9)';
-          msg.textContent = 'You\'re on the list.';
-          document.getElementById('cdEmail').value = '';
-        } else {
-          msg.style.color = 'rgba(255,80,80,0.9)';
-          msg.textContent = 'Something went wrong. Try again.';
-        }
-      })
-      .catch(function() {
-        msg.style.color = 'rgba(255,80,80,0.9)';
-        msg.textContent = 'Something went wrong. Try again.';
-      });
+      // Open Beehiiv's hosted form in a new tab with email pre-filled
+      var beehiivUrl = 'https://subscribe-forms.beehiiv.com/b64503cb-8e19-4aec-9d50-a7a707588ca5'
+                     + '?email=' + encodeURIComponent(email);
+      window.open(beehiivUrl, '_blank');
+      msg.style.color = 'rgba(255,255,255,0.9)';
+      msg.textContent = 'Check the new tab to confirm your subscription.';
+      document.getElementById('cdEmail').value = '';
     }
   </script>
 </body>
