@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7ZCQ4YEN6"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-K7ZCQ4YEN6');
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <title>Press Kit — Fola Adeleke®</title>
+  <meta name="description" content="Electronic press kit for Fola Adeleke® — a limited edition fine art print house." />
+
+  <!-- Open Graph -->
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://www.folaadeleke.com/press.html" />
+  <meta property="og:title"       content="Press Kit — Fola Adeleke®" />
+  <meta property="og:description" content="Electronic press kit for Fola Adeleke® — a limited edition fine art print house." />
+  <meta property="og:image"       content="https://www.folaadeleke.com/home-page.png" />
+
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --black: #000;
+      --white: #fff;
+      --grey-light: #eee;
+      --grey-mid: #999;
+      --grey-bg: #ccc;
+      --nav-height: 56px;
+      --font: 'Courier New', Courier, monospace;
+      --spacing: 0.2em;
+    }
+
+    html, body { height: 100%; }
+
+    body {
+      font-family: var(--font);
+      background: var(--white);
+      color: var(--black);
+      font-weight: 400;
+      line-height: 1.6;
+      padding-top: var(--nav-height);
+    }
+
+    /* ---------- NAV ---------- */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-height);
+      background: var(--white);
+      border-bottom: 1px solid var(--grey-light);
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      padding: 0 20px;
+      z-index: 10;
+    }
+    nav a { color: inherit; text-decoration: none; }
+
+    .nav-left  { justify-self: start; font-size: 18px; }
+    .nav-brand { justify-self: center; font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; }
+    .nav-right { justify-self: end;   font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; }
+    .nav-right:hover { text-decoration: underline; }
+
+    /* ---------- LAYOUT ---------- */
+    main {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 60px 24px 80px;
+    }
+
+    .kicker {
+      font-size: 10px;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--grey-mid);
+      margin-bottom: 24px;
+    }
+
+    h1.title {
+      font-size: clamp(22px, 4vw, 30px);
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      font-weight: 400;
+      margin-bottom: 48px;
+    }
+
+    section {
+      border-top: 1px solid var(--grey-light);
+      padding: 40px 0;
+    }
+    section:first-of-type { border-top: none; padding-top: 0; }
+
+    section h2 {
+      font-size: 12px;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      font-weight: 400;
+      margin-bottom: 24px;
+      color: var(--grey-mid);
+    }
+
+    section h3 {
+      font-size: 13px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      font-weight: 400;
+      margin: 24px 0 12px;
+    }
+
+    section p, section li {
+      font-size: 13px;
+      letter-spacing: 0.04em;
+      line-height: 1.9;
+      margin-bottom: 14px;
+    }
+
+    section ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    section ul li {
+      border-bottom: 1px solid var(--grey-light);
+      padding: 10px 0;
+      margin-bottom: 0;
+    }
+    section ul li:last-child { border-bottom: none; }
+
+    .meta-row {
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      gap: 16px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--grey-light);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+    }
+    .meta-row:last-of-type { border-bottom: none; }
+    .meta-label {
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--grey-mid);
+      font-size: 11px;
+    }
+
+    .pull-quote {
+      font-style: italic;
+      font-size: 14px;
+      line-height: 1.9;
+      letter-spacing: 0.02em;
+      border-left: 1px solid var(--black);
+      padding: 4px 0 4px 20px;
+      margin: 16px 0 8px;
+    }
+    .pull-attr {
+      font-size: 10px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--grey-mid);
+      margin-left: 20px;
+      margin-bottom: 24px;
+    }
+
+    .download-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .btn {
+      display: inline-block;
+      border: 1px solid var(--black);
+      padding: 12px 18px;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--black);
+      text-decoration: none;
+      transition: background 0.15s, color 0.15s;
+    }
+    .btn:hover { background: var(--black); color: var(--white); }
+    .btn.primary { background: var(--black); color: var(--white); }
+    .btn.primary:hover { background: var(--white); color: var(--black); }
+
+    .fine-print {
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      color: var(--grey-mid);
+      text-transform: uppercase;
+      margin-top: 8px;
+    }
+
+    footer {
+      border-top: 1px solid var(--grey-light);
+      padding: 24px;
+      text-align: center;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--grey-mid);
+    }
+
+    /* Print styles — for users who Cmd+P this page */
+    @media print {
+      nav, .download-row, footer .print-hide { display: none !important; }
+      body { padding-top: 0; }
+      main { max-width: 100%; padding: 0; }
+      section { page-break-inside: avoid; }
+    }
+
+    @media (max-width: 520px) {
+      .meta-row { grid-template-columns: 1fr; gap: 4px; }
+      main { padding: 40px 20px 60px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a class="nav-left" href="/" aria-label="Back">&larr;</a>
+    <a class="nav-brand" href="/">Fola Adeleke&reg;</a>
+    <a class="nav-right" href="mailto:press@folaadeleke.com">Press</a>
+  </nav>
+
+  <main>
+
+    <p class="kicker">Electronic Press Kit &mdash; 2026</p>
+    <h1 class="title">Press Kit</h1>
+
+    <!-- ============================================ -->
+    <section id="at-a-glance">
+      <h2>At a Glance</h2>
+      <div class="meta-row">
+        <span class="meta-label">Brand</span>
+        <span>Fola Adeleke&reg;</span>
+      </div>
+      <div class="meta-row">
+        <span class="meta-label">Category</span>
+        <span>Limited edition fine art prints</span>
+      </div>
+      <div class="meta-row">
+        <span class="meta-label">Founded</span>
+        <span>2026 &mdash; London</span>
+      </div>
+      <div class="meta-row">
+        <span class="meta-label">Model</span>
+        <span>Weekly drops. Sundays, 12PM BST. No restock.</span>
+      </div>
+      <div class="meta-row">
+        <span class="meta-label">Sizes</span>
+        <span>A1 &amp; A2 &mdash; museum-grade archival paper</span>
+      </div>
+      <div class="meta-row">
+        <span class="meta-label">Pricing</span>
+        <span>From &pound;95</span>
+      </div>
+      <div class="meta-row">
+        <span class="meta-label">Website</span>
+        <span><a href="https://www.folaadeleke.com">folaadeleke.com</a></span>
+      </div>
+      <div class="meta-row">
+        <span class="meta-label">Press contact</span>
+        <span><a href="mailto:press@folaadeleke.com">press@folaadeleke.com</a></span>
+      </div>
+    </section>
+
+    <!-- ============================================ -->
+    <section id="short-bio">
+      <h2>Short Bio &mdash; 60 words</h2>
+      <p>
+        Fola Adeleke&reg; is a London-based fine art print house founded in 2026. The studio produces limited edition
+        works on museum-grade archival paper, released in weekly Sunday drops and never restocked.
+        Its debut collection &mdash; <em>Sisterhood</em>, <em>Loud Celebration</em>, and <em>No Voice Chorus</em>
+        &mdash; explores the texture of femininity, solidarity, and silenced stories made loud.
+      </p>
+    </section>
+
+    <!-- ============================================ -->
+    <section id="long-bio">
+      <h2>Long Bio &mdash; 180 words</h2>
+      <p>
+        Fola Adeleke&reg; is a London-based fine art print house working at the intersection of contemporary
+        portraiture, typographic restraint, and editorial design. Founded in 2026, the studio operates on a
+        single, unusual principle: every piece is a limited edition, released on Sunday at 12PM BST,
+        and never restocked.
+      </p>
+      <p>
+        The work draws from the visual language of the broadsheet, the fashion editorial, and the archive.
+        Prints are produced on museum-grade archival paper at A1 and A2, and priced deliberately to sit
+        between the accessible and the collectible &mdash; fine art for the first wall of an adult home.
+      </p>
+      <p>
+        The inaugural collection <em>Sisterhood</em>, <em>Loud Celebration</em>, and <em>No Voice Chorus</em>
+        marks the studio's opening position: a meditation on femininity as chorus, celebration, and
+        the long work of being heard. Subsequent drops expand the archive weekly, with subscribers to the
+        studio's newsletter &mdash; <em>Fola Adeleke&rsquo;s Notes</em> &mdash; receiving first access, process
+        notes, and occasional pre-release previews.
+      </p>
+    </section>
+
+    <!-- ============================================ -->
+    <section id="statement">
+      <h2>Studio Statement</h2>
+      <p>
+        We believe a print should hold its own in a room. Not shout. Not apologise. We print small, we print
+        once, and we don't restock &mdash; because a limit is what turns a picture into a record of
+        a moment. Sundays at 12PM are our release window because ritual is a kind of promise, and we keep it.
+      </p>
+      <p>
+        The work is concerned with voice: who gets one, how it carries, and what it costs to raise it.
+        Every drop is a sentence in a longer argument, which is why the archive matters more than any
+        single piece. We make for the collector who is building a room, not decorating one.
+      </p>
+    </section>
+
+    <!-- ============================================ -->
+    <section id="press-release">
+      <h2>Press Release</h2>
+      <h3>For Immediate Release</h3>
+      <p>
+        <strong>LONDON, 2026</strong> &mdash; Fola Adeleke&reg; launches today as a limited edition fine art
+        print house, releasing its first three works &mdash; <em>Sisterhood</em>, <em>Loud Celebration</em>,
+        and <em>No Voice Chorus</em> &mdash; on folaadeleke.com. Each piece is available in A1 and A2,
+        printed on museum-grade archival paper, and priced from &pound;95.
+      </p>
+      <p>
+        The studio introduces a disciplined release model to the fine art print market: one drop per week,
+        every Sunday at 12PM BST, with no restocks. Once an edition closes, it is closed. The format
+        borrows from luxury fashion's drop culture and re-tunes it for the archive &mdash; rewarding
+        subscribers, collectors, and curators who move decisively.
+      </p>
+      <p>
+        The inaugural collection explores femininity as a chorus: three portraits in conversation about
+        solidarity, visibility, and the long work of being heard. <em>Sisterhood</em> sits at the centre;
+        <em>Loud Celebration</em> is its joy; <em>No Voice Chorus</em> is its unfinished business.
+      </p>
+      <p>
+        Alongside the shop, the studio launches <em>Fola Adeleke&rsquo;s Notes</em>, a subscriber letter
+        containing process documentation, archive reissues, and pre-release access. A press programme
+        is in place for galleries, curators, and editors; high-resolution assets and interview requests
+        are available on application.
+      </p>
+      <h3>Fast Facts</h3>
+      <ul>
+        <li>Debut: <strong>Three works, A1 &amp; A2, from &pound;95</strong></li>
+        <li>Cadence: <strong>Weekly drops, Sundays, 12PM BST &mdash; no restock</strong></li>
+        <li>Paper: <strong>Museum-grade archival, studio-signed editions</strong></li>
+        <li>Shipping: <strong>Worldwide, hand-finished tube, tracked</strong></li>
+        <li>Newsletter: <strong><em>Fola Adeleke&rsquo;s Notes</em></strong></li>
+      </ul>
+      <h3>Media Contact</h3>
+      <p>
+        Press &amp; Commissions &mdash; <a href="mailto:press@folaadeleke.com">press@folaadeleke.com</a><br />
+        General &mdash; <a href="mailto:hello@folaadeleke.com">hello@folaadeleke.com</a><br />
+        Online &mdash; <a href="https://www.folaadeleke.com">folaadeleke.com</a>
+      </p>
+      <p class="fine-print">&mdash; Ends &mdash;</p>
+    </section>
+
+    <!-- ============================================ -->
+    <section id="quotes">
+      <h2>Selected Quotes</h2>
+      <p class="pull-quote">
+        &ldquo;We print small, we print once, and we don't restock &mdash; because a limit is what turns
+        a picture into a record of a moment.&rdquo;
+      </p>
+      <p class="pull-attr">&mdash; Studio Statement</p>
+
+      <p class="pull-quote">
+        &ldquo;A print should hold its own in a room. Not shout. Not apologise.&rdquo;
+      </p>
+      <p class="pull-attr">&mdash; Studio Statement</p>
+
+      <p class="pull-quote">
+        &ldquo;Sundays at 12PM are our release window because ritual is a kind of promise,
+        and we keep it.&rdquo;
+      </p>
+      <p class="pull-attr">&mdash; Studio Statement</p>
+
+      <h3>Placeholder &mdash; External Press</h3>
+      <p style="font-size: 11px; color: var(--grey-mid);">
+        As features, reviews, and interviews are published, pull-quotes will be added here.
+        Editors: please send publication links to <a href="mailto:press@folaadeleke.com">press@folaadeleke.com</a>
+        for inclusion.
+      </p>
+    </section>
+
+    <!-- ============================================ -->
+    <section id="downloads">
+      <h2>Downloads &amp; Assets</h2>
+      <p>
+        A downloadable PDF version of this press kit is available below.
+        High-resolution images of individual works, installation photography, and the studio mark are
+        sent on request to credentialed press, galleries, and stockists.
+      </p>
+      <div class="download-row">
+        <a class="btn primary" href="/fola-adeleke-press-kit.pdf">Download Press Kit (PDF)</a>
+        <a class="btn" href="mailto:press@folaadeleke.com?subject=High-res%20asset%20request">Request Hi-Res Assets</a>
+        <a class="btn" href="https://www.folaadeleke.com">Visit Website</a>
+      </div>
+    </section>
+
+    <!-- ============================================ -->
+    <section id="contact">
+      <h2>Contact &amp; Links</h2>
+      <div class="meta-row">
+        <span class="meta-label">Press</span>
+        <span><a href="mailto:press@folaadeleke.com">press@folaadeleke.com</a></span>
+      </div>
+      <div class="meta-row">
+        <span class="meta-label">General</span>
+        <span><a href="mailto:hello@folaadeleke.com">hello@folaadeleke.com</a></span>
+      </div>
+      <div class="meta-row">
+        <span class="meta-label">Website</span>
+        <span><a href="https://www.folaadeleke.com">folaadeleke.com</a></span>
+      </div>
+      <div class="meta-row">
+        <span class="meta-label">Newsletter</span>
+        <span><a href="/newsletter.html">Fola Adeleke&rsquo;s Notes</a></span>
+      </div>
+      <div class="meta-row">
+        <span class="meta-label">Shop</span>
+        <span><a href="https://shop.folaadeleke.com">shop.folaadeleke.com</a></span>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Fola Adeleke&reg;. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>
