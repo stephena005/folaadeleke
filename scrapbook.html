@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Archive — Fola Adeleke®</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <style>
+    :root {
+      --black: #000;
+      --white: #fff;
+      --grey-light: #eee;
+      --grey-mid: #999;
+      --font: 'Courier New', Courier, monospace;
+      --nav-height: 56px;
+      --gap: 2px;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: var(--font);
+      min-height: 100vh;
+    }
+
+    /* ── Gate ─────────────────────────────────────── */
+    #gate {
+      position: fixed;
+      inset: 0;
+      background: var(--black);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 36px;
+      z-index: 200;
+    }
+
+    #gate h1 {
+      font-size: 11px;
+      font-weight: normal;
+      letter-spacing: 0.45em;
+      text-transform: uppercase;
+    }
+
+    #gate input {
+      background: none;
+      border: none;
+      border-bottom: 1px solid #222;
+      color: var(--white);
+      font-family: var(--font);
+      font-size: 20px;
+      padding: 10px 0;
+      width: 200px;
+      text-align: center;
+      outline: none;
+      transition: border-color 0.2s;
+      -webkit-appearance: none;
+    }
+
+    #gate input:focus {
+      border-bottom-color: #555;
+    }
+
+    #gate-error {
+      font-size: 9px;
+      letter-spacing: 0.25em;
+      color: var(--grey-mid);
+      text-transform: uppercase;
+      height: 12px;
+    }
+
+    #gate.hidden {
+      display: none;
+    }
+
+    /* ── Site nav ─────────────────────────────────── */
+    .site-nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: var(--black);
+      height: var(--nav-height);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      border-bottom: 1px solid #0d0d0d;
+    }
+
+    .site-nav a {
+      color: var(--white);
+      text-decoration: none;
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+    }
+
+    .site-nav-brand {
+      font-size: 13px;
+      letter-spacing: 0.15em;
+    }
+
+    /* ── Tag filter ───────────────────────────────── */
+    #tag-nav {
+      padding: 12px 12px 10px;
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    #tag-nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    .tag-pill {
+      flex-shrink: 0;
+      background: none;
+      border: 1px solid #1a1a1a;
+      color: #444;
+      font-family: var(--font);
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 5px 11px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .tag-pill:hover {
+      border-color: #444;
+      color: #999;
+    }
+
+    .tag-pill.active {
+      border-color: var(--white);
+      color: var(--white);
+    }
+
+    /* ── Grid ─────────────────────────────────────── */
+    #grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--gap);
+      padding: var(--gap);
+      grid-auto-flow: row dense;
+    }
+
+    @media (max-width: 680px) {
+      #grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 400px) {
+      #grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card-wide {
+      grid-column: span 2;
+    }
+
+    .card-full {
+      grid-column: 1 / -1;
+    }
+
+    /* ── Card base ────────────────────────────────── */
+    .card {
+      position: relative;
+      background: #080808;
+      overflow: hidden;
+    }
+
+    /* Image */
+    .card-img {
+      overflow: hidden;
+    }
+
+    .card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      cursor: zoom-in;
+      transition: transform 0.4s ease;
+    }
+
+    .card:hover .card-img img {
+      transform: scale(1.02);
+    }
+
+    .card:not(.card-wide):not(.card-full) .card-img {
+      aspect-ratio: 3/4;
+    }
+
+    .card-wide .card-img {
+      aspect-ratio: 16/9;
+    }
+
+    .card-full .card-img {
+      aspect-ratio: 21/9;
+    }
+
+    /* Video */
+    .card-vid {
+      aspect-ratio: 16/9;
+    }
+
+    .card-vid iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+
+    /* Article */
+    .card-art {
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: inherit;
+      min-height: 200px;
+    }
+
+    .card-art-img {
+      flex: 1;
+      min-height: 130px;
+      overflow: hidden;
+    }
+
+    .card-art-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+
+    .card:hover .card-art-img img {
+      transform: scale(1.02);
+    }
+
+    .card-art-body {
+      padding: 11px 13px 14px;
+      flex-shrink: 0;
+    }
+
+    .card-art-site {
+      font-size: 8px;
+      letter-spacing: 0.22em;
+      color: var(--grey-mid);
+      text-transform: uppercase;
+      margin-bottom: 5px;
+    }
+
+    .card-art-title {
+      font-size: 11px;
+      line-height: 1.55;
+      letter-spacing: 0.03em;
+    }
+
+    /* Audio */
+    .card-aud iframe {
+      width: 100%;
+      border: none;
+      display: block;
+    }
+
+    /* Tag overlay */
+    .tag-overlay {
+      position: absolute;
+      bottom: 8px;
+      left: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 3px;
+      opacity: 0;
+      transition: opacity 0.2s;
+      pointer-events: none;
+    }
+
+    .card:hover .tag-overlay {
+      opacity: 1;
+    }
+
+    .tag-chip {
+      font-size: 7px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      background: rgba(0, 0, 0, 0.85);
+      color: #bbb;
+      padding: 3px 5px;
+    }
+
+    /* ── Loading / empty ──────────────────────────── */
+    #loader {
+      text-align: center;
+      padding: 36px;
+      font-size: 9px;
+      letter-spacing: 0.4em;
+      color: #333;
+      text-transform: uppercase;
+    }
+
+    #empty {
+      text-align: center;
+      padding: 80px 20px;
+      font-size: 10px;
+      letter-spacing: 0.25em;
+      color: #333;
+    }
+
+    /* ── Lightbox ─────────────────────────────────── */
+    #lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.97);
+      z-index: 300;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    #lightbox.hidden {
+      display: none;
+    }
+
+    #lightbox img {
+      max-width: 94vw;
+      max-height: 94vh;
+      object-fit: contain;
+    }
+
+    #lb-close {
+      position: absolute;
+      top: 14px;
+      right: 20px;
+      font-size: 28px;
+      line-height: 1;
+      color: #444;
+      cursor: pointer;
+      transition: color 0.15s;
+    }
+
+    #lb-close:hover {
+      color: var(--white);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Gate -->
+  <div id="gate">
+    <h1>Archive</h1>
+    <input type="password" id="pw" placeholder="——" autocomplete="off">
+    <div id="gate-error"></div>
+  </div>
+
+  <!-- Main -->
+  <div id="main" style="display:none">
+
+    <nav class="site-nav">
+      <a href="/" class="site-nav-brand">Fola Adeleke®</a>
+      <a href="/">Home</a>
+    </nav>
+
+    <div id="tag-nav"></div>
+
+    <div id="grid"></div>
+    <div id="loader" style="display:none">Loading</div>
+    <div id="empty" style="display:none">Nothing here yet.</div>
+    <div id="sentinel" style="height:1px"></div>
+
+  </div>
+
+  <!-- Lightbox -->
+  <div id="lightbox" class="hidden">
+    <span id="lb-close">×</span>
+    <img id="lb-img" src="" alt="">
+  </div>
+
+  <script>
+    // ╔══════════════════════════════════════════╗
+    // ║          CONFIG — EDIT THESE            ║
+    // ╚══════════════════════════════════════════╝
+    const CONFIG = {
+      SUPABASE_URL: 'https://vrajwxnjacptxbaejrzm.supabase.co',
+      SUPABASE_ANON_KEY: 'sb_publishable__9Y4_TQXphEDnkZgu_jXgQ_-8a5qj50',
+      PASSWORD: 'mykwek-waQdon-suqte7',
+      PAGE_SIZE: 18,
+    };
+    // ════════════════════════════════════════════
+
+    const TAGS = ['fashion', 'film', 'art', 'music', 'travel', 'life', 'beauty', 'culture', 'people', 'nature', 'words'];
+
+    const { createClient } = supabase;
+    const db = createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
+
+    let activeTag = 'all', page = 0, loading = false, done = false, cardIdx = 0;
+
+    // ── Gate ──────────────────────────────────────
+    const gate = document.getElementById('gate');
+    const pw = document.getElementById('pw');
+
+    if (sessionStorage.getItem('sb_auth') === '1') boot();
+
+    pw.addEventListener('keydown', e => {
+      if (e.key !== 'Enter') return;
+      if (pw.value === CONFIG.PASSWORD) {
+        sessionStorage.setItem('sb_auth', '1');
+        boot();
+      } else {
+        document.getElementById('gate-error').textContent = 'incorrect';
+        pw.value = '';
+      }
+    });
+
+    function boot() {
+      gate.classList.add('hidden');
+      document.getElementById('main').style.display = '';
+      buildTagNav();
+      loadMore();
+      new IntersectionObserver(
+        es => { if (es[0].isIntersecting) loadMore(); },
+        { rootMargin: '400px' }
+      ).observe(document.getElementById('sentinel'));
+    }
+
+    // ── Tag nav ───────────────────────────────────
+    function buildTagNav() {
+      const nav = document.getElementById('tag-nav');
+      ['all', ...TAGS].forEach(t => {
+        const b = document.createElement('button');
+        b.className = 'tag-pill' + (t === 'all' ? ' active' : '');
+        b.textContent = t;
+        b.addEventListener('click', () => {
+          nav.querySelectorAll('.tag-pill').forEach(x => x.classList.remove('active'));
+          b.classList.add('active');
+          activeTag = t;
+          reset();
+        });
+        nav.appendChild(b);
+      });
+    }
+
+    // ── Load ──────────────────────────────────────
+    async function loadMore() {
+      if (loading || done) return;
+      loading = true;
+      document.getElementById('loader').style.display = '';
+
+      let q = db.from('entries')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .range(page * CONFIG.PAGE_SIZE, (page + 1) * CONFIG.PAGE_SIZE - 1);
+      if (activeTag !== 'all') q = q.contains('tags', [activeTag]);
+
+      const { data, error } = await q;
+      document.getElementById('loader').style.display = 'none';
+      loading = false;
+
+      if (error) { console.error(error); return; }
+      if (!data.length && page === 0) { document.getElementById('empty').style.display = ''; return; }
+      if (data.length < CONFIG.PAGE_SIZE) done = true;
+
+      data.forEach(renderCard);
+      page++;
+    }
+
+    function reset() {
+      page = 0; loading = false; done = false; cardIdx = 0;
+      document.getElementById('grid').innerHTML = '';
+      document.getElementById('empty').style.display = 'none';
+      loadMore();
+    }
+
+    // ── Editorial size pattern ────────────────────
+    // Repeating pattern for 3-col grid: creates rhythm of hero, standards, wides
+    const SIZES = ['full', 'std', 'std', 'wide', 'std', 'std', 'wide', 'std', 'std', 'std', 'std', 'wide', 'std', 'std'];
+    function cardSize(i) { return SIZES[i % SIZES.length]; }
+
+    // ── Render ────────────────────────────────────
+    function renderCard(entry) {
+      const sz = cardSize(cardIdx++);
+      const card = document.createElement('div');
+      card.className = 'card'
+        + (sz === 'wide' ? ' card-wide' : '')
+        + (sz === 'full' ? ' card-full' : '');
+
+      if (entry.type === 'image') {
+        const src = entry.file_path
+          ? `${CONFIG.SUPABASE_URL}/storage/v1/object/public/media/${entry.file_path}`
+          : entry.url;
+        const wrap = document.createElement('div');
+        wrap.className = 'card-img';
+        const img = document.createElement('img');
+        img.src = src;
+        img.loading = 'lazy';
+        img.alt = '';
+        img.addEventListener('click', () => openLightbox(src));
+        wrap.appendChild(img);
+        card.appendChild(wrap);
+      }
+
+      else if (entry.type === 'video') {
+        const embed = videoEmbed(entry.url);
+        if (embed) {
+          card.innerHTML = `<div class="card-vid"><iframe src="${embed}" allowfullscreen loading="lazy"></iframe></div>`;
+        }
+      }
+
+      else if (entry.type === 'article') {
+        const a = document.createElement('a');
+        a.className = 'card-art';
+        a.href = entry.url;
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        let host = '';
+        try { host = new URL(entry.url).hostname.replace('www.', ''); } catch { }
+        a.innerHTML = `
+      ${entry.preview_image ? `<div class="card-art-img"><img src="${escAttr(entry.preview_image)}" alt="" loading="lazy"></div>` : ''}
+      <div class="card-art-body">
+        <div class="card-art-site">${escHTML(entry.site_name || host)}</div>
+        <div class="card-art-title">${escHTML(entry.title || entry.url)}</div>
+      </div>`;
+        card.appendChild(a);
+      }
+
+      else if (entry.type === 'audio') {
+        const embed = audioEmbed(entry.url);
+        if (embed) {
+          card.innerHTML = `<div class="card-aud"><iframe src="${embed}" height="152" loading="lazy"></iframe></div>`;
+        }
+      }
+
+      if (entry.tags?.length) {
+        const ov = document.createElement('div');
+        ov.className = 'tag-overlay';
+        ov.innerHTML = entry.tags.map(t => `<span class="tag-chip">${escHTML(t)}</span>`).join('');
+        card.appendChild(ov);
+      }
+
+      document.getElementById('grid').appendChild(card);
+    }
+
+    // ── Embed helpers ─────────────────────────────
+    function videoEmbed(url) {
+      if (!url) return null;
+      const yt = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s?]+)/);
+      if (yt) return `https://www.youtube.com/embed/${yt[1]}?rel=0`;
+      const vi = url.match(/vimeo\.com\/(\d+)/);
+      if (vi) return `https://player.vimeo.com/video/${vi[1]}`;
+      return null;
+    }
+
+    function audioEmbed(url) {
+      if (!url) return null;
+      if (url.includes('spotify.com'))
+        return url.replace(/spotify\.com\/(track|album|playlist|episode)\//, 'spotify.com/embed/$1/');
+      if (url.includes('soundcloud.com'))
+        return `https://w.soundcloud.com/player/?url=${encodeURIComponent(url)}&color=%23000000&auto_play=false&hide_related=true&show_comments=false`;
+      return null;
+    }
+
+    // ── Sanitise ──────────────────────────────────
+    function escHTML(s) {
+      return String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+    function escAttr(s) { return escHTML(s); }
+
+    // ── Lightbox ──────────────────────────────────
+    const lb = document.getElementById('lightbox');
+    const lbImg = document.getElementById('lb-img');
+    function openLightbox(src) { lbImg.src = src; lb.classList.remove('hidden'); }
+    lb.addEventListener('click', () => lb.classList.add('hidden'));
+    document.getElementById('lb-close').addEventListener('click', e => {
+      e.stopPropagation();
+      lb.classList.add('hidden');
+    });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') lb.classList.add('hidden'); });
+  </script>
+</body>
+
+</html>
