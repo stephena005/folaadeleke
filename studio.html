@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Studio</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <style>
+    :root {
+      --black: #000;
+      --white: #fff;
+      --grey-mid: #666;
+      --grey-dark: #111;
+      --font: 'Courier New', Courier, monospace;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: var(--font);
+      min-height: 100vh;
+      max-width: 480px;
+      margin: 0 auto;
+      padding-bottom: 80px;
+    }
+
+    /* ── Gate ─────────────────────────────────────── */
+    #gate {
+      position: fixed;
+      inset: 0;
+      background: var(--black);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 32px;
+      z-index: 100;
+    }
+
+    #gate h1 {
+      font-size: 10px;
+      font-weight: normal;
+      letter-spacing: 0.45em;
+      text-transform: uppercase;
+    }
+
+    #gate input {
+      background: none;
+      border: none;
+      border-bottom: 1px solid #222;
+      color: var(--white);
+      font-family: var(--font);
+      font-size: 22px;
+      padding: 10px 0;
+      width: 200px;
+      text-align: center;
+      outline: none;
+      -webkit-appearance: none;
+      transition: border-color 0.2s;
+    }
+
+    #gate input:focus {
+      border-bottom-color: #555;
+    }
+
+    #gate-error {
+      font-size: 9px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--grey-mid);
+      height: 12px;
+    }
+
+    #gate.hidden {
+      display: none;
+    }
+
+    /* ── Header ───────────────────────────────────── */
+    header {
+      padding: 22px 20px 18px;
+      border-bottom: 1px solid #0d0d0d;
+    }
+
+    header h1 {
+      font-size: 9px;
+      font-weight: normal;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--grey-mid);
+    }
+
+    /* ── Type tabs ────────────────────────────────── */
+    .type-tabs {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #0d0d0d;
+    }
+
+    .type-tab {
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: #2a2a2a;
+      font-family: var(--font);
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 15px 0;
+      cursor: pointer;
+      transition: all 0.15s;
+      text-align: center;
+    }
+
+    .type-tab.active {
+      color: var(--white);
+      border-bottom-color: var(--white);
+    }
+
+    /* ── Form sections ────────────────────────────── */
+    .form-section {
+      display: none;
+      padding: 24px 20px 0;
+    }
+
+    .form-section.visible {
+      display: block;
+    }
+
+    /* ── Field ────────────────────────────────────── */
+    .field {
+      margin-bottom: 22px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 9px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--grey-mid);
+      margin-bottom: 9px;
+    }
+
+    .field input[type="url"],
+    .field input[type="text"] {
+      width: 100%;
+      background: var(--grey-dark);
+      border: none;
+      color: var(--white);
+      font-family: var(--font);
+      font-size: 14px;
+      padding: 13px 14px;
+      outline: none;
+      border-radius: 0;
+      -webkit-appearance: none;
+    }
+
+    .field input::placeholder {
+      color: #2a2a2a;
+    }
+
+    /* ── File drop ────────────────────────────────── */
+    .file-drop {
+      border: 1px dashed #1e1e1e;
+      padding: 36px 20px;
+      text-align: center;
+      cursor: pointer;
+      position: relative;
+      transition: border-color 0.15s;
+    }
+
+    .file-drop:hover,
+    .file-drop.has-file {
+      border-color: #333;
+    }
+
+    .file-drop input[type="file"] {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .file-drop-label {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #2a2a2a;
+      pointer-events: none;
+    }
+
+    #file-preview {
+      display: none;
+      margin-top: 14px;
+      pointer-events: none;
+    }
+
+    #file-preview img {
+      width: 100%;
+      max-height: 260px;
+      object-fit: cover;
+      display: block;
+    }
+
+    #file-name {
+      font-size: 9px;
+      color: var(--grey-mid);
+      margin-top: 8px;
+      letter-spacing: 0.1em;
+    }
+
+    /* ── URL preview ──────────────────────────────── */
+    .url-preview {
+      display: none;
+      background: #0a0a0a;
+      margin-top: 10px;
+    }
+
+    .url-preview.visible {
+      display: block;
+    }
+
+    .art-prev-img img {
+      width: 100%;
+      max-height: 200px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .art-prev-body {
+      padding: 12px 13px 14px;
+    }
+
+    .art-prev-site {
+      font-size: 8px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--grey-mid);
+      margin-bottom: 4px;
+    }
+
+    .art-prev-title {
+      font-size: 11px;
+      line-height: 1.5;
+      letter-spacing: 0.03em;
+    }
+
+    .vid-prev iframe {
+      width: 100%;
+      border: none;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .aud-prev iframe {
+      width: 100%;
+      border: none;
+      display: block;
+      height: 152px;
+    }
+
+    /* ── Tags ─────────────────────────────────────── */
+    .tag-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tag-check {
+      display: none;
+    }
+
+    .tag-label {
+      display: inline-block;
+      border: 1px solid #1a1a1a;
+      color: #333;
+      font-family: var(--font);
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 7px 12px;
+      cursor: pointer;
+      transition: all 0.15s;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .tag-check:checked+.tag-label {
+      border-color: var(--white);
+      color: var(--white);
+    }
+
+    /* ── Submit ───────────────────────────────────── */
+    .submit-btn {
+      width: 100%;
+      background: var(--white);
+      border: none;
+      color: var(--black);
+      font-family: var(--font);
+      font-size: 10px;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      padding: 17px;
+      cursor: pointer;
+      margin-top: 28px;
+      transition: opacity 0.15s;
+      -webkit-appearance: none;
+    }
+
+    .submit-btn:disabled {
+      opacity: 0.25;
+      cursor: not-allowed;
+    }
+
+    /* ── Toast ────────────────────────────────────── */
+    #toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--white);
+      color: var(--black);
+      font-family: var(--font);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 11px 22px;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+      white-space: nowrap;
+      z-index: 999;
+    }
+
+    #toast.show {
+      opacity: 1;
+    }
+
+    /* ── Recent ───────────────────────────────────── */
+    .recent-wrap {
+      margin-top: 16px;
+      padding: 0 20px;
+      border-top: 1px solid #0d0d0d;
+    }
+
+    .recent-hd {
+      font-size: 9px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: #222;
+      padding: 20px 0 14px;
+    }
+
+    .recent-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid #090909;
+    }
+
+    .recent-thumb {
+      width: 44px;
+      height: 44px;
+      object-fit: cover;
+      flex-shrink: 0;
+      background: #0d0d0d;
+      display: block;
+    }
+
+    .recent-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .recent-type {
+      font-size: 8px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #333;
+      margin-bottom: 3px;
+    }
+
+    .recent-label {
+      font-size: 10px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: #555;
+    }
+
+    .recent-tags {
+      font-size: 8px;
+      color: #2a2a2a;
+      letter-spacing: 0.1em;
+      margin-top: 3px;
+    }
+
+    .del-btn {
+      background: none;
+      border: none;
+      color: #222;
+      font-size: 20px;
+      line-height: 1;
+      cursor: pointer;
+      padding: 4px 8px;
+      flex-shrink: 0;
+      transition: color 0.15s;
+    }
+
+    .del-btn:hover {
+      color: var(--white);
+    }
+
+    .recent-empty {
+      font-size: 9px;
+      color: #222;
+      letter-spacing: 0.15em;
+      padding: 12px 0;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Gate -->
+  <div id="gate">
+    <h1>Studio</h1>
+    <input type="password" id="pw" placeholder="——" autocomplete="off">
+    <div id="gate-error"></div>
+  </div>
+
+  <!-- Main -->
+  <div id="main" style="display:none">
+
+    <header>
+      <h1>Add to Archive</h1>
+    </header>
+
+    <div class="type-tabs">
+      <button class="type-tab active" data-type="image">Image</button>
+      <button class="type-tab" data-type="video">Video</button>
+      <button class="type-tab" data-type="article">Article</button>
+      <button class="type-tab" data-type="audio">Audio</button>
+    </div>
+
+    <!-- IMAGE -->
+    <div class="form-section visible" id="form-image">
+      <div class="field">
+        <div class="file-drop" id="file-drop">
+          <input type="file" id="file-input" accept="image/*" capture="environment">
+          <div class="file-drop-label">Tap to choose or photograph</div>
+          <div id="file-preview">
+            <img id="file-preview-img" src="" alt="">
+            <div id="file-name"></div>
+          </div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Tags</label>
+        <div class="tag-grid" id="tags-image"></div>
+      </div>
+      <button class="submit-btn" id="submit-image">Add Image</button>
+    </div>
+
+    <!-- VIDEO -->
+    <div class="form-section" id="form-video">
+      <div class="field">
+        <label>YouTube or Vimeo URL</label>
+        <input type="url" id="video-url" placeholder="https://youtube.com/watch?v=…" inputmode="url">
+        <div class="url-preview vid-prev" id="vid-preview">
+          <iframe id="vid-iframe" src="" allowfullscreen></iframe>
+        </div>
+      </div>
+      <div class="field">
+        <label>Tags</label>
+        <div class="tag-grid" id="tags-video"></div>
+      </div>
+      <button class="submit-btn" id="submit-video">Add Video</button>
+    </div>
+
+    <!-- ARTICLE -->
+    <div class="form-section" id="form-article">
+      <div class="field">
+        <label>Article URL</label>
+        <input type="url" id="article-url" placeholder="https://…" inputmode="url">
+        <div class="url-preview" id="art-preview">
+          <div class="art-prev-img"><img id="art-prev-img" src="" alt=""></div>
+          <div class="art-prev-body">
+            <div class="art-prev-site" id="art-prev-site"></div>
+            <div class="art-prev-title" id="art-prev-title"></div>
+          </div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Tags</label>
+        <div class="tag-grid" id="tags-article"></div>
+      </div>
+      <button class="submit-btn" id="submit-article">Add Article</button>
+    </div>
+
+    <!-- AUDIO -->
+    <div class="form-section" id="form-audio">
+      <div class="field">
+        <label>Spotify or SoundCloud URL</label>
+        <input type="url" id="audio-url" placeholder="https://open.spotify.com/…" inputmode="url">
+        <div class="url-preview aud-prev" id="aud-preview">
+          <iframe id="aud-iframe" src=""></iframe>
+        </div>
+      </div>
+      <div class="field">
+        <label>Tags</label>
+        <div class="tag-grid" id="tags-audio"></div>
+      </div>
+      <button class="submit-btn" id="submit-audio">Add Audio</button>
+    </div>
+
+    <!-- Recent -->
+    <div class="recent-wrap">
+      <div class="recent-hd">Recent</div>
+      <div id="recent-list"></div>
+    </div>
+
+  </div>
+
+  <div id="toast"></div>
+
+  <script>
+    // ╔══════════════════════════════════════════╗
+    // ║          CONFIG — EDIT THESE            ║
+    // ╚══════════════════════════════════════════╝
+    const CONFIG = {
+      SUPABASE_URL: 'https://vrajwxnjacptxbaejrzm.supabase.co',
+      SUPABASE_ANON_KEY: 'sb_publishable__9Y4_TQXphEDnkZgu_jXgQ_-8a5qj50',
+      PASSWORD: 'mykwek-waQdon-suqte7',
+    };
+    // ════════════════════════════════════════════
+
+    const TAGS = ['fashion', 'film', 'art', 'music', 'travel', 'life', 'beauty', 'culture', 'people', 'nature', 'words'];
+
+    const { createClient } = supabase;
+    const db = createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
+
+    // ── Gate ──────────────────────────────────────
+    const gate = document.getElementById('gate');
+    const pw = document.getElementById('pw');
+
+    if (sessionStorage.getItem('sb_auth') === '1') boot();
+
+    pw.addEventListener('keydown', e => {
+      if (e.key !== 'Enter') return;
+      if (pw.value === CONFIG.PASSWORD) {
+        sessionStorage.setItem('sb_auth', '1');
+        boot();
+      } else {
+        document.getElementById('gate-error').textContent = 'incorrect';
+        pw.value = '';
+      }
+    });
+
+    function boot() {
+      gate.classList.add('hidden');
+      document.getElementById('main').style.display = '';
+      buildTagGrids();
+      loadRecent();
+    }
+
+    // ── Tag grids ─────────────────────────────────
+    function buildTagGrids() {
+      ['image', 'video', 'article', 'audio'].forEach(type => {
+        const grid = document.getElementById(`tags-${type}`);
+        TAGS.forEach(tag => {
+          const id = `tag-${type}-${tag}`;
+          const cb = document.createElement('input');
+          cb.type = 'checkbox'; cb.className = 'tag-check'; cb.id = id; cb.value = tag;
+          const lb = document.createElement('label');
+          lb.className = 'tag-label'; lb.htmlFor = id; lb.textContent = tag;
+          grid.appendChild(cb);
+          grid.appendChild(lb);
+        });
+      });
+    }
+
+    function getTags(type) {
+      return [...document.querySelectorAll(`#tags-${type} .tag-check:checked`)].map(c => c.value);
+    }
+
+    function clearTags(type) {
+      document.querySelectorAll(`#tags-${type} .tag-check`).forEach(c => c.checked = false);
+    }
+
+    // ── Type tabs ─────────────────────────────────
+    document.querySelectorAll('.type-tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.type-tab').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.form-section').forEach(f => f.classList.remove('visible'));
+        btn.classList.add('active');
+        document.getElementById(`form-${btn.dataset.type}`).classList.add('visible');
+      });
+    });
+
+    // ── Helpers ───────────────────────────────────
+    function videoEmbed(url) {
+      if (!url) return null;
+      const yt = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s?]+)/);
+      if (yt) return `https://www.youtube.com/embed/${yt[1]}?rel=0`;
+      const vi = url.match(/vimeo\.com\/(\d+)/);
+      if (vi) return `https://player.vimeo.com/video/${vi[1]}`;
+      return null;
+    }
+
+    function audioEmbed(url) {
+      if (!url) return null;
+      if (url.includes('spotify.com'))
+        return url.replace(/spotify\.com\/(track|album|playlist|episode)\//, 'spotify.com/embed/$1/');
+      if (url.includes('soundcloud.com'))
+        return `https://w.soundcloud.com/player/?url=${encodeURIComponent(url)}&color=%23000000&auto_play=false&hide_related=true&show_comments=false`;
+      return null;
+    }
+
+    function setBtn(id, text, disabled) {
+      const b = document.getElementById(id);
+      b.textContent = text;
+      b.disabled = disabled;
+    }
+
+    // ── IMAGE ─────────────────────────────────────
+    const fileInput = document.getElementById('file-input');
+    const filePreview = document.getElementById('file-preview');
+    const filePreviewImg = document.getElementById('file-preview-img');
+    const fileDrop = document.getElementById('file-drop');
+
+    fileInput.addEventListener('change', () => {
+      const file = fileInput.files[0];
+      if (!file) return;
+      fileDrop.classList.add('has-file');
+      document.getElementById('file-name').textContent = file.name;
+      const reader = new FileReader();
+      reader.onload = e => {
+        filePreviewImg.src = e.target.result;
+        filePreview.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    });
+
+    document.getElementById('submit-image').addEventListener('click', async () => {
+      const file = fileInput.files[0];
+      if (!file) { toast('Choose an image first'); return; }
+      setBtn('submit-image', 'Uploading…', true);
+
+      const ext = file.name.split('.').pop();
+      const path = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+      const { error: upErr } = await db.storage.from('media').upload(path, file);
+      if (upErr) { toast('Upload failed'); setBtn('submit-image', 'Add Image', false); return; }
+
+      const { error: dbErr } = await db.from('entries').insert({ type: 'image', file_path: path, tags: getTags('image') });
+      if (dbErr) { toast('Save failed'); setBtn('submit-image', 'Add Image', false); return; }
+
+      toast('Added ✓');
+      fileInput.value = '';
+      filePreview.style.display = 'none';
+      filePreviewImg.src = '';
+      fileDrop.classList.remove('has-file');
+      document.getElementById('file-name').textContent = '';
+      clearTags('image');
+      setBtn('submit-image', 'Add Image', false);
+      loadRecent();
+    });
+
+    // ── VIDEO ─────────────────────────────────────
+    let vidTimer;
+    document.getElementById('video-url').addEventListener('input', e => {
+      clearTimeout(vidTimer);
+      vidTimer = setTimeout(() => {
+        const embed = videoEmbed(e.target.value.trim());
+        const preview = document.getElementById('vid-preview');
+        const iframe = document.getElementById('vid-iframe');
+        if (embed) { iframe.src = embed; preview.classList.add('visible'); }
+        else { preview.classList.remove('visible'); iframe.src = ''; }
+      }, 600);
+    });
+
+    document.getElementById('submit-video').addEventListener('click', async () => {
+      const url = document.getElementById('video-url').value.trim();
+      if (!url || !videoEmbed(url)) { toast('Enter a valid YouTube or Vimeo URL'); return; }
+      setBtn('submit-video', 'Saving…', true);
+
+      const { error } = await db.from('entries').insert({ type: 'video', url, tags: getTags('video') });
+      if (error) { toast('Save failed'); setBtn('submit-video', 'Add Video', false); return; }
+
+      toast('Added ✓');
+      document.getElementById('video-url').value = '';
+      document.getElementById('vid-preview').classList.remove('visible');
+      document.getElementById('vid-iframe').src = '';
+      clearTags('video');
+      setBtn('submit-video', 'Add Video', false);
+      loadRecent();
+    });
+
+    // ── ARTICLE ───────────────────────────────────
+    let artMeta = null, artTimer;
+
+    document.getElementById('article-url').addEventListener('input', e => {
+      artMeta = null;
+      clearTimeout(artTimer);
+      artTimer = setTimeout(() => fetchOG(e.target.value.trim()), 750);
+    });
+
+    async function fetchOG(url) {
+      if (!url || !url.startsWith('http')) return;
+      document.getElementById('art-preview').classList.remove('visible');
+      try {
+        const res = await fetch(`https://api.microlink.io/?url=${encodeURIComponent(url)}`);
+        const json = await res.json();
+        if (json.status !== 'success') return;
+        const d = json.data;
+        artMeta = {
+          title: d.title || '',
+          description: d.description || '',
+          preview_image: d.image?.url || '',
+          site_name: d.publisher || '',
+        };
+        const img = document.getElementById('art-prev-img');
+        img.src = artMeta.preview_image;
+        img.style.display = artMeta.preview_image ? 'block' : 'none';
+        document.getElementById('art-prev-site').textContent = artMeta.site_name;
+        document.getElementById('art-prev-title').textContent = artMeta.title;
+        document.getElementById('art-preview').classList.add('visible');
+      } catch { }
+    }
+
+    document.getElementById('submit-article').addEventListener('click', async () => {
+      const url = document.getElementById('article-url').value.trim();
+      if (!url) { toast('Enter a URL'); return; }
+      setBtn('submit-article', 'Saving…', true);
+
+      const { error } = await db.from('entries').insert({
+        type: 'article', url,
+        ...(artMeta || {}),
+        tags: getTags('article'),
+      });
+      if (error) { toast('Save failed'); setBtn('submit-article', 'Add Article', false); return; }
+
+      toast('Added ✓');
+      document.getElementById('article-url').value = '';
+      document.getElementById('art-preview').classList.remove('visible');
+      artMeta = null;
+      clearTags('article');
+      setBtn('submit-article', 'Add Article', false);
+      loadRecent();
+    });
+
+    // ── AUDIO ─────────────────────────────────────
+    let audTimer;
+    document.getElementById('audio-url').addEventListener('input', e => {
+      clearTimeout(audTimer);
+      audTimer = setTimeout(() => {
+        const embed = audioEmbed(e.target.value.trim());
+        const preview = document.getElementById('aud-preview');
+        const iframe = document.getElementById('aud-iframe');
+        if (embed) { iframe.src = embed; preview.classList.add('visible'); }
+        else { preview.classList.remove('visible'); iframe.src = ''; }
+      }, 600);
+    });
+
+    document.getElementById('submit-audio').addEventListener('click', async () => {
+      const url = document.getElementById('audio-url').value.trim();
+      if (!url || !audioEmbed(url)) { toast('Enter a valid Spotify or SoundCloud URL'); return; }
+      setBtn('submit-audio', 'Saving…', true);
+
+      const { error } = await db.from('entries').insert({ type: 'audio', url, tags: getTags('audio') });
+      if (error) { toast('Save failed'); setBtn('submit-audio', 'Add Audio', false); return; }
+
+      toast('Added ✓');
+      document.getElementById('audio-url').value = '';
+      document.getElementById('aud-preview').classList.remove('visible');
+      document.getElementById('aud-iframe').src = '';
+      clearTags('audio');
+      setBtn('submit-audio', 'Add Audio', false);
+      loadRecent();
+    });
+
+    // ── RECENT ────────────────────────────────────
+    async function loadRecent() {
+      const { data } = await db.from('entries').select('*').order('created_at', { ascending: false }).limit(10);
+      const list = document.getElementById('recent-list');
+      list.innerHTML = '';
+      if (!data?.length) {
+        list.innerHTML = '<div class="recent-empty">No entries yet.</div>';
+        return;
+      }
+      data.forEach(entry => {
+        const div = document.createElement('div');
+        div.className = 'recent-item';
+        const thumb = thumbFor(entry);
+        const label = entry.title || entry.url || entry.file_path || '—';
+        div.innerHTML = `
+      ${thumb ? `<img class="recent-thumb" src="${escAttr(thumb)}" alt="">` : '<div class="recent-thumb"></div>'}
+      <div class="recent-info">
+        <div class="recent-type">${escHTML(entry.type)}</div>
+        <div class="recent-label">${escHTML(label)}</div>
+        <div class="recent-tags">${(entry.tags || []).join(' · ')}</div>
+      </div>
+      <button class="del-btn" data-id="${escAttr(entry.id)}" data-path="${escAttr(entry.file_path || '')}">×</button>`;
+        list.appendChild(div);
+      });
+      list.querySelectorAll('.del-btn').forEach(btn => {
+        btn.addEventListener('click', () => deleteEntry(btn.dataset.id, btn.dataset.path));
+      });
+    }
+
+    function thumbFor(entry) {
+      if (entry.type === 'image') return entry.file_path ? `${CONFIG.SUPABASE_URL}/storage/v1/object/public/media/${entry.file_path}` : entry.url;
+      if (entry.type === 'article') return entry.preview_image || '';
+      return '';
+    }
+
+    async function deleteEntry(id, filePath) {
+      if (!confirm('Delete this entry?')) return;
+      if (filePath) await db.storage.from('media').remove([filePath]);
+      const { error } = await db.from('entries').delete().eq('id', id);
+      if (error) { toast('Delete failed'); return; }
+      toast('Deleted');
+      loadRecent();
+    }
+
+    // ── Toast ─────────────────────────────────────
+    let toastTimer;
+    function toast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => t.classList.remove('show'), 2400);
+    }
+
+    // ── Sanitise ──────────────────────────────────
+    function escHTML(s) {
+      return String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+    function escAttr(s) { return escHTML(s); }
+  </script>
+</body>
+
+</html>
