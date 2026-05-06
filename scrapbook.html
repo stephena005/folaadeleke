@@ -26,8 +26,8 @@
     }
 
     body {
-      background: var(--black);
-      color: var(--white);
+      background: var(--white);
+      color: var(--black);
       font-family: var(--font);
       min-height: 100vh;
     }
@@ -36,7 +36,7 @@
     #gate {
       position: fixed;
       inset: 0;
-      background: var(--black);
+      background: var(--white);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -55,8 +55,8 @@
     #gate input {
       background: none;
       border: none;
-      border-bottom: 1px solid #222;
-      color: var(--white);
+      border-bottom: 1px solid #ccc;
+      color: var(--black);
       font-family: var(--font);
       font-size: 20px;
       padding: 10px 0;
@@ -68,7 +68,7 @@
     }
 
     #gate input:focus {
-      border-bottom-color: #555;
+      border-bottom-color: var(--black);
     }
 
     #gate-error {
@@ -88,21 +88,25 @@
       position: sticky;
       top: 0;
       z-index: 50;
-      background: var(--black);
+      background: var(--white);
       height: var(--nav-height);
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 0 20px;
-      border-bottom: 1px solid #0d0d0d;
+      border-bottom: 1px solid var(--grey-light);
     }
 
     .site-nav a {
-      color: var(--white);
+      color: var(--black);
       text-decoration: none;
       font-size: 11px;
       letter-spacing: 0.25em;
       text-transform: uppercase;
+    }
+
+    .site-nav a:hover {
+      text-decoration: underline;
     }
 
     .site-nav-brand {
@@ -118,6 +122,7 @@
       overflow-x: auto;
       scrollbar-width: none;
       -webkit-overflow-scrolling: touch;
+      border-bottom: 1px solid var(--grey-light);
     }
 
     #tag-nav::-webkit-scrollbar {
@@ -127,8 +132,8 @@
     .tag-pill {
       flex-shrink: 0;
       background: none;
-      border: 1px solid #1a1a1a;
-      color: #444;
+      border: 1px solid var(--grey-light);
+      color: var(--grey-mid);
       font-family: var(--font);
       font-size: 9px;
       letter-spacing: 0.2em;
@@ -139,13 +144,13 @@
     }
 
     .tag-pill:hover {
-      border-color: #444;
-      color: #999;
+      border-color: var(--grey-mid);
+      color: var(--black);
     }
 
     .tag-pill.active {
-      border-color: var(--white);
-      color: var(--white);
+      border-color: var(--black);
+      color: var(--black);
     }
 
     /* ── Grid ─────────────────────────────────────── */
@@ -180,7 +185,7 @@
     /* ── Card base ────────────────────────────────── */
     .card {
       position: relative;
-      background: #080808;
+      background: #f5f5f5;
       overflow: hidden;
     }
 
@@ -300,8 +305,8 @@
       font-size: 7px;
       letter-spacing: 0.15em;
       text-transform: uppercase;
-      background: rgba(0, 0, 0, 0.85);
-      color: #bbb;
+      background: rgba(255, 255, 255, 0.9);
+      color: var(--black);
       padding: 3px 5px;
     }
 
@@ -311,7 +316,7 @@
       padding: 36px;
       font-size: 9px;
       letter-spacing: 0.4em;
-      color: #333;
+      color: var(--grey-mid);
       text-transform: uppercase;
     }
 
@@ -320,7 +325,7 @@
       padding: 80px 20px;
       font-size: 10px;
       letter-spacing: 0.25em;
-      color: #333;
+      color: var(--grey-mid);
     }
 
     /* ── Lightbox ─────────────────────────────────── */
@@ -401,7 +406,7 @@
     const CONFIG = {
       SUPABASE_URL: 'https://vrajwxnjacptxbaejrzm.supabase.co',
       SUPABASE_ANON_KEY: 'sb_publishable__9Y4_TQXphEDnkZgu_jXgQ_-8a5qj50',
-      PASSWORD: 'mykwek-waQdon-suqte7',
+      PASSWORD: 'getmoneyorgohome',
       PAGE_SIZE: 18,
     };
     // ════════════════════════════════════════════

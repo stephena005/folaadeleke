@@ -10,8 +10,9 @@
     :root {
       --black: #000;
       --white: #fff;
-      --grey-mid: #666;
-      --grey-dark: #111;
+      --grey-light: #eee;
+      --grey-mid: #999;
+      --grey-dark: #f5f5f5;
       --font: 'Courier New', Courier, monospace;
     }
 
@@ -24,8 +25,8 @@
     }
 
     body {
-      background: var(--black);
-      color: var(--white);
+      background: var(--white);
+      color: var(--black);
       font-family: var(--font);
       min-height: 100vh;
       max-width: 480px;
@@ -37,7 +38,7 @@
     #gate {
       position: fixed;
       inset: 0;
-      background: var(--black);
+      background: var(--white);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -56,8 +57,8 @@
     #gate input {
       background: none;
       border: none;
-      border-bottom: 1px solid #222;
-      color: var(--white);
+      border-bottom: 1px solid #ccc;
+      color: var(--black);
       font-family: var(--font);
       font-size: 22px;
       padding: 10px 0;
@@ -69,7 +70,7 @@
     }
 
     #gate input:focus {
-      border-bottom-color: #555;
+      border-bottom-color: var(--black);
     }
 
     #gate-error {
@@ -87,7 +88,7 @@
     /* ── Header ───────────────────────────────────── */
     header {
       padding: 22px 20px 18px;
-      border-bottom: 1px solid #0d0d0d;
+      border-bottom: 1px solid var(--grey-light);
     }
 
     header h1 {
@@ -102,14 +103,14 @@
     .type-tabs {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      border-bottom: 1px solid #0d0d0d;
+      border-bottom: 1px solid var(--grey-light);
     }
 
     .type-tab {
       background: none;
       border: none;
       border-bottom: 2px solid transparent;
-      color: #2a2a2a;
+      color: var(--grey-mid);
       font-family: var(--font);
       font-size: 9px;
       letter-spacing: 0.2em;
@@ -121,8 +122,8 @@
     }
 
     .type-tab.active {
-      color: var(--white);
-      border-bottom-color: var(--white);
+      color: var(--black);
+      border-bottom-color: var(--black);
     }
 
     /* ── Form sections ────────────────────────────── */
@@ -154,7 +155,7 @@
       width: 100%;
       background: var(--grey-dark);
       border: none;
-      color: var(--white);
+      color: var(--black);
       font-family: var(--font);
       font-size: 14px;
       padding: 13px 14px;
@@ -164,12 +165,12 @@
     }
 
     .field input::placeholder {
-      color: #2a2a2a;
+      color: #bbb;
     }
 
     /* ── File drop ────────────────────────────────── */
     .file-drop {
-      border: 1px dashed #1e1e1e;
+      border: 1px dashed var(--grey-light);
       padding: 36px 20px;
       text-align: center;
       cursor: pointer;
@@ -179,7 +180,7 @@
 
     .file-drop:hover,
     .file-drop.has-file {
-      border-color: #333;
+      border-color: var(--grey-mid);
     }
 
     .file-drop input[type="file"] {
@@ -195,7 +196,7 @@
       font-size: 10px;
       letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: #2a2a2a;
+      color: var(--grey-mid);
       pointer-events: none;
     }
 
@@ -222,7 +223,7 @@
     /* ── URL preview ──────────────────────────────── */
     .url-preview {
       display: none;
-      background: #0a0a0a;
+      background: var(--grey-dark);
       margin-top: 10px;
     }
 
@@ -282,8 +283,8 @@
 
     .tag-label {
       display: inline-block;
-      border: 1px solid #1a1a1a;
-      color: #333;
+      border: 1px solid var(--grey-light);
+      color: var(--grey-mid);
       font-family: var(--font);
       font-size: 9px;
       letter-spacing: 0.2em;
@@ -296,16 +297,16 @@
     }
 
     .tag-check:checked+.tag-label {
-      border-color: var(--white);
-      color: var(--white);
+      border-color: var(--black);
+      color: var(--black);
     }
 
     /* ── Submit ───────────────────────────────────── */
     .submit-btn {
       width: 100%;
-      background: var(--white);
+      background: var(--black);
       border: none;
-      color: var(--black);
+      color: var(--white);
       font-family: var(--font);
       font-size: 10px;
       letter-spacing: 0.35em;
@@ -328,8 +329,8 @@
       bottom: 28px;
       left: 50%;
       transform: translateX(-50%);
-      background: var(--white);
-      color: var(--black);
+      background: var(--black);
+      color: var(--white);
       font-family: var(--font);
       font-size: 10px;
       letter-spacing: 0.2em;
@@ -350,14 +351,14 @@
     .recent-wrap {
       margin-top: 16px;
       padding: 0 20px;
-      border-top: 1px solid #0d0d0d;
+      border-top: 1px solid var(--grey-light);
     }
 
     .recent-hd {
       font-size: 9px;
       letter-spacing: 0.3em;
       text-transform: uppercase;
-      color: #222;
+      color: var(--grey-mid);
       padding: 20px 0 14px;
     }
 
@@ -366,7 +367,7 @@
       align-items: center;
       gap: 12px;
       padding: 10px 0;
-      border-bottom: 1px solid #090909;
+      border-bottom: 1px solid var(--grey-light);
     }
 
     .recent-thumb {
@@ -374,7 +375,7 @@
       height: 44px;
       object-fit: cover;
       flex-shrink: 0;
-      background: #0d0d0d;
+      background: var(--grey-light);
       display: block;
     }
 
@@ -387,7 +388,7 @@
       font-size: 8px;
       letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: #333;
+      color: var(--grey-mid);
       margin-bottom: 3px;
     }
 
@@ -396,12 +397,12 @@
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      color: #555;
+      color: var(--black);
     }
 
     .recent-tags {
       font-size: 8px;
-      color: #2a2a2a;
+      color: var(--grey-mid);
       letter-spacing: 0.1em;
       margin-top: 3px;
     }
@@ -409,7 +410,7 @@
     .del-btn {
       background: none;
       border: none;
-      color: #222;
+      color: var(--grey-light);
       font-size: 20px;
       line-height: 1;
       cursor: pointer;
@@ -419,12 +420,12 @@
     }
 
     .del-btn:hover {
-      color: var(--white);
+      color: var(--black);
     }
 
     .recent-empty {
       font-size: 9px;
-      color: #222;
+      color: var(--grey-mid);
       letter-spacing: 0.15em;
       padding: 12px 0;
     }
@@ -542,7 +543,7 @@
     const CONFIG = {
       SUPABASE_URL: 'https://vrajwxnjacptxbaejrzm.supabase.co',
       SUPABASE_ANON_KEY: 'sb_publishable__9Y4_TQXphEDnkZgu_jXgQ_-8a5qj50',
-      PASSWORD: 'mykwek-waQdon-suqte7',
+      PASSWORD: 'getmoneyorgohome',
     };
     // ════════════════════════════════════════════
 
