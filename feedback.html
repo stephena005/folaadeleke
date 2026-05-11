@@ -200,6 +200,23 @@
     textarea::placeholder { color: #cccccc; }
     textarea:focus { border-color: #000000; }
 
+    /* ── Email input ── */
+    input[type="email"] {
+      width: 100%;
+      border: 1px solid #eeeeee;
+      background: #ffffff;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      color: #000000;
+      padding: 14px 16px;
+      outline: none;
+      transition: border-color 0.15s;
+      margin-bottom: 24px;
+    }
+    input[type="email"]::placeholder { color: #cccccc; }
+    input[type="email"]:focus { border-color: #000000; }
+
     /* ── Submit ── */
     .submit-btn {
       display: block;
@@ -330,6 +347,14 @@
 
       <hr class="divider">
 
+      <label class="field-label" for="email-input">Your Email</label>
+      <input
+        type="email"
+        id="email-input"
+        placeholder="your@email.com"
+        autocomplete="email"
+      />
+
       <label class="field-label" for="comment">Anything else? (optional)</label>
       <textarea
         id="comment"
@@ -373,9 +398,13 @@
 
     // ── Read URL params ──────────────────────────────────────────
     const params = new URLSearchParams(window.location.search);
-    const preRating = parseInt(params.get('rating'), 10) || null;
-    const orderRef  = params.get('order') || null;
-    const email     = params.get('email') || null;
+    const preRating  = parseInt(params.get('rating'), 10) || null;
+    const orderRef   = params.get('order') || null;
+    const emailParam = params.get('email') || null;
+
+    // Pre-fill email field if Beehiiv passed it via URL
+    const emailInput = document.getElementById('email-input');
+    if (emailParam) emailInput.value = emailParam;
 
     // ── State ────────────────────────────────────────────────────
     let selectedRating = null;
@@ -416,7 +445,7 @@
         rating:    selectedRating,
         comment:   document.getElementById('comment').value.trim() || null,
         order_ref: orderRef,
-        email:     email,
+        email:     emailInput.value.trim() || emailParam || null,
       };
 
       const { error } = await db.from('feedback').insert([payload]);
