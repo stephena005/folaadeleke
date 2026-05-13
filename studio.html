@@ -5,6 +5,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Studio</title>
+
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#000000">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Studio">
+  <link rel="apple-touch-icon" href="/studio-icon.svg">
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <style>
     :root {
@@ -850,6 +860,33 @@
       return String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
     function escAttr(s) { return escHTML(s); }
+
+    // ── Service worker ────────────────────────────
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js');
+    }
+
+    // ── iOS install prompt (shown once) ───────────
+    const isIOS = /iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase());
+    const isStandalone = window.navigator.standalone === true;
+    if (isIOS && !isStandalone && !localStorage.getItem('ios_hint_shown')) {
+      localStorage.setItem('ios_hint_shown', '1');
+      setTimeout(() => {
+        const banner = document.createElement('div');
+        banner.style.cssText = `
+          position:fixed; bottom:0; left:0; right:0;
+          background:#000; color:#fff;
+          font-family:'Courier New',Courier,monospace;
+          font-size:10px; letter-spacing:0.15em;
+          padding:14px 20px 28px;
+          text-align:center; z-index:999;
+          line-height:1.7;
+        `;
+        banner.innerHTML = `Tap <strong>Share</strong> then <strong>"Add to Home Screen"</strong> to install Studio as an app.<br><span style="color:#666;cursor:pointer" id="dismiss-banner">Dismiss</span>`;
+        document.body.appendChild(banner);
+        document.getElementById('dismiss-banner').addEventListener('click', () => banner.remove());
+      }, 2000);
+    }
   </script>
 </body>
 
