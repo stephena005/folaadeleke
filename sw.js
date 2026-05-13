@@ -1,4 +1,4 @@
-const CACHE = 'studio-v1';
+const CACHE = 'studio-v2';
 
 const PRECACHE = [
   '/studio.html',
