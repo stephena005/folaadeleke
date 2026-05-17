@@ -107,6 +107,7 @@
       {%- else -%}
         {%- assign dim_a1 = product.metafields.custom.a1_dimensions | default: '594 × 841 mm / 23.4 × 33.1 in' -%}
         {%- assign dim_a2 = product.metafields.custom.a2_dimensions | default: '420 × 594 mm / 16.5 × 23.4 in' -%}
+        {%- assign dim_a3 = product.metafields.custom.a3_dimensions | default: '297 × 420 mm / 11.7 × 16.5 in' -%}
       {%- endif -%}
       <div class="product-spec-row">
         <span class="spec-label">Dimensions</span>
@@ -114,6 +115,7 @@
           {%- case size_option.values.first -%}
             {%- when 'A1' -%}{{ dim_a1 }}
             {%- when 'A2' -%}{{ dim_a2 }}
+            {%- when 'A3' -%}{{ dim_a3 }}
             {%- else -%}{{ size_option.values.first }}
           {%- endcase -%}
         </span>
@@ -208,6 +210,12 @@
               <td>A2</td>
               <td colspan="2">{{ dim_a2 }}</td>
             </tr>
+            {%- if size_option.values contains 'A3' -%}
+            <tr>
+              <td>A3</td>
+              <td colspan="2">{{ dim_a3 }}</td>
+            </tr>
+            {%- endif -%}
           </tbody>
         </table>
         {%- if product.handle == 'loud-celebration' -%}
@@ -243,7 +251,8 @@
 
   var sizeDimensions = {
     'A1': 'A1 — {{ dim_a1 }}',
-    'A2': 'A2 — {{ dim_a2 }}'
+    'A2': 'A2 — {{ dim_a2 }}',
+    'A3': 'A3 — {{ dim_a3 }}'
   };
 
   var currencySymbol = '{{ cart.currency.symbol }}';
