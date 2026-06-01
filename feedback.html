@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+  ═══════════════════════════════════════════════════════════════
+  FOLA ADELEKE® — BUYER FEEDBACK LANDING PAGE
+  ═══════════════════════════════════════════════════════════════
+
+  URL parameters (passed from the feedback email links):
+    ?rating=1-5        pre-selects the star rating
+    ?order=ORDER_NUM   optional order reference (for your records)
+    ?email=EMAIL       optional subscriber email (Beehiiv merge tag)
+
+  SUPABASE SETUP — run this SQL once in your Supabase SQL editor:
+  ──────────────────────────────────────────────────────────────
+  create table public.feedback (
+    id          bigserial primary key,
+    rating      smallint   not null check (rating between 1 and 5),
+    comment     text,
+    order_ref   text,
+    email       text,
+    created_at  timestamptz default now()
+  );
+
+  -- Allow anyone to insert (no auth required from a web page)
+  alter table public.feedback enable row level security;
+
+  create policy "Allow anonymous inserts"
+    on public.feedback for insert
+    with check (true);
+
+  ═══════════════════════════════════════════════════════════════
+-->
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Share Your Feedback — Fola Adeleke®</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Courier New', Courier, monospace;
+      background-color: #ffffff;
+      color: #000000;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 60px 24px 80px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 480px;
+    }
+
+    /* ── Header ── */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #eeeeee;
+      margin-bottom: 40px;
+    }
+    .header-label {
+      font-size: 9px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: #999999;
+    }
+
+    /* ── Brand ── */
+    .brand {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .brand h1 {
+      font-size: 16px;
+      font-weight: normal;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: #000000;
+    }
+    .brand h1 sup {
+      font-size: 10px;
+      letter-spacing: 0;
+    }
+
+    .rule {
+      width: 48px;
+      height: 1px;
+      background: #000000;
+      margin: 0 auto 36px;
+    }
+
+    /* ── Headline ── */
+    .headline {
+      text-align: center;
+      font-size: 20px;
+      font-weight: normal;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: #000000;
+      margin-bottom: 14px;
+      line-height: 1.4;
+    }
+    .subline {
+      text-align: center;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      line-height: 2;
+      color: #999999;
+      margin-bottom: 40px;
+    }
+
+    /* ── Rating ── */
+    .rating-label {
+      font-size: 9px;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: #999999;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    .rating-row {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .rating-btn {
+      width: 52px;
+      height: 52px;
+      border: 1px solid #eeeeee;
+      background: #ffffff;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 15px;
+      letter-spacing: 0.05em;
+      color: #999999;
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s, background 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .rating-btn:hover {
+      border-color: #000000;
+      color: #000000;
+    }
+    .rating-btn.selected {
+      border-color: #000000;
+      background: #000000;
+      color: #ffffff;
+    }
+    .rating-ends {
+      display: flex;
+      justify-content: space-between;
+      padding: 0 4px;
+      margin-bottom: 36px;
+    }
+    .rating-ends span {
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      color: #cccccc;
+    }
+
+    /* ── Divider ── */
+    .divider {
+      border: none;
+      border-top: 1px solid #eeeeee;
+      margin-bottom: 36px;
+    }
+
+    /* ── Comment ── */
+    .field-label {
+      font-size: 9px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: #999999;
+      display: block;
+      margin-bottom: 10px;
+    }
+    textarea {
+      width: 100%;
+      height: 120px;
+      border: 1px solid #eeeeee;
+      background: #ffffff;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      line-height: 1.9;
+      color: #000000;
+      padding: 14px 16px;
+      resize: none;
+      outline: none;
+      transition: border-color 0.15s;
+      margin-bottom: 24px;
+    }
+    textarea::placeholder { color: #cccccc; }
+    textarea:focus { border-color: #000000; }
+
+    /* ── Email input ── */
+    input[type="email"] {
+      width: 100%;
+      border: 1px solid #eeeeee;
+      background: #ffffff;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      color: #000000;
+      padding: 14px 16px;
+      outline: none;
+      transition: border-color 0.15s;
+      margin-bottom: 24px;
+    }
+    input[type="email"]::placeholder { color: #cccccc; }
+    input[type="email"]:focus { border-color: #000000; }
+
+    /* ── Submit ── */
+    .submit-btn {
+      display: block;
+      width: 100%;
+      background: #000000;
+      color: #ffffff;
+      border: 1px solid #000000;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      padding: 15px 0;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+    .submit-btn:hover:not(:disabled) {
+      background: #ffffff;
+      color: #000000;
+    }
+    .submit-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    /* ── Error message ── */
+    .error-msg {
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      color: #cc0000;
+      text-align: center;
+      margin-top: 14px;
+      display: none;
+    }
+
+    /* ── Success state ── */
+    #success-view {
+      display: none;
+      text-align: center;
+    }
+    .success-mark {
+      font-size: 22px;
+      letter-spacing: 0.05em;
+      color: #000000;
+      margin-bottom: 20px;
+    }
+    .success-heading {
+      font-size: 18px;
+      font-weight: normal;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: #000000;
+      margin-bottom: 14px;
+    }
+    .success-copy {
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      line-height: 2.2;
+      color: #999999;
+      margin-bottom: 36px;
+    }
+    .back-link {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #000000;
+      text-decoration: none;
+      border-bottom: 1px solid #000000;
+    }
+    .back-link:hover { color: #999999; border-bottom-color: #999999; }
+
+    /* ── Footer ── */
+    .footer {
+      border-top: 1px solid #eeeeee;
+      padding-top: 24px;
+      margin-top: 48px;
+      text-align: center;
+    }
+    .footer p {
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      color: #cccccc;
+      line-height: 1.8;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 480px) {
+      .rating-btn { width: 46px; height: 46px; font-size: 13px; }
+      .headline { font-size: 16px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <!-- Header -->
+    <div class="header">
+      <span class="header-label">Fola Adeleke's Notes</span>
+      <span class="header-label">Feedback</span>
+    </div>
+
+    <!-- Brand -->
+    <div class="brand">
+      <h1>Fola Adeleke<sup>®</sup></h1>
+    </div>
+    <div class="rule"></div>
+
+    <!-- Form view -->
+    <div id="form-view">
+      <h2 class="headline">How was your order?</h2>
+      <p class="subline">
+        Takes 30 seconds.<br>
+        Your feedback shapes what comes next.
+      </p>
+
+      <p class="rating-label">Your Rating</p>
+      <div class="rating-row" role="group" aria-label="Rating from 1 to 5">
+        <button class="rating-btn" data-value="1" type="button" aria-label="1 — Very poor">1</button>
+        <button class="rating-btn" data-value="2" type="button" aria-label="2 — Poor">2</button>
+        <button class="rating-btn" data-value="3" type="button" aria-label="3 — Okay">3</button>
+        <button class="rating-btn" data-value="4" type="button" aria-label="4 — Good">4</button>
+        <button class="rating-btn" data-value="5" type="button" aria-label="5 — Excellent">5</button>
+      </div>
+      <div class="rating-ends">
+        <span>Not what I expected</span>
+        <span>Exceeded expectations</span>
+      </div>
+
+      <hr class="divider">
+
+      <label class="field-label" for="email-input">Your Email</label>
+      <input
+        type="email"
+        id="email-input"
+        placeholder="your@email.com"
+        autocomplete="email"
+      />
+
+      <label class="field-label" for="comment">Anything else? (optional)</label>
+      <textarea
+        id="comment"
+        placeholder="Tell us what you loved, what could be better, or anything on your mind..."
+        maxlength="1000"
+      ></textarea>
+
+      <button class="submit-btn" id="submit-btn" type="button" disabled>
+        Submit Feedback &rarr;
+      </button>
+      <p class="error-msg" id="error-msg">Something went wrong. Please try again.</p>
+    </div>
+
+    <!-- Success view -->
+    <div id="success-view">
+      <p class="success-mark">—</p>
+      <h2 class="success-heading">Thank you.</h2>
+      <p class="success-copy">
+        Your feedback has been received.<br>
+        It means a lot, and it goes directly to Fola.
+      </p>
+      <a href="https://folaadeleke.com" class="back-link">Return to the site &rarr;</a>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <p>Fola Adeleke® &nbsp;·&nbsp; © 2026</p>
+    </div>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script>
+    const CONFIG = {
+      SUPABASE_URL: 'https://vrajwxnjacptxbaejrzm.supabase.co',
+      SUPABASE_ANON_KEY: 'sb_publishable__9Y4_TQXphEDnkZgu_jXgQ_-8a5qj50',
+    };
+
+    const { createClient } = supabase;
+    const db = createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
+
+    // ── Read URL params ──────────────────────────────────────────
+    const params = new URLSearchParams(window.location.search);
+    const preRating  = parseInt(params.get('rating'), 10) || null;
+    const orderRef   = params.get('order') || null;
+    const emailParam = params.get('email') || null;
+
+    // Pre-fill email field if Beehiiv passed it via URL
+    const emailInput = document.getElementById('email-input');
+    if (emailParam) emailInput.value = emailParam;
+
+    // ── State ────────────────────────────────────────────────────
+    let selectedRating = null;
+
+    // ── Rating buttons ───────────────────────────────────────────
+    const ratingBtns  = document.querySelectorAll('.rating-btn');
+    const submitBtn   = document.getElementById('submit-btn');
+    const errorMsg    = document.getElementById('error-msg');
+    const formView    = document.getElementById('form-view');
+    const successView = document.getElementById('success-view');
+
+    function selectRating(value) {
+      selectedRating = value;
+      ratingBtns.forEach(btn => {
+        btn.classList.toggle('selected', parseInt(btn.dataset.value, 10) === value);
+      });
+      submitBtn.disabled = false;
+    }
+
+    ratingBtns.forEach(btn => {
+      btn.addEventListener('click', () => selectRating(parseInt(btn.dataset.value, 10)));
+    });
+
+    // Pre-select rating from URL param
+    if (preRating >= 1 && preRating <= 5) {
+      selectRating(preRating);
+    }
+
+    // ── Submit ───────────────────────────────────────────────────
+    submitBtn.addEventListener('click', async () => {
+      if (!selectedRating) return;
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending…';
+      errorMsg.style.display = 'none';
+
+      const payload = {
+        rating:    selectedRating,
+        comment:   document.getElementById('comment').value.trim() || null,
+        order_ref: orderRef,
+        email:     emailInput.value.trim() || emailParam || null,
+      };
+
+      const { error } = await db.from('feedback').insert([payload]);
+
+      if (error) {
+        console.error(error);
+        errorMsg.style.display = 'block';
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit Feedback →';
+        return;
+      }
+
+      formView.style.display = 'none';
+      successView.style.display = 'block';
+    });
+  </script>
+</body>
+</html>
