@@ -164,11 +164,14 @@
       display: none;
       margin-top: 14px;
       pointer-events: none;
+      display: none;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 4px;
     }
 
     #file-preview img {
       width: 100%;
-      max-height: 260px;
+      aspect-ratio: 1;
       object-fit: cover;
       display: block;
     }
@@ -412,12 +415,10 @@
     <div class="form-section visible" id="form-image">
       <div class="field">
         <div class="file-drop" id="file-drop">
-          <input type="file" id="file-input" accept="image/*">
+          <input type="file" id="file-input" accept="image/*" multiple>
           <div class="file-drop-label">Tap to choose or photograph</div>
-          <div id="file-preview">
-            <img id="file-preview-img" src="" alt="">
-            <div id="file-name"></div>
-          </div>
+          <div id="file-preview"></div>
+          <div id="file-name"></div>
         </div>
       </div>
       <div class="field">
@@ -572,22 +573,25 @@
     }
 
     // ── IMAGE ─────────────────────────────────────
-    const fileInput = document.getElementById('file-input');
+    const fileInput   = document.getElementById('file-input');
     const filePreview = document.getElementById('file-preview');
-    const filePreviewImg = document.getElementById('file-preview-img');
-    const fileDrop = document.getElementById('file-drop');
+    const fileDrop    = document.getElementById('file-drop');
 
     fileInput.addEventListener('change', () => {
-      const file = fileInput.files[0];
-      if (!file) return;
+      const files = [...fileInput.files];
+      if (!files.length) return;
       fileDrop.classList.add('has-file');
-      document.getElementById('file-name').textContent = file.name;
-      const reader = new FileReader();
-      reader.onload = e => {
-        filePreviewImg.src = e.target.result;
-        filePreview.style.display = 'block';
-      };
-      reader.readAsDataURL(file);
+      document.getElementById('file-name').textContent =
+        files.length === 1 ? files[0].name : `${files.length} images selected`;
+      filePreview.innerHTML = '';
+      filePreview.style.display = 'grid';
+      files.forEach(file => {
+        const img = document.createElement('img');
+        const reader = new FileReader();
+        reader.onload = e => { img.src = e.target.result; };
+        reader.readAsDataURL(file);
+        filePreview.appendChild(img);
+      });
     });
 
     function compressImage(file, maxWidth = 1600, quality = 0.8) {
@@ -606,26 +610,33 @@
     }
 
     document.getElementById('submit-image').addEventListener('click', async () => {
-      const file = fileInput.files[0];
-      if (!file) { toast('Choose an image first'); return; }
-      setBtn('submit-image', 'Uploading…', true);
+      const files = [...fileInput.files];
+      if (!files.length) { toast('Choose an image first'); return; }
+      const tags = getTags('image');
+      setBtn('submit-image', `Uploading 0 / ${files.length}…`, true);
 
-      const compressed = await compressImage(file);
-      const path = `${Date.now()}-${Math.random().toString(36).slice(2)}.jpg`;
-      const { error: upErr } = await db.storage.from('media').upload(path, compressed);
-      if (upErr) { toast('Upload failed'); setBtn('submit-image', 'Add Image', false); return; }
+      let uploaded = 0, failed = 0;
+      for (const file of files) {
+        const ext  = file.name.split('.').pop();
+        const path = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+        const { error: upErr } = await db.storage.from('media').upload(path, file);
+        if (upErr) { failed++; continue; }
+        const { error: dbErr } = await db.from('entries').insert({ type: 'image', file_path: path, tags });
+        if (dbErr) { failed++; continue; }
+        uploaded++;
+        setBtn('submit-image', `Uploading ${uploaded} / ${files.length}…`, true);
+      }
 
-      const { error: dbErr } = await db.from('entries').insert({ type: 'image', file_path: path, tags: getTags('image') });
-      if (dbErr) { toast('Save failed'); setBtn('submit-image', 'Add Image', false); return; }
+      if (failed > 0) toast(`${uploaded} added, ${failed} failed`);
+      else toast(`${uploaded} image${uploaded > 1 ? 's' : ''} added ✓`);
 
-      toast('Added ✓');
       fileInput.value = '';
+      filePreview.innerHTML = '';
       filePreview.style.display = 'none';
-      filePreviewImg.src = '';
       fileDrop.classList.remove('has-file');
       document.getElementById('file-name').textContent = '';
       clearTags('image');
-      setBtn('submit-image', 'Add Image', false);
+      setBtn('submit-image', 'Add Images', false);
       loadRecent();
     });
 
