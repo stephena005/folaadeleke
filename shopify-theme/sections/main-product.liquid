@@ -144,6 +144,13 @@
     <!-- Divider -->
     <hr class="product-rule" />
 
+    <!-- Klarna On-Site Messaging -->
+    <klarna-placement
+      data-key="credit-promotion-auto-size"
+      data-locale="en-GB"
+      data-purchase-amount="{{ product.selected_or_first_available_variant.price }}"
+    ></klarna-placement>
+
     <!-- Add to Cart Form -->
     {%- form 'product', product, id: 'product-form', novalidate: 'novalidate' -%}
       <input type="hidden" name="id" id="variant-id" value="{{ product.selected_or_first_available_variant.id }}" />

@@ -21,6 +21,9 @@
   {{ content_for_header }}
 
   {{ 'base.css' | asset_url | stylesheet_tag }}
+
+  <script async src="https://js.klarna.com/web-sdk/v1/klarna.js"
+    data-client-id="YOUR_KLARNA_CLIENT_ID"></script>
 </head>
 
 <body>
