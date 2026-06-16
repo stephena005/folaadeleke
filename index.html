@@ -1095,71 +1095,43 @@
   </script>
 
   <!-- ── Music node ───────────────────────────── -->
-  <div id="music-node" aria-label="Play Fola's playlist">
-    <div id="music-pill">
-      <span id="music-label">Fola's vibe</span>
-      <button id="music-btn" aria-label="Play / pause">
-        <svg id="icon-play" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M3 2L10 6L3 10V2Z" fill="currentColor"/></svg>
-        <svg id="icon-pause" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:none"><rect x="2.5" y="2" width="2.5" height="8" rx="1" fill="currentColor"/><rect x="7" y="2" width="2.5" height="8" rx="1" fill="currentColor"/></svg>
-      </button>
-    </div>
-    <iframe id="music-iframe"
-      src=""
-      data-src="https://open.spotify.com/embed/playlist/2EvrAgnHW9v3V2P5GMELXu?utm_source=generator&theme=0"
-      width="0" height="0" frameborder="0"
-      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-      loading="lazy"
-      style="display:none">
-    </iframe>
-  </div>
-
   <style>
     #music-node {
       position: fixed;
       bottom: 24px;
       right: 24px;
-      z-index: 999;
+      z-index: 9999;
       display: flex;
       align-items: center;
       gap: 10px;
-      opacity: 0;
-      animation: music-fadein 0.6s ease 2s forwards;
     }
 
-    @keyframes music-fadein {
-      to { opacity: 1; }
-    }
-
-    #music-pill {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: #fff;
-      border: 1px solid #e0e0e0;
-      border-radius: 24px;
-      padding: 7px 14px 7px 10px;
+    #music-label {
       font-family: 'Courier New', Courier, monospace;
       font-size: 10px;
       letter-spacing: 0.18em;
       color: #999;
       white-space: nowrap;
-      max-width: 0;
-      overflow: hidden;
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 24px;
+      padding: 7px 14px;
       opacity: 0;
-      transition: max-width 0.4s ease, opacity 0.3s ease, padding 0.4s ease;
+      transform: translateX(8px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
       pointer-events: none;
     }
 
-    #music-node:hover #music-pill,
-    #music-node.playing #music-pill {
-      max-width: 200px;
+    #music-node:hover #music-label,
+    #music-node.playing #music-label {
       opacity: 1;
+      transform: translateX(0);
       pointer-events: auto;
     }
 
     #music-btn {
-      width: 36px;
-      height: 36px;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
       border: 1px solid #ccc;
       background: #fff;
@@ -1170,7 +1142,7 @@
       justify-content: center;
       flex-shrink: 0;
       transition: border-color 0.2s, transform 0.15s;
-      font-family: inherit;
+      position: relative;
     }
 
     #music-btn:hover {
@@ -1182,21 +1154,35 @@
       border-color: #000;
     }
 
-    #music-node.playing #music-btn::before {
+    #music-node.playing #music-btn::after {
       content: '';
       position: absolute;
-      width: 36px;
-      height: 36px;
+      inset: -1px;
       border-radius: 50%;
-      border: 1px solid #aaa;
+      border: 1px solid #999;
       animation: music-pulse 2s ease-out infinite;
     }
 
     @keyframes music-pulse {
       0%   { transform: scale(1); opacity: 0.6; }
-      100% { transform: scale(1.9); opacity: 0; }
+      100% { transform: scale(2); opacity: 0; }
     }
   </style>
+
+  <div id="music-node">
+    <span id="music-label">Fola's vibe</span>
+    <button id="music-btn" aria-label="Play / pause">
+      <svg id="icon-play" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3 2L10 6L3 10V2Z" fill="currentColor"/></svg>
+      <svg id="icon-pause" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true" style="display:none"><rect x="2.5" y="2" width="2.5" height="8" rx="1" fill="currentColor"/><rect x="7" y="2" width="2.5" height="8" rx="1" fill="currentColor"/></svg>
+    </button>
+    <iframe id="music-iframe"
+      src=""
+      data-src="https://open.spotify.com/embed/playlist/2EvrAgnHW9v3V2P5GMELXu?utm_source=generator&theme=0"
+      width="0" height="0" frameborder="0"
+      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+      style="display:none">
+    </iframe>
+  </div>
 
   <script>
     (function () {
