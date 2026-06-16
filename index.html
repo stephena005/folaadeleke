@@ -1192,21 +1192,38 @@
       var iconPlay = document.getElementById('icon-play');
       var iconPause = document.getElementById('icon-pause');
       var playing = false;
+      var controller = null;
+
+      window.onSpotifyIframeApiReady = function (IFrameAPI) {
+        var element = iframe;
+        var options = {
+          uri: 'spotify:playlist:2EvrAgnHW9v3V2P5GMELXu',
+          width: 0,
+          height: 0
+        };
+        IFrameAPI.createController(element, options, function (c) {
+          controller = c;
+        });
+      };
+
+      var script = document.createElement('script');
+      script.src = 'https://open.spotify.com/embed/iframe-api/v1';
+      script.async = true;
+      document.head.appendChild(script);
 
       btn.addEventListener('click', function () {
         if (!playing) {
-          if (!iframe.src) iframe.src = iframe.dataset.src;
           playing = true;
           node.classList.add('playing');
           iconPlay.style.display = 'none';
           iconPause.style.display = '';
-          iframe.contentWindow.postMessage({ command: 'play' }, '*');
+          if (controller) controller.resume();
         } else {
           playing = false;
           node.classList.remove('playing');
           iconPlay.style.display = '';
           iconPause.style.display = 'none';
-          iframe.contentWindow.postMessage({ command: 'pause' }, '*');
+          if (controller) controller.pause();
         }
       });
     })();
