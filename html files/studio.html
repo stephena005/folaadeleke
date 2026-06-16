@@ -247,6 +247,65 @@
       color: var(--white);
     }
 
+    /* ── Bulk upload ──────────────────────────────── */
+    #img-bulk-field {
+      display: none;
+    }
+
+    #img-bulk-field.visible {
+      display: block;
+    }
+
+    #bulk-urls {
+      width: 100%;
+      background: var(--grey-dark);
+      border: none;
+      color: var(--black);
+      font-family: var(--font);
+      font-size: 12px;
+      padding: 13px 14px;
+      outline: none;
+      resize: vertical;
+      min-height: 140px;
+      line-height: 1.7;
+    }
+
+    #bulk-urls::placeholder {
+      color: #bbb;
+    }
+
+    #bulk-count {
+      font-size: 9px;
+      color: var(--grey-mid);
+      letter-spacing: 0.15em;
+      margin-top: 7px;
+    }
+
+    #bulk-progress {
+      display: none;
+      margin-top: 14px;
+    }
+
+    #bulk-progress-bar-wrap {
+      background: var(--grey-light);
+      height: 2px;
+      width: 100%;
+    }
+
+    #bulk-progress-bar {
+      background: var(--black);
+      height: 2px;
+      width: 0%;
+      transition: width 0.2s;
+    }
+
+    #bulk-progress-label {
+      font-size: 9px;
+      color: var(--grey-mid);
+      letter-spacing: 0.15em;
+      margin-top: 6px;
+    }
+
     #img-url-field {
       display: none;
     }
@@ -517,6 +576,7 @@
         <div class="img-source-toggle">
           <button class="img-src-btn active" id="img-src-upload">Upload</button>
           <button class="img-src-btn" id="img-src-url">Link / URL</button>
+          <button class="img-src-btn" id="img-src-bulk">Bulk</button>
         </div>
         <div id="file-drop-wrap">
           <div class="file-drop" id="file-drop">
@@ -526,6 +586,14 @@
               <img id="file-preview-img" src="" alt="">
               <div id="file-name"></div>
             </div>
+          </div>
+        </div>
+        <div id="img-bulk-field">
+          <textarea id="bulk-urls" placeholder="Paste one URL per line&#10;https://example.com/image1.jpg&#10;https://example.com/image2.jpg&#10;…"></textarea>
+          <div id="bulk-count"></div>
+          <div id="bulk-progress">
+            <div id="bulk-progress-bar-wrap"><div id="bulk-progress-bar"></div></div>
+            <div id="bulk-progress-label"></div>
           </div>
         </div>
         <div id="img-url-field">
@@ -710,21 +778,32 @@
     const fileDrop = document.getElementById('file-drop');
     let imgMode = 'upload'; // 'upload' | 'url'
 
-    document.getElementById('img-src-upload').addEventListener('click', () => {
-      imgMode = 'upload';
-      document.getElementById('img-src-upload').classList.add('active');
-      document.getElementById('img-src-url').classList.remove('active');
-      document.getElementById('file-drop-wrap').classList.remove('hidden');
-      document.getElementById('img-url-field').classList.remove('visible');
+    function setImgMode(mode) {
+      imgMode = mode;
+      ['upload', 'url', 'bulk'].forEach(m => {
+        document.getElementById(`img-src-${m}`).classList.toggle('active', m === mode);
+      });
+      document.getElementById('file-drop-wrap').classList.toggle('hidden', mode !== 'upload');
+      document.getElementById('img-url-field').classList.toggle('visible', mode === 'url');
+      document.getElementById('img-bulk-field').classList.toggle('visible', mode === 'bulk');
+    }
+
+    document.getElementById('img-src-upload').addEventListener('click', () => setImgMode('upload'));
+    document.getElementById('img-src-url').addEventListener('click', () => setImgMode('url'));
+    document.getElementById('img-src-bulk').addEventListener('click', () => setImgMode('bulk'));
+
+    // bulk URL count preview
+    document.getElementById('bulk-urls').addEventListener('input', () => {
+      const urls = parseBulkUrls();
+      document.getElementById('bulk-count').textContent = urls.length ? `${urls.length} URL${urls.length > 1 ? 's' : ''} detected` : '';
     });
 
-    document.getElementById('img-src-url').addEventListener('click', () => {
-      imgMode = 'url';
-      document.getElementById('img-src-url').classList.add('active');
-      document.getElementById('img-src-upload').classList.remove('active');
-      document.getElementById('file-drop-wrap').classList.add('hidden');
-      document.getElementById('img-url-field').classList.add('visible');
-    });
+    function parseBulkUrls() {
+      return document.getElementById('bulk-urls').value
+        .split('\n')
+        .map(l => l.trim())
+        .filter(l => l.startsWith('http'));
+    }
 
     let imgUrlTimer;
     document.getElementById('image-url').addEventListener('input', e => {
@@ -773,6 +852,34 @@
     }
 
     document.getElementById('submit-image').addEventListener('click', async () => {
+      if (imgMode === 'bulk') {
+        const urls = parseBulkUrls();
+        if (!urls.length) { toast('Paste at least one URL'); return; }
+        setBtn('submit-image', 'Saving…', true);
+        const progress = document.getElementById('bulk-progress');
+        const bar = document.getElementById('bulk-progress-bar');
+        const label = document.getElementById('bulk-progress-label');
+        progress.style.display = 'block';
+        const tags = getTags('image');
+        let done = 0, failed = 0;
+        for (const url of urls) {
+          const { error } = await db.from('entries').insert({ type: 'image', url, tags });
+          if (error) failed++; else done++;
+          const pct = Math.round(((done + failed) / urls.length) * 100);
+          bar.style.width = pct + '%';
+          label.textContent = `${done + failed} / ${urls.length}`;
+        }
+        progress.style.display = 'none';
+        bar.style.width = '0%';
+        toast(failed ? `Done — ${done} added, ${failed} failed` : `${done} images added ✓`);
+        document.getElementById('bulk-urls').value = '';
+        document.getElementById('bulk-count').textContent = '';
+        clearTags('image');
+        setBtn('submit-image', 'Add Image', false);
+        loadRecent();
+        return;
+      }
+
       if (imgMode === 'url') {
         const url = document.getElementById('image-url').value.trim();
         if (!url) { toast('Enter an image URL'); return; }
