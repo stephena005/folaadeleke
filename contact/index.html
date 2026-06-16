@@ -145,7 +145,6 @@
       window.onSpotifyIframeApiReady = function (IFrameAPI) {
         IFrameAPI.createController(iframe, { uri: 'spotify:playlist:2EvrAgnHW9v3V2P5GMELXu', width: 0, height: 0 }, function (c) {
           controller = c;
-          controller.toggleShuffle(true);
           if (sessionStorage.getItem('music_playing') === '1') {
             playing = true; node.classList.add('playing');
             iconPlay.style.display = 'none'; iconPause.style.display = '';
@@ -154,8 +153,6 @@
         });
       };
       var s = document.createElement('script'); s.src = 'https://open.spotify.com/embed/iframe-api/v1'; s.async = true; document.head.appendChild(s);
-      document.getElementById('music-prev').addEventListener('click', function () { if (controller) controller.previousTrack(); });
-      document.getElementById('music-next').addEventListener('click', function () { if (controller) controller.nextTrack(); });
       btn.addEventListener('click', function () {
         if (!playing) {
           playing = true; node.classList.add('playing'); iconPlay.style.display = 'none'; iconPause.style.display = '';
