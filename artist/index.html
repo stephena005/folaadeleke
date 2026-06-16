@@ -367,8 +367,10 @@
   <!-- ── Music node ───────────────────────────── -->
   <style>
     #music-node { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; align-items: center; gap: 10px; }
-    #music-label { font-family: 'Courier New', Courier, monospace; font-size: 10px; letter-spacing: 0.18em; color: #999; white-space: nowrap; background: #fff; border: 1px solid #e0e0e0; border-radius: 24px; padding: 7px 14px; opacity: 0; transform: translateX(8px); transition: opacity 0.3s ease, transform 0.3s ease; pointer-events: none; }
-    #music-node:hover #music-label, #music-node.playing #music-label { opacity: 1; transform: translateX(0); pointer-events: auto; }
+    #music-pill { display: flex; align-items: center; gap: 8px; font-family: 'Courier New', Courier, monospace; font-size: 10px; letter-spacing: 0.18em; color: #999; white-space: nowrap; background: #fff; border: 1px solid #e0e0e0; border-radius: 24px; padding: 6px 12px; opacity: 0; transform: translateX(8px); transition: opacity 0.3s ease, transform 0.3s ease; pointer-events: none; }
+    #music-node:hover #music-pill, #music-node.playing #music-pill { opacity: 1; transform: translateX(0); pointer-events: auto; }
+    #music-prev, #music-next { background: none; border: none; cursor: pointer; color: #999; padding: 0; display: flex; align-items: center; transition: color 0.15s; flex-shrink: 0; }
+    #music-prev:hover, #music-next:hover { color: #000; }
     #music-btn { width: 40px; height: 40px; border-radius: 50%; border: 1px solid #ccc; background: #fff; color: #000; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: border-color 0.2s, transform 0.15s; position: relative; }
     #music-btn:hover { border-color: #000; transform: scale(1.06); }
     #music-node.playing #music-btn { border-color: #000; }
@@ -376,7 +378,11 @@
     @keyframes music-pulse { 0% { transform: scale(1); opacity: 0.6; } 100% { transform: scale(2); opacity: 0; } }
   </style>
   <div id="music-node">
-    <span id="music-label">Fola's vibe</span>
+    <div id="music-pill">
+      <button id="music-prev" aria-label="Previous track"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><rect x="1" y="2" width="2" height="8" rx="0.5" fill="currentColor"/><path d="M10 2L4 6L10 10V2Z" fill="currentColor"/></svg></button>
+      <span id="music-label">Fola's vibe</span>
+      <button id="music-next" aria-label="Next track"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><rect x="9" y="2" width="2" height="8" rx="0.5" fill="currentColor"/><path d="M2 2L8 6L2 10V2Z" fill="currentColor"/></svg></button>
+    </div>
     <button id="music-btn" aria-label="Play / pause">
       <svg id="icon-play" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3 2L10 6L3 10V2Z" fill="currentColor"/></svg>
       <svg id="icon-pause" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true" style="display:none"><rect x="2.5" y="2" width="2.5" height="8" rx="1" fill="currentColor"/><rect x="7" y="2" width="2.5" height="8" rx="1" fill="currentColor"/></svg>
@@ -402,6 +408,8 @@
         });
       };
       var s = document.createElement('script'); s.src = 'https://open.spotify.com/embed/iframe-api/v1'; s.async = true; document.head.appendChild(s);
+      document.getElementById('music-prev').addEventListener('click', function () { if (controller) controller.previousTrack(); });
+      document.getElementById('music-next').addEventListener('click', function () { if (controller) controller.nextTrack(); });
       btn.addEventListener('click', function () {
         if (!playing) {
           playing = true; node.classList.add('playing'); iconPlay.style.display = 'none'; iconPause.style.display = '';
