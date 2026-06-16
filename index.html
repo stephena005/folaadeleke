@@ -1203,6 +1203,13 @@
         };
         IFrameAPI.createController(element, options, function (c) {
           controller = c;
+          if (sessionStorage.getItem('music_playing') === '1') {
+            playing = true;
+            node.classList.add('playing');
+            iconPlay.style.display = 'none';
+            iconPause.style.display = '';
+            controller.resume();
+          }
         });
       };
 
@@ -1217,12 +1224,14 @@
           node.classList.add('playing');
           iconPlay.style.display = 'none';
           iconPause.style.display = '';
+          sessionStorage.setItem('music_playing', '1');
           if (controller) controller.resume();
         } else {
           playing = false;
           node.classList.remove('playing');
           iconPlay.style.display = '';
           iconPause.style.display = 'none';
+          sessionStorage.removeItem('music_playing');
           if (controller) controller.pause();
         }
       });

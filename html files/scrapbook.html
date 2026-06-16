@@ -602,6 +602,56 @@
     });
     document.addEventListener('keydown', e => { if (e.key === 'Escape') lb.classList.add('hidden'); });
   </script>
+
+  <!-- ── Music node ───────────────────────────── -->
+  <style>
+    #music-node { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; align-items: center; gap: 10px; }
+    #music-label { font-family: 'Courier New', Courier, monospace; font-size: 10px; letter-spacing: 0.18em; color: #999; white-space: nowrap; background: #fff; border: 1px solid #e0e0e0; border-radius: 24px; padding: 7px 14px; opacity: 0; transform: translateX(8px); transition: opacity 0.3s ease, transform 0.3s ease; pointer-events: none; }
+    #music-node:hover #music-label, #music-node.playing #music-label { opacity: 1; transform: translateX(0); pointer-events: auto; }
+    #music-btn { width: 40px; height: 40px; border-radius: 50%; border: 1px solid #ccc; background: #fff; color: #000; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: border-color 0.2s, transform 0.15s; position: relative; }
+    #music-btn:hover { border-color: #000; transform: scale(1.06); }
+    #music-node.playing #music-btn { border-color: #000; }
+    #music-node.playing #music-btn::after { content: ''; position: absolute; inset: -1px; border-radius: 50%; border: 1px solid #999; animation: music-pulse 2s ease-out infinite; }
+    @keyframes music-pulse { 0% { transform: scale(1); opacity: 0.6; } 100% { transform: scale(2); opacity: 0; } }
+  </style>
+  <div id="music-node">
+    <span id="music-label">Fola's vibe</span>
+    <button id="music-btn" aria-label="Play / pause">
+      <svg id="icon-play" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3 2L10 6L3 10V2Z" fill="currentColor"/></svg>
+      <svg id="icon-pause" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true" style="display:none"><rect x="2.5" y="2" width="2.5" height="8" rx="1" fill="currentColor"/><rect x="7" y="2" width="2.5" height="8" rx="1" fill="currentColor"/></svg>
+    </button>
+    <iframe id="music-iframe" src="" width="0" height="0" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" style="display:none"></iframe>
+  </div>
+  <script>
+    (function () {
+      var node = document.getElementById('music-node');
+      var btn = document.getElementById('music-btn');
+      var iframe = document.getElementById('music-iframe');
+      var iconPlay = document.getElementById('icon-play');
+      var iconPause = document.getElementById('icon-pause');
+      var playing = false, controller = null;
+      window.onSpotifyIframeApiReady = function (IFrameAPI) {
+        IFrameAPI.createController(iframe, { uri: 'spotify:playlist:2EvrAgnHW9v3V2P5GMELXu', width: 0, height: 0 }, function (c) {
+          controller = c;
+          if (sessionStorage.getItem('music_playing') === '1') {
+            playing = true; node.classList.add('playing');
+            iconPlay.style.display = 'none'; iconPause.style.display = '';
+            controller.resume();
+          }
+        });
+      };
+      var s = document.createElement('script'); s.src = 'https://open.spotify.com/embed/iframe-api/v1'; s.async = true; document.head.appendChild(s);
+      btn.addEventListener('click', function () {
+        if (!playing) {
+          playing = true; node.classList.add('playing'); iconPlay.style.display = 'none'; iconPause.style.display = '';
+          sessionStorage.setItem('music_playing', '1'); if (controller) controller.resume();
+        } else {
+          playing = false; node.classList.remove('playing'); iconPlay.style.display = ''; iconPause.style.display = 'none';
+          sessionStorage.removeItem('music_playing'); if (controller) controller.pause();
+        }
+      });
+    })();
+  </script>
 </body>
 
 </html>
