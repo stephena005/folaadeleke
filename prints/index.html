@@ -12,235 +12,72 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <title>Fola Adeleke®</title>
+  <title>Works — Fola Adeleke®</title>
   <style>
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:        #fff;
-      --cream:     #000;
-      --gold:      #000;
-      --muted:     #999;
-      --divider:   #eee;
+      --bg: #fff;
+      --black: #000;
+      --white: #fff;
+      --muted: #999;
+      --divider: #eee;
       --nav-height: 56px;
-      --font-display: 'Courier New', Courier, monospace;
-      --font-mono:    'Courier New', Courier, monospace;
-      --black:     #000;
-      --white:     #fff;
-      --grey-mid:  #999;
-      --font:      'Courier New', Courier, monospace;
-      --spacing:   0.2em;
+      --font: 'Courier New', Courier, monospace;
+      --spacing: 0.2em;
     }
 
     html { scroll-behavior: smooth; }
+    body { font-family: var(--font); background: var(--bg); color: var(--black); min-height: 100vh; overflow-x: hidden; }
+    :focus-visible { outline: 1px solid var(--black); outline-offset: 2px; }
 
-    body {
-      font-family: var(--font-mono);
-      background: var(--bg);
-      color: var(--cream);
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    /* ── FOCUS STATES ── */
-    :focus-visible {
-      outline: 1px solid var(--black);
-      outline-offset: 2px;
-    }
-
-    /* ── NAVIGATION ── */
+    /* ── NAV ── */
     nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
+      position: fixed; top: 0; left: 0; right: 0;
       height: var(--nav-height);
       background: var(--white);
       border-bottom: 1px solid var(--divider);
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      align-items: center;
-      padding: 0 32px;
-      z-index: 100;
+      display: grid; grid-template-columns: 1fr auto 1fr;
+      align-items: center; padding: 0 32px; z-index: 100;
     }
-
-    .nav-left {
-      display: flex;
-      align-items: center;
-      gap: 28px;
-    }
-
-    .hamburger {
-      display: block;
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: var(--black);
-      padding: 4px 8px 4px 0;
-      line-height: 1;
-      font-size: 20px;
-    }
-
-    .nav-brand {
-      text-align: center;
-      font-family: var(--font-mono);
-      font-size: 13px;
-      font-weight: normal;
-      letter-spacing: var(--spacing);
-      color: var(--black);
-      text-decoration: none;
-    }
-
-    .nav-right {
-      display: flex;
-      justify-content: flex-end;
-    }
-
-    .nav-contact {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      letter-spacing: var(--spacing);
-      text-transform: uppercase;
-      text-decoration: none;
-      color: var(--black);
-    }
-
+    .nav-left { display: flex; align-items: center; }
+    .hamburger { display: block; background: none; border: none; cursor: pointer; color: var(--black); padding: 4px 8px 4px 0; line-height: 1; font-size: 20px; }
+    .nav-brand { text-align: center; font-family: var(--font); font-size: 13px; font-weight: normal; letter-spacing: var(--spacing); color: var(--black); text-decoration: none; }
+    .nav-right { display: flex; justify-content: flex-end; }
+    .nav-contact { font-family: var(--font); font-size: 11px; letter-spacing: var(--spacing); text-transform: uppercase; text-decoration: none; color: var(--black); }
     .nav-contact:hover { text-decoration: underline; }
 
-    /* ── DRAWER (mobile) ── */
-    .drawer-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.6);
-      z-index: 200;
-    }
-
+    /* ── DRAWER ── */
+    .drawer-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 200; }
     .drawer-overlay.open { display: block; }
-
-    .drawer {
-      position: fixed;
-      top: 0;
-      left: -280px;
-      width: 260px;
-      height: 100%;
-      background: var(--white);
-      border-right: 1px solid var(--divider);
-      z-index: 201;
-      transition: left 0.3s ease;
-      display: flex;
-      flex-direction: column;
-      padding: 80px 32px 40px;
-    }
-
+    .drawer { position: fixed; top: 0; left: -280px; width: 260px; height: 100%; background: var(--white); border-right: 1px solid var(--divider); z-index: 201; transition: left 0.3s ease; display: flex; flex-direction: column; padding: 80px 32px 40px; }
     .drawer.open { left: 0; }
+    .drawer a, .drawer button { font-family: var(--font); font-size: 12px; letter-spacing: var(--spacing); text-transform: uppercase; text-decoration: none; color: var(--black); background: none; border: none; cursor: pointer; padding: 14px 0; border-bottom: 1px solid var(--divider); text-align: left; width: 100%; }
+    .drawer a:last-child, .drawer button:last-child { border-bottom: none; }
+    .drawer-close { position: absolute; top: 18px; right: 18px; font-size: 20px; background: none; border: none; cursor: pointer; color: var(--black); line-height: 1; }
 
-    .drawer a,
-    .drawer button {
-      font-family: var(--font-mono);
-      font-size: 12px;
-      letter-spacing: var(--spacing);
-      text-transform: uppercase;
-      text-decoration: none;
-      color: var(--black);
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 14px 0;
+    /* ── TRUST BAR ── */
+    .trust-bar {
+      position: fixed; top: var(--nav-height); left: 0; right: 0;
+      display: flex; align-items: center; justify-content: center;
       border-bottom: 1px solid var(--divider);
-      text-align: left;
-      width: 100%;
+      padding: 10px 64px;
+      background: var(--white);
+      z-index: 90;
     }
-
-    .drawer a:last-child,
-    .drawer button:last-child { border-bottom: none; }
-
-    .drawer-close {
-      position: absolute;
-      top: 18px;
-      right: 18px;
-      font-size: 20px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: var(--black);
-      line-height: 1;
-    }
-
-    /* ── HERO ── */
-    .hero {
-      padding: 120px 64px 80px;
-      padding-top: calc(var(--nav-height) + 120px);
-    }
-
-    .hero-eyebrow {
-      font-family: var(--font-mono);
-      font-size: 10px;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 20px;
-      display: block;
-    }
-
-    .hero-headline {
-      font-family: var(--font-display);
-      font-size: 36px;
-      font-weight: normal;
-      color: var(--cream);
-      line-height: 1.2;
-      letter-spacing: 0.1em;
-      margin-bottom: 16px;
-    }
-
-    .hero-subline {
-      font-family: var(--font-display);
-      font-style: italic;
-      font-size: 13px;
-      color: var(--muted);
-      line-height: 1.8;
-    }
-
-    /* ── EDITION SIGNAL ── */
-    .edition-signal {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0;
-      border-top: 1px solid var(--divider);
-      border-bottom: 1px solid var(--divider);
-      padding: 40px 64px;
-      margin-top: 40px;
-    }
-
-    .edition-signal-item {
-      font-family: var(--font-mono);
-      font-size: 10px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--black);
-      flex: 1;
-      text-align: center;
-    }
-
-    .edition-signal-divider {
-      width: 1px;
-      height: 28px;
-      background: var(--divider);
-      flex-shrink: 0;
-      margin: 0 32px;
-    }
+    .trust-bar-item { font-family: var(--font); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--black); flex: 1; text-align: center; }
+    .trust-bar-divider { width: 1px; height: 20px; background: var(--divider); flex-shrink: 0; margin: 0 24px; }
 
     /* ── SLIDESHOW ── */
     .slideshow {
+      padding-top: calc(var(--nav-height) + 40px);
+    }
+
+    /* Image stage — arrows live here, anchored to the image area */
+    .image-stage {
       position: relative;
       overflow: hidden;
-      padding-top: 60px;
-      padding-bottom: 80px;
+      padding: 32px 0 0;
     }
 
     .slides-track {
@@ -249,364 +86,212 @@
       will-change: transform;
     }
 
-    .slide {
+    .slide-image {
       min-width: 100%;
+      height: 62vh;
       display: flex;
-      flex-direction: column;
+      justify-content: center;
       align-items: center;
       padding: 0 80px;
     }
 
     .product-image {
       width: 100%;
-      max-width: 440px;
-      background: #000;
+      max-width: 600px;
+      height: 100%;
     }
+    .product-image a { display: block; width: 100%; height: 100%; }
+    .product-image img { width: 100%; height: 100%; object-fit: contain; object-position: center; display: block; }
 
-    .product-image a {
-      display: block;
-      width: 100%;
-    }
-
-    .product-image img {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
-
-    .placeholder-label {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: var(--font-mono);
-      font-size: 10px;
-      letter-spacing: 0.2em;
+    /* Counter sits below the image, inside the image-stage */
+    .slide-counter {
+      text-align: center;
+      margin-top: 16px;
+      padding-bottom: 12px;
+      font-family: var(--font);
+      font-size: 9px;
+      letter-spacing: 0.25em;
       color: var(--muted);
-      text-transform: uppercase;
-      pointer-events: none;
     }
 
-    .product-rule {
-      width: 100%;
-      max-width: 440px;
-      border: none;
+    /* Arrows — positioned relative to image-stage */
+    .slide-prev, .slide-next {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 44px; height: 44px;
+      background: var(--white);
+      border: 1px solid var(--black);
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--black);
+      transition: background 0.15s, color 0.15s;
+      z-index: 10;
+    }
+    .slide-prev { left: 20px; }
+    .slide-next { right: 20px; }
+    .slide-prev:hover, .slide-next:hover { background: var(--black); color: var(--white); }
+    .slide-prev:disabled, .slide-next:disabled { border-color: #ccc; color: #ccc; cursor: default; background: var(--white); }
+
+    /* Info stage — synced separately */
+    .info-stage {
+      overflow: hidden;
       border-top: 1px solid var(--divider);
-      margin: 24px 0;
+      margin-top: 8px;
     }
 
-    .product-info {
+    .infos-track {
+      display: flex;
+      transition: transform 0.9s ease;
+      will-change: transform;
+    }
+
+    .slide-info {
+      min-width: 100%;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      align-items: center;
+      padding: 24px 80px 40px;
+    }
+
+    .info-inner {
       width: 100%;
-      max-width: 440px;
-      margin-bottom: 20px;
-      text-align: left;
+      max-width: 600px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .info-top {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 12px;
     }
 
     .product-name {
-      font-family: var(--font-mono);
+      font-family: var(--font);
       font-size: 11px;
       font-weight: 400;
       letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: var(--cream);
+      color: var(--black);
     }
 
     .product-edition {
-      font-family: var(--font-mono);
+      font-family: var(--font);
       font-size: 10px;
       letter-spacing: 0.05em;
       color: var(--muted);
+      white-space: nowrap;
     }
 
-    .product-price {
-      font-family: var(--font-mono);
-      font-size: 12px;
-      color: var(--cream);
-      letter-spacing: 0.05em;
+    .btn-acquire {
+      display: block;
+      width: 100%;
+      background: var(--black);
+      color: var(--white);
+      border: 1px solid var(--black);
+      padding: 13px;
+      font-family: var(--font);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      transition: opacity 0.15s;
+      margin-bottom: 20px;
     }
+    .btn-acquire:hover { opacity: 0.75; }
+    .btn-acquire.sold-out { background: var(--muted); border-color: var(--muted); color: var(--white); cursor: default; pointer-events: none; }
 
     .product-caption {
-      font-family: var(--font-mono);
+      font-family: var(--font);
       font-style: italic;
       font-size: 11px;
       line-height: 1.8;
       color: var(--muted);
+      margin-bottom: 10px;
     }
 
     .product-size {
-      font-family: var(--font-mono);
+      font-family: var(--font);
       font-size: 9px;
       letter-spacing: 0.15em;
       text-transform: uppercase;
       color: var(--muted);
     }
 
-    /* ── CTA BUTTON ── */
-    .btn-acquire {
-      display: block;
-      width: 100%;
-      max-width: 440px;
-      background: var(--black);
-      color: var(--white);
-      border: 1px solid var(--black);
-      padding: 13px;
-      font-family: var(--font-mono);
-      font-size: 10px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      cursor: pointer;
-      text-align: center;
-      text-decoration: none;
-      transition: opacity 0.15s;
-    }
-
-    .btn-acquire:hover { opacity: 0.75; }
-
-    .btn-acquire.sold-out {
-      background: var(--muted);
-      border-color: var(--muted);
-      color: var(--white);
-      cursor: default;
-      pointer-events: none;
-    }
-
-    /* ── SLIDE NAVIGATION ── */
-    .slide-prev,
-    .slide-next {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 44px;
-      height: 44px;
-      background: var(--white);
-      border: 1px solid var(--black);
-      cursor: pointer;
+    /* ── THUMBNAIL STRIP ── */
+    .thumb-strip {
       display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--black);
-      transition: background 0.15s, color 0.15s;
-      z-index: 10;
+      overflow-x: auto;
+      gap: 6px;
+      padding: 16px 32px;
+      border-top: 1px solid var(--divider);
+      scrollbar-width: none;
     }
+    .thumb-strip::-webkit-scrollbar { display: none; }
 
-    .slide-prev { left: 20px; }
-    .slide-next { right: 20px; }
-
-    .slide-prev:hover,
-    .slide-next:hover {
-      background: var(--black);
-      color: var(--white);
-    }
-
-    .slide-prev:disabled,
-    .slide-next:disabled {
-      border-color: #ccc;
-      color: #ccc;
-      cursor: default;
-      background: var(--white);
-    }
-
-    .slide-counter {
-      text-align: center;
-      margin-top: 36px;
-      font-family: var(--font-mono);
-      font-size: 10px;
-      letter-spacing: 0.2em;
-      color: var(--muted);
-    }
-
-    .slide-dots {
-      display: flex;
-      justify-content: center;
-      gap: 8px;
-      margin-top: 16px;
-    }
-
-    .slide-dot {
-      width: 4px;
-      height: 4px;
-      background: var(--muted);
-      opacity: 0.3;
-      cursor: pointer;
-      border: none;
+    .thumb {
+      flex-shrink: 0;
+      width: 56px;
+      height: 56px;
       padding: 0;
-      transition: opacity 0.15s;
+      border: 2px solid transparent;
+      background: #f0f0f0;
+      cursor: pointer;
+      overflow: hidden;
+      transition: border-color 0.15s;
     }
-
-    .slide-dot.active { opacity: 1; background: var(--black); }
+    .thumb.active { border-color: var(--black); }
+    .thumb img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; }
 
     /* ── FOOTER ── */
     footer {
       border-top: 1px solid var(--divider);
       padding: 32px 64px;
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      align-items: center;
-      gap: 20px;
+      display: grid; grid-template-columns: 1fr auto 1fr;
+      align-items: center; gap: 20px;
     }
-
-    .footer-brand {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      font-weight: normal;
-      letter-spacing: var(--spacing);
-      color: var(--black);
-      text-decoration: none;
-    }
-
-    .footer-social {
-      display: flex;
-      justify-content: center;
-      gap: 24px;
-    }
-
-    .footer-social a {
-      font-family: var(--font-mono);
-      font-size: 10px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--muted);
-      text-decoration: none;
-    }
-
+    .footer-brand { font-family: var(--font); font-size: 11px; font-weight: normal; letter-spacing: var(--spacing); color: var(--black); text-decoration: none; }
+    .footer-social { display: flex; justify-content: center; gap: 24px; }
+    .footer-social a { font-family: var(--font); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); text-decoration: none; }
     .footer-social a:hover { color: var(--black); }
+    .footer-copy { font-family: var(--font); font-size: 10px; letter-spacing: 0.08em; color: var(--muted); text-align: right; }
 
-    .footer-copy {
-      font-family: var(--font-mono);
-      font-size: 10px;
-      letter-spacing: 0.08em;
-      color: var(--muted);
-      text-align: right;
-    }
-
-    /* ── MUSIC NODE (adapted to dark theme) ── */
-    #music-node {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      z-index: 9999;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    #music-pill {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-family: 'Courier New', Courier, monospace;
-      font-size: 10px;
-      letter-spacing: 0.18em;
-      color: #999;
-      white-space: nowrap;
-      background: #fff;
-      border: 1px solid #e0e0e0;
-      border-radius: 24px;
-      padding: 6px 12px;
-      opacity: 0;
-      transform: translateX(8px);
-      transition: opacity 0.3s ease, transform 0.3s ease;
-      pointer-events: none;
-    }
-
-    #music-node:hover #music-pill,
-    #music-node.playing #music-pill {
-      opacity: 1;
-      transform: translateX(0);
-      pointer-events: auto;
-    }
-
-    #music-prev, #music-next {
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: #999;
-      padding: 0;
-      display: flex;
-      align-items: center;
-      transition: color 0.15s;
-      flex-shrink: 0;
-    }
-
+    /* ── MUSIC ── */
+    #music-node { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; align-items: center; gap: 10px; }
+    #music-pill { display: flex; align-items: center; gap: 8px; font-family: 'Courier New', Courier, monospace; font-size: 10px; letter-spacing: 0.18em; color: #999; white-space: nowrap; background: #fff; border: 1px solid #e0e0e0; border-radius: 24px; padding: 6px 12px; opacity: 0; transform: translateX(8px); transition: opacity 0.3s ease, transform 0.3s ease; pointer-events: none; }
+    #music-node:hover #music-pill, #music-node.playing #music-pill { opacity: 1; transform: translateX(0); pointer-events: auto; }
+    #music-prev, #music-next { background: none; border: none; cursor: pointer; color: #999; padding: 0; display: flex; align-items: center; transition: color 0.15s; flex-shrink: 0; }
     #music-prev:hover, #music-next:hover { color: #000; }
-
-    #music-btn {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      border: 1px solid #ccc;
-      background: #fff;
-      color: #000;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      transition: border-color 0.2s, transform 0.15s;
-      position: relative;
-    }
-
-    #music-btn:hover {
-      border-color: #000;
-      transform: scale(1.06);
-    }
-
-    #music-node.playing #music-btn {
-      border-color: #000;
-    }
-
-    #music-node.playing #music-btn::after {
-      content: '';
-      position: absolute;
-      inset: -1px;
-      border-radius: 50%;
-      border: 1px solid #999;
-      animation: music-pulse 2s ease-out infinite;
-    }
-
-    @keyframes music-pulse {
-      0%   { transform: scale(1); opacity: 0.5; }
-      100% { transform: scale(2); opacity: 0; }
-    }
+    #music-btn { width: 40px; height: 40px; border-radius: 50%; border: 1px solid #ccc; background: #fff; color: #000; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: border-color 0.2s, transform 0.15s; position: relative; }
+    #music-btn:hover { border-color: #000; transform: scale(1.06); }
+    #music-node.playing #music-btn { border-color: #000; }
+    #music-node.playing #music-btn::after { content: ''; position: absolute; inset: -1px; border-radius: 50%; border: 1px solid #999; animation: music-pulse 2s ease-out infinite; }
+    @keyframes music-pulse { 0% { transform: scale(1); opacity: 0.5; } 100% { transform: scale(2); opacity: 0; } }
 
     /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
       nav { padding: 0 20px; }
-      .hero { padding: calc(var(--nav-height) + 60px) 24px 40px; }
-
-      .edition-signal {
-        flex-direction: column;
-        gap: 24px;
-        padding: 28px 24px;
-      }
-
-      .edition-signal-divider {
-        width: 40px;
-        height: 1px;
-        margin: 0;
-      }
-
-      .slide { padding: 0 48px; }
+      .trust-bar { padding: 10px 20px; }
+      .trust-bar-item { font-size: 8px; letter-spacing: 0.1em; }
+      .trust-bar-divider { margin: 0 12px; }
+      .slide-image { padding: 0 52px; }
+      .slide-info { padding: 20px 52px 32px; }
       .slide-prev { left: 4px; }
       .slide-next { right: 4px; }
-
-      footer {
-        grid-template-columns: 1fr;
-        text-align: center;
-        padding: 28px 24px;
-        gap: 16px;
-      }
+      footer { grid-template-columns: 1fr; text-align: center; padding: 28px 24px; gap: 16px; }
       .footer-copy { text-align: center; }
     }
   </style>
 </head>
 <body>
 
-  <!-- ── NAVIGATION ── -->
+  <!-- ── NAV ── -->
   <nav>
     <div class="nav-left">
       <button class="hamburger" aria-label="Open menu" onclick="openDrawer()">&#9776;</button>
@@ -617,7 +302,7 @@
     </div>
   </nav>
 
-  <!-- ── MOBILE DRAWER ── -->
+  <!-- ── DRAWER ── -->
   <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
   <div class="drawer" id="drawer" aria-label="Navigation drawer">
     <button class="drawer-close" onclick="closeDrawer()" aria-label="Close menu">&#x2715;</button>
@@ -627,248 +312,311 @@
     <a href="/contact">Contact</a>
   </div>
 
-  <!-- ── HERO ── -->
-
-
-  <!-- ── EDITION SIGNAL ── -->
-  <div class="edition-signal" aria-label="Edition details">
-    <span class="edition-signal-item">Archival Pigment Print</span>
-    <span class="edition-signal-divider" aria-hidden="true"></span>
-    <span class="edition-signal-item">Signed &amp; Numbered</span>
-    <span class="edition-signal-divider" aria-hidden="true"></span>
-    <span class="edition-signal-item">Certificate of Authenticity Included</span>
+  <!-- ── TRUST BAR ── -->
+  <div class="trust-bar" aria-label="Edition details">
+    <span class="trust-bar-item">Archival Pigment Print</span>
+    <span class="trust-bar-divider" aria-hidden="true"></span>
+    <span class="trust-bar-item">Signed &amp; Numbered</span>
+    <span class="trust-bar-divider" aria-hidden="true"></span>
+    <span class="trust-bar-item">Certificate of Authenticity Included</span>
   </div>
 
   <!-- ── SLIDESHOW ── -->
-  <main class="slideshow" id="slideshow" aria-label="Available prints">
-    <button class="slide-prev" id="slidePrev" aria-label="Previous print">&#8592;</button>
-    <button class="slide-next" id="slideNext" aria-label="Next print">&#8594;</button>
+  <main class="slideshow" aria-label="Available prints">
 
-    <div class="slides-track" id="slidesTrack">
+    <!-- Image track with arrows anchored to it -->
+    <div class="image-stage" id="imageStage">
+      <button class="slide-prev" id="slidePrev" aria-label="Previous print">&#8592;</button>
+      <button class="slide-next" id="slideNext" aria-label="Next print">&#8594;</button>
 
-      <!-- 01 Black Excellence -->
-      <div class="slide" id="product-black-excellence">
-        <div class="product-image">
-          <a href="https://shop.folaadeleke.com/products/black-excellence" target="_blank" rel="noopener" aria-label="View Black Excellence on shop">
-            <img src="/images/prints/Black Excellence/black-excellence-shopify.jpg" alt="Black Excellence — fine art print by Fola Adeleke" />
-          </a>
-        </div>
-        <hr class="product-rule" />
-        <div class="product-info">
-          <span class="product-name">Black Excellence</span>
-          <span class="product-edition">Edition of 15</span>
-          <p class="product-caption">Black Excellence celebrates the strength, unity, and beauty of the Black couple — a powerful partnership embodying love, resilience, achievement, and cultural pride.</p>
-          <span class="product-size">A1 / A2 / A3</span>
-        </div>
-        <a class="btn-acquire" href="https://shop.folaadeleke.com/products/black-excellence" target="_blank" rel="noopener">Acquire Print</a>
-      </div>
+      <div class="slides-track" id="slidesTrack">
 
-      <!-- 02 My Son's Father -->
-      <div class="slide" id="product-my-sons-father">
-        <div class="product-image">
-          <a href="https://shop.folaadeleke.com/products/my-sons-father" target="_blank" rel="noopener" aria-label="View My Son's Father Was Fatherless on shop">
-            <img src="/images/prints/My Sons Father/my-sons-father-was-fatherless.jpg" alt="My Son's Father Was Fatherless — fine art print by Fola Adeleke" />
-          </a>
+        <div class="slide-image">
+          <div class="product-image">
+            <a href="https://shop.folaadeleke.com/products/black-excellence" target="_blank" rel="noopener">
+              <img src="/images/prints/Black Excellence/black-excellence-shopify.jpg" alt="Black Excellence — fine art print by Fola Adeleke" />
+            </a>
+          </div>
         </div>
-        <hr class="product-rule" />
-        <div class="product-info">
-          <span class="product-name">My Son&#8217;s Father Was Fatherless</span>
-          <span class="product-edition">Edition of 15</span>
-          <p class="product-caption">A conversation about inherited silence, absent guidance, and the quiet struggle of men trying to become fathers without ever experiencing fatherhood themselves.</p>
-          <span class="product-size">A1 / A2 / A3</span>
-        </div>
-        <a class="btn-acquire" href="https://shop.folaadeleke.com/products/my-sons-father" target="_blank" rel="noopener">Acquire Print</a>
-      </div>
 
-      <!-- 03 Birthday Function -->
-      <div class="slide" id="product-birthday-function">
-        <div class="product-image">
-          <a href="https://shop.folaadeleke.com/products/birthday-function" target="_blank" rel="noopener" aria-label="View Birthday Function on shop">
-            <img src="/images/prints/Birthday Function/birthday-function-shopify.jpg" alt="Birthday Function — fine art print by Fola Adeleke" />
-          </a>
+        <div class="slide-image">
+          <div class="product-image">
+            <a href="https://shop.folaadeleke.com/products/my-sons-father" target="_blank" rel="noopener">
+              <img src="/images/prints/My Sons Father/my-sons-father-was-fatherless.jpg" alt="My Son's Father Was Fatherless — fine art print by Fola Adeleke" />
+            </a>
+          </div>
         </div>
-        <hr class="product-rule" />
-        <div class="product-info">
-          <span class="product-name">Birthday Function</span>
-          <span class="product-edition">Edition of 15</span>
-          <p class="product-caption">Remembers the family celebrations we hosted when we were young — when the community came together to celebrate one another&#8217;s milestones as we navigated life in a new land.</p>
-          <span class="product-size">A1 / A2 / A3</span>
-        </div>
-        <a class="btn-acquire" href="https://shop.folaadeleke.com/products/birthday-function" target="_blank" rel="noopener">Acquire Print</a>
-      </div>
 
-      <!-- 04 Saturday Function -->
-      <div class="slide" id="product-saturday-function">
-        <div class="product-image">
-          <a href="https://shop.folaadeleke.com/products/saturday-function" target="_blank" rel="noopener" aria-label="View Saturday Function on shop">
-            <img src="/images/prints/Saturday Function/shopify/saturday-function.jpg" alt="Saturday Function — fine art print by Fola Adeleke" />
-          </a>
+        <div class="slide-image">
+          <div class="product-image">
+            <a href="https://shop.folaadeleke.com/products/birthday-function" target="_blank" rel="noopener">
+              <img src="/images/prints/Birthday Function/birthday-function-shopify.jpg" alt="Birthday Function — fine art print by Fola Adeleke" />
+            </a>
+          </div>
         </div>
-        <hr class="product-rule" />
-        <div class="product-info">
-          <span class="product-name">Saturday Function</span>
-          <span class="product-edition">Edition of 15</span>
-          <p class="product-caption">A visual tribute to sisterhood and the art of arrival. Perfume and confidence announcing their arrival as they strut into the gathering.</p>
-          <span class="product-size">A1 / A2 / A3</span>
-        </div>
-        <a class="btn-acquire" href="https://shop.folaadeleke.com/products/saturday-function" target="_blank" rel="noopener">Acquire Print</a>
-      </div>
 
-      <!-- 05 Elders Guidance -->
-      <div class="slide" id="product-elders">
-        <div class="product-image">
-          <a href="https://shop.folaadeleke.com/products/elders-guidance" target="_blank" rel="noopener" aria-label="View Elders Guidance on shop">
-            <img src="/images/prints/Elders/Elders Guidance - Shopify.jpg" alt="Elders Guidance — fine art print by Fola Adeleke" />
-          </a>
+        <div class="slide-image">
+          <div class="product-image">
+            <a href="https://shop.folaadeleke.com/products/saturday-function" target="_blank" rel="noopener">
+              <img src="/images/prints/Saturday Function/shopify/saturday-function.jpg" alt="Saturday Function — fine art print by Fola Adeleke" />
+            </a>
+          </div>
         </div>
-        <hr class="product-rule" />
-        <div class="product-info">
-          <span class="product-name">Elders Guidance</span>
-          <span class="product-edition">Edition of 15</span>
-          <p class="product-caption">Women are the guardians of the next generation. Their watchfulness is not loud or demanding; it is steady, enduring, and deeply rooted in love.</p>
-          <span class="product-size">A1 / A2</span>
-        </div>
-        <a class="btn-acquire" href="https://shop.folaadeleke.com/products/elders-guidance" target="_blank" rel="noopener">Acquire Print</a>
-      </div>
 
-      <!-- 06 Husband & Wife -->
-      <div class="slide" id="product-husband-wife">
-        <div class="product-image">
-          <a href="https://shop.folaadeleke.com/products/husband-wife" target="_blank" rel="noopener" aria-label="View Husband &amp; Wife on shop">
-            <img src="/images/prints/Husband%20%26%20Wife/Husband%20and%20wife%20-%20Shopify.jpg" alt="Husband &amp; Wife — fine art print by Fola Adeleke" />
-          </a>
+        <div class="slide-image">
+          <div class="product-image">
+            <a href="https://shop.folaadeleke.com/products/elders-guidance" target="_blank" rel="noopener">
+              <img src="/images/prints/Elders/Elders Guidance - Shopify.jpg" alt="Elders Guidance — fine art print by Fola Adeleke" />
+            </a>
+          </div>
         </div>
-        <hr class="product-rule" />
-        <div class="product-info">
-          <span class="product-name">Husband &amp; Wife</span>
-          <span class="product-edition">Edition of 15</span>
-          <p class="product-caption">The couple is enveloped in a family fabric that represents heritage, identity, and belonging — rooted in a wider family structure that both shapes and sustains them.</p>
-          <span class="product-size">A1 / A2 / A3</span>
-        </div>
-        <a class="btn-acquire" href="https://shop.folaadeleke.com/products/husband-wife" target="_blank" rel="noopener">Acquire Print</a>
-      </div>
 
-      <!-- 07 If You Know You Know Sha -->
-      <div class="slide" id="product-iykyk">
-        <div class="product-image">
-          <a href="https://shop.folaadeleke.com/products/if-you-know-you-know-sha" target="_blank" rel="noopener" aria-label="View If You Know, You Know, Sha on shop">
-            <img src="/images/prints/iykyk/If You Know You Know Sha copy.jpg" alt="If You Know, You Know, Sha — fine art print by Fola Adeleke" />
-          </a>
+        <div class="slide-image">
+          <div class="product-image">
+            <a href="https://shop.folaadeleke.com/products/husband-wife" target="_blank" rel="noopener">
+              <img src="/images/prints/Husband%20%26%20Wife/Husband%20and%20wife%20-%20Shopify.jpg" alt="Husband &amp; Wife — fine art print by Fola Adeleke" />
+            </a>
+          </div>
         </div>
-        <hr class="product-rule" />
-        <div class="product-info">
-          <span class="product-name">If You Know, You Know, Sha</span>
-          <span class="product-edition">Edition of 15</span>
-          <p class="product-caption">A reminder that home can exist inside something as simple as a nostalgic memory — the unspoken belief that things from our soil are just different.</p>
-          <span class="product-size">A1 / A2 / A3</span>
-        </div>
-        <a class="btn-acquire" href="https://shop.folaadeleke.com/products/if-you-know-you-know-sha" target="_blank" rel="noopener">Acquire Print</a>
-      </div>
 
-      <!-- 08 Drowned — Kehinde -->
-      <div class="slide" id="product-kehinde">
-        <div class="product-image">
-          <a href="https://shop.folaadeleke.com/products/drowned-in-cloth-kehinde" target="_blank" rel="noopener" aria-label="View Drowned in Native Cloth — Kehinde on shop">
-            <img src="/images/prints/Drowned/Kehinde/Drowned in Native Cloth - Kehinde home.jpg" alt="Drowned in Native Cloth - Kehinde — fine art print by Fola Adeleke" />
-          </a>
+        <div class="slide-image">
+          <div class="product-image">
+            <a href="https://shop.folaadeleke.com/products/if-you-know-you-know-sha" target="_blank" rel="noopener">
+              <img src="/images/prints/iykyk/If You Know You Know Sha copy.jpg" alt="If You Know, You Know, Sha — fine art print by Fola Adeleke" />
+            </a>
+          </div>
         </div>
-        <hr class="product-rule" />
-        <div class="product-info">
-          <span class="product-name">Drowned in Native Cloth — Kehinde</span>
-          <span class="product-edition">Edition of 15</span>
-          <p class="product-caption">To be &#8220;drowned&#8221; in native cloth is to be completely immersed in heritage — not simply adorned, but defined and sustained by it.</p>
-          <span class="product-size">A1 / A2 / A3</span>
-        </div>
-        <a class="btn-acquire" href="https://shop.folaadeleke.com/products/drowned-in-cloth-kehinde" target="_blank" rel="noopener">Acquire Print</a>
-      </div>
 
-      <!-- 09 Drowned — Taiwo -->
-      <div class="slide" id="product-drowned">
-        <div class="product-image">
-          <a href="https://shop.folaadeleke.com/products/drowned-in-cloth" target="_blank" rel="noopener" aria-label="View Drowned in Native Cloth — Taiwo on shop">
-            <img src="/images/prints/Drowned/Taiwo/drowned in native cloth home.jpeg" alt="Drowned in Native Cloth - Taiwo — fine art print by Fola Adeleke" />
-          </a>
+        <div class="slide-image">
+          <div class="product-image">
+            <a href="https://shop.folaadeleke.com/products/drowned-in-cloth-kehinde" target="_blank" rel="noopener">
+              <img src="/images/prints/Drowned/Kehinde/Drowned in Native Cloth - Kehinde home.jpg" alt="Drowned in Native Cloth — Kehinde — fine art print by Fola Adeleke" />
+            </a>
+          </div>
         </div>
-        <hr class="product-rule" />
-        <div class="product-info">
-          <span class="product-name">Drowned in Native Cloth — Taiwo</span>
-          <span class="product-edition">Edition of 15</span>
-          <p class="product-caption">African culture is not simply worn — it is inherited. To be &#8220;drowned&#8221; in native cloth is to be completely immersed in heritage, ancestry, and cultural permanence.</p>
-          <span class="product-size">A1 / A2 / A3</span>
-        </div>
-        <a class="btn-acquire" href="https://shop.folaadeleke.com/products/drowned-in-cloth" target="_blank" rel="noopener">Acquire Print</a>
-      </div>
 
-      <!-- 10 Unapologetic -->
-      <div class="slide" id="product-unapologetic">
-        <div class="product-image">
-          <a href="https://shop.folaadeleke.com/products/unapologetic" target="_blank" rel="noopener" aria-label="View Unapologetic on shop">
-            <img src="/images/prints/Unapologetic/Unapologetic-shopify.jpg" alt="Unapologetic — fine art print by Fola Adeleke" />
-          </a>
+        <div class="slide-image">
+          <div class="product-image">
+            <a href="https://shop.folaadeleke.com/products/drowned-in-cloth" target="_blank" rel="noopener">
+              <img src="/images/prints/Drowned/Taiwo/drowned in native cloth home.jpeg" alt="Drowned in Native Cloth — Taiwo — fine art print by Fola Adeleke" />
+            </a>
+          </div>
         </div>
-        <hr class="product-rule" />
-        <div class="product-info">
-          <span class="product-name">Unapologetic</span>
-          <span class="product-edition">Edition of 15</span>
-          <p class="product-caption">Honouring the African woman as both legacy and future — rooted in tradition yet fully present in the modern world. Owning every layer of who we are.</p>
-          <span class="product-size">A1 / A2 / A3</span>
-        </div>
-        <a class="btn-acquire" href="https://shop.folaadeleke.com/products/unapologetic" target="_blank" rel="noopener">Acquire Print</a>
-      </div>
 
-      <!-- 11 No VC -->
-      <div class="slide" id="product-novc">
-        <div class="product-image">
-          <a href="https://shop.folaadeleke.com/products/novc" target="_blank" rel="noopener" aria-label="View No VC / No Vacation on shop">
-            <img src="/images/prints/No VC/No VC.jpeg" alt="No VC / No Vacation — fine art print by Fola Adeleke" />
-          </a>
+        <div class="slide-image">
+          <div class="product-image">
+            <a href="https://shop.folaadeleke.com/products/unapologetic" target="_blank" rel="noopener">
+              <img src="/images/prints/Unapologetic/Unapologetic-shopify.jpg" alt="Unapologetic — fine art print by Fola Adeleke" />
+            </a>
+          </div>
         </div>
-        <hr class="product-rule" />
-        <div class="product-info">
-          <span class="product-name">No VC / No Vacation</span>
-          <span class="product-edition">Edition of 15</span>
-          <p class="product-caption">Celebrating the endurance of Black women founders — who press on regardless, building livelihoods for their families with no days off and no days out.</p>
-          <span class="product-size">A1 / A2 / A3</span>
-        </div>
-        <a class="btn-acquire" href="https://shop.folaadeleke.com/products/novc" target="_blank" rel="noopener">Acquire Print</a>
-      </div>
 
-      <!-- 12 Loud Celebration (Sold Out) -->
-      <div class="slide" id="product-loud-celebration">
-        <div class="product-image">
-          <img src="/images/prints/Loud Celebration/Loud Celebration.jpeg" alt="Loud Celebration — fine art print by Fola Adeleke" style="opacity:0.5;" />
+        <div class="slide-image">
+          <div class="product-image">
+            <a href="https://shop.folaadeleke.com/products/novc" target="_blank" rel="noopener">
+              <img src="/images/prints/No VC/No VC.jpeg" alt="No VC / No Vacation — fine art print by Fola Adeleke" />
+            </a>
+          </div>
         </div>
-        <hr class="product-rule" />
-        <div class="product-info">
-          <span class="product-name">Loud Celebration</span>
-          <span class="product-edition">Edition of 15</span>
-          <p class="product-caption">Loudness beyond sound — celebration as something deeply felt rather than simply heard. Joy, pride, and release as their own language.</p>
-          <span class="product-size">A1 / A2 / A3</span>
-        </div>
-        <span class="btn-acquire sold-out">No Longer Available</span>
-      </div>
 
-      <!-- 13 Sisterhood -->
-      <div class="slide" id="product-sisterhood">
-        <div class="product-image">
-          <a href="https://shop.folaadeleke.com/products/sisterhood" target="_blank" rel="noopener" aria-label="View Sisterhood on shop">
-            <img src="/images/prints/Sisterhood/sisterhood.jpeg" alt="Sisterhood — fine art print by Fola Adeleke" />
-          </a>
+        <div class="slide-image">
+          <div class="product-image">
+            <img src="/images/prints/Loud Celebration/Loud Celebration.jpeg" alt="Loud Celebration — fine art print by Fola Adeleke" style="opacity:0.5;" />
+          </div>
         </div>
-        <hr class="product-rule" />
-        <div class="product-info">
-          <span class="product-name">Sisterhood</span>
-          <span class="product-edition">Edition of 15</span>
-          <p class="product-caption">Honouring African sisterhood as a quiet force of endurance — rooted in care, survival, and shared strength across generations.</p>
-          <span class="product-size">A1 / A2 / A3</span>
+
+        <div class="slide-image">
+          <div class="product-image">
+            <a href="https://shop.folaadeleke.com/products/sisterhood" target="_blank" rel="noopener">
+              <img src="/images/prints/Sisterhood/sisterhood.jpeg" alt="Sisterhood — fine art print by Fola Adeleke" />
+            </a>
+          </div>
         </div>
-        <a class="btn-acquire" href="https://shop.folaadeleke.com/products/sisterhood" target="_blank" rel="noopener">Acquire Print</a>
-      </div>
 
-    </div><!-- /slides-track -->
+      </div><!-- /slides-track -->
 
-    <div class="slide-counter" id="slideCounter">01 / 13</div>
-    <div class="slide-dots" id="slideDots" aria-hidden="true"></div>
+      <div class="slide-counter" id="slideCounter">01 / 13</div>
+    </div><!-- /image-stage -->
+
+    <!-- Info track — synced to image track -->
+    <div class="info-stage">
+      <div class="infos-track" id="infosTrack">
+
+        <div class="slide-info">
+          <div class="info-inner">
+            <div class="info-top">
+              <span class="product-name">Black Excellence</span>
+              <span class="product-edition">Edition of 15</span>
+            </div>
+            <a class="btn-acquire" href="https://shop.folaadeleke.com/products/black-excellence" target="_blank" rel="noopener">Acquire Print</a>
+            <p class="product-caption">Black Excellence celebrates the strength, unity, and beauty of the Black couple — a powerful partnership embodying love, resilience, achievement, and cultural pride.</p>
+            <span class="product-size">A1 / A2 / A3</span>
+          </div>
+        </div>
+
+        <div class="slide-info">
+          <div class="info-inner">
+            <div class="info-top">
+              <span class="product-name">My Son&#8217;s Father Was Fatherless</span>
+              <span class="product-edition">Edition of 15</span>
+            </div>
+            <a class="btn-acquire" href="https://shop.folaadeleke.com/products/my-sons-father" target="_blank" rel="noopener">Acquire Print</a>
+            <p class="product-caption">A conversation about inherited silence, absent guidance, and the quiet struggle of men trying to become fathers without ever experiencing fatherhood themselves.</p>
+            <span class="product-size">A1 / A2 / A3</span>
+          </div>
+        </div>
+
+        <div class="slide-info">
+          <div class="info-inner">
+            <div class="info-top">
+              <span class="product-name">Birthday Function</span>
+              <span class="product-edition">Edition of 15</span>
+            </div>
+            <a class="btn-acquire" href="https://shop.folaadeleke.com/products/birthday-function" target="_blank" rel="noopener">Acquire Print</a>
+            <p class="product-caption">Remembers the family celebrations we hosted when we were young — when the community came together to celebrate one another&#8217;s milestones as we navigated life in a new land.</p>
+            <span class="product-size">A1 / A2 / A3</span>
+          </div>
+        </div>
+
+        <div class="slide-info">
+          <div class="info-inner">
+            <div class="info-top">
+              <span class="product-name">Saturday Function</span>
+              <span class="product-edition">Edition of 15</span>
+            </div>
+            <a class="btn-acquire" href="https://shop.folaadeleke.com/products/saturday-function" target="_blank" rel="noopener">Acquire Print</a>
+            <p class="product-caption">A visual tribute to sisterhood and the art of arrival. Perfume and confidence announcing their arrival as they strut into the gathering.</p>
+            <span class="product-size">A1 / A2 / A3</span>
+          </div>
+        </div>
+
+        <div class="slide-info">
+          <div class="info-inner">
+            <div class="info-top">
+              <span class="product-name">Elders Guidance</span>
+              <span class="product-edition">Edition of 15</span>
+            </div>
+            <a class="btn-acquire" href="https://shop.folaadeleke.com/products/elders-guidance" target="_blank" rel="noopener">Acquire Print</a>
+            <p class="product-caption">Women are the guardians of the next generation. Their watchfulness is not loud or demanding; it is steady, enduring, and deeply rooted in love.</p>
+            <span class="product-size">A1 / A2</span>
+          </div>
+        </div>
+
+        <div class="slide-info">
+          <div class="info-inner">
+            <div class="info-top">
+              <span class="product-name">Husband &amp; Wife</span>
+              <span class="product-edition">Edition of 15</span>
+            </div>
+            <a class="btn-acquire" href="https://shop.folaadeleke.com/products/husband-wife" target="_blank" rel="noopener">Acquire Print</a>
+            <p class="product-caption">The couple is enveloped in a family fabric that represents heritage, identity, and belonging — rooted in a wider family structure that both shapes and sustains them.</p>
+            <span class="product-size">A1 / A2 / A3</span>
+          </div>
+        </div>
+
+        <div class="slide-info">
+          <div class="info-inner">
+            <div class="info-top">
+              <span class="product-name">If You Know, You Know, Sha</span>
+              <span class="product-edition">Edition of 15</span>
+            </div>
+            <a class="btn-acquire" href="https://shop.folaadeleke.com/products/if-you-know-you-know-sha" target="_blank" rel="noopener">Acquire Print</a>
+            <p class="product-caption">A reminder that home can exist inside something as simple as a nostalgic memory — the unspoken belief that things from our soil are just different.</p>
+            <span class="product-size">A1 / A2 / A3</span>
+          </div>
+        </div>
+
+        <div class="slide-info">
+          <div class="info-inner">
+            <div class="info-top">
+              <span class="product-name">Drowned in Native Cloth — Kehinde</span>
+              <span class="product-edition">Edition of 15</span>
+            </div>
+            <a class="btn-acquire" href="https://shop.folaadeleke.com/products/drowned-in-cloth-kehinde" target="_blank" rel="noopener">Acquire Print</a>
+            <p class="product-caption">To be &#8220;drowned&#8221; in native cloth is to be completely immersed in heritage — not simply adorned, but defined and sustained by it.</p>
+            <span class="product-size">A1 / A2 / A3</span>
+          </div>
+        </div>
+
+        <div class="slide-info">
+          <div class="info-inner">
+            <div class="info-top">
+              <span class="product-name">Drowned in Native Cloth — Taiwo</span>
+              <span class="product-edition">Edition of 15</span>
+            </div>
+            <a class="btn-acquire" href="https://shop.folaadeleke.com/products/drowned-in-cloth" target="_blank" rel="noopener">Acquire Print</a>
+            <p class="product-caption">African culture is not simply worn — it is inherited. To be &#8220;drowned&#8221; in native cloth is to be completely immersed in heritage, ancestry, and cultural permanence.</p>
+            <span class="product-size">A1 / A2 / A3</span>
+          </div>
+        </div>
+
+        <div class="slide-info">
+          <div class="info-inner">
+            <div class="info-top">
+              <span class="product-name">Unapologetic</span>
+              <span class="product-edition">Edition of 15</span>
+            </div>
+            <a class="btn-acquire" href="https://shop.folaadeleke.com/products/unapologetic" target="_blank" rel="noopener">Acquire Print</a>
+            <p class="product-caption">Honouring the African woman as both legacy and future — rooted in tradition yet fully present in the modern world. Owning every layer of who we are.</p>
+            <span class="product-size">A1 / A2 / A3</span>
+          </div>
+        </div>
+
+        <div class="slide-info">
+          <div class="info-inner">
+            <div class="info-top">
+              <span class="product-name">No VC / No Vacation</span>
+              <span class="product-edition">Edition of 15</span>
+            </div>
+            <a class="btn-acquire" href="https://shop.folaadeleke.com/products/novc" target="_blank" rel="noopener">Acquire Print</a>
+            <p class="product-caption">Celebrating the endurance of Black women founders — who press on regardless, building livelihoods for their families with no days off and no days out.</p>
+            <span class="product-size">A1 / A2 / A3</span>
+          </div>
+        </div>
+
+        <div class="slide-info">
+          <div class="info-inner">
+            <div class="info-top">
+              <span class="product-name">Loud Celebration</span>
+              <span class="product-edition">Edition of 15</span>
+            </div>
+            <span class="btn-acquire sold-out">No Longer Available</span>
+            <p class="product-caption">Loudness beyond sound — celebration as something deeply felt rather than simply heard. Joy, pride, and release as their own language.</p>
+            <span class="product-size">A1 / A2 / A3</span>
+          </div>
+        </div>
+
+        <div class="slide-info">
+          <div class="info-inner">
+            <div class="info-top">
+              <span class="product-name">Sisterhood</span>
+              <span class="product-edition">Edition of 15</span>
+            </div>
+            <a class="btn-acquire" href="https://shop.folaadeleke.com/products/sisterhood" target="_blank" rel="noopener">Acquire Print</a>
+            <p class="product-caption">Honouring African sisterhood as a quiet force of endurance — rooted in care, survival, and shared strength across generations.</p>
+            <span class="product-size">A1 / A2 / A3</span>
+          </div>
+        </div>
+
+      </div><!-- /infos-track -->
+    </div><!-- /info-stage -->
+
+    <!-- Thumbnail strip -->
+    <div class="thumb-strip" id="thumbStrip" aria-label="Jump to print">
+      <button class="thumb active" data-index="0" aria-label="Black Excellence"><img src="/images/prints/Black Excellence/black-excellence-shopify.jpg" alt="" /></button>
+      <button class="thumb" data-index="1" aria-label="My Son's Father Was Fatherless"><img src="/images/prints/My Sons Father/my-sons-father-was-fatherless.jpg" alt="" /></button>
+      <button class="thumb" data-index="2" aria-label="Birthday Function"><img src="/images/prints/Birthday Function/birthday-function-shopify.jpg" alt="" /></button>
+      <button class="thumb" data-index="3" aria-label="Saturday Function"><img src="/images/prints/Saturday Function/shopify/saturday-function.jpg" alt="" /></button>
+      <button class="thumb" data-index="4" aria-label="Elders Guidance"><img src="/images/prints/Elders/Elders Guidance - Shopify.jpg" alt="" /></button>
+      <button class="thumb" data-index="5" aria-label="Husband &amp; Wife"><img src="/images/prints/Husband%20%26%20Wife/Husband%20and%20wife%20-%20Shopify.jpg" alt="" /></button>
+      <button class="thumb" data-index="6" aria-label="If You Know You Know Sha"><img src="/images/prints/iykyk/If You Know You Know Sha copy.jpg" alt="" /></button>
+      <button class="thumb" data-index="7" aria-label="Drowned in Native Cloth — Kehinde"><img src="/images/prints/Drowned/Kehinde/Drowned in Native Cloth - Kehinde home.jpg" alt="" /></button>
+      <button class="thumb" data-index="8" aria-label="Drowned in Native Cloth — Taiwo"><img src="/images/prints/Drowned/Taiwo/drowned in native cloth home.jpeg" alt="" /></button>
+      <button class="thumb" data-index="9" aria-label="Unapologetic"><img src="/images/prints/Unapologetic/Unapologetic-shopify.jpg" alt="" /></button>
+      <button class="thumb" data-index="10" aria-label="No VC / No Vacation"><img src="/images/prints/No VC/No VC.jpeg" alt="" /></button>
+      <button class="thumb" data-index="11" aria-label="Loud Celebration"><img src="/images/prints/Loud Celebration/Loud Celebration.jpeg" alt="" /></button>
+      <button class="thumb" data-index="12" aria-label="Sisterhood"><img src="/images/prints/Sisterhood/sisterhood.jpeg" alt="" /></button>
+    </div>
 
   </main>
 
@@ -882,7 +630,7 @@
     <p class="footer-copy">&#169; 2026 Fola Adeleke&#174;. All rights reserved.</p>
   </footer>
 
-  <!-- ── MUSIC NODE (Spotify) ── -->
+  <!-- ── MUSIC NODE ── -->
   <div id="music-node">
     <div id="music-pill">
       <button id="music-prev" aria-label="Previous track">
@@ -920,52 +668,50 @@
 
     // ── SLIDESHOW ──────────────────────────────────────────
     (function () {
-      var track   = document.getElementById('slidesTrack');
-      var prev    = document.getElementById('slidePrev');
-      var next    = document.getElementById('slideNext');
-      var counter = document.getElementById('slideCounter');
-      var dotsEl  = document.getElementById('slideDots');
-      var slides  = track.querySelectorAll('.slide');
-      var total   = slides.length;
-      var current = 0;
-
-      // Build dots
-      for (var i = 0; i < total; i++) {
-        var dot = document.createElement('button');
-        dot.className = 'slide-dot' + (i === 0 ? ' active' : '');
-        dot.setAttribute('aria-label', 'Go to print ' + (i + 1));
-        dot.dataset.index = i;
-        dot.addEventListener('click', function () { goTo(+this.dataset.index); });
-        dotsEl.appendChild(dot);
-      }
+      var track     = document.getElementById('slidesTrack');
+      var infoTrack = document.getElementById('infosTrack');
+      var prev      = document.getElementById('slidePrev');
+      var next      = document.getElementById('slideNext');
+      var counter   = document.getElementById('slideCounter');
+      var thumbs    = document.querySelectorAll('.thumb');
+      var slides    = track.querySelectorAll('.slide-image');
+      var total     = slides.length;
+      var current   = 0;
 
       function goTo(n) {
         current = n;
-        track.style.transform = 'translateX(-' + (current * 100) + '%)';
+        var pct = '-' + (current * 100) + '%';
+        track.style.transform     = 'translateX(' + pct + ')';
+        infoTrack.style.transform = 'translateX(' + pct + ')';
         counter.textContent = String(current + 1).padStart(2, '0') + ' / ' + String(total).padStart(2, '0');
         prev.disabled = current === 0;
         next.disabled = current === total - 1;
-        dotsEl.querySelectorAll('.slide-dot').forEach(function (d, i) {
-          d.classList.toggle('active', i === current);
-        });
+        thumbs.forEach(function (t, i) { t.classList.toggle('active', i === current); });
+        // scroll active thumb into view
+        thumbs[current].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
       }
 
       prev.addEventListener('click', function () { if (current > 0) goTo(current - 1); });
       next.addEventListener('click', function () { if (current < total - 1) goTo(current + 1); });
 
-      // Keyboard navigation
-      document.addEventListener('keydown', function (e) {
-        if (e.key === 'ArrowLeft')  { if (current > 0) goTo(current - 1); }
-        if (e.key === 'ArrowRight') { if (current < total - 1) goTo(current + 1); }
+      thumbs.forEach(function (t) {
+        t.addEventListener('click', function () { goTo(+this.dataset.index); });
       });
 
-      // Touch/swipe
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowLeft'  && current > 0)          goTo(current - 1);
+        if (e.key === 'ArrowRight' && current < total - 1)  goTo(current + 1);
+      });
+
       var startX = null;
       track.addEventListener('touchstart', function (e) { startX = e.touches[0].clientX; }, { passive: true });
       track.addEventListener('touchend', function (e) {
         if (startX === null) return;
         var dx = e.changedTouches[0].clientX - startX;
-        if (Math.abs(dx) > 40) { if (dx < 0 && current < total - 1) goTo(current + 1); else if (dx > 0 && current > 0) goTo(current - 1); }
+        if (Math.abs(dx) > 40) {
+          if (dx < 0 && current < total - 1) goTo(current + 1);
+          else if (dx > 0 && current > 0)    goTo(current - 1);
+        }
         startX = null;
       }, { passive: true });
 
@@ -985,11 +731,7 @@
 
       window.onSpotifyIframeApiReady = function (IFrameAPI) {
         var element = iframe;
-        var options = {
-          uri: 'spotify:playlist:2EvrAgnHW9v3V2P5GMELXu',
-          width: 0,
-          height: 0
-        };
+        var options = { uri: 'spotify:playlist:2EvrAgnHW9v3V2P5GMELXu', width: 0, height: 0 };
         IFrameAPI.createController(element, options, function (c) {
           controller = c;
           if (sessionStorage.getItem('music_playing') === '1') {
