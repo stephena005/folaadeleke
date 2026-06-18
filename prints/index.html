@@ -715,11 +715,21 @@
         next.disabled = current === total - 1;
         thumbs.forEach(function (t, i) { t.classList.toggle('active', i === current); });
         // scroll active thumb into view
-        thumbs[current].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        // Scroll thumb strip horizontally only — never scroll the page
+        var strip = document.getElementById('thumbStrip');
+        var thumb = thumbs[current];
+        var stripScrollLeft = thumb.offsetLeft - (strip.offsetWidth / 2) + (thumb.offsetWidth / 2);
+        strip.scrollTo({ left: stripScrollLeft, behavior: 'smooth' });
       }
 
-      prev.addEventListener('click', function () { if (current > 0) goTo(current - 1); });
-      next.addEventListener('click', function () { if (current < total - 1) goTo(current + 1); });
+      prev.addEventListener('click', function () {
+        if (current > 0) goTo(current - 1);
+        this.blur();
+      });
+      next.addEventListener('click', function () {
+        if (current < total - 1) goTo(current + 1);
+        this.blur();
+      });
 
       thumbs.forEach(function (t) {
         t.addEventListener('click', function () { goTo(+this.dataset.index); });
