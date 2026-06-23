@@ -12,7 +12,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <title>Contact &#8212; Fola Adeleke&#174;</title>
+  <title>Press &#8212; Fola Adeleke&#174;</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root { --black: #000; --white: #fff; --grey-light: #eee; --grey-mid: #999; --font: 'Courier New', Courier, monospace; --spacing: 0.2em; --nav-height: 56px; }
@@ -38,16 +38,17 @@
     .footer-social a:hover { color: var(--black); }
     footer p { font-size: 10px; letter-spacing: 0.08em; color: var(--grey-mid); }
 
-    .contact-wrap { min-height: calc(100vh - var(--nav-height) - 80px); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 100px 40px 80px; text-align: center; }
-    .contact-wrap h1 { font-size: 36px; font-weight: 200; letter-spacing: 0.4em; text-transform: uppercase; margin-bottom: 28px; }
-    .contact-rule { width: 100%; max-width: 480px; border: none; border-top: 1px solid var(--grey-light); margin-bottom: 36px; }
-    .contact-row { display: flex; align-items: baseline; gap: 20px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center; }
-    .contact-label { font-size: 10px; letter-spacing: var(--spacing); text-transform: uppercase; color: var(--grey-mid); flex-shrink: 0; }
-    .contact-value { font-size: 12px; letter-spacing: 0.08em; }
-    .contact-value a { color: var(--black); text-decoration: none; }
-    .contact-value a:hover { text-decoration: underline; }
-    .social-dot { color: var(--grey-mid); margin: 0 4px; }
-    @media (max-width: 768px) { .contact-wrap h1 { font-size: 24px; letter-spacing: 0.25em; } }
+    .press-wrap { min-height: calc(100vh - var(--nav-height) - 80px); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 100px 40px 80px; text-align: center; }
+    .press-wrap h1 { font-size: 36px; font-weight: 200; letter-spacing: 0.4em; text-transform: uppercase; margin-bottom: 28px; }
+    .press-rule { width: 100%; max-width: 480px; border: none; border-top: 1px solid var(--grey-light); margin-bottom: 48px; }
+    .press-list { list-style: none; width: 100%; max-width: 480px; }
+    .press-item { padding: 24px 0; border-bottom: 1px solid var(--grey-light); }
+    .press-item:first-child { border-top: 1px solid var(--grey-light); }
+    .press-publication { font-size: 12px; letter-spacing: var(--spacing); text-transform: uppercase; margin-bottom: 6px; }
+    .press-description { font-size: 10px; letter-spacing: 0.08em; color: var(--grey-mid); margin-bottom: 12px; line-height: 1.8; }
+    .press-link { font-size: 10px; letter-spacing: var(--spacing); text-transform: uppercase; color: var(--black); text-decoration: none; border-bottom: 1px solid var(--grey-light); padding-bottom: 2px; transition: border-color 0.15s; }
+    .press-link:hover { border-bottom-color: var(--black); }
+    @media (max-width: 768px) { .press-wrap h1 { font-size: 24px; letter-spacing: 0.25em; } }
   </style>
 </head>
 <body>
@@ -68,27 +69,25 @@
     <a href="/">Home</a>
     <a href="/prints">Prints</a>
     <a href="/artist">Artist</a>
-    <a href="/press">Press</a>
-    <a href="/contact" aria-current="page">Contact</a>
+    <a href="/press" aria-current="page">Press</a>
+    <a href="/contact">Contact</a>
   </div>
 
-  <div class="contact-wrap">
-    <h1>Contact</h1>
-    <hr class="contact-rule" />
-    <div class="contact-row">
-      <span class="contact-label">Follow</span>
-      <span class="contact-value">
-        <a href="https://www.instagram.com/fola_adeleke" target="_blank" rel="noopener">Instagram</a>
-        <span class="social-dot">&#183;</span>
-        <a href="https://www.tiktok.com/@folaadeleke" target="_blank" rel="noopener">TikTok</a>
-      </span>
-    </div>
-    <div class="contact-row">
-      <span class="contact-label">Email</span>
-      <span class="contact-value">
-        <a href="mailto:hello@folaadeleke.com">hello@folaadeleke.com</a>
-      </span>
-    </div>
+  <div class="press-wrap">
+    <h1>Press</h1>
+    <hr class="press-rule" />
+    <ul class="press-list">
+      <li class="press-item">
+        <div class="press-publication">Monad NYC</div>
+        <div class="press-description">First feature-length interview</div>
+        <a class="press-link" href="https://www.monadnyc.com/home/fola" target="_blank" rel="noopener">Read</a>
+      </li>
+      <li class="press-item">
+        <div class="press-publication">Deeds Magazine</div>
+        <div class="press-description">Instagram feature</div>
+        <a class="press-link" href="https://www.instagram.com/p/DZrKtDFjZ6c/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" target="_blank" rel="noopener">View</a>
+      </li>
+    </ul>
   </div>
 
   <footer>
@@ -151,18 +150,15 @@
           }
         });
       };
-      var s = document.createElement('script'); s.src = 'https://open.spotify.com/embed/iframe-api/v1'; s.async = true; document.head.appendChild(s);
       btn.addEventListener('click', function () {
-        if (!playing) {
-          playing = true; node.classList.add('playing'); iconPlay.style.display = 'none'; iconPause.style.display = '';
-          sessionStorage.setItem('music_playing', '1'); if (controller) controller.resume();
-        } else {
-          playing = false; node.classList.remove('playing'); iconPlay.style.display = ''; iconPause.style.display = 'none';
-          sessionStorage.removeItem('music_playing'); if (controller) controller.pause();
-        }
+        if (!controller) return;
+        if (playing) { controller.pause(); node.classList.remove('playing'); iconPlay.style.display = ''; iconPause.style.display = 'none'; sessionStorage.removeItem('music_playing'); }
+        else { controller.resume(); node.classList.add('playing'); iconPlay.style.display = 'none'; iconPause.style.display = ''; sessionStorage.setItem('music_playing', '1'); }
+        playing = !playing;
       });
     })();
   </script>
+  <script src="https://open.spotify.com/embed/iframe-api/v1" async></script>
 
 </body>
 </html>
