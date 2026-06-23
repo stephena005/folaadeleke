@@ -1132,19 +1132,12 @@
       pointer-events: auto;
     }
 
-    #music-prev, #music-next {
-      background: none;
-      border: none;
-      cursor: pointer;
+    #music-label {
+      text-decoration: none;
       color: #999;
-      padding: 0;
-      display: flex;
-      align-items: center;
       transition: color 0.15s;
-      flex-shrink: 0;
     }
-
-    #music-prev:hover, #music-next:hover { color: #000; }
+    #music-label:hover { color: #000; }
 
     #music-btn {
       width: 40px;
@@ -1188,13 +1181,7 @@
 
   <div id="music-node">
     <div id="music-pill">
-      <button id="music-prev" aria-label="Previous track">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><rect x="1" y="2" width="2" height="8" rx="0.5" fill="currentColor"/><path d="M10 2L4 6L10 10V2Z" fill="currentColor"/></svg>
-      </button>
-      <span id="music-label">Fola's vibe</span>
-      <button id="music-next" aria-label="Next track">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><rect x="9" y="2" width="2" height="8" rx="0.5" fill="currentColor"/><path d="M2 2L8 6L2 10V2Z" fill="currentColor"/></svg>
-      </button>
+      <a id="music-label" href="https://open.spotify.com/playlist/2EvrAgnHW9v3V2P5GMELXu" target="_blank" rel="noopener noreferrer">Fola's vibe</a>
     </div>
     <button id="music-btn" aria-label="Play / pause">
       <svg id="icon-play" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3 2L10 6L3 10V2Z" fill="currentColor"/></svg>
@@ -1242,11 +1229,6 @@
       script.src = 'https://open.spotify.com/embed/iframe-api/v1';
       script.async = true;
       document.head.appendChild(script);
-
-      document.getElementById('music-prev').addEventListener('click', function () {
-      });
-      document.getElementById('music-next').addEventListener('click', function () {
-      });
 
       btn.addEventListener('click', function () {
         if (!playing) {
