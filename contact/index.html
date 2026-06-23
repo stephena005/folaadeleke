@@ -38,16 +38,185 @@
     .footer-social a:hover { color: var(--black); }
     footer p { font-size: 10px; letter-spacing: 0.08em; color: var(--grey-mid); }
 
-    .contact-wrap { min-height: calc(100vh - var(--nav-height) - 80px); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 100px 40px 80px; text-align: center; }
-    .contact-wrap h1 { font-size: 36px; font-weight: 200; letter-spacing: 0.4em; text-transform: uppercase; margin-bottom: 28px; }
-    .contact-rule { width: 100%; max-width: 480px; border: none; border-top: 1px solid var(--grey-light); margin-bottom: 36px; }
-    .contact-row { display: flex; align-items: baseline; gap: 20px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center; }
-    .contact-label { font-size: 10px; letter-spacing: var(--spacing); text-transform: uppercase; color: var(--grey-mid); flex-shrink: 0; }
-    .contact-value { font-size: 12px; letter-spacing: 0.08em; }
-    .contact-value a { color: var(--black); text-decoration: none; }
-    .contact-value a:hover { text-decoration: underline; }
-    .social-dot { color: var(--grey-mid); margin: 0 4px; }
-    @media (max-width: 768px) { .contact-wrap h1 { font-size: 24px; letter-spacing: 0.25em; } }
+    /* ── Form styles ── */
+    .form-wrap {
+      max-width: 560px;
+      margin: 0 auto;
+      padding: 120px 32px 80px;
+    }
+    .form-wrap h1 {
+      font-size: 32px;
+      font-weight: 200;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+    .form-intro {
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      color: var(--grey-mid);
+      text-align: center;
+      line-height: 1.8;
+      margin-bottom: 36px;
+    }
+    .form-rule {
+      width: 100%;
+      border: none;
+      border-top: 1px solid var(--grey-light);
+      margin-bottom: 36px;
+    }
+    .form-group {
+      margin-bottom: 24px;
+    }
+    label {
+      display: block;
+      font-size: 10px;
+      letter-spacing: var(--spacing);
+      text-transform: uppercase;
+      color: var(--grey-mid);
+      margin-bottom: 8px;
+    }
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    select,
+    textarea {
+      width: 100%;
+      font-family: var(--font);
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      color: var(--black);
+      background: var(--white);
+      border: 1px solid var(--grey-light);
+      padding: 12px 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--black);
+    }
+    select {
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23999' stroke-width='1'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 36px;
+      cursor: pointer;
+    }
+    textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    /* ── Conditional sections ── */
+    .conditional { display: none; }
+    .conditional.visible { display: block; }
+
+    /* ── Submit ── */
+    .form-submit {
+      display: block;
+      width: 100%;
+      font-family: var(--font);
+      font-size: 11px;
+      letter-spacing: var(--spacing);
+      text-transform: uppercase;
+      color: var(--white);
+      background: var(--black);
+      border: 1px solid var(--black);
+      padding: 14px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      margin-top: 12px;
+    }
+    .form-submit:hover {
+      background: var(--white);
+      color: var(--black);
+    }
+    .optional-hint {
+      font-size: 9px;
+      color: var(--grey-mid);
+      letter-spacing: 0.06em;
+      margin-left: 4px;
+      text-transform: none;
+    }
+
+    /* ── Thank-you state ── */
+    .thank-you {
+      display: none;
+      text-align: center;
+      padding: 80px 0;
+    }
+    .thank-you h2 {
+      font-size: 24px;
+      font-weight: 200;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .thank-you p {
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      color: var(--grey-mid);
+      line-height: 1.8;
+    }
+
+    .contact-info {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .contact-row {
+      display: flex;
+      align-items: baseline;
+      gap: 20px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .contact-label {
+      font-size: 10px;
+      letter-spacing: var(--spacing);
+      text-transform: uppercase;
+      color: var(--grey-mid);
+      flex-shrink: 0;
+    }
+    .contact-value {
+      font-size: 12px;
+      letter-spacing: 0.08em;
+    }
+    .contact-value a {
+      color: var(--black);
+      text-decoration: none;
+    }
+    .contact-value a:hover {
+      text-decoration: underline;
+    }
+    .social-dot {
+      color: var(--grey-mid);
+      margin: 0 4px;
+    }
+    .section-label {
+      font-size: 10px;
+      letter-spacing: var(--spacing);
+      text-transform: uppercase;
+      color: var(--grey-mid);
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    @media (max-width: 600px) {
+      .form-wrap h1 { font-size: 22px; letter-spacing: 0.25em; }
+      .form-row { grid-template-columns: 1fr; }
+      .form-wrap { padding: 100px 20px 60px; }
+    }
   </style>
 </head>
 <body>
@@ -69,25 +238,181 @@
     <a href="/prints">Prints</a>
     <a href="/artist">Artist</a>
     <a href="/press">Press</a>
-    <a href="/contact" aria-current="page">Contact</a>
+    <a href="/contact">Contact</a>
   </div>
 
-  <div class="contact-wrap">
+  <div class="form-wrap">
     <h1>Contact</h1>
-    <hr class="contact-rule" />
-    <div class="contact-row">
-      <span class="contact-label">Follow</span>
-      <span class="contact-value">
-        <a href="https://www.instagram.com/fola_adeleke" target="_blank" rel="noopener">Instagram</a>
-        <span class="social-dot">&#183;</span>
-        <a href="https://www.tiktok.com/@folaadeleke" target="_blank" rel="noopener">TikTok</a>
-      </span>
+
+    <div class="contact-info">
+      <div class="contact-row">
+        <span class="contact-label">Follow</span>
+        <span class="contact-value">
+          <a href="https://www.instagram.com/fola_adeleke" target="_blank" rel="noopener">Instagram</a>
+          <span class="social-dot">&#183;</span>
+          <a href="https://www.tiktok.com/@folaadeleke" target="_blank" rel="noopener">TikTok</a>
+        </span>
+      </div>
+      <div class="contact-row">
+        <span class="contact-label">Email</span>
+        <span class="contact-value">
+          <a href="mailto:hello@folaadeleke.com">hello@folaadeleke.com</a>
+        </span>
+      </div>
     </div>
-    <div class="contact-row">
-      <span class="contact-label">Email</span>
-      <span class="contact-value">
-        <a href="mailto:hello@folaadeleke.com">hello@folaadeleke.com</a>
-      </span>
+
+    <hr class="form-rule" />
+    <p class="section-label">Enquiry form</p>
+    <p class="form-intro">
+      Interested in a commission or artwork for your space?<br />
+      Fill in the details below and I'll be in touch.
+    </p>
+
+    <form id="enquiry-form" action="https://formspree.io/f/maqgnkee" method="POST">
+
+      <!-- Enquiry type -->
+      <div class="form-group">
+        <label for="type">Enquiry type</label>
+        <select id="type" name="type" required>
+          <option value="" disabled selected>Select&hellip;</option>
+          <option value="Commission">Commission</option>
+          <option value="Commercial / Trade">Commercial / Trade</option>
+          <option value="General">General enquiry</option>
+        </select>
+      </div>
+
+      <!-- Contact details -->
+      <div class="form-row">
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" required />
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Phone <span class="optional-hint">(optional)</span></label>
+        <input type="tel" id="phone" name="phone" />
+      </div>
+
+      <!-- ── Commission fields ── -->
+      <div id="commission-fields" class="conditional">
+        <hr class="form-rule" />
+        <div class="form-group">
+          <label for="subject">Subject / vision</label>
+          <textarea id="subject" name="subject" placeholder="Describe what you have in mind&hellip;"></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="medium">Preferred medium</label>
+            <select id="medium" name="medium">
+              <option value="" disabled selected>Select&hellip;</option>
+              <option value="Photography">Photography</option>
+              <option value="Mixed media">Mixed media</option>
+              <option value="Open to suggestion">Open to suggestion</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="size">Desired size</label>
+            <input type="text" id="size" name="size" placeholder="e.g. 60 &times; 90 cm" />
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Commercial fields ── -->
+      <div id="commercial-fields" class="conditional">
+        <hr class="form-rule" />
+        <div class="form-row">
+          <div class="form-group">
+            <label for="business">Business name</label>
+            <input type="text" id="business" name="business" />
+          </div>
+          <div class="form-group">
+            <label for="business-type">Type of space</label>
+            <select id="business-type" name="business_type">
+              <option value="" disabled selected>Select&hellip;</option>
+              <option value="Hotel / Hospitality">Hotel / Hospitality</option>
+              <option value="Restaurant / Bar">Restaurant / Bar</option>
+              <option value="Office / Corporate">Office / Corporate</option>
+              <option value="Retail">Retail</option>
+              <option value="Residential (Developer)">Residential (Developer)</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="pieces">Number of pieces</label>
+            <input type="text" id="pieces" name="pieces" placeholder="e.g. 3&#8211;5" />
+          </div>
+          <div class="form-group">
+            <label for="dimensions">Dimensions / wall space</label>
+            <input type="text" id="dimensions" name="dimensions" placeholder="e.g. 2m wide wall" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="site-visit">Site visit or consultation needed?</label>
+          <select id="site-visit" name="site_visit">
+            <option value="" disabled selected>Select&hellip;</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+            <option value="Maybe — let's discuss">Maybe &#8212; let's discuss</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="contact-other">Interior designer / procurement contact <span class="optional-hint">(optional)</span></label>
+          <input type="text" id="contact-other" name="contact_other" placeholder="Name and email if different" />
+        </div>
+      </div>
+
+      <!-- ── Shared fields ── -->
+      <hr class="form-rule" />
+      <div class="form-row">
+        <div class="form-group">
+          <label for="budget">Budget range</label>
+          <select id="budget" name="budget">
+            <option value="" disabled selected>Select&hellip;</option>
+            <option value="Under £1,000">Under &pound;1,000</option>
+            <option value="£1,000 – £3,000">&pound;1,000 &#8211; &pound;3,000</option>
+            <option value="£3,000 – £5,000">&pound;3,000 &#8211; &pound;5,000</option>
+            <option value="£5,000 – £10,000">&pound;5,000 &#8211; &pound;10,000</option>
+            <option value="£10,000+">&pound;10,000+</option>
+            <option value="Prefer to discuss">Prefer to discuss</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="timeline">Timeline</label>
+          <input type="text" id="timeline" name="timeline" placeholder="e.g. 3 months, flexible" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="message">Additional details <span class="optional-hint">(optional)</span></label>
+        <textarea id="message" name="message" rows="4" placeholder="Anything else you'd like to share&hellip;"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="referral">How did you find me? <span class="optional-hint">(optional)</span></label>
+        <select id="referral" name="referral">
+          <option value="" disabled selected>Select&hellip;</option>
+          <option value="Instagram">Instagram</option>
+          <option value="TikTok">TikTok</option>
+          <option value="Word of mouth">Word of mouth</option>
+          <option value="Press / article">Press / article</option>
+          <option value="Event">Event</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+
+      <button type="submit" class="form-submit">Send Enquiry</button>
+    </form>
+
+    <div class="thank-you" id="thankYou">
+      <h2>Thank You</h2>
+      <p>Your enquiry has been received.<br />I'll be in touch shortly.</p>
     </div>
   </div>
 
@@ -108,6 +433,37 @@
       document.getElementById('drawer').classList.remove('open');
       document.getElementById('drawerOverlay').classList.remove('open');
     }
+
+    // Show/hide conditional fields based on enquiry type
+    var typeSelect = document.getElementById('type');
+    var commissionFields = document.getElementById('commission-fields');
+    var commercialFields = document.getElementById('commercial-fields');
+
+    typeSelect.addEventListener('change', function () {
+      commissionFields.classList.toggle('visible', this.value === 'Commission');
+      commercialFields.classList.toggle('visible', this.value === 'Commercial / Trade');
+    });
+
+    // Handle form submission
+    var form = document.getElementById('enquiry-form');
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var data = new FormData(form);
+      fetch(form.action, {
+        method: 'POST',
+        body: data,
+        headers: { 'Accept': 'application/json' }
+      }).then(function (response) {
+        if (response.ok) {
+          form.style.display = 'none';
+          document.getElementById('thankYou').style.display = 'block';
+        } else {
+          alert('Something went wrong. Please try again or email hello@folaadeleke.com');
+        }
+      }).catch(function () {
+        alert('Something went wrong. Please try again or email hello@folaadeleke.com');
+      });
+    });
   </script>
 
   <!-- ── Music node ───────────────────────────── -->
