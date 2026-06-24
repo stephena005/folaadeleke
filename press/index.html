@@ -171,13 +171,13 @@
   <script>
     (function() {
       var loader = document.getElementById('page-loader');
-      var FADE = 270;
+      var FADE = 405;
       window.addEventListener('load', function() {
         setTimeout(function() {
           loader.style.transition = 'opacity ' + FADE + 'ms ease';
           loader.style.opacity = '0';
           setTimeout(function() { loader.classList.add('hidden'); }, FADE);
-        }, 100);
+        }, 150);
       });
       document.addEventListener('click', function(e) {
         var link = e.target.closest('a[href]');
