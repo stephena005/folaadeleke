@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7ZCQ4YEN6"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-K7ZCQ4YEN6');
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <title>Certificate Verified — Tradition Imagination — Fola Adeleke&#174;</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --black: #000; --white: #fff; --grey-light: #eee; --grey-mid: #999; --font: 'Courier New', Courier, monospace; --spacing: 0.2em; --nav-height: 56px; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font); background: var(--white); color: var(--black); min-height: 100vh; overflow-x: hidden; }
+    nav { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-height); background: var(--white); border-bottom: 1px solid var(--grey-light); display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 0 20px; z-index: 100; }
+    .nav-left { display: flex; align-items: center; }
+    .nav-right { display: flex; justify-content: flex-end; }
+    .nav-brand { text-align: center; font-size: 13px; font-weight: normal; letter-spacing: var(--spacing); text-decoration: none; color: var(--black); }
+    .nav-link { font-size: 11px; letter-spacing: var(--spacing); text-transform: uppercase; text-decoration: none; color: var(--black); font-family: var(--font); }
+    .nav-link:hover { text-decoration: underline; }
+    .hamburger { background: none; border: none; cursor: pointer; font-size: 20px; padding: 4px 8px 4px 0; color: var(--black); line-height: 1; }
+    .drawer-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 200; }
+    .drawer-overlay.open { display: block; }
+    .drawer { position: fixed; top: 0; left: -260px; width: 240px; height: 100%; background: var(--white); border-right: 1px solid var(--grey-light); z-index: 201; transition: left 0.3s ease; display: flex; flex-direction: column; padding: 80px 32px 40px; }
+    .drawer.open { left: 0; }
+    .drawer a, .drawer button { font-family: var(--font); font-size: 12px; letter-spacing: var(--spacing); text-transform: uppercase; text-decoration: none; color: var(--black); background: none; border: none; cursor: pointer; padding: 14px 0; border-bottom: 1px solid var(--grey-light); text-align: left; width: 100%; }
+    .drawer a:last-child, .drawer button:last-child { border-bottom: none; }
+    .drawer-close { position: absolute; top: 18px; right: 18px; font-size: 20px; background: none; border: none; cursor: pointer; color: var(--black); line-height: 1; }
+    footer { border-top: 1px solid var(--grey-light); padding: 20px; text-align: center; }
+    .footer-social { display: flex; justify-content: center; gap: 24px; margin-bottom: 12px; }
+    .footer-social a { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--grey-mid); text-decoration: none; }
+    .footer-social a:hover { color: var(--black); }
+    footer p { font-size: 10px; letter-spacing: 0.08em; color: var(--grey-mid); }
+
+    #page-loader { position: fixed; inset: 0; z-index: 9999; background: rgba(255,255,255,0.7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; }
+    #page-loader.hidden { display: none; }
+    .propeller-icon { width: 56px; height: 50px; background-color: #000; clip-path: polygon(42.9% 62.9%, 44.9% 57.6%, 44.2% 52.3%, 42.9% 45.5%, 42.2% 40.2%, 42.2% 37.9%, 40.8% 30.3%, 40.1% 25.0%, 40.1% 21.2%, 39.5% 15.2%, 40.1% 9.8%, 43.5% 4.5%, 48.3% 0.8%, 53.1% 6.1%, 55.1% 11.4%, 55.8% 16.7%, 55.8% 22.0%, 55.8% 25.0%, 55.1% 31.8%, 53.7% 40.9%, 53.7% 43.2%, 53.1% 48.5%, 52.4% 53.8%, 53.1% 59.1%, 56.5% 63.6%, 62.6% 65.9%, 66.0% 67.4%, 72.8% 69.7%, 76.2% 71.2%, 81.6% 73.5%, 86.4% 75.8%, 90.5% 78.0%, 93.9% 81.1%, 97.3% 86.4%, 98.6% 91.7%, 95.9% 94.7%, 91.2% 96.2%, 85.7% 95.5%, 82.3% 93.9%, 76.9% 90.2%, 73.5% 87.9%, 69.4% 84.8%, 62.6% 78.8%, 57.8% 75.0%, 53.1% 71.2%, 48.3% 69.7%, 43.5% 72.0%, 38.8% 76.5%, 34.0% 81.1%, 29.3% 85.6%, 25.2% 89.4%, 21.1% 92.4%, 15.6% 96.2%, 10.2% 98.5%, 5.4% 98.5%, 0.7% 97.0%, 1.4% 91.7%, 2.7% 86.4%, 8.2% 81.1%, 12.9% 78.0%, 15.0% 76.5%, 20.4% 73.5%, 23.1% 72.0%, 32.7% 68.2%, 35.4% 66.7%, 40.1% 64.4%); transform-origin: 49% 63%; animation: propeller-spin 0.9s ease-in-out infinite; }
+    @keyframes propeller-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+    main { padding: calc(var(--nav-height) + 48px) 20px 64px; max-width: 720px; margin: 0 auto; }
+    .verify-head { text-align: center; margin-bottom: 36px; }
+    .verify-eyebrow { font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--grey-mid); margin-bottom: 10px; }
+    .verify-status { font-size: 15px; letter-spacing: 0.05em; }
+    .verify-status b { font-weight: normal; border-bottom: 1px solid var(--black); }
+
+    .stage-wrap { width: 100%; max-width: 640px; margin: 0 auto 40px; }
+    .stage { width: 100%; aspect-ratio: 210 / 148; border: 1px solid var(--black); overflow: hidden; position: relative; background: #fff; }
+    .cert-plate { width: 794px; height: 560px; position: absolute; top: 0; left: 0; transform-origin: top left; background: #ffffff; color: #1a1a1a; font-family: 'Courier New', ui-monospace, monospace; display: flex; overflow: hidden; }
+    .art-panel { width: 295px; height: 560px; flex-shrink: 0; position: relative; }
+    .art-img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 22%; display: block; }
+    .art-overlay-top { position: absolute; top: 0; left: 0; right: 0; padding: 15px 17px; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0)); }
+    .brand { display: flex; align-items: center; gap: 4px; font-size: 9px; letter-spacing: 0.15em; font-weight: 700; color: #fff; white-space: nowrap; }
+    .brand-mark { width: 10px; height: 9px; flex-shrink: 0; }
+    .brand-mark svg { display: block; width: 100%; height: 100%; fill: currentColor; }
+    .brand sup { font-size: 5px; vertical-align: super; margin-left: 1px; }
+    .art-tag { font-size: 5px; letter-spacing: 0.1em; text-transform: uppercase; color: #eee; white-space: nowrap; }
+    .art-label { position: absolute; left: 13px; bottom: 13px; font-size: 6px; letter-spacing: 0.2em; text-transform: uppercase; color: #fff; background: rgba(0,0,0,0.5); padding: 3px 7px; white-space: nowrap; }
+    .content-panel { flex: 1; height: 560px; padding: 20px 26px; display: flex; flex-direction: column; }
+    .top-meta { display: flex; justify-content: flex-end; padding-bottom: 8px; border-bottom: 1px solid #1a1a1a; margin-bottom: 13px; }
+    .top-meta-text { font-size: 6px; letter-spacing: 0.08em; text-transform: uppercase; color: #888; white-space: nowrap; }
+    .top-meta-text span { margin-left: 5px; }
+    .body-main { flex: 1; display: flex; flex-direction: column; justify-content: center; min-height: 0; }
+    .label { font-size: 6px; letter-spacing: 0.25em; text-transform: uppercase; color: #888; margin-bottom: 6px; }
+    .title { font-size: 22px; letter-spacing: 0.03em; text-transform: uppercase; font-weight: 700; line-height: 1.1; margin-bottom: 12px; }
+    .year-row { display: flex; align-items: center; gap: 9px; margin-bottom: 17px; }
+    .year { font-size: 8px; letter-spacing: 0.25em; color: #555; }
+    .year-line { width: 26px; height: 1px; background: #1a1a1a; }
+    .edition-section { display: flex; align-items: center; gap: 19px; }
+    .edition-num { font-size: 40px; font-weight: 700; line-height: 1; color: #1a1a1a; }
+    .edition-slash { font-size: 40px; font-weight: 400; line-height: 1; color: #ccc; margin: 0 3px; }
+    .edition-total { font-size: 40px; font-weight: 700; line-height: 1; color: #bbb; }
+    .edition-text { font-size: 7px; line-height: 1.6; color: #444; max-width: 166px; }
+    .footer-block { border-top: 1px solid #ddd; padding-top: 12px; margin-top: 13px; display: grid; grid-template-columns: 1.1fr 1fr 1.1fr 1.3fr 38px; gap: 10px; align-items: start; }
+    .footer-item .label { font-size: 5px; margin-bottom: 4px; white-space: nowrap; }
+    .footer-value { font-size: 7px; line-height: 1.5; color: #1a1a1a; white-space: normal; overflow-wrap: break-word; }
+    .signed-section { text-align: right; }
+    .signature-line { width: 64px; height: 1px; background: #1a1a1a; margin-left: auto; margin-bottom: 4px; margin-top: 8px; }
+    .signed-by { font-size: 6px; color: #888; letter-spacing: 0.08em; white-space: nowrap; }
+    .qr-section { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
+    .qr-code svg { width: 29px; height: 29px; }
+
+    .ident-propeller { position: absolute; top: 50%; left: 50%; width: 64px; height: 58px; margin: -29px 0 0 -32px; color: #1a1a1a; z-index: 5; opacity: 0; }
+    .ident-propeller svg { width: 100%; height: 100%; fill: currentColor; }
+    .cert-plate { opacity: 0; }
+    .stage.play .cert-plate { animation: plate-fade-in 0.01s linear 1.7s forwards; }
+    .art-panel { transform: translateX(-100%); opacity: 0; }
+    .stage.play .art-panel { animation: slide-in-left 0.9s cubic-bezier(.2,.8,.2,1) 1.7s forwards; }
+    .content-panel { transform: translateX(30%); opacity: 0; }
+    .stage.play .content-panel { animation: slide-in-right 0.9s cubic-bezier(.2,.8,.2,1) 1.9s forwards; }
+    .stage.play .ident-propeller { animation: ident-spin 1.7s linear forwards, ident-fade 1.7s linear forwards; }
+    @keyframes ident-spin {
+      0% { transform: rotate(0deg) scale(1); }
+      88% { transform: rotate(1080deg) scale(1); }
+      100% { transform: rotate(1080deg) scale(0.16) translate(-720%, -660%); }
+    }
+    @keyframes ident-fade { 0% { opacity: 1; } 92% { opacity: 1; } 100% { opacity: 0; } }
+    @keyframes plate-fade-in { to { opacity: 1; } }
+    @keyframes slide-in-left { to { transform: translateX(0); opacity: 1; } }
+    @keyframes slide-in-right { to { transform: translateX(0); opacity: 1; } }
+    .brand, .art-tag { opacity: 0; }
+    .stage.play .brand { animation: fade-up 0.5s ease-out 2.5s forwards; }
+    .stage.play .art-tag { animation: fade-up 0.5s ease-out 2.6s forwards; }
+    @keyframes fade-up { 0% { opacity: 0; transform: translateY(6px); } 100% { opacity: 1; transform: translateY(0); } }
+
+    @media (prefers-reduced-motion: reduce) {
+      .cert-plate, .art-panel, .content-panel, .brand, .art-tag { opacity: 1 !important; transform: none !important; animation: none !important; }
+      .ident-propeller { display: none; }
+    }
+
+    .verify-details { border-top: 1px solid var(--grey-light); padding-top: 20px; margin-top: 8px; }
+    .verify-details dl { display: grid; grid-template-columns: 140px 1fr; row-gap: 10px; font-size: 12px; }
+    .verify-details dt { color: var(--grey-mid); text-transform: uppercase; letter-spacing: 0.1em; font-size: 10px; }
+    .verify-details dd { }
+    .verify-links { text-align: center; margin-top: 32px; }
+    .verify-links a { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--black); text-decoration: none; border-bottom: 1px solid var(--black); }
+    .verify-links a:hover { color: var(--grey-mid); border-color: var(--grey-mid); }
+  </style>
+</head>
+<body>
+
+  <div id="page-loader"><div class="propeller-icon"></div></div>
+
+  <nav>
+    <div class="nav-left">
+      <button class="hamburger" aria-label="Open menu" onclick="openDrawer()">&#9776;</button>
+    </div>
+    <a class="nav-brand" href="/">Fola Adeleke&#174;</a>
+    <div class="nav-right">
+      <a class="nav-link" href="/contact">Contact</a>
+    </div>
+  </nav>
+
+  <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+  <div class="drawer" id="drawer">
+    <button class="drawer-close" onclick="closeDrawer()" aria-label="Close menu">&#x2715;</button>
+    <a href="/">Home</a>
+    <a href="/prints">Prints</a>
+    <a href="/artist">Artist</a>
+    <a href="/press">Press</a>
+    <a href="/contact">Contact</a>
+  </div>
+
+  <main>
+    <div class="verify-head">
+      <div class="verify-eyebrow">Certificate of Authenticity</div>
+      <div class="verify-status">This print is <b>verified original</b> &mdash; issued by Fola Adeleke&reg;</div>
+    </div>
+
+    <div class="stage-wrap">
+      <div class="stage" id="stage">
+        <div class="cert-plate">
+          <div class="ident-propeller"><svg viewBox="0 0 588 528" xmlns="http://www.w3.org/2000/svg"><g transform="translate(0,528) scale(0.1,-0.1)"><path d="M2727 5199 c-70 -61 -223 -233 -272 -309 -112 -171 -132 -248 -121
+-465 11 -240 26 -429 47 -595 20 -162 30 -228 90 -600 6 -36 19 -104 30 -152
+10 -48 19 -99 19 -113 0 -15 7 -53 15 -84 8 -31 21 -99 29 -151 17 -104 27
+-159 57 -325 11 -60 21 -133 22 -162 2 -49 -1 -55 -40 -95 -49 -51 -83 -112
+-83 -150 0 -14 -3 -33 -6 -42 -7 -17 -103 -65 -264 -131 -36 -15 -83 -35 -105
+-45 -22 -10 -65 -28 -95 -40 -30 -12 -73 -31 -96 -41 -23 -11 -47 -19 -53 -19
+-7 0 -29 -9 -49 -19 -20 -11 -62 -29 -92 -41 -30 -12 -72 -30 -92 -41 -20 -10
+-42 -19 -49 -19 -6 0 -30 -8 -53 -19 -23 -10 -66 -29 -96 -42 -30 -12 -92 -40
+-138 -61 -45 -21 -84 -38 -87 -38 -16 0 -408 -193 -530 -260 -152 -85 -265
+-150 -280 -162 -5 -4 -46 -32 -90 -61 -44 -29 -92 -71 -107 -93 -31 -43 -118
+-218 -118 -235 0 -6 -7 -25 -15 -42 -19 -41 -42 -125 -56 -202 -5 -33 -14 -82
+-19 -108 -9 -42 -7 -52 11 -76 52 -70 460 -148 642 -122 65 9 232 82 312 136
+20 14 38 25 41 25 3 0 17 8 32 19 15 10 74 49 132 87 106 69 464 333 510 376
+14 13 41 35 62 50 20 15 42 33 50 41 7 7 71 62 143 122 71 61 168 144 215 185
+47 42 127 111 179 155 52 44 103 89 114 99 11 11 81 68 156 129 125 101 137
+108 165 101 17 -4 84 -8 148 -10 l117 -2 70 -53 c38 -30 95 -72 126 -94 31
+-22 79 -59 108 -81 29 -23 71 -54 93 -70 23 -16 164 -122 315 -235 151 -113
+310 -231 354 -262 78 -56 384 -262 417 -282 9 -5 49 -29 90 -53 40 -24 87 -51
+103 -62 60 -38 268 -145 350 -181 45 -19 61 -21 175 -16 169 7 351 49 547 127
+54 22 42 124 -42 360 -18 51 -27 72 -81 185 -41 84 -99 152 -174 201 -24 16
+-55 37 -69 46 -33 22 -71 43 -168 94 -43 22 -87 45 -98 51 -24 13 -183 88
+-240 113 -22 10 -61 27 -86 39 -25 12 -50 21 -54 21 -4 0 -26 8 -49 19 -46 21
+-123 52 -176 71 -19 7 -53 19 -75 26 -22 8 -49 19 -60 24 -23 10 -125 46 -170
+60 -16 5 -52 16 -80 26 -50 18 -120 41 -185 63 -19 7 -82 28 -140 47 -58 19
+-113 38 -122 44 -10 5 -34 14 -55 19 -21 6 -76 24 -123 41 -47 17 -99 35 -117
+41 -18 5 -45 16 -60 24 -15 8 -35 15 -43 15 -30 0 -82 41 -96 77 -19 44 -82
+130 -119 161 -23 20 -26 29 -22 60 4 21 9 73 12 117 3 44 14 141 25 215 18
+126 25 182 51 370 5 41 18 134 29 205 68 463 94 774 94 1125 0 250 -3 298 -22
+395 -11 61 -29 126 -39 145 -51 98 -244 316 -361 408 -71 55 -101 56 -165 1z"/></g></svg></div>
+          <div class="art-panel">
+            <img class="art-img" src="/images/prints/Tradition Imagination/Tradition Imagination - certificate.jpg" alt="Tradition Imagination">
+            <div class="art-overlay-top">
+              <div class="brand">
+                <span class="brand-mark"><svg viewBox="0 0 588 528" xmlns="http://www.w3.org/2000/svg"><g transform="translate(0,528) scale(0.1,-0.1)"><path d="M2727 5199 c-70 -61 -223 -233 -272 -309 -112 -171 -132 -248 -121
+-465 11 -240 26 -429 47 -595 20 -162 30 -228 90 -600 6 -36 19 -104 30 -152
+10 -48 19 -99 19 -113 0 -15 7 -53 15 -84 8 -31 21 -99 29 -151 17 -104 27
+-159 57 -325 11 -60 21 -133 22 -162 2 -49 -1 -55 -40 -95 -49 -51 -83 -112
+-83 -150 0 -14 -3 -33 -6 -42 -7 -17 -103 -65 -264 -131 -36 -15 -83 -35 -105
+-45 -22 -10 -65 -28 -95 -40 -30 -12 -73 -31 -96 -41 -23 -11 -47 -19 -53 -19
+-7 0 -29 -9 -49 -19 -20 -11 -62 -29 -92 -41 -30 -12 -72 -30 -92 -41 -20 -10
+-42 -19 -49 -19 -6 0 -30 -8 -53 -19 -23 -10 -66 -29 -96 -42 -30 -12 -92 -40
+-138 -61 -45 -21 -84 -38 -87 -38 -16 0 -408 -193 -530 -260 -152 -85 -265
+-150 -280 -162 -5 -4 -46 -32 -90 -61 -44 -29 -92 -71 -107 -93 -31 -43 -118
+-218 -118 -235 0 -6 -7 -25 -15 -42 -19 -41 -42 -125 -56 -202 -5 -33 -14 -82
+-19 -108 -9 -42 -7 -52 11 -76 52 -70 460 -148 642 -122 65 9 232 82 312 136
+20 14 38 25 41 25 3 0 17 8 32 19 15 10 74 49 132 87 106 69 464 333 510 376
+14 13 41 35 62 50 20 15 42 33 50 41 7 7 71 62 143 122 71 61 168 144 215 185
+47 42 127 111 179 155 52 44 103 89 114 99 11 11 81 68 156 129 125 101 137
+108 165 101 17 -4 84 -8 148 -10 l117 -2 70 -53 c38 -30 95 -72 126 -94 31
+-22 79 -59 108 -81 29 -23 71 -54 93 -70 23 -16 164 -122 315 -235 151 -113
+310 -231 354 -262 78 -56 384 -262 417 -282 9 -5 49 -29 90 -53 40 -24 87 -51
+103 -62 60 -38 268 -145 350 -181 45 -19 61 -21 175 -16 169 7 351 49 547 127
+54 22 42 124 -42 360 -18 51 -27 72 -81 185 -41 84 -99 152 -174 201 -24 16
+-55 37 -69 46 -33 22 -71 43 -168 94 -43 22 -87 45 -98 51 -24 13 -183 88
+-240 113 -22 10 -61 27 -86 39 -25 12 -50 21 -54 21 -4 0 -26 8 -49 19 -46 21
+-123 52 -176 71 -19 7 -53 19 -75 26 -22 8 -49 19 -60 24 -23 10 -125 46 -170
+60 -16 5 -52 16 -80 26 -50 18 -120 41 -185 63 -19 7 -82 28 -140 47 -58 19
+-113 38 -122 44 -10 5 -34 14 -55 19 -21 6 -76 24 -123 41 -47 17 -99 35 -117
+41 -18 5 -45 16 -60 24 -15 8 -35 15 -43 15 -30 0 -82 41 -96 77 -19 44 -82
+130 -119 161 -23 20 -26 29 -22 60 4 21 9 73 12 117 3 44 14 141 25 215 18
+126 25 182 51 370 5 41 18 134 29 205 68 463 94 774 94 1125 0 250 -3 298 -22
+395 -11 61 -29 126 -39 145 -51 98 -244 316 -361 408 -71 55 -101 56 -165 1z"/></g></svg></span>
+                <span class="brand-word">Fola Adeleke<sup>&reg;</sup></span>
+              </div>
+              <div class="art-tag">Certificate &middot; Limited Edition</div>
+            </div>
+            <div class="art-label">Print Reproduction</div>
+          </div>
+          <div class="content-panel">
+            <div class="top-meta">
+              <div class="top-meta-text">NO RESTOCK<span>&middot;</span><span>ONE OF FIFTEEN</span></div>
+            </div>
+            <div class="body-main">
+              <div class="label">The Work</div>
+              <div class="title">Tradition Imagination</div>
+              <div class="year-row">
+                <div class="year">2026</div>
+                <div class="year-line"></div>
+              </div>
+              <div class="edition-section">
+                <div><span class="edition-num">1</span><span class="edition-slash">/</span><span class="edition-total">15</span></div>
+                <div class="edition-text">Once they&rsquo;re gone, they&rsquo;re gone. There will be no further prints in this edition.</div>
+              </div>
+            </div>
+            <div class="footer-block">
+              <div class="footer-item">
+                <div class="label">Medium</div>
+                <div class="footer-value">Archival gicl&eacute;e, Hahnem&uuml;hle 308gsm</div>
+              </div>
+              <div class="footer-item">
+                <div class="label">Dimensions</div>
+                <div class="footer-value">420 &times; 594 mm (A2)</div>
+              </div>
+              <div class="footer-item">
+                <div class="label">Issued To</div>
+                <div class="footer-value">Wheatbaker Hotel</div>
+              </div>
+              <div class="footer-item signed-section">
+                <div class="label">Signed</div>
+                <div class="signature-line"></div>
+                <div class="signed-by">Fola Adeleke&reg; &middot; 29 Jul 2026</div>
+              </div>
+              <div class="footer-item qr-section">
+                <div class="label">Verify</div>
+                <div class="qr-code"><svg viewBox="0 0 37 37" xmlns="http://www.w3.org/2000/svg"><path d="M2,2H3V3H2zM3,2H4V3H3zM4,2H5V3H4zM5,2H6V3H5zM6,2H7V3H6zM7,2H8V3H7zM8,2H9V3H8zM13,2H14V3H13zM16,2H17V3H16zM18,2H19V3H18zM20,2H21V3H20zM21,2H22V3H21zM22,2H23V3H22zM23,2H24V3H23zM25,2H26V3H25zM28,2H29V3H28zM29,2H30V3H29zM30,2H31V3H30zM31,2H32V3H31zM32,2H33V3H32zM33,2H34V3H33zM34,2H35V3H34zM2,3H3V4H2zM8,3H9V4H8zM17,3H18V4H17zM20,3H21V4H20zM22,3H23V4H22zM23,3H24V4H23zM28,3H29V4H28zM34,3H35V4H34zM2,4H3V5H2zM4,4H5V5H4zM5,4H6V5H5zM6,4H7V5H6zM8,4H9V5H8zM10,4H11V5H10zM11,4H12V5H11zM12,4H13V5H12zM13,4H14V5H13zM14,4H15V5H14zM16,4H17V5H16zM18,4H19V5H18zM21,4H22V5H21zM23,4H24V5H23zM24,4H25V5H24zM26,4H27V5H26zM28,4H29V5H28zM30,4H31V5H30zM31,4H32V5H31zM32,4H33V5H32zM34,4H35V5H34zM2,5H3V6H2zM4,5H5V6H4zM5,5H6V6H5zM6,5H7V6H6zM8,5H9V6H8zM10,5H11V6H10zM11,5H12V6H11zM13,5H14V6H13zM17,5H18V6H17zM20,5H21V6H20zM23,5H24V6H23zM26,5H27V6H26zM28,5H29V6H28zM30,5H31V6H30zM31,5H32V6H31zM32,5H33V6H32zM34,5H35V6H34zM2,6H3V7H2zM4,6H5V7H4zM5,6H6V7H5zM6,6H7V7H6zM8,6H9V7H8zM10,6H11V7H10zM11,6H12V7H11zM12,6H13V7H12zM13,6H14V7H13zM15,6H16V7H15zM16,6H17V7H16zM17,6H18V7H17zM18,6H19V7H18zM19,6H20V7H19zM22,6H23V7H22zM23,6H24V7H23zM24,6H25V7H24zM28,6H29V7H28zM30,6H31V7H30zM31,6H32V7H31zM32,6H33V7H32zM34,6H35V7H34zM2,7H3V8H2zM8,7H9V8H8zM10,7H11V8H10zM12,7H13V8H12zM13,7H14V8H13zM19,7H20V8H19zM21,7H22V8H21zM23,7H24V8H23zM24,7H25V8H24zM25,7H26V8H25zM26,7H27V8H26zM28,7H29V8H28zM34,7H35V8H34zM2,8H3V9H2zM3,8H4V9H3zM4,8H5V9H4zM5,8H6V9H5zM6,8H7V9H6zM7,8H8V9H7zM8,8H9V9H8zM10,8H11V9H10zM12,8H13V9H12zM14,8H15V9H14zM16,8H17V9H16zM18,8H19V9H18zM20,8H21V9H20zM22,8H23V9H22zM24,8H25V9H24zM26,8H27V9H26zM28,8H29V9H28zM29,8H30V9H29zM30,8H31V9H30zM31,8H32V9H31zM32,8H33V9H32zM33,8H34V9H33zM34,8H35V9H34zM10,9H11V10H10zM11,9H12V10H11zM12,9H13V10H12zM14,9H15V10H14zM16,9H17V10H16zM18,9H19V10H18zM21,9H22V10H21zM22,9H23V10H22zM23,9H24V10H23zM25,9H26V10H25zM2,10H3V11H2zM4,10H5V11H4zM5,10H6V11H5zM6,10H7V11H6zM7,10H8V11H7zM8,10H9V11H8zM14,10H15V11H14zM15,10H16V11H15zM19,10H20V11H19zM21,10H22V11H21zM24,10H25V11H24zM25,10H26V11H25zM26,10H27V11H26zM28,10H29V11H28zM29,10H30V11H29zM30,10H31V11H30zM31,10H32V11H31zM32,10H33V11H32zM2,11H3V12H2zM3,11H4V12H3zM4,11H5V12H4zM5,11H6V12H5zM10,11H11V12H10zM11,11H12V12H11zM12,11H13V12H12zM15,11H16V12H15zM18,11H19V12H18zM19,11H20V12H19zM20,11H21V12H20zM21,11H22V12H21zM22,11H23V12H22zM25,11H26V12H25zM28,11H29V12H28zM29,11H30V12H29zM31,11H32V12H31zM32,11H33V12H32zM33,11H34V12H33zM34,11H35V12H34zM3,12H4V13H3zM5,12H6V13H5zM8,12H9V13H8zM10,12H11V13H10zM13,12H14V13H13zM15,12H16V13H15zM16,12H17V13H16zM17,12H18V13H17zM18,12H19V13H18zM19,12H20V13H19zM24,12H25V13H24zM30,12H31V13H30zM32,12H33V13H32zM6,13H7V14H6zM7,13H8V14H7zM11,13H12V14H11zM13,13H14V14H13zM14,13H15V14H14zM15,13H16V14H15zM17,13H18V14H17zM19,13H20V14H19zM20,13H21V14H20zM21,13H22V14H21zM22,13H23V14H22zM26,13H27V14H26zM28,13H29V14H28zM30,13H31V14H30zM31,13H32V14H31zM32,13H33V14H32zM34,13H35V14H34zM4,14H5V15H4zM5,14H6V15H5zM6,14H7V15H6zM7,14H8V15H7zM8,14H9V15H8zM10,14H11V15H10zM16,14H17V15H16zM18,14H19V15H18zM21,14H22V15H21zM22,14H23V15H22zM23,14H24V15H23zM24,14H25V15H24zM26,14H27V15H26zM27,14H28V15H27zM30,14H31V15H30zM31,14H32V15H31zM33,14H34V15H33zM6,15H7V16H6zM7,15H8V16H7zM13,15H14V16H13zM14,15H15V16H14zM15,15H16V16H15zM17,15H18V16H17zM19,15H20V16H19zM20,15H21V16H20zM23,15H24V16H23zM26,15H27V16H26zM28,15H29V16H28zM29,15H30V16H29zM32,15H33V16H32zM33,15H34V16H33zM34,15H35V16H34zM3,16H4V17H3zM4,16H5V17H4zM5,16H6V17H5zM6,16H7V17H6zM7,16H8V17H7zM8,16H9V17H8zM10,16H11V17H10zM11,16H12V17H11zM12,16H13V17H12zM14,16H15V17H14zM17,16H18V17H17zM18,16H19V17H18zM22,16H23V17H22zM23,16H24V17H23zM24,16H25V17H24zM27,16H28V17H27zM28,16H29V17H28zM31,16H32V17H31zM33,16H34V17H33zM2,17H3V18H2zM3,17H4V18H3zM4,17H5V18H4zM5,17H6V18H5zM10,17H11V18H10zM11,17H12V18H11zM16,17H17V18H16zM17,17H18V18H17zM23,17H24V18H23zM24,17H25V18H24zM26,17H27V18H26zM27,17H28V18H27zM28,17H29V18H28zM31,17H32V18H31zM32,17H33V18H32zM2,18H3V19H2zM4,18H5V19H4zM5,18H6V19H5zM6,18H7V19H6zM7,18H8V19H7zM8,18H9V19H8zM9,18H10V19H9zM10,18H11V19H10zM13,18H14V19H13zM17,18H18V19H17zM19,18H20V19H19zM20,18H21V19H20zM24,18H25V19H24zM25,18H26V19H25zM26,18H27V19H26zM27,18H28V19H27zM29,18H30V19H29zM30,18H31V19H30zM34,18H35V19H34zM6,19H7V20H6zM14,19H15V20H14zM15,19H16V20H15zM16,19H17V20H16zM18,19H19V20H18zM20,19H21V20H20zM21,19H22V20H21zM23,19H24V20H23zM25,19H26V20H25zM28,19H29V20H28zM29,19H30V20H29zM31,19H32V20H31zM32,19H33V20H32zM34,19H35V20H34zM2,20H3V21H2zM3,20H4V21H3zM5,20H6V21H5zM6,20H7V21H6zM7,20H8V21H7zM8,20H9V21H8zM9,20H10V21H9zM13,20H14V21H13zM14,20H15V21H14zM17,20H18V21H17zM20,20H21V21H20zM22,20H23V21H22zM23,20H24V21H23zM26,20H27V21H26zM29,20H30V21H29zM30,20H31V21H30zM32,20H33V21H32zM33,20H34V21H33zM2,21H3V22H2zM4,21H5V22H4zM5,21H6V22H5zM6,21H7V22H6zM7,21H8V22H7zM13,21H14V22H13zM14,21H15V22H14zM16,21H17V22H16zM22,21H23V22H22zM23,21H24V22H23zM24,21H25V22H24zM27,21H28V22H27zM29,21H30V22H29zM30,21H31V22H30zM31,21H32V22H31zM32,21H33V22H32zM34,21H35V22H34zM7,22H8V23H7zM8,22H9V23H8zM9,22H10V23H9zM10,22H11V23H10zM14,22H15V23H14zM15,22H16V23H15zM16,22H17V23H16zM17,22H18V23H17zM20,22H21V23H20zM23,22H24V23H23zM25,22H26V23H25zM27,22H28V23H27zM29,22H30V23H29zM30,22H31V23H30zM31,22H32V23H31zM33,22H34V23H33zM2,23H3V24H2zM3,23H4V24H3zM5,23H6V24H5zM7,23H8V24H7zM10,23H11V24H10zM12,23H13V24H12zM14,23H15V24H14zM17,23H18V24H17zM18,23H19V24H18zM19,23H20V24H19zM22,23H23V24H22zM24,23H25V24H24zM25,23H26V24H25zM26,23H27V24H26zM28,23H29V24H28zM31,23H32V24H31zM32,23H33V24H32zM34,23H35V24H34zM2,24H3V25H2zM4,24H5V25H4zM6,24H7V25H6zM7,24H8V25H7zM8,24H9V25H8zM9,24H10V25H9zM10,24H11V25H10zM11,24H12V25H11zM13,24H14V25H13zM15,24H16V25H15zM16,24H17V25H16zM19,24H20V25H19zM21,24H22V25H21zM23,24H24V25H23zM24,24H25V25H24zM26,24H27V25H26zM27,24H28V25H27zM29,24H30V25H29zM31,24H32V25H31zM32,24H33V25H32zM33,24H34V25H33zM2,25H3V26H2zM6,25H7V26H6zM7,25H8V26H7zM9,25H10V26H9zM10,25H11V26H10zM11,25H12V26H11zM15,25H16V26H15zM16,25H17V26H16zM18,25H19V26H18zM21,25H22V26H21zM22,25H23V26H22zM23,25H24V26H23zM28,25H29V26H28zM29,25H30V26H29zM30,25H31V26H30zM32,25H33V26H32zM33,25H34V26H33zM34,25H35V26H34zM2,26H3V27H2zM6,26H7V27H6zM7,26H8V27H7zM8,26H9V27H8zM10,26H11V27H10zM12,26H13V27H12zM13,26H14V27H13zM15,26H16V27H15zM16,26H17V27H16zM18,26H19V27H18zM19,26H20V27H19zM21,26H22V27H21zM24,26H25V27H24zM26,26H27V27H26zM27,26H28V27H27zM28,26H29V27H28zM29,26H30V27H29zM30,26H31V27H30zM31,26H32V27H31zM34,26H35V27H34zM10,27H11V28H10zM12,27H13V28H12zM18,27H19V28H18zM19,27H20V28H19zM21,27H22V28H21zM22,27H23V28H22zM26,27H27V28H26zM30,27H31V28H30zM32,27H33V28H32zM33,27H34V28H33zM34,27H35V28H34zM2,28H3V29H2zM3,28H4V29H3zM4,28H5V29H4zM5,28H6V29H5zM6,28H7V29H6zM7,28H8V29H7zM8,28H9V29H8zM12,28H13V29H12zM13,28H14V29H13zM17,28H18V29H17zM18,28H19V29H18zM19,28H20V29H19zM22,28H23V29H22zM24,28H25V29H24zM25,28H26V29H25zM26,28H27V29H26zM28,28H29V29H28zM30,28H31V29H30zM32,28H33V29H32zM2,29H3V30H2zM8,29H9V30H8zM10,29H11V30H10zM11,29H12V30H11zM13,29H14V30H13zM16,29H17V30H16zM17,29H18V30H17zM18,29H19V30H18zM19,29H20V30H19zM20,29H21V30H20zM21,29H22V30H21zM25,29H26V30H25zM26,29H27V30H26zM30,29H31V30H30zM31,29H32V30H31zM32,29H33V30H32zM33,29H34V30H33zM34,29H35V30H34zM2,30H3V31H2zM4,30H5V31H4zM5,30H6V31H5zM6,30H7V31H6zM8,30H9V31H8zM10,30H11V31H10zM11,30H12V31H11zM13,30H14V31H13zM15,30H16V31H15zM17,30H18V31H17zM18,30H19V31H18zM21,30H22V31H21zM22,30H23V31H22zM23,30H24V31H23zM24,30H25V31H24zM26,30H27V31H26zM27,30H28V31H27zM28,30H29V31H28zM29,30H30V31H29zM30,30H31V31H30zM31,30H32V31H31zM33,30H34V31H33zM34,30H35V31H34zM2,31H3V32H2zM4,31H5V32H4zM5,31H6V32H5zM6,31H7V32H6zM8,31H9V32H8zM10,31H11V32H10zM11,31H12V32H11zM12,31H13V32H12zM13,31H14V32H13zM17,31H18V32H17zM20,31H21V32H20zM23,31H24V32H23zM25,31H26V32H25zM27,31H28V32H27zM30,31H31V32H30zM31,31H32V32H31zM32,31H33V32H32zM34,31H35V32H34zM2,32H3V33H2zM4,32H5V33H4zM5,32H6V33H5zM6,32H7V33H6zM8,32H9V33H8zM10,32H11V33H10zM13,32H14V33H13zM14,32H15V33H14zM17,32H18V33H17zM18,32H19V33H18zM19,32H20V33H19zM22,32H23V33H22zM23,32H24V33H23zM24,32H25V33H24zM25,32H26V33H25zM28,32H29V33H28zM29,32H30V33H29zM32,32H33V33H32zM2,33H3V34H2zM8,33H9V34H8zM11,33H12V34H11zM12,33H13V34H12zM13,33H14V34H13zM17,33H18V34H17zM20,33H21V34H20zM23,33H24V34H23zM24,33H25V34H24zM25,33H26V34H25zM27,33H28V34H27zM30,33H31V34H30zM32,33H33V34H32zM2,34H3V35H2zM3,34H4V35H3zM4,34H5V35H4zM5,34H6V35H5zM6,34H7V35H6zM7,34H8V35H7zM8,34H9V35H8zM10,34H11V35H10zM11,34H12V35H11zM13,34H14V35H13zM17,34H18V35H17zM19,34H20V35H19zM24,34H25V35H24zM26,34H27V35H26zM27,34H28V35H27zM29,34H30V35H29zM31,34H32V35H31zM33,34H34V35H33z" fill="#000"/></svg></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="verify-details">
+      <dl>
+        <dt>Work</dt><dd>Tradition Imagination</dd>
+        <dt>Edition</dt><dd>1 of 15</dd>
+        <dt>Dimensions</dt><dd>420 &times; 594 mm (A2)</dd>
+        <dt>Medium</dt><dd>Archival gicl&eacute;e on Hahnem&uuml;hle Photo Rag 308gsm</dd>
+        <dt>Issued to</dt><dd>Wheatbaker Hotel</dd>
+        <dt>Signed</dt><dd>Fola Adeleke&reg; &middot; 29 Jul 2026</dd>
+      </dl>
+    </div>
+
+    <div class="verify-links">
+      <a href="/prints">View all prints</a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-social">
+      <a href="https://www.instagram.com/fola_adeleke" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://www.tiktok.com/@folaadeleke" target="_blank" rel="noopener">TikTok</a>
+    </div>
+    <p>&#169; 2026 Fola Adeleke&#174;. All rights reserved.</p>
+  </footer>
+
+  <script>
+    function openDrawer() {
+      document.getElementById('drawer').classList.add('open');
+      document.getElementById('drawerOverlay').classList.add('open');
+    }
+    function closeDrawer() {
+      document.getElementById('drawer').classList.remove('open');
+      document.getElementById('drawerOverlay').classList.remove('open');
+    }
+
+    (function() {
+      var stage = document.getElementById('stage');
+      function scaleStage() {
+        var plate = stage.querySelector('.cert-plate');
+        var s = stage.clientWidth / 794;
+        plate.style.transform = 'scale(' + s + ')';
+      }
+      scaleStage();
+      window.addEventListener('resize', scaleStage);
+
+      var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (!reduced) {
+        function run() {
+          stage.classList.remove('play');
+          void stage.offsetWidth;
+          stage.classList.add('play');
+        }
+        setTimeout(function() {
+          run();
+          setInterval(run, 5200);
+        }, 300);
+      }
+    })();
+  </script>
+
+  <script>
+    (function() {
+      var loader = document.getElementById('page-loader');
+      var FADE = 608;
+      var MIN_SHOW = 1800;
+      var start = Date.now();
+      function fadeOut() {
+        loader.style.transition = 'opacity ' + FADE + 'ms ease';
+        loader.style.opacity = '0';
+        setTimeout(function() { loader.classList.add('hidden'); }, FADE);
+      }
+      window.addEventListener('load', function() {
+        var elapsed = Date.now() - start;
+        var remaining = Math.max(0, MIN_SHOW - elapsed);
+        setTimeout(fadeOut, remaining);
+      });
+      document.addEventListener('click', function(e) {
+        var link = e.target.closest('a[href]');
+        if (!link) return;
+        var href = link.getAttribute('href');
+        if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:') || link.target === '_blank' || link.hostname !== location.hostname) return;
+        e.preventDefault();
+        loader.classList.remove('hidden');
+        loader.style.opacity = '0';
+        loader.offsetHeight;
+        loader.style.transition = 'opacity ' + FADE + 'ms ease';
+        loader.style.opacity = '1';
+        setTimeout(function() { window.location.href = href; }, FADE);
+      });
+    })();
+  </script>
+
+</body>
+</html>
