@@ -56,6 +56,15 @@
     <!-- Title -->
     <h1 class="product-title">{{ product.title }}</h1>
 
+    <!-- Digital vs. physical product -->
+    {%- assign is_digital = false -%}
+    {%- for tag in product.tags -%}
+      {%- assign tag_downcase = tag | downcase -%}
+      {%- if tag_downcase == 'digital' -%}
+        {%- assign is_digital = true -%}
+      {%- endif -%}
+    {%- endfor -%}
+
     <!-- Price -->
     {%- assign current_variant = product.selected_or_first_available_variant -%}
     <p class="product-price" id="product-price">
@@ -123,6 +132,11 @@
           {%- endcase -%}
         </span>
       </div>
+    {%- elsif is_digital -%}
+      <div class="product-spec-row">
+        <span class="spec-label">Format</span>
+        <span class="spec-value">{{ product.metafields.custom.digital_format | default: 'JPEG, high resolution' }}</span>
+      </div>
     {%- else -%}
       <div class="product-spec-row">
         <span class="spec-label">Size</span>
@@ -131,10 +145,12 @@
     {%- endif -%}
 
     <div class="product-spec-row">
-      <span class="spec-label">Edition</span>
+      <span class="spec-label">{%- if is_digital -%}Delivery{%- else -%}Edition{%- endif -%}</span>
       <span class="spec-value">
         {%- if product.metafields.custom.edition != blank -%}
           {{ product.metafields.custom.edition }}
+        {%- elsif is_digital -%}
+          Instant Digital Download
         {%- else -%}
           Limited Edition
         {%- endif -%}
@@ -188,7 +204,11 @@
         <span class="accordion-icon">+</span>
       </button>
       <div class="accordion-body" id="accordion-shipping" hidden>
-        <p>Prints are shipped flat, wrapped in acid-free tissue, and packaged in a rigid mailer. Dispatch within 3–5 business days. Tracked shipping worldwide.</p>
+        {%- if is_digital -%}
+          <p>This is a digital product — nothing is shipped. After checkout you'll receive a download link by email, usually within a few minutes.</p>
+        {%- else -%}
+          <p>Prints are shipped flat, wrapped in acid-free tissue, and packaged in a rigid mailer. Dispatch within 3–5 business days. Tracked shipping worldwide.</p>
+        {%- endif -%}
       </div>
 
 <button class="accordion-trigger" aria-expanded="false" data-accordion="returns">
@@ -196,9 +216,22 @@
         <span class="accordion-icon">+</span>
       </button>
       <div class="accordion-body" id="accordion-returns" hidden>
-        <p>Each print is made to order and part of a limited edition. We take great care with every order. If your print arrives damaged or not as described, please contact us within 7 days of receipt and we will make it right.</p>
+        {%- if is_digital -%}
+          <p>Digital downloads are non-refundable once delivered, as the files can't be returned. If you run into any trouble with your download, contact us within 7 days and we'll sort it out.</p>
+        {%- else -%}
+          <p>Each print is made to order and part of a limited edition. We take great care with every order. If your print arrives damaged or not as described, please contact us within 7 days of receipt and we will make it right.</p>
+        {%- endif -%}
       </div>
 
+      {%- if is_digital -%}
+      <button class="accordion-trigger" aria-expanded="false" data-accordion="sizeguide">
+        <span>What's Included</span>
+        <span class="accordion-icon">+</span>
+      </button>
+      <div class="accordion-body" id="accordion-sizeguide" hidden>
+        <p class="size-guide-note">{{ product.metafields.custom.digital_includes | default: 'Delivered as individual wallpaper files, one per colorway, sized for modern phone lock and home screens.' }}</p>
+      </div>
+      {%- else -%}
       <button class="accordion-trigger" aria-expanded="false" data-accordion="sizeguide">
         <span>Size Guide</span>
         <span class="accordion-icon">+</span>
@@ -234,6 +267,7 @@
           <p class="size-guide-note">Prints are unframed. Both sizes correspond to standard international paper formats — frames are widely available from most framing studios.</p>
         {%- endif -%}
       </div>
+      {%- endif -%}
     </div>
 
   </div>
