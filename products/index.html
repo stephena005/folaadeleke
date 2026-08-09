@@ -68,103 +68,45 @@
     .trust-bar-item { font-family: var(--font); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--black); flex: 1; text-align: center; }
     .trust-bar-divider { width: 1px; height: 20px; background: var(--divider); flex-shrink: 0; margin: 0 24px; }
 
-    /* ── PRODUCT LAYOUT ── */
-    .product-page {
+    /* ── PAGE HEADER ── */
+    .shop-page {
       padding-top: calc(var(--nav-height) + 40px + 48px);
       padding-bottom: 60px;
       max-width: 1100px;
       margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      gap: 64px;
       padding-left: 64px;
       padding-right: 64px;
-      align-items: start;
     }
+    .shop-header { margin-bottom: 40px; }
+    .shop-kicker { font-family: var(--font); font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+    .shop-title { font-family: var(--font); font-size: 22px; letter-spacing: 0.04em; color: var(--black); margin-bottom: 10px; }
+    .shop-subtitle { font-family: var(--font); font-size: 12px; line-height: 1.8; color: #444; max-width: 520px; }
 
-    /* Image stage */
-    .image-stage { position: relative; overflow: hidden; }
+    /* ── PRODUCT GRID ── */
+    .product-grid { display: grid; grid-template-columns: 1fr; gap: 32px; }
 
-    .slides-track { display: flex; transition: transform 0.9s ease; will-change: transform; }
-
-    .slide-image {
-      min-width: 100%;
-      aspect-ratio: 1290 / 2796;
-      display: flex;
-      justify-content: center;
+    .product-card {
+      display: grid;
+      grid-template-columns: 0.85fr 1.15fr;
+      gap: 48px;
       align-items: center;
-      background: #f5f5f5;
-    }
-    .product-image { width: 100%; height: 100%; }
-    .product-image img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
-
-    .slide-caption {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      margin-top: 14px;
-    }
-    .slide-caption-name { font-family: var(--font); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--black); }
-    .slide-counter { font-family: var(--font); font-size: 9px; letter-spacing: 0.2em; color: var(--muted); }
-
-    .slide-prev, .slide-next {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 40px; height: 40px;
-      background: var(--white);
-      border: 1px solid var(--black);
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
+      text-decoration: none;
       color: var(--black);
-      transition: background 0.15s, color 0.15s;
-      z-index: 10;
+      border: 1px solid var(--divider);
+      padding: 32px;
+      transition: border-color 0.2s;
     }
-    .slide-prev { left: 12px; }
-    .slide-next { right: 12px; }
-    .slide-prev:hover, .slide-next:hover { background: var(--black); color: var(--white); }
-    .slide-prev:disabled, .slide-next:disabled { border-color: #ccc; color: #ccc; cursor: default; background: var(--white); }
+    .product-card:hover { border-color: var(--black); }
+    .product-card:hover .card-cta { opacity: 0.75; }
 
-    .thumb-strip {
-      display: flex;
-      overflow-x: auto;
-      gap: 6px;
-      margin-top: 16px;
-      scrollbar-width: none;
-    }
-    .thumb-strip::-webkit-scrollbar { display: none; }
-    .thumb { flex-shrink: 0; width: 48px; height: 48px; padding: 0; border: 2px solid transparent; background: #f0f0f0; cursor: pointer; overflow: hidden; transition: border-color 0.15s; }
-    .thumb.active { border-color: var(--black); }
-    .thumb img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
+    .card-image { aspect-ratio: 1290 / 2796; max-height: 480px; overflow: hidden; background: #f5f5f5; justify-self: center; }
+    .card-image img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
 
-    /* Info panel — static, describes the single bundle product */
-    .product-info { position: sticky; top: calc(var(--nav-height) + 40px + 48px); }
-    .product-kicker { font-family: var(--font); font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
-    .product-title { font-family: var(--font); font-size: 20px; letter-spacing: 0.04em; color: var(--black); margin-bottom: 10px; }
-    .product-price { font-family: var(--font); font-size: 13px; letter-spacing: 0.08em; color: var(--black); margin-bottom: 22px; }
-
-    .btn-acquire {
-      display: block; width: 100%;
-      background: var(--black); color: var(--white);
-      border: 1px solid var(--black);
-      padding: 13px; font-family: var(--font); font-size: 10px;
-      letter-spacing: 0.2em; text-transform: uppercase;
-      cursor: pointer; text-align: center; text-decoration: none;
-      transition: opacity 0.15s; margin-bottom: 22px;
-    }
-    .btn-acquire:hover { opacity: 0.75; }
-    .btn-acquire.sold-out { background: var(--muted); border-color: var(--muted); color: var(--white); cursor: default; pointer-events: none; }
-
-    .product-caption { font-family: var(--font); font-size: 12px; line-height: 1.9; color: #444; margin-bottom: 24px; }
-    .product-caption em { font-style: italic; color: var(--muted); }
-
-    .product-details { border-top: 1px solid var(--divider); padding-top: 18px; }
-    .product-details dt { font-family: var(--font); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-top: 12px; }
-    .product-details dt:first-child { margin-top: 0; }
-    .product-details dd { font-family: var(--font); font-size: 11px; color: var(--black); margin-top: 4px; }
-
-    .colorway-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
-    .colorway-tag { font-family: var(--font); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--black); border: 1px solid var(--divider); padding: 4px 8px; }
+    .card-kicker { font-family: var(--font); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+    .card-title { font-family: var(--font); font-size: 18px; letter-spacing: 0.03em; color: var(--black); margin-bottom: 10px; }
+    .card-desc { font-family: var(--font); font-size: 12px; line-height: 1.8; color: #444; margin-bottom: 16px; }
+    .card-price { font-family: var(--font); font-size: 13px; letter-spacing: 0.05em; color: var(--black); margin-bottom: 20px; }
+    .card-cta { display: inline-block; font-family: var(--font); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--black); border-bottom: 1px solid var(--black); padding-bottom: 2px; transition: opacity 0.15s; }
 
     /* ── FOOTER ── */
     footer {
@@ -181,8 +123,8 @@
 
     /* ── RESPONSIVE ── */
     @media (max-width: 860px) {
-      .product-page { grid-template-columns: 1fr; gap: 32px; padding-left: 24px; padding-right: 24px; }
-      .product-info { position: static; }
+      .product-card { grid-template-columns: 1fr; gap: 24px; padding: 24px; }
+      .card-image { max-height: 420px; }
     }
     @media (max-width: 768px) {
       nav { padding: 0 20px; }
@@ -190,7 +132,7 @@
       .trust-bar::-webkit-scrollbar { display: none; }
       .trust-bar-item { font-size: 8px; letter-spacing: 0.1em; flex: none; }
       .trust-bar-divider { margin: 0 10px; }
-      .product-page { padding-top: calc(var(--nav-height) + 34px + 48px); }
+      .shop-page { padding-top: calc(var(--nav-height) + 34px + 48px); padding-left: 24px; padding-right: 24px; }
       footer { grid-template-columns: 1fr; text-align: center; padding: 28px 24px; gap: 16px; }
       .footer-copy { text-align: center; }
     }
@@ -231,81 +173,36 @@
   </div>
 
   <!-- ── TRUST BAR ── -->
-  <div class="trust-bar" aria-label="Product details">
-    <span class="trust-bar-item">Digital Download</span>
-    <span class="trust-bar-divider" aria-hidden="true"></span>
-    <span class="trust-bar-item">7 Phone Wallpapers Included</span>
+  <div class="trust-bar" aria-label="Shop details">
+    <span class="trust-bar-item">Digital Downloads</span>
     <span class="trust-bar-divider" aria-hidden="true"></span>
     <span class="trust-bar-item">Instant Delivery</span>
     <span class="trust-bar-divider" aria-hidden="true"></span>
-    <span class="trust-bar-item">Propeller Pattern Collection</span>
+    <span class="trust-bar-item">New Products Added Regularly</span>
   </div>
 
-  <!-- ── PRODUCT ── -->
-  <main class="product-page" aria-label="Propeller wallpaper collection">
+  <!-- ── SHOP ── -->
+  <main class="shop-page" aria-label="Products">
+    <div class="shop-header">
+      <p class="shop-kicker">Shop</p>
+      <h1 class="shop-title">Products</h1>
+      <p class="shop-subtitle">Digital goods inspired by the wider body of work — starting with a set of phone wallpapers, with more on the way.</p>
+    </div>
 
-    <div>
-      <div class="image-stage" id="imageStage">
-        <button class="slide-prev" id="slidePrev" aria-label="Previous colorway">&#8592;</button>
-        <button class="slide-next" id="slideNext" aria-label="Next colorway">&#8594;</button>
-
-        <div class="slides-track" id="slidesTrack">
-          <div class="slide-image"><div class="product-image"><img src="/images/Propeller/propeller-wallpapers-1290x2796/propeller-indigo-1290x2796.jpg" alt="Propeller wallpaper — Indigo colorway" /></div></div>
-          <div class="slide-image"><div class="product-image"><img src="/images/Propeller/propeller-wallpapers-1290x2796/propeller-multicolor-1290x2796.jpg" alt="Propeller wallpaper — Multicolor colorway" /></div></div>
-          <div class="slide-image"><div class="product-image"><img src="/images/Propeller/propeller-wallpapers-1290x2796/propeller-denim-1290x2796.jpg" alt="Propeller wallpaper — Denim colorway" /></div></div>
-          <div class="slide-image"><div class="product-image"><img src="/images/Propeller/propeller-wallpapers-1290x2796/propeller-green-1290x2796.jpg" alt="Propeller wallpaper — Green colorway" /></div></div>
-          <div class="slide-image"><div class="product-image"><img src="/images/Propeller/propeller-wallpapers-1290x2796/propeller-crimson-1290x2796.jpg" alt="Propeller wallpaper — Crimson colorway" /></div></div>
-          <div class="slide-image"><div class="product-image"><img src="/images/Propeller/propeller-wallpapers-1290x2796/propeller-gold-1290x2796.jpg" alt="Propeller wallpaper — Gold colorway" /></div></div>
-          <div class="slide-image"><div class="product-image"><img src="/images/Propeller/propeller-wallpapers-1290x2796/propeller-sand-1290x2796.jpg" alt="Propeller wallpaper — Sand colorway" /></div></div>
+    <div class="product-grid">
+      <a class="product-card" href="/products/propeller-wallpaper-pack">
+        <div class="card-image">
+          <img src="/images/Propeller/propeller-wallpapers-1290x2796/propeller-indigo-1290x2796.jpg" alt="Propeller Wallpaper Collection — Indigo colorway" />
         </div>
-      </div>
-
-      <div class="slide-caption">
-        <span class="slide-caption-name" id="slideCaptionName">Indigo</span>
-        <span class="slide-counter" id="slideCounter">01 / 07</span>
-      </div>
-
-      <div class="thumb-strip" id="thumbStrip" aria-label="Jump to colorway">
-        <button class="thumb active" data-index="0" data-name="Indigo" aria-label="Indigo"><img src="/images/Propeller/propeller-wallpapers-1290x2796/propeller-indigo-1290x2796.jpg" alt="" /></button>
-        <button class="thumb" data-index="1" data-name="Multicolor" aria-label="Multicolor"><img src="/images/Propeller/propeller-wallpapers-1290x2796/propeller-multicolor-1290x2796.jpg" alt="" /></button>
-        <button class="thumb" data-index="2" data-name="Denim" aria-label="Denim"><img src="/images/Propeller/propeller-wallpapers-1290x2796/propeller-denim-1290x2796.jpg" alt="" /></button>
-        <button class="thumb" data-index="3" data-name="Green" aria-label="Green"><img src="/images/Propeller/propeller-wallpapers-1290x2796/propeller-green-1290x2796.jpg" alt="" /></button>
-        <button class="thumb" data-index="4" data-name="Crimson" aria-label="Crimson"><img src="/images/Propeller/propeller-wallpapers-1290x2796/propeller-crimson-1290x2796.jpg" alt="" /></button>
-        <button class="thumb" data-index="5" data-name="Gold" aria-label="Gold"><img src="/images/Propeller/propeller-wallpapers-1290x2796/propeller-gold-1290x2796.jpg" alt="" /></button>
-        <button class="thumb" data-index="6" data-name="Sand" aria-label="Sand"><img src="/images/Propeller/propeller-wallpapers-1290x2796/propeller-sand-1290x2796.jpg" alt="" /></button>
-      </div>
+        <div class="card-body">
+          <p class="card-kicker">Digital Product</p>
+          <h2 class="card-title">Propeller Wallpaper Collection</h2>
+          <p class="card-desc">7 phone wallpapers, one per colorway — Indigo, Multicolor, Denim, Green, Crimson, Gold and Sand.</p>
+          <p class="card-price">&#163;9.99</p>
+          <span class="card-cta">View Collection</span>
+        </div>
+      </a>
     </div>
-
-    <div class="product-info">
-      <p class="product-kicker">Digital Product</p>
-      <h1 class="product-title">Propeller Wallpaper Collection</h1>
-      <p class="product-price">&#163;9.99</p>
-
-      <!-- NOTE: this Shopify product is currently set up as a physical print listing (A1 size, "Limited Edition") — copy needs updating for the digital wallpaper pack before this goes live. See TODO below. -->
-      <a class="btn-acquire" href="https://shop.folaadeleke.com/products/propeller-wallpaper-pack" target="_blank" rel="noopener">Acquire Pack</a>
-
-      <p class="product-caption">The Propeller motif — drawn from Fola&#8217;s wider body of work — reimagined as a set of seven phone wallpapers, each in its own colorway. <em>Indigo, Multicolor, Denim, Green, Crimson, Gold and Sand.</em> One pack, seven ways to carry the pattern with you.</p>
-
-      <dl class="product-details">
-        <dt>Includes</dt>
-        <dd>7 wallpaper files, one per colorway</dd>
-        <dt>Colorways</dt>
-        <dd>
-          <div class="colorway-list">
-            <span class="colorway-tag">Indigo</span>
-            <span class="colorway-tag">Multicolor</span>
-            <span class="colorway-tag">Denim</span>
-            <span class="colorway-tag">Green</span>
-            <span class="colorway-tag">Crimson</span>
-            <span class="colorway-tag">Gold</span>
-            <span class="colorway-tag">Sand</span>
-          </div>
-        </dd>
-        <dt>Delivery</dt>
-        <dd>Digital download, delivered by email after purchase</dd>
-      </dl>
-    </div>
-
   </main>
 
   <!-- ── FOOTER ── -->
@@ -329,57 +226,6 @@
       document.getElementById('drawerOverlay').classList.remove('open');
       document.body.style.overflow = '';
     }
-
-    // ── COLORWAY GALLERY ──────────────────────────────────────────
-    (function () {
-      var track   = document.getElementById('slidesTrack');
-      var prev    = document.getElementById('slidePrev');
-      var next    = document.getElementById('slideNext');
-      var counter = document.getElementById('slideCounter');
-      var caption = document.getElementById('slideCaptionName');
-      var thumbs  = document.querySelectorAll('.thumb');
-      var slides  = track.querySelectorAll('.slide-image');
-      var total   = slides.length;
-      var current = 0;
-
-      function goTo(n) {
-        current = n;
-        var pct = '-' + (current * 100) + '%';
-        track.style.transform = 'translateX(' + pct + ')';
-        counter.textContent = String(current + 1).padStart(2, '0') + ' / ' + String(total).padStart(2, '0');
-        caption.textContent = thumbs[current].dataset.name;
-        prev.disabled = current === 0;
-        next.disabled = current === total - 1;
-        thumbs.forEach(function (t, i) { t.classList.toggle('active', i === current); });
-        var strip = document.getElementById('thumbStrip');
-        var thumb = thumbs[current];
-        var stripScrollLeft = thumb.offsetLeft - (strip.offsetWidth / 2) + (thumb.offsetWidth / 2);
-        strip.scrollTo({ left: stripScrollLeft, behavior: 'smooth' });
-      }
-
-      prev.addEventListener('click', function () { if (current > 0) goTo(current - 1); this.blur(); });
-      next.addEventListener('click', function () { if (current < total - 1) goTo(current + 1); this.blur(); });
-      thumbs.forEach(function (t) { t.addEventListener('click', function () { goTo(+this.dataset.index); }); });
-
-      document.addEventListener('keydown', function (e) {
-        if (e.key === 'ArrowLeft'  && current > 0)          goTo(current - 1);
-        if (e.key === 'ArrowRight' && current < total - 1)  goTo(current + 1);
-      });
-
-      var startX = null;
-      track.addEventListener('touchstart', function (e) { startX = e.touches[0].clientX; }, { passive: true });
-      track.addEventListener('touchend', function (e) {
-        if (startX === null) return;
-        var dx = e.changedTouches[0].clientX - startX;
-        if (Math.abs(dx) > 40) {
-          if (dx < 0 && current < total - 1) goTo(current + 1);
-          else if (dx > 0 && current > 0)    goTo(current - 1);
-        }
-        startX = null;
-      }, { passive: true });
-
-      goTo(0);
-    })();
   </script>
 
   <script>
