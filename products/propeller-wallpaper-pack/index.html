@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7ZCQ4YEN6"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-K7ZCQ4YEN6');
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <title>Products — Fola Adeleke®</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #fff;
+      --black: #000;
+      --white: #fff;
+      --muted: #999;
+      --divider: #eee;
+      --nav-height: 56px;
+      --font: 'Courier New', Courier, monospace;
+      --spacing: 0.2em;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font); background: var(--bg); color: var(--black); min-height: 100vh; overflow-x: hidden; }
+    :focus-visible { outline: 1px solid var(--black); outline-offset: 2px; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      height: var(--nav-height);
+      background: var(--white);
+      border-bottom: 1px solid var(--divider);
+      display: grid; grid-template-columns: 1fr auto 1fr;
+      align-items: center; padding: 0 32px; z-index: 100;
+    }
+    .nav-left { display: flex; align-items: center; }
+    .hamburger { display: block; background: none; border: none; cursor: pointer; color: var(--black); padding: 4px 8px 4px 0; line-height: 1; font-size: 20px; }
+    .nav-brand { text-align: center; font-family: var(--font); font-size: 13px; font-weight: normal; letter-spacing: var(--spacing); color: var(--black); text-decoration: none; }
+    .nav-right { display: flex; justify-content: flex-end; }
+    .nav-contact { font-family: var(--font); font-size: 11px; letter-spacing: var(--spacing); text-transform: uppercase; text-decoration: none; color: var(--black); }
+    .nav-contact:hover { text-decoration: underline; }
+
+    /* ── DRAWER ── */
+    .drawer-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 200; }
+    .drawer-overlay.open { display: block; }
+    .drawer { position: fixed; top: 0; left: -280px; width: 260px; height: 100%; background: var(--white); border-right: 1px solid var(--divider); z-index: 201; transition: left 0.3s ease; display: flex; flex-direction: column; padding: 80px 32px 40px; }
+    .drawer.open { left: 0; }
+    .drawer a, .drawer button { font-family: var(--font); font-size: 12px; letter-spacing: var(--spacing); text-transform: uppercase; text-decoration: none; color: var(--black); background: none; border: none; cursor: pointer; padding: 14px 0; border-bottom: 1px solid var(--divider); text-align: left; width: 100%; }
+    .drawer a:last-child, .drawer button:last-child { border-bottom: none; }
+    .drawer-close { position: absolute; top: 18px; right: 18px; font-size: 20px; background: none; border: none; cursor: pointer; color: var(--black); line-height: 1; }
+
+    /* ── TRUST BAR ── */
+    .trust-bar {
+      position: fixed; top: var(--nav-height); left: 0; right: 0;
+      display: flex; align-items: center; justify-content: center;
+      border-bottom: 1px solid var(--divider);
+      padding: 10px 64px;
+      background: var(--white);
+      z-index: 90;
+    }
+    .trust-bar-item { font-family: var(--font); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--black); flex: 1; text-align: center; }
+    .trust-bar-divider { width: 1px; height: 20px; background: var(--divider); flex-shrink: 0; margin: 0 24px; }
+
+    /* ── PRODUCT LAYOUT ── */
+    .product-page {
+      padding-top: calc(var(--nav-height) + 40px + 48px);
+      padding-bottom: 60px;
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 64px;
+      padding-left: 64px;
+      padding-right: 64px;
+      align-items: start;
+    }
+
+    .product-breadcrumb {
+      grid-column: 1 / -1;
+      font-family: var(--font); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 4px;
+    }
+    .product-breadcrumb a { color: var(--muted); text-decoration: none; }
+    .product-breadcrumb a:hover { color: var(--black); text-decoration: underline; }
+
+    /* Image stage */
+    .image-stage { position: relative; overflow: hidden; }
+
+    .slides-track { display: flex; transition: transform 0.9s ease; will-change: transform; }
+
+    .slide-image {
+      min-width: 100%;
+      aspect-ratio: 1290 / 2796;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #f5f5f5;
+    }
+    .product-image { width: 100%; height: 100%; }
+    .product-image img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
+
+    .slide-caption {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-top: 14px;
+    }
+    .slide-caption-name { font-family: var(--font); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--black); }
+    .slide-counter { font-family: var(--font); font-size: 9px; letter-spacing: 0.2em; color: var(--muted); }
+
+    .slide-prev, .slide-next {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 40px; height: 40px;
+      background: var(--white);
+      border: 1px solid var(--black);
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--black);
+      transition: background 0.15s, color 0.15s;
+      z-index: 10;
+    }
+    .slide-prev { left: 12px; }
+    .slide-next { right: 12px; }
+    .slide-prev:hover, .slide-next:hover { background: var(--black); color: var(--white); }
+    .slide-prev:disabled, .slide-next:disabled { border-color: #ccc; color: #ccc; cursor: default; background: var(--white); }
+
+    .thumb-strip {
+      display: flex;
+      overflow-x: auto;
+      gap: 6px;
+      margin-top: 16px;
+      scrollbar-width: none;
+    }
+    .thumb-strip::-webkit-scrollbar { display: none; }
+    .thumb { flex-shrink: 0; width: 48px; height: 48px; padding: 0; border: 2px solid transparent; background: #f0f0f0; cursor: pointer; overflow: hidden; transition: border-color 0.15s; }
+    .thumb.active { border-color: var(--black); }
+    .thumb img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
+
+    /* Info panel — static, describes the single bundle product */
+    .product-info { position: sticky; top: calc(var(--nav-height) + 40px + 48px); }
+    .product-kicker { font-family: var(--font); font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+    .product-title { font-family: var(--font); font-size: 20px; letter-spacing: 0.04em; color: var(--black); margin-bottom: 10px; }
+    .product-price { font-family: var(--font); font-size: 13px; letter-spacing: 0.08em; color: var(--black); margin-bottom: 22px; }
+
+    .btn-acquire {
+      display: block; width: 100%;
+      background: var(--black); color: var(--white);
+      border: 1px solid var(--black);
+      padding: 13px; font-family: var(--font); font-size: 10px;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      cursor: pointer; text-align: center; text-decoration: none;
+      transition: opacity 0.15s; margin-bottom: 22px;
+    }
+    .btn-acquire:hover { opacity: 0.75; }
+    .btn-acquire.sold-out { background: var(--muted); border-color: var(--muted); color: var(--white); cursor: default; pointer-events: none; }
+
+    .product-caption { font-family: var(--font); font-size: 12px; line-height: 1.9; color: #444; margin-bottom: 24px; }
+    .product-caption em { font-style: italic; color: var(--muted); }
+
+    .product-details { border-top: 1px solid var(--divider); padding-top: 18px; }
+    .product-details dt { font-family: var(--font); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-top: 12px; }
+    .product-details dt:first-child { margin-top: 0; }
+    .product-details dd { font-family: var(--font); font-size: 11px; color: var(--black); margin-top: 4px; }
+
+    .colorway-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+    .colorway-tag { font-family: var(--font); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--black); border: 1px solid var(--divider); padding: 4px 8px; }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--divider);
+      padding: 32px 64px;
+      display: grid; grid-template-columns: 1fr auto 1fr;
+      align-items: center; gap: 20px;
+    }
+    .footer-brand { font-family: var(--font); font-size: 11px; font-weight: normal; letter-spacing: var(--spacing); color: var(--black); text-decoration: none; }
+    .footer-social { display: flex; justify-content: center; gap: 24px; }
+    .footer-social a { font-family: var(--font); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); text-decoration: none; }
+    .footer-social a:hover { color: var(--black); }
+    .footer-copy { font-family: var(--font); font-size: 10px; letter-spacing: 0.08em; color: var(--muted); text-align: right; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 860px) {
+      .product-page { grid-template-columns: 1fr; gap: 32px; padding-left: 24px; padding-right: 24px; }
+      .product-info { position: static; }
+    }
+    @media (max-width: 768px) {
+      nav { padding: 0 20px; }
+      .trust-bar { padding: 8px 16px; overflow-x: auto; white-space: nowrap; scrollbar-width: none; justify-content: flex-start; }
+      .trust-bar::-webkit-scrollbar { display: none; }
+      .trust-bar-item { font-size: 8px; letter-spacing: 0.1em; flex: none; }
+      .trust-bar-divider { margin: 0 10px; }
+      .product-page { padding-top: calc(var(--nav-height) + 34px + 48px); }
+      footer { grid-template-columns: 1fr; text-align: center; padding: 28px 24px; gap: 16px; }
+      .footer-copy { text-align: center; }
+    }
+
+    /* ─── PAGE TRANSITION LOADER ─── */
+    #page-loader { position: fixed; inset: 0; z-index: 9999; background: rgba(255,255,255,0.7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; }
+    #page-loader.fade-out { opacity: 0; pointer-events: none; }
+    #page-loader.hidden { display: none; }
+    .propeller-icon { width: 56px; height: 50px; background-color: #000; clip-path: polygon(42.9% 62.9%, 44.9% 57.6%, 44.2% 52.3%, 42.9% 45.5%, 42.2% 40.2%, 42.2% 37.9%, 40.8% 30.3%, 40.1% 25.0%, 40.1% 21.2%, 39.5% 15.2%, 40.1% 9.8%, 43.5% 4.5%, 48.3% 0.8%, 53.1% 6.1%, 55.1% 11.4%, 55.8% 16.7%, 55.8% 22.0%, 55.8% 25.0%, 55.1% 31.8%, 53.7% 40.9%, 53.7% 43.2%, 53.1% 48.5%, 52.4% 53.8%, 53.1% 59.1%, 56.5% 63.6%, 62.6% 65.9%, 66.0% 67.4%, 72.8% 69.7%, 76.2% 71.2%, 81.6% 73.5%, 86.4% 75.8%, 90.5% 78.0%, 93.9% 81.1%, 97.3% 86.4%, 98.6% 91.7%, 95.9% 94.7%, 91.2% 96.2%, 85.7% 95.5%, 82.3% 93.9%, 76.9% 90.2%, 73.5% 87.9%, 69.4% 84.8%, 62.6% 78.8%, 57.8% 75.0%, 53.1% 71.2%, 48.3% 69.7%, 43.5% 72.0%, 38.8% 76.5%, 34.0% 81.1%, 29.3% 85.6%, 25.2% 89.4%, 21.1% 92.4%, 15.6% 96.2%, 10.2% 98.5%, 5.4% 98.5%, 0.7% 97.0%, 1.4% 91.7%, 2.7% 86.4%, 8.2% 81.1%, 12.9% 78.0%, 15.0% 76.5%, 20.4% 73.5%, 23.1% 72.0%, 32.7% 68.2%, 35.4% 66.7%, 40.1% 64.4%); transform-origin: 49% 63%; animation: propeller-spin 0.9s ease-in-out infinite; }
+    @keyframes propeller-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+  <div id="page-loader"><div class="propeller-icon"></div></div>
+
+  <!-- ── NAV ── -->
+  <nav>
+    <div class="nav-left">
+      <button class="hamburger" aria-label="Open menu" onclick="openDrawer()">&#9776;</button>
+    </div>
+    <a class="nav-brand" href="/">Fola Adeleke®</a>
+    <div class="nav-right">
+      <a class="nav-contact" href="/contact">Contact</a>
+    </div>
+  </nav>
+
+  <!-- ── DRAWER ── -->
+  <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+  <div class="drawer" id="drawer" aria-label="Navigation drawer">
+    <button class="drawer-close" onclick="closeDrawer()" aria-label="Close menu">&#x2715;</button>
+    <a href="/">Home</a>
+    <a href="/prints">Works</a>
+    <a href="/products" aria-current="page">Products</a>
+    <a href="/artist">Artist</a>
+    <a href="/press">Press</a>
+    <a href="/contact">Contact</a>
+  </div>
+
+  <!-- ── TRUST BAR ── -->
+  <div class="trust-bar" aria-label="Product details">
+    <span class="trust-bar-item">Digital Download</span>
+    <span class="trust-bar-divider" aria-hidden="true"></span>
+    <span class="trust-bar-item">7 Phone Wallpapers Included</span>
+    <span class="trust-bar-divider" aria-hidden="true"></span>
+    <span class="trust-bar-item">Instant Delivery</span>
+    <span class="trust-bar-divider" aria-hidden="true"></span>
+    <span class="trust-bar-item">Propeller Pattern Collection</span>
+  </div>
+
+  <!-- ── PRODUCT ── -->
+  <main class="product-page" aria-label="Propeller wallpaper collection">
+
+    <p class="product-breadcrumb"><a href="/products">Products</a> <span>/</span> <span>Propeller Wallpaper Collection</span></p>
+
+    <div>
+      <div class="image-stage" id="imageStage">
+        <button class="slide-prev" id="slidePrev" aria-label="Previous colorway">&#8592;</button>
+        <button class="slide-next" id="slideNext" aria-label="Next colorway">&#8594;</button>
+
+        <div class="slides-track" id="slidesTrack">
+          <div class="slide-image"><div class="product-image"><img src="/images/Propeller/propeller-wallpapers-1290x2796/propeller-indigo-1290x2796.jpg" alt="Propeller wallpaper — Indigo colorway" /></div></div>
+          <div class="slide-image"><div class="product-image"><img src="/images/Propeller/propeller-wallpapers-1290x2796/propeller-multicolor-1290x2796.jpg" alt="Propeller wallpaper — Multicolor colorway" /></div></div>
+          <div class="slide-image"><div class="product-image"><img src="/images/Propeller/propeller-wallpapers-1290x2796/propeller-denim-1290x2796.jpg" alt="Propeller wallpaper — Denim colorway" /></div></div>
+          <div class="slide-image"><div class="product-image"><img src="/images/Propeller/propeller-wallpapers-1290x2796/propeller-green-1290x2796.jpg" alt="Propeller wallpaper — Green colorway" /></div></div>
+          <div class="slide-image"><div class="product-image"><img src="/images/Propeller/propeller-wallpapers-1290x2796/propeller-crimson-1290x2796.jpg" alt="Propeller wallpaper — Crimson colorway" /></div></div>
+          <div class="slide-image"><div class="product-image"><img src="/images/Propeller/propeller-wallpapers-1290x2796/propeller-gold-1290x2796.jpg" alt="Propeller wallpaper — Gold colorway" /></div></div>
+          <div class="slide-image"><div class="product-image"><img src="/images/Propeller/propeller-wallpapers-1290x2796/propeller-sand-1290x2796.jpg" alt="Propeller wallpaper — Sand colorway" /></div></div>
+        </div>
+      </div>
+
+      <div class="slide-caption">
+        <span class="slide-caption-name" id="slideCaptionName">Indigo</span>
+        <span class="slide-counter" id="slideCounter">01 / 07</span>
+      </div>
+
+      <div class="thumb-strip" id="thumbStrip" aria-label="Jump to colorway">
+        <button class="thumb active" data-index="0" data-name="Indigo" aria-label="Indigo"><img src="/images/Propeller/propeller-wallpapers-1290x2796/propeller-indigo-1290x2796.jpg" alt="" /></button>
+        <button class="thumb" data-index="1" data-name="Multicolor" aria-label="Multicolor"><img src="/images/Propeller/propeller-wallpapers-1290x2796/propeller-multicolor-1290x2796.jpg" alt="" /></button>
+        <button class="thumb" data-index="2" data-name="Denim" aria-label="Denim"><img src="/images/Propeller/propeller-wallpapers-1290x2796/propeller-denim-1290x2796.jpg" alt="" /></button>
+        <button class="thumb" data-index="3" data-name="Green" aria-label="Green"><img src="/images/Propeller/propeller-wallpapers-1290x2796/propeller-green-1290x2796.jpg" alt="" /></button>
+        <button class="thumb" data-index="4" data-name="Crimson" aria-label="Crimson"><img src="/images/Propeller/propeller-wallpapers-1290x2796/propeller-crimson-1290x2796.jpg" alt="" /></button>
+        <button class="thumb" data-index="5" data-name="Gold" aria-label="Gold"><img src="/images/Propeller/propeller-wallpapers-1290x2796/propeller-gold-1290x2796.jpg" alt="" /></button>
+        <button class="thumb" data-index="6" data-name="Sand" aria-label="Sand"><img src="/images/Propeller/propeller-wallpapers-1290x2796/propeller-sand-1290x2796.jpg" alt="" /></button>
+      </div>
+    </div>
+
+    <div class="product-info">
+      <p class="product-kicker">Digital Product</p>
+      <h1 class="product-title">Propeller Wallpaper Collection</h1>
+      <p class="product-price">&#163;9.99</p>
+
+      <!-- NOTE: this Shopify product is currently set up as a physical print listing (A1 size, "Limited Edition") — copy needs updating for the digital wallpaper pack before this goes live. See TODO below. -->
+      <a class="btn-acquire" href="https://shop.folaadeleke.com/products/propeller-wallpaper-pack" target="_blank" rel="noopener">Acquire Pack</a>
+
+      <p class="product-caption">The Propeller motif — drawn from Fola&#8217;s wider body of work — reimagined as a set of seven phone wallpapers, each in its own colorway. <em>Indigo, Multicolor, Denim, Green, Crimson, Gold and Sand.</em> One pack, seven ways to carry the pattern with you.</p>
+
+      <dl class="product-details">
+        <dt>Includes</dt>
+        <dd>7 wallpaper files, one per colorway</dd>
+        <dt>Colorways</dt>
+        <dd>
+          <div class="colorway-list">
+            <span class="colorway-tag">Indigo</span>
+            <span class="colorway-tag">Multicolor</span>
+            <span class="colorway-tag">Denim</span>
+            <span class="colorway-tag">Green</span>
+            <span class="colorway-tag">Crimson</span>
+            <span class="colorway-tag">Gold</span>
+            <span class="colorway-tag">Sand</span>
+          </div>
+        </dd>
+        <dt>Delivery</dt>
+        <dd>Digital download, delivered by email after purchase</dd>
+      </dl>
+    </div>
+
+  </main>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <a class="footer-brand" href="/">Fola Adeleke®</a>
+    <div class="footer-social">
+      <a href="https://www.instagram.com/fola_adeleke" target="_blank" rel="noopener" aria-label="Instagram">Instagram</a>
+      <a href="https://www.tiktok.com/@folaadeleke" target="_blank" rel="noopener" aria-label="TikTok">TikTok</a>
+    </div>
+    <p class="footer-copy">&#169; 2026 Fola Adeleke&#174;. All rights reserved.</p>
+  </footer>
+
+  <script>
+    function openDrawer() {
+      document.getElementById('drawer').classList.add('open');
+      document.getElementById('drawerOverlay').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeDrawer() {
+      document.getElementById('drawer').classList.remove('open');
+      document.getElementById('drawerOverlay').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    // ── COLORWAY GALLERY ──────────────────────────────────────────
+    (function () {
+      var track   = document.getElementById('slidesTrack');
+      var prev    = document.getElementById('slidePrev');
+      var next    = document.getElementById('slideNext');
+      var counter = document.getElementById('slideCounter');
+      var caption = document.getElementById('slideCaptionName');
+      var thumbs  = document.querySelectorAll('.thumb');
+      var slides  = track.querySelectorAll('.slide-image');
+      var total   = slides.length;
+      var current = 0;
+
+      function goTo(n) {
+        current = n;
+        var pct = '-' + (current * 100) + '%';
+        track.style.transform = 'translateX(' + pct + ')';
+        counter.textContent = String(current + 1).padStart(2, '0') + ' / ' + String(total).padStart(2, '0');
+        caption.textContent = thumbs[current].dataset.name;
+        prev.disabled = current === 0;
+        next.disabled = current === total - 1;
+        thumbs.forEach(function (t, i) { t.classList.toggle('active', i === current); });
+        var strip = document.getElementById('thumbStrip');
+        var thumb = thumbs[current];
+        var stripScrollLeft = thumb.offsetLeft - (strip.offsetWidth / 2) + (thumb.offsetWidth / 2);
+        strip.scrollTo({ left: stripScrollLeft, behavior: 'smooth' });
+      }
+
+      prev.addEventListener('click', function () { if (current > 0) goTo(current - 1); this.blur(); });
+      next.addEventListener('click', function () { if (current < total - 1) goTo(current + 1); this.blur(); });
+      thumbs.forEach(function (t) { t.addEventListener('click', function () { goTo(+this.dataset.index); }); });
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowLeft'  && current > 0)          goTo(current - 1);
+        if (e.key === 'ArrowRight' && current < total - 1)  goTo(current + 1);
+      });
+
+      var startX = null;
+      track.addEventListener('touchstart', function (e) { startX = e.touches[0].clientX; }, { passive: true });
+      track.addEventListener('touchend', function (e) {
+        if (startX === null) return;
+        var dx = e.changedTouches[0].clientX - startX;
+        if (Math.abs(dx) > 40) {
+          if (dx < 0 && current < total - 1) goTo(current + 1);
+          else if (dx > 0 && current > 0)    goTo(current - 1);
+        }
+        startX = null;
+      }, { passive: true });
+
+      goTo(0);
+    })();
+  </script>
+
+  <script>
+    (function() {
+      var loader = document.getElementById('page-loader');
+      var FADE = 608;
+      var MIN_SHOW = 1800;
+      var start = Date.now();
+      function fadeOut() {
+        loader.style.transition = 'opacity ' + FADE + 'ms ease';
+        loader.style.opacity = '0';
+        setTimeout(function() { loader.classList.add('hidden'); }, FADE);
+      }
+      window.addEventListener('load', function() {
+        var elapsed = Date.now() - start;
+        var remaining = Math.max(0, MIN_SHOW - elapsed);
+        setTimeout(fadeOut, remaining);
+      });
+      document.addEventListener('click', function(e) {
+        var link = e.target.closest('a[href]');
+        if (!link) return;
+        var href = link.getAttribute('href');
+        if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:') || link.target === '_blank' || link.hostname !== location.hostname) return;
+        e.preventDefault();
+        loader.classList.remove('hidden');
+        loader.style.opacity = '0';
+        loader.offsetHeight;
+        loader.style.transition = 'opacity ' + FADE + 'ms ease';
+        loader.style.opacity = '1';
+        setTimeout(function() { window.location.href = href; }, FADE);
+      });
+    })();
+  </script>
+
+</body>
+</html>
