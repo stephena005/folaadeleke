@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7ZCQ4YEN6"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-K7ZCQ4YEN6');
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <title>Studio Intern &#8212; Fola Adeleke&#174;</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --black: #000; --white: #fff; --grey-light: #eee; --grey-mid: #999; --font: 'Courier New', Courier, monospace; --spacing: 0.2em; --nav-height: 56px; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font); background: var(--white); color: var(--black); min-height: 100vh; overflow-x: hidden; }
+    nav { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-height); background: var(--white); border-bottom: 1px solid var(--grey-light); display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 0 20px; z-index: 100; }
+    .nav-left { display: flex; align-items: center; }
+    .nav-right { display: flex; justify-content: flex-end; }
+    .nav-brand { text-align: center; font-size: 13px; font-weight: normal; letter-spacing: var(--spacing); text-decoration: none; color: var(--black); }
+    .nav-link { font-size: 11px; letter-spacing: var(--spacing); text-transform: uppercase; text-decoration: none; color: var(--black); font-family: var(--font); }
+    .nav-link:hover { text-decoration: underline; }
+    .hamburger { background: none; border: none; cursor: pointer; font-size: 20px; padding: 4px 8px 4px 0; color: var(--black); line-height: 1; }
+    .drawer-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 200; }
+    .drawer-overlay.open { display: block; }
+    .drawer { position: fixed; top: 0; left: -260px; width: 240px; height: 100%; background: var(--white); border-right: 1px solid var(--grey-light); z-index: 201; transition: left 0.3s ease; display: flex; flex-direction: column; padding: 80px 32px 40px; }
+    .drawer.open { left: 0; }
+    .drawer a, .drawer button { font-family: var(--font); font-size: 12px; letter-spacing: var(--spacing); text-transform: uppercase; text-decoration: none; color: var(--black); background: none; border: none; cursor: pointer; padding: 14px 0; border-bottom: 1px solid var(--grey-light); text-align: left; width: 100%; }
+    .drawer a:last-child, .drawer button:last-child { border-bottom: none; }
+    .drawer-group { border-bottom: 1px solid var(--grey-light); }
+    .drawer-group-toggle { display: flex; align-items: center; justify-content: space-between; border-bottom: none; }
+    .drawer-caret { font-size: 9px; transition: transform 0.2s ease; }
+    .drawer-group.open .drawer-caret { transform: rotate(180deg); }
+    .drawer-submenu { max-height: 0; overflow: hidden; transition: max-height 0.25s ease; }
+    .drawer-group.open .drawer-submenu { max-height: 160px; }
+    .drawer-submenu a { display: block; border-bottom: none; padding: 10px 0 10px 16px; font-size: 11px; color: var(--grey-mid); }
+    .drawer-submenu a:last-child { padding-bottom: 14px; }
+    .drawer-close { position: absolute; top: 18px; right: 18px; font-size: 20px; background: none; border: none; cursor: pointer; color: var(--black); line-height: 1; }
+    footer { border-top: 1px solid var(--grey-light); padding: 20px; text-align: center; }
+    .footer-social { display: flex; justify-content: center; gap: 24px; margin-bottom: 12px; }
+    .footer-social a { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--grey-mid); text-decoration: none; }
+    .footer-social a:hover { color: var(--black); }
+    footer p { font-size: 10px; letter-spacing: 0.08em; color: var(--grey-mid); }
+
+    /* ── Notice / job post styles ── */
+    .notice-wrap { max-width: 720px; margin: 0 auto; padding: 120px 32px 100px; }
+    .section-label { font-size: 10px; letter-spacing: var(--spacing); text-transform: uppercase; color: var(--grey-mid); text-align: center; margin-bottom: 18px; }
+    .notice-wrap h1 { font-size: 32px; font-weight: 200; letter-spacing: 0.35em; text-transform: uppercase; text-align: center; margin-bottom: 10px; }
+    .notice-sub { font-size: 13px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--grey-mid); text-align: center; margin-bottom: 32px; }
+    .notice-rule { width: 48px; border: none; border-top: 1px solid var(--black); margin: 0 auto 48px; }
+    .notice-intro { font-size: 13px; line-height: 1.9; letter-spacing: 0.04em; color: var(--black); margin-bottom: 8px; }
+    .notice-divider { border: none; border-top: 1px solid var(--grey-light); margin: 44px 0 28px; }
+    .notice-heading { font-size: 12px; letter-spacing: 0.35em; text-transform: uppercase; color: var(--grey-mid); margin-bottom: 24px; }
+    .notice-list { list-style: none; }
+    .notice-list li { display: flex; gap: 14px; font-size: 13px; line-height: 1.7; letter-spacing: 0.02em; color: var(--black); margin-bottom: 16px; }
+    .notice-list li:last-child { margin-bottom: 0; }
+    .notice-list .dash { color: var(--grey-mid); flex-shrink: 0; }
+    .notice-list li strong { font-weight: normal; text-transform: uppercase; letter-spacing: 0.08em; }
+    .notice-apply { text-align: center; margin-top: 8px; }
+    .notice-apply p { font-size: 13px; line-height: 1.9; letter-spacing: 0.04em; margin-bottom: 28px; }
+    .notice-apply a.cta { display: inline-block; font-family: var(--font); font-size: 11px; letter-spacing: var(--spacing); text-transform: uppercase; color: var(--white); background: var(--black); border: 1px solid var(--black); padding: 14px 36px; text-decoration: none; transition: background 0.15s, color 0.15s; margin-bottom: 16px; }
+    .notice-apply a.cta:hover { background: var(--white); color: var(--black); }
+    .notice-apply .or { display: block; font-size: 10px; letter-spacing: 0.08em; color: var(--grey-mid); margin-bottom: 16px; }
+    .notice-apply a.secondary { font-size: 11px; letter-spacing: var(--spacing); text-transform: uppercase; color: var(--black); text-decoration: none; border-bottom: 1px solid var(--grey-light); padding-bottom: 2px; }
+    .notice-apply a.secondary:hover { border-bottom-color: var(--black); }
+    .notice-fine { font-size: 9px; letter-spacing: 0.08em; color: var(--grey-mid); line-height: 1.8; text-align: center; margin-top: 56px; }
+
+    @media (max-width: 600px) {
+      .notice-wrap h1 { font-size: 22px; letter-spacing: 0.22em; }
+      .notice-wrap { padding: 100px 24px 80px; }
+    }
+    /* ─── PAGE TRANSITION LOADER ─── */
+    #page-loader { position: fixed; inset: 0; z-index: 9999; background: rgba(255,255,255,0.7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; }
+    #page-loader.fade-out { opacity: 0; pointer-events: none; }
+    #page-loader.hidden { display: none; }
+    .propeller-icon { width: 56px; height: 50px; background-color: #000; clip-path: polygon(42.9% 62.9%, 44.9% 57.6%, 44.2% 52.3%, 42.9% 45.5%, 42.2% 40.2%, 42.2% 37.9%, 40.8% 30.3%, 40.1% 25.0%, 40.1% 21.2%, 39.5% 15.2%, 40.1% 9.8%, 43.5% 4.5%, 48.3% 0.8%, 53.1% 6.1%, 55.1% 11.4%, 55.8% 16.7%, 55.8% 22.0%, 55.8% 25.0%, 55.1% 31.8%, 53.7% 40.9%, 53.7% 43.2%, 53.1% 48.5%, 52.4% 53.8%, 53.1% 59.1%, 56.5% 63.6%, 62.6% 65.9%, 66.0% 67.4%, 72.8% 69.7%, 76.2% 71.2%, 81.6% 73.5%, 86.4% 75.8%, 90.5% 78.0%, 93.9% 81.1%, 97.3% 86.4%, 98.6% 91.7%, 95.9% 94.7%, 91.2% 96.2%, 85.7% 95.5%, 82.3% 93.9%, 76.9% 90.2%, 73.5% 87.9%, 69.4% 84.8%, 62.6% 78.8%, 57.8% 75.0%, 53.1% 71.2%, 48.3% 69.7%, 43.5% 72.0%, 38.8% 76.5%, 34.0% 81.1%, 29.3% 85.6%, 25.2% 89.4%, 21.1% 92.4%, 15.6% 96.2%, 10.2% 98.5%, 5.4% 98.5%, 0.7% 97.0%, 1.4% 91.7%, 2.7% 86.4%, 8.2% 81.1%, 12.9% 78.0%, 15.0% 76.5%, 20.4% 73.5%, 23.1% 72.0%, 32.7% 68.2%, 35.4% 66.7%, 40.1% 64.4%); transform-origin: 49% 63%; animation: propeller-spin 0.9s ease-in-out infinite; }
+    @keyframes propeller-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+  <div id="page-loader"><div class="propeller-icon"></div></div>
+
+  <nav>
+    <div class="nav-left">
+      <button class="hamburger" aria-label="Open menu" onclick="openDrawer()">&#9776;</button>
+    </div>
+    <a class="nav-brand" href="/">Fola Adeleke&#174;</a>
+    <div class="nav-right">
+      <a class="nav-link" href="/contact">Contact</a>
+    </div>
+  </nav>
+
+  <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+  <div class="drawer" id="drawer">
+    <button class="drawer-close" onclick="closeDrawer()" aria-label="Close menu">&#x2715;</button>
+    <a href="/">Home</a>
+    <div class="drawer-group" id="productsDrawerGroup">
+      <button class="drawer-group-toggle" onclick="toggleDrawerGroup()" aria-expanded="false">Products <span class="drawer-caret">▼</span></button>
+      <div class="drawer-submenu">
+        <a href="/prints">Prints</a>
+        <a href="/products">World</a>
+      </div>
+    </div>
+    <a href="/artist">Artist</a>
+    <a href="/press">Press</a>
+    <a href="/contact">Contact</a>
+  </div>
+
+  <div class="notice-wrap">
+    <p class="section-label">Internship</p>
+    <h1>Studio Intern</h1>
+    <p class="notice-sub">(Unpaid)</p>
+    <hr class="notice-rule" />
+
+    <p class="notice-intro">
+      Fola Adeleke&#174; is a Mixed Media Concept Artist and Designer. We're looking for a young creative who's eager to learn and develop in the creative industry to help on exciting projects.
+    </p>
+
+    <hr class="notice-divider" />
+    <p class="notice-heading">What you'll do</p>
+    <ul class="notice-list">
+      <li><span class="dash">&#8212;</span><span><strong>Social media</strong> &#8212; planning and posting content, managing Stories, replying to DMs and comments</span></li>
+      <li><span class="dash">&#8212;</span><span><strong>Order fulfilment</strong> &#8212; packing and dispatching prints, quality-checking prints before they go out, coordinating couriers</span></li>
+      <li><span class="dash">&#8212;</span><span><strong>Email &amp; admin</strong> &#8212; managing the studio inbox, replying to customer queries, general admin support</span></li>
+      <li><span class="dash">&#8212;</span><span><strong>Back-office</strong> &#8212; keeping invoices, buyer records and agreements organised and up to date</span></li>
+      <li><span class="dash">&#8212;</span><span><strong>E-commerce support</strong> &#8212; helping list and update products as the store moves onto Shopify</span></li>
+      <li><span class="dash">&#8212;</span><span><strong>Light content creation</strong> &#8212; photographing and filming prints and behind-the-scenes studio content</span></li>
+      <li><span class="dash">&#8212;</span><span><strong>Customer care</strong> &#8212; helping handle order issues with a friendly, solutions-first tone</span></li>
+      <li><span class="dash">&#8212;</span><span><strong>Research</strong> &#8212; keeping an eye on trends, competitor accounts and new platforms worth trying</span></li>
+    </ul>
+
+    <hr class="notice-divider" />
+    <p class="notice-heading">You are</p>
+    <ul class="notice-list">
+      <li><span class="dash">&#8212;</span><span>Organised, reliable, and comfortable managing your own to-do list</span></li>
+      <li><span class="dash">&#8212;</span><span>Confident writing &#8212; you'll be representing the brand in emails and DMs</span></li>
+      <li><span class="dash">&#8212;</span><span>Genuinely interested in art, design, or small-brand building</span></li>
+      <li><span class="dash">&#8212;</span><span>Discreet with customer and order information</span></li>
+      <li><span class="dash">&#8212;</span><span>Instagram / TikTok fluent &#8212; bonus: photo or video editing (Canva, CapCut, Lightroom)</span></li>
+    </ul>
+
+    <hr class="notice-divider" />
+    <p class="notice-heading">Details</p>
+    <ul class="notice-list">
+      <li><span class="dash">&#8212;</span><span>Unpaid internship, hybrid, based in London</span></li>
+      <li><span class="dash">&#8212;</span><span>Flexible hours, to be agreed</span></li>
+      <li><span class="dash">&#8212;</span><span>Reasonable expenses (travel etc.) covered</span></li>
+      <li><span class="dash">&#8212;</span><span>Reference / testimonial provided, with potential to extend or turn into a paid role</span></li>
+    </ul>
+
+    <hr class="notice-divider" />
+    <p class="notice-heading" style="text-align:center;">How to apply</p>
+    <div class="notice-apply">
+      <p>DM @folaadeleke or email hello@folaadeleke.com with a couple of lines on why you're interested, plus any relevant links &#8212; portfolio, socials you've run, or anything else worth seeing.</p>
+      <a class="cta" href="mailto:hello@folaadeleke.com?subject=Studio%20Intern%20Application">Email to apply</a>
+      <span class="or">or</span>
+      <a class="secondary" href="https://www.instagram.com/fola_adeleke" target="_blank" rel="noopener">DM on Instagram</a>
+    </div>
+
+    <p class="notice-fine">This is an unpaid placement. Reasonable expenses are covered and hours are kept flexible around your availability.</p>
+  </div>
+
+  <footer>
+    <div class="footer-social">
+      <a href="https://www.instagram.com/fola_adeleke" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://www.tiktok.com/@folaadeleke" target="_blank" rel="noopener">TikTok</a>
+    </div>
+    <p>&#169; 2026 Fola Adeleke&#174;. All rights reserved.</p>
+  </footer>
+
+  <script>
+    function openDrawer() {
+      document.getElementById('drawer').classList.add('open');
+      document.getElementById('drawerOverlay').classList.add('open');
+    }
+    function closeDrawer() {
+      document.getElementById('drawer').classList.remove('open');
+      document.getElementById('drawerOverlay').classList.remove('open');
+    }
+    function toggleDrawerGroup() {
+      var group = document.getElementById('productsDrawerGroup');
+      var isOpen = group.classList.toggle('open');
+      group.querySelector('.drawer-group-toggle').setAttribute('aria-expanded', isOpen);
+    }
+  </script>
+
+  <!-- ── Music node ───────────────────────────── -->
+  <style>
+    #music-node { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; align-items: center; gap: 10px; }
+    #music-pill { display: flex; align-items: center; gap: 8px; font-family: 'Courier New', Courier, monospace; font-size: 10px; letter-spacing: 0.18em; color: #999; white-space: nowrap; background: #fff; border: 1px solid #e0e0e0; border-radius: 24px; padding: 6px 12px; opacity: 0; transform: translateX(8px); transition: opacity 0.3s ease, transform 0.3s ease; pointer-events: none; }
+    #music-node:hover #music-pill, #music-node.playing #music-pill { opacity: 1; transform: translateX(0); pointer-events: auto; }
+    #music-label { text-decoration: none; color: #999; transition: color 0.15s; }
+    #music-label:hover { color: #000; }
+    #music-btn { width: 40px; height: 40px; border-radius: 50%; border: 1px solid #ccc; background: #fff; color: #000; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: border-color 0.2s, transform 0.15s; position: relative; }
+    #music-btn:hover { border-color: #000; transform: scale(1.06); }
+    #music-node.playing #music-btn { border-color: #000; }
+    #music-node.playing #music-btn::after { content: ''; position: absolute; inset: -1px; border-radius: 50%; border: 1px solid #999; animation: music-pulse 2s ease-out infinite; }
+    @keyframes music-pulse { 0% { transform: scale(1); opacity: 0.6; } 100% { transform: scale(2); opacity: 0; } }
+  </style>
+  <div id="music-node">
+    <div id="music-pill">
+      <a id="music-label" href="https://open.spotify.com/playlist/2EvrAgnHW9v3V2P5GMELXu" target="_blank" rel="noopener noreferrer">Fola's vibe</a>
+    </div>
+    <button id="music-btn" aria-label="Play / pause">
+      <svg id="icon-play" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3 2L10 6L3 10V2Z" fill="currentColor"/></svg>
+      <svg id="icon-pause" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true" style="display:none"><rect x="2.5" y="2" width="2.5" height="8" rx="1" fill="currentColor"/><rect x="7" y="2" width="2.5" height="8" rx="1" fill="currentColor"/></svg>
+    </button>
+    <iframe id="music-iframe" src="" width="0" height="0" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" style="display:none"></iframe>
+  </div>
+  <script>
+    (function () {
+      var node = document.getElementById('music-node');
+      var btn = document.getElementById('music-btn');
+      var iframe = document.getElementById('music-iframe');
+      var iconPlay = document.getElementById('icon-play');
+      var iconPause = document.getElementById('icon-pause');
+      var playing = false, controller = null;
+      window.onSpotifyIframeApiReady = function (IFrameAPI) {
+        IFrameAPI.createController(iframe, { uri: 'spotify:playlist:2EvrAgnHW9v3V2P5GMELXu', width: 0, height: 0 }, function (c) {
+          controller = c;
+          if (sessionStorage.getItem('music_playing') === '1') {
+            playing = true; node.classList.add('playing');
+            iconPlay.style.display = 'none'; iconPause.style.display = '';
+            controller.resume();
+          }
+        });
+      };
+      btn.addEventListener('click', function () {
+        if (!controller) return;
+        if (playing) { controller.pause(); node.classList.remove('playing'); iconPlay.style.display = ''; iconPause.style.display = 'none'; sessionStorage.removeItem('music_playing'); }
+        else { controller.resume(); node.classList.add('playing'); iconPlay.style.display = 'none'; iconPause.style.display = ''; sessionStorage.setItem('music_playing', '1'); }
+        playing = !playing;
+      });
+    })();
+  </script>
+  <script src="https://open.spotify.com/embed/iframe-api/v1" async></script>
+
+  <script>
+    (function() {
+      var loader = document.getElementById('page-loader');
+      var FADE = 608;
+      var MIN_SHOW = 1800;
+      var start = Date.now();
+      function fadeOut() {
+        loader.style.transition = 'opacity ' + FADE + 'ms ease';
+        loader.style.opacity = '0';
+        setTimeout(function() { loader.classList.add('hidden'); }, FADE);
+      }
+      window.addEventListener('load', function() {
+        var elapsed = Date.now() - start;
+        var remaining = Math.max(0, MIN_SHOW - elapsed);
+        setTimeout(fadeOut, remaining);
+      });
+      document.addEventListener('click', function(e) {
+        var link = e.target.closest('a[href]');
+        if (!link) return;
+        var href = link.getAttribute('href');
+        if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:') || link.target === '_blank' || link.hostname !== location.hostname) return;
+        e.preventDefault();
+        loader.classList.remove('hidden');
+        loader.style.opacity = '0';
+        loader.offsetHeight;
+        loader.style.transition = 'opacity ' + FADE + 'ms ease';
+        loader.style.opacity = '1';
+        setTimeout(function() { window.location.href = href; }, FADE);
+      });
+    })();
+  </script>
+
+</body>
+</html>
