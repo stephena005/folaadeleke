@@ -31,6 +31,14 @@
     .drawer.open { left: 0; }
     .drawer a, .drawer button { font-family: var(--font); font-size: 12px; letter-spacing: var(--spacing); text-transform: uppercase; text-decoration: none; color: var(--black); background: none; border: none; cursor: pointer; padding: 14px 0; border-bottom: 1px solid var(--grey-light); text-align: left; width: 100%; }
     .drawer a:last-child, .drawer button:last-child { border-bottom: none; }
+    .drawer-group { border-bottom: 1px solid var(--grey-light); }
+    .drawer-group-toggle { display: flex; align-items: center; justify-content: space-between; border-bottom: none; }
+    .drawer-caret { font-size: 9px; transition: transform 0.2s ease; }
+    .drawer-group.open .drawer-caret { transform: rotate(180deg); }
+    .drawer-submenu { max-height: 0; overflow: hidden; transition: max-height 0.25s ease; }
+    .drawer-group.open .drawer-submenu { max-height: 160px; }
+    .drawer-submenu a { display: block; border-bottom: none; padding: 10px 0 10px 16px; font-size: 11px; color: var(--grey-mid); }
+    .drawer-submenu a:last-child { padding-bottom: 14px; }
     .drawer-close { position: absolute; top: 18px; right: 18px; font-size: 20px; background: none; border: none; cursor: pointer; color: var(--black); line-height: 1; }
     footer { border-top: 1px solid var(--grey-light); padding: 20px; text-align: center; }
     .footer-social { display: flex; justify-content: center; gap: 24px; margin-bottom: 12px; }
@@ -243,8 +251,13 @@
   <div class="drawer" id="drawer">
     <button class="drawer-close" onclick="closeDrawer()" aria-label="Close menu">&#x2715;</button>
     <a href="/">Home</a>
-    <a href="/prints">Prints</a>
-    <a href="/products">Products</a>
+    <div class="drawer-group" id="productsDrawerGroup">
+      <button class="drawer-group-toggle" onclick="toggleDrawerGroup()" aria-expanded="false">Products <span class="drawer-caret">▼</span></button>
+      <div class="drawer-submenu">
+        <a href="/prints">Prints</a>
+        <a href="/products">World</a>
+      </div>
+    </div>
     <a href="/artist">Artist</a>
     <a href="/press">Press</a>
     <a href="/contact">Contact</a>
@@ -434,6 +447,11 @@
     function closeDrawer() {
       document.getElementById('drawer').classList.remove('open');
       document.getElementById('drawerOverlay').classList.remove('open');
+    }
+    function toggleDrawerGroup() {
+      var group = document.getElementById('productsDrawerGroup');
+      var isOpen = group.classList.toggle('open');
+      group.querySelector('.drawer-group-toggle').setAttribute('aria-expanded', isOpen);
     }
 
     // Show/hide conditional fields based on enquiry type

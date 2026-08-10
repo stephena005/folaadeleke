@@ -172,6 +172,15 @@
       border-bottom: none;
     }
 
+    .drawer-group { border-bottom: 1px solid var(--grey-light); }
+    .drawer-group-toggle { display: flex; align-items: center; justify-content: space-between; border-bottom: none; }
+    .drawer-caret { font-size: 9px; transition: transform 0.2s ease; }
+    .drawer-group.open .drawer-caret { transform: rotate(180deg); }
+    .drawer-submenu { max-height: 0; overflow: hidden; transition: max-height 0.25s ease; }
+    .drawer-group.open .drawer-submenu { max-height: 160px; }
+    .drawer-submenu a { display: block; border-bottom: none; padding: 10px 0 10px 16px; font-size: 11px; color: var(--grey-mid); }
+    .drawer-submenu a:last-child { padding-bottom: 14px; }
+
     .drawer-close {
       position: absolute;
       top: 18px;
@@ -898,8 +907,13 @@
   <div class="drawer" id="drawer">
     <button class="drawer-close" onclick="closeDrawer()" aria-label="Close menu">✕</button>
     <button onclick="showPage('home'); closeDrawer()">Home</button>
-    <a href="/prints">Prints</a>
-    <a href="/products">Products</a>
+    <div class="drawer-group" id="productsDrawerGroup">
+      <button class="drawer-group-toggle" onclick="toggleDrawerGroup()" aria-expanded="false">Products <span class="drawer-caret">▼</span></button>
+      <div class="drawer-submenu">
+        <a href="/prints">Prints</a>
+        <a href="/products">World</a>
+      </div>
+    </div>
     <a href="/artist">Artist</a>
     <a href="/press">Press</a>
     <a href="/contact">Contact</a>
@@ -1001,6 +1015,11 @@
       document.getElementById('drawer').classList.remove('open');
       document.getElementById('drawerOverlay').classList.remove('open');
       document.body.style.overflow = '';
+    }
+    function toggleDrawerGroup() {
+      var group = document.getElementById('productsDrawerGroup');
+      var isOpen = group.classList.toggle('open');
+      group.querySelector('.drawer-group-toggle').setAttribute('aria-expanded', isOpen);
     }
 
     // ── MODAL ──────────────────────────────────────────────
