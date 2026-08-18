@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7ZCQ4YEN6"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-K7ZCQ4YEN6');
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <title>In Conversation &#8212; Fola Adeleke&#174;</title>
+  <meta name="description" content="Fola Adeleke on home, culture, identity and the practice behind the work. Recorded 17 August 2026." />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --black: #000; --white: #fff; --grey-light: #eee; --grey-mid: #999; --font: 'Courier New', Courier, monospace; --spacing: 0.2em; --nav-height: 56px; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font); background: var(--white); color: var(--black); min-height: 100vh; overflow-x: hidden; line-height: 1.6; }
+    nav { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-height); background: var(--white); border-bottom: 1px solid var(--grey-light); display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 0 20px; z-index: 100; }
+    .nav-left { display: flex; align-items: center; }
+    .nav-right { display: flex; justify-content: flex-end; }
+    .nav-brand { text-align: center; font-size: 13px; font-weight: normal; letter-spacing: var(--spacing); text-decoration: none; color: var(--black); }
+    .nav-link { font-size: 11px; letter-spacing: var(--spacing); text-transform: uppercase; text-decoration: none; color: var(--black); font-family: var(--font); }
+    .nav-link:hover { text-decoration: underline; }
+    .hamburger { background: none; border: none; cursor: pointer; font-size: 20px; padding: 4px 8px 4px 0; color: var(--black); line-height: 1; }
+    .drawer-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 200; }
+    .drawer-overlay.open { display: block; }
+    .drawer { position: fixed; top: 0; left: -260px; width: 240px; height: 100%; background: var(--white); border-right: 1px solid var(--grey-light); z-index: 201; transition: left 0.3s ease; display: flex; flex-direction: column; padding: 80px 32px 40px; }
+    .drawer.open { left: 0; }
+    .drawer a, .drawer button { font-family: var(--font); font-size: 12px; letter-spacing: var(--spacing); text-transform: uppercase; text-decoration: none; color: var(--black); background: none; border: none; cursor: pointer; padding: 14px 0; border-bottom: 1px solid var(--grey-light); text-align: left; width: 100%; }
+    .drawer a:last-child, .drawer button:last-child { border-bottom: none; }
+    .drawer-group { border-bottom: 1px solid var(--grey-light); }
+    .drawer-group-toggle { display: flex; align-items: center; justify-content: space-between; border-bottom: none; }
+    .drawer-caret { font-size: 9px; transition: transform 0.2s ease; }
+    .drawer-group.open .drawer-caret { transform: rotate(180deg); }
+    .drawer-submenu { max-height: 0; overflow: hidden; transition: max-height 0.25s ease; }
+    .drawer-group.open .drawer-submenu { max-height: 160px; }
+    .drawer-submenu a { display: block; border-bottom: none; padding: 10px 0 10px 16px; font-size: 11px; color: var(--grey-mid); }
+    .drawer-submenu a:last-child { padding-bottom: 14px; }
+    .drawer-close { position: absolute; top: 18px; right: 18px; font-size: 20px; background: none; border: none; cursor: pointer; color: var(--black); line-height: 1; }
+    footer { border-top: 1px solid var(--grey-light); padding: 20px; text-align: center; }
+    .footer-social { display: flex; justify-content: center; gap: 24px; margin-bottom: 12px; }
+    .footer-social a { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--grey-mid); text-decoration: none; }
+    .footer-social a:hover { color: var(--black); }
+    footer p { font-size: 10px; letter-spacing: 0.08em; color: var(--grey-mid); }
+
+    /* ─── Interview content ─── */
+    .interview-header { padding: calc(var(--nav-height) + 56px) 24px 40px; text-align: center; border-bottom: 1px solid var(--black); }
+    .interview-eyebrow { font-size: 11px; letter-spacing: 0.35em; text-transform: uppercase; color: var(--grey-mid); margin-bottom: 18px; }
+    .interview-header h1 { font-size: clamp(26px, 5vw, 44px); letter-spacing: var(--spacing); text-transform: uppercase; font-weight: 200; margin-bottom: 12px; }
+    .interview-subtitle { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--grey-mid); }
+    .interview-intro { max-width: 600px; margin: 36px auto 0; padding: 0 24px; text-align: center; font-size: 13px; letter-spacing: 0.03em; color: #444; }
+
+    .interview-main { max-width: 700px; margin: 0 auto; padding: 0 24px 80px; }
+
+    .interview-toc { margin: 56px 0; padding: 28px 0; border-top: 1px solid var(--grey-light); border-bottom: 1px solid var(--grey-light); }
+    .toc-label { font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--grey-mid); margin-bottom: 16px; }
+    .interview-toc ol { list-style: none; counter-reset: toc-counter; }
+    .interview-toc li { counter-increment: toc-counter; font-size: 12px; padding: 6px 0; }
+    .interview-toc li a { color: var(--black); text-decoration: none; }
+    .interview-toc li a:hover { text-decoration: underline; }
+    .interview-toc li::before { content: counter(toc-counter, decimal-leading-zero) " \2014 "; color: var(--grey-mid); }
+
+    .entry { margin-bottom: 68px; scroll-margin-top: 80px; }
+    .entry-meta { display: flex; justify-content: space-between; align-items: baseline; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--grey-mid); margin-bottom: 10px; }
+    .entry-index { color: var(--black); font-weight: bold; }
+    .question { font-size: 16px; letter-spacing: 0.01em; font-weight: normal; font-style: italic; margin-bottom: 18px; line-height: 1.5; }
+    .answer p { font-size: 13px; margin-bottom: 14px; text-align: left; }
+    .entry-divider { text-align: center; color: var(--grey-mid); letter-spacing: 0.5em; font-size: 11px; margin: 0 0 68px; }
+
+    .interview-end { text-align: center; padding-top: 24px; border-top: 1px solid var(--black); }
+    .interview-end .interview-eyebrow { margin-bottom: 20px; }
+    .back-to-top { display: inline-block; margin-top: 24px; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--black); text-decoration: none; border: 1px solid var(--black); padding: 10px 18px; }
+    .back-to-top:hover { background: var(--black); color: var(--white); }
+
+    @media (max-width: 480px) { .interview-header { padding: calc(var(--nav-height) + 40px) 16px 32px; } .entry-meta { flex-direction: column; gap: 4px; } }
+
+    /* ─── PAGE TRANSITION LOADER ─── */
+    #page-loader { position: fixed; inset: 0; z-index: 9999; background: rgba(255,255,255,0.7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; }
+    #page-loader.fade-out { opacity: 0; pointer-events: none; }
+    #page-loader.hidden { display: none; }
+    .propeller-icon { width: 56px; height: 50px; background-color: #000; clip-path: polygon(42.9% 62.9%, 44.9% 57.6%, 44.2% 52.3%, 42.9% 45.5%, 42.2% 40.2%, 42.2% 37.9%, 40.8% 30.3%, 40.1% 25.0%, 40.1% 21.2%, 39.5% 15.2%, 40.1% 9.8%, 43.5% 4.5%, 48.3% 0.8%, 53.1% 6.1%, 55.1% 11.4%, 55.8% 16.7%, 55.8% 22.0%, 55.8% 25.0%, 55.1% 31.8%, 53.7% 40.9%, 53.7% 43.2%, 53.1% 48.5%, 52.4% 53.8%, 53.1% 59.1%, 56.5% 63.6%, 62.6% 65.9%, 66.0% 67.4%, 72.8% 69.7%, 76.2% 71.2%, 81.6% 73.5%, 86.4% 75.8%, 90.5% 78.0%, 93.9% 81.1%, 97.3% 86.4%, 98.6% 91.7%, 95.9% 94.7%, 91.2% 96.2%, 85.7% 95.5%, 82.3% 93.9%, 76.9% 90.2%, 73.5% 87.9%, 69.4% 84.8%, 62.6% 78.8%, 57.8% 75.0%, 53.1% 71.2%, 48.3% 69.7%, 43.5% 72.0%, 38.8% 76.5%, 34.0% 81.1%, 29.3% 85.6%, 25.2% 89.4%, 21.1% 92.4%, 15.6% 96.2%, 10.2% 98.5%, 5.4% 98.5%, 0.7% 97.0%, 1.4% 91.7%, 2.7% 86.4%, 8.2% 81.1%, 12.9% 78.0%, 15.0% 76.5%, 20.4% 73.5%, 23.1% 72.0%, 32.7% 68.2%, 35.4% 66.7%, 40.1% 64.4%); transform-origin: 49% 63%; animation: propeller-spin 0.9s ease-in-out infinite; }
+    @keyframes propeller-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+  <div id="page-loader"><div class="propeller-icon"></div></div>
+
+  <nav>
+    <div class="nav-left">
+      <button class="hamburger" aria-label="Open menu" onclick="openDrawer()">&#9776;</button>
+    </div>
+    <a class="nav-brand" href="/">Fola Adeleke&#174;</a>
+    <div class="nav-right">
+      <a class="nav-link" href="/contact">Contact</a>
+    </div>
+  </nav>
+
+  <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+  <div class="drawer" id="drawer">
+    <button class="drawer-close" onclick="closeDrawer()" aria-label="Close menu">&#x2715;</button>
+    <a href="/">Home</a>
+    <div class="drawer-group" id="productsDrawerGroup">
+      <button class="drawer-group-toggle" onclick="toggleDrawerGroup()" aria-expanded="false">Products <span class="drawer-caret">▼</span></button>
+      <div class="drawer-submenu">
+        <a href="/prints">Prints</a>
+        <a href="/products">World</a>
+      </div>
+    </div>
+    <a href="/artist">Artist</a>
+    <a href="/press">Press</a>
+    <a href="/contact">Contact</a>
+  </div>
+
+  <header class="interview-header" id="top">
+    <div class="interview-eyebrow">Fola Adeleke&#174;</div>
+    <h1>In Conversation</h1>
+    <div class="interview-subtitle">Recorded 17 August 2026 &middot; East London</div>
+  </header>
+
+  <div class="interview-intro">
+    On home, culture, identity, and the practice behind the work &mdash; recorded across fourteen sessions on 17 August 2026, sequenced here in chronological order.
+  </div>
+
+  <main class="interview-main">
+
+    <div class="interview-toc" role="navigation" aria-label="Contents">
+      <div class="toc-label">Contents</div>
+      <ol>
+        <li><a href="#q1">Growing up in a Nigerian house in East London</a></li>
+        <li><a href="#q2">Traditions kept alive</a></li>
+        <li><a href="#q3">First aware of cultural difference</a></li>
+        <li><a href="#q4">Caught between two cultures</a></li>
+        <li><a href="#q5">What the world misunderstands about African culture</a></li>
+        <li><a href="#q6">Where fashion enters the story</a></li>
+        <li><a href="#q7">The move from fashion to art</a></li>
+        <li><a href="#q8">Telling stories through image</a></li>
+        <li><a href="#q9">Describing an aesthetic language</a></li>
+        <li><a href="#q10">Building a piece</a></li>
+        <li><a href="#q11">Where an artwork begins</a></li>
+        <li><a href="#q12">Where AI starts, and hands take over</a></li>
+        <li><a href="#q13">Where art, fashion and culture meet</a></li>
+        <li><a href="#q14">The future the work is building toward</a></li>
+      </ol>
+    </div>
+
+    <section class="entry" id="q1">
+      <div class="entry-meta"><span class="entry-index">01 / 14</span><span>22:11 &middot; 17.08.2026</span></div>
+      <h2 class="question">I'm just going to answer how I grew up in a Nigerian house in East London, what was home like?</h2>
+      <div class="answer">
+        <p>Home was, I believe, very cultured. I believe the food in the fridge or in the cupboards were very, well I would say 80% Nigerian. Just a kind of fun fact, I remember growing up and opening the, seeing like an ice cream container and being really excited that there was ice cream at home and getting myself a plate and when I went to open it, it was soup inside. That was kind of, that kind of sums up how African the home was.</p>
+        <p>Home was, yeah, very cultured, very cultured. The language that was spoken from my mother to us, to me and my siblings, was Yoruba. The music was Nigerian. I think the main two things that was really English was the fact that we listened to hip-hop from an early age. We watched UK TV from EastEnders to like, to like Neighbours and Home and Away and then Cereal. I think Cereal was the most British thing we had was Cereal but everything beyond that was, we had African home cooked meals every single day and whether that was lunch and dinner, it was always, it was very, it was very Nigerian basically.</p>
+      </div>
+    </section>
+
+    <div class="entry-divider">&middot;&nbsp; &middot;&nbsp; &middot;</div>
+
+    <section class="entry" id="q2">
+      <div class="entry-meta"><span class="entry-index">02 / 14</span><span>22:15 &middot; 17.08.2026</span></div>
+      <h2 class="question">What traditions did we keep alive?</h2>
+      <div class="answer">
+        <p>We always, we always, we always ate together and prayed. That was something that we always did. We, we had our chore, we had our Saturday chores that we all had to do before we had breakfast. And mine was the bathroom. And after we all collectively finished it, my mum would make, you know, what I would call, what was her tradition, which was like an African breakfast, which was really heavy. And we ate together. But while we was doing the chores, there was always music playing. And that was, there's always Nigerian music that was playing at the time. And even to this day, I don't even know what artists it was, but that was playing in the background.</p>
+        <p>I think those were the traditions. I think, you know, leaving the home, there was a lot more tradition. Saturdays was always a function. There was always someone's birthday to go to. There was always an outfit that we was meant to, that we was all wearing. Me and my brother would always, for some reason, have the same thing on, even though we was four years apart. And my mum always had an outfit that matched a bag. And she had several bags.</p>
+        <p>She had, I think she's a, I say I think she is a huge inspiration to what I do, because she is, she is what I see as a powerful, the first powerful black woman I saw, or African woman I saw. And we followed her lead. It was a single house, a single parent household. And I watched her just power through everything.</p>
+      </div>
+    </section>
+
+    <div class="entry-divider">&middot;&nbsp; &middot;&nbsp; &middot;</div>
+
+    <section class="entry" id="q3">
+      <div class="entry-meta"><span class="entry-index">03 / 14</span><span>22:21 &middot; 17.08.2026</span></div>
+      <h2 class="question">When did I first become aware of my traditions?</h2>
+      <div class="answer">
+        <p>I think as early as school. I had an uncle that lived with me when I was really young and he used to come and pick me up in open-toed brown sandals and a two-piece of native clothes, always prints, and then with the hat as well, the fila. And I used to be somewhat embarrassed because he was so different from everyone else that was picking their, you know, their kids up. And he'd come to pick me up, I used to kind of not want him to pick me up. And I think that's as early &mdash; I think I was at the time roughly around five. I think that experience of being embarrassed by that kind of difference made me aware that my culture was different from everyone else.</p>
+        <p>And then the second time was around the same time, when my mom she made me pack lunch for a school trip and it had beans with stew, with like chili stew and plantain, which I loved at home but I never knew it was so different from what everyone else was gonna bring. And that was another time, it was quite an embarrassing time to be different. And that was when I realised I was, you know, my culture was different. And in that time it was something that wasn't always there, wasn't enough of us to feel different in a good way. It always felt like we were somewhat alone in that and in those spaces.</p>
+      </div>
+    </section>
+
+    <div class="entry-divider">&middot;&nbsp; &middot;&nbsp; &middot;</div>
+
+    <section class="entry" id="q4">
+      <div class="entry-meta"><span class="entry-index">04 / 14</span><span>22:26 &middot; 17.08.2026</span></div>
+      <h2 class="question">Was you ever caught between two cultures?</h2>
+      <div class="answer">
+        <p>I would say I've always been caught between two cultures, or I was &mdash; I think in this stage of my life, I blend both because I don't believe I need to shape shift to make anyone feel comfortable. I've come to that kind of understanding. I don't need to lower my tone or make myself smaller or even have to adapt my culture to appease or to make people feel comfortable because that's not what the world is doing for anybody.</p>
+        <p>But from a young age I've always felt that &mdash; I think anyone from Africa that lives in the Western world has to have a dual identity. It even shows in people's names, that I know a lot of, growing up when I was younger, I knew a lot of people who were Oluwatosin, Oluwafemi, but all of a sudden one day their name is James or Peter, and that to me is them adapting and changing. I actually had to, I say had to, I chose to shorten my name because it was too hard and complicated for people to digest and actually say. So I shortened my name twice, and that's again me being caught up in that, and I think a lot of people were caught up in that.</p>
+        <p>I'm glad I never had an English name. I'm glad my mum never gave me an English name, but I think that sometimes is the indication for some people and some families adapting to their surroundings, so they are fitting in instead of someone that's different. So to answer your question, sure, yes I've always felt that way, but in the last few years I've tried to blend both, because I should feel comfortable being who I am wherever I am.</p>
+      </div>
+    </section>
+
+    <div class="entry-divider">&middot;&nbsp; &middot;&nbsp; &middot;</div>
+
+    <section class="entry" id="q5">
+      <div class="entry-meta"><span class="entry-index">05 / 14</span><span>22:31 &middot; 17.08.2026</span></div>
+      <h2 class="question">What do I still feel that the world misunderstands about African culture?</h2>
+      <div class="answer">
+        <p>I think there's so many things. I think for one, the easy one is the depiction of what the Western world has done with these adverts of Oxfam and showing areas of extreme poverty. I think there's extreme poverty in every country in the world, and I think you can build a narrative that looks as bad in any country where you see poverty. Maybe some are more extreme, but that depiction of Africa is not the depiction of Africa that I know. I think there's obviously some places of poverty, but a lot more places of beauty and wealth and hardworking people just across the whole of Africa.</p>
+        <p>I think there's this understanding that the world believes that Africa needs help from everyone else, when I think if we strip it back, Africa is extremely wealthy in minerals on its own. So if it stood on its own two feet and it was left alone by any of the colonial countries, I think Africa would be thriving amazingly. I think on a low tier level people think we're loud, and I think we need to change that narrative &mdash; that loudness is actually confidence, and yeah, it's just extreme confidence in who we are.</p>
+        <p>I just think on a whole, Africa is beautiful and African culture is beautiful. I think there needs to be more said about the wealth, the rich heritage of Africa. I think all of this is misunderstood still to this day about Africa &mdash; and just to link it back to my work, my biggest mission is to share the beautiful aspects of African culture and also make sure they're seen, because I actually believe the backbone of African culture is African women, and I need them to be seen in an amazing light. That's my soul mission with the art I do.</p>
+      </div>
+    </section>
+
+    <div class="entry-divider">&middot;&nbsp; &middot;&nbsp; &middot;</div>
+
+    <section class="entry" id="q6">
+      <div class="entry-meta"><span class="entry-index">06 / 14</span><span>22:38 &middot; 17.08.2026</span></div>
+      <h2 class="question">Where does fashion enter that story?</h2>
+      <div class="answer">
+        <p>Well, for me, I think fashion has been around &mdash; I've been around fashion before I knew why I identified it as fashion. Every week my mother and I and my siblings was off to another house party, and every week my mother had another print, another gele, another outfit, matching shoes and purse every week. I saw that all the time. But because at a young age there was no connection to coolness about African culture, I think there were those like red threads of culture that were starting to bubble up in me without me even really knowing. But I think I created my own identity away from African culture.</p>
+        <p>I played basketball. I travelled, I represented England and travelled all over Europe playing basketball. And that allowed me to see how different every culture was, and got me curious from the age of 13 &mdash; travelling to Slovenia, to Portugal, France, Italy, all of these countries, and America eventually. And I think I veered off African culture with fashion, hence why I entered the realm of streetwear. But I think in the back of my mind, African culture has always been close to my heart, and it just took me &mdash; I guess it took me away before it took me right back to where it all began, which is where I'm at now.</p>
+        <p>And I believe all of my pieces speak to different realms and practices. I think I see myself as a designer and a concept creator, more so now as a composer, and art being the form of composition and storytelling. And I'm able to, with this one vision, put all of those things together for them to build a new world. And I don't think it's something I meant to do &mdash; I think I just kept on knocking on the door and scratching the surface until something started to form, which is what we see today. Every piece is more than the composition. It's aligned into storytelling that aligns with my life, and my fashion, my eye and composition just together.</p>
+      </div>
+    </section>
+
+    <div class="entry-divider">&middot;&nbsp; &middot;&nbsp; &middot;</div>
+
+    <section class="entry" id="q7">
+      <div class="entry-meta"><span class="entry-index">07 / 14</span><span>22:44 &middot; 17.08.2026</span></div>
+      <h2 class="question">When did you move from fashion to art?</h2>
+      <div class="answer">
+        <p>That's a good question. I don't think I've ever moved. I think, you know, by practice I'm a designer. Art is a realm I've stepped into because I have probably created more concepts, and through creating these concepts I've started to scratch the surface on my ongoing concept, which is built as a practice &mdash; a practice that I've delved into, and through that, art has formed. I still consider myself a designer, an artist, a conceptual creator, a world builder I believe. Sometimes I don't feel worthy of the title artist, because I still believe I'm creating a world that exists, and if I am able to create enough of this world it will be seen in every angle, no matter what kind of collaboration it is &mdash; it will be the same world.</p>
+        <p>But I guess I embarked on this like a year and a half ago. I had this question with myself, and it was a conversation with someone where a friend told me &mdash; I don't know if you fit in the brief. You've given the client that I was working for at the time too much of who you are. And my thought was, well, the client came to me because they wanted my vision. And then I start to question: what's better &mdash; is it better for you to be a designer that can execute a brief, or is it better for you to be a designer that has refined his own ethos and aesthetic?</p>
+        <p>And that one conversation led me to just embark on my vision so heartedly, without any opinion or without wanting to tread lightly to make anyone feel comfortable. And that led me to where I am today, where I am storytelling from my point of view through historic things, through a lot of reference points, nostalgia, a conversational lens, and just world building as a whole. So even though I am an artist, I believe there's lots of tiers to it. And overall, if anyone asked me, I would say I'm a world builder.</p>
+      </div>
+    </section>
+
+    <div class="entry-divider">&middot;&nbsp; &middot;&nbsp; &middot;</div>
+
+    <section class="entry" id="q8">
+      <div class="entry-meta"><span class="entry-index">08 / 14</span><span>22:47 &middot; 17.08.2026</span></div>
+      <h2 class="question">What made you want to tell stories through image?</h2>
+      <div class="answer">
+        <p>I think I have a lot to say. I think I have a lot in my mind. I think part of my practice is &mdash; I believe because I have a sporting background, I believe in reps. I believe the best ideas are, if you believe something is the best idea, you need to do a hundred of them and the best idea will come out at the hundredth one. And so because of that, I'm trying to let out all of my ideas. And within letting out those ideas, I want these conversations to happen. I feel like these conversations need to exist.</p>
+        <p>So building stories through images, what I love is I show four different people and they have four different conversations about it, and why this is this way. I remember I created a piece and one of my good friends said to me &mdash; it doesn't seem realistic because they look Nigerian but they're wearing too much gold, and the amount of gold they're wearing is another culture. And I told him, that's fine, because we're not trying to build a sense of reality. We're trying to build something that intrinsically sparks conversation with people.</p>
+        <p>I think there's a lot of conversations that need to be had in the creative space, and I believe maybe I'm someone that can bridge that gap and aid that conversation to happen.</p>
+      </div>
+    </section>
+
+    <div class="entry-divider">&middot;&nbsp; &middot;&nbsp; &middot;</div>
+
+    <section class="entry" id="q9">
+      <div class="entry-meta"><span class="entry-index">09 / 14</span><span>22:51 &middot; 17.08.2026</span></div>
+      <h2 class="question">How would you describe your aesthetic language?</h2>
+      <div class="answer">
+        <p>There's a number of words I would use to describe my aesthetic language. I think one of them is rich, African, proud, unapologetic. These are words I would use to describe my artistic language. I would like to just keep it as rich, loud and unapologetic. I think it's very important to not be afraid to share your opinion and your point of view and stand by that. I think it's also important for me to share the beautiful aspects of Africa.</p>
+      </div>
+    </section>
+
+    <div class="entry-divider">&middot;&nbsp; &middot;&nbsp; &middot;</div>
+
+    <section class="entry" id="q10">
+      <div class="entry-meta"><span class="entry-index">10 / 14</span><span>22:55 &middot; 17.08.2026</span></div>
+      <h2 class="question">How do I build a piece?</h2>
+      <div class="answer">
+        <p>I build a piece starting from storytelling &mdash; what is it I want to tell, what dots am I trying to bring together. I believe, just in fashion alone, I normally come from a place of nostalgia. I think nostalgia is no different from sampling in music. I normally come from a place of there, and then there's what is the story I'm trying to tell, and once I can mood board &mdash; which is just like design, throwing a few images together to kind of storyboard &mdash; I build from there. I then start collaging, collaging all my images digitally through Photoshop, Illustrator, grading, and then I start to move toward the accessories and prints that I need as part of this story.</p>
+        <p>And then once I've done that, I try to blend this using some AI tools to blend these elements together, and my hope is that people see that composition and see beyond the image, and see some of the storytelling. It doesn't mean that I need to scream from a rooftop what this story is about. I think if five people see the image and see something different, but it all moved them and sparked a memory &mdash; I remember I did an art piece about, you know, growing up, one of the things &mdash; if you ask people, especially in the 90s, where would you get your drink from at an African party? A lot of us will have to think, because we couldn't remember where we got our drinks from. But we in fact got our drinks from a bathtub full of ice.</p>
+        <p>I did a piece with this memory in mind, and so many people's comments and messages to me personally were &mdash; wow, you've helped me unlock a memory I never knew existed because it's been so long. So it's just about, for me, again sparking that nostalgia and building through all of those digital platforms.</p>
+      </div>
+    </section>
+
+    <div class="entry-divider">&middot;&nbsp; &middot;&nbsp; &middot;</div>
+
+    <section class="entry" id="q11">
+      <div class="entry-meta"><span class="entry-index">11 / 14</span><span>22:59 &middot; 17.08.2026</span></div>
+      <h2 class="question">Where does an artwork normally begin?</h2>
+      <div class="answer">
+        <p>This is a good question. It can be &mdash; I think for the most part, it's a memory. Sometimes it's a memory that I didn't live, it's the idea. So I am working on a piece that I haven't quite finished yet. It's taken me a long time to finish. It's a piece about that era when a lot of Africans moved to the Western world &mdash; in a sense of America, New York, Houston, London &mdash; that first wave. What did that look like? That memory doesn't exist for me, because I was first-generation born, but I didn't have to come over and understand the difference.</p>
+        <p>I have this collection called Unapologetic, where some of the models and figures in the pieces are wearing Western worn clothes, like grey mile tracksuits, and the head wrap with their gold, and it's so far removed from each other, but that must have been something that happened where people were merging. They had just come from wearing what they wear in Africa &mdash; for me, personally, or my family personally, would have been Nigeria &mdash; but they would have at that point naturally mixed Western clothing with their native clothing. And how did that look?</p>
+        <p>That comes from a memory that I don't possess. It just comes from a place of imagination. So some ideas come from a place of memory, some come from a place of a futuristic ideology or thought of how things could be, and others come from a place of just deep imagination and dreaming.</p>
+      </div>
+    </section>
+
+    <div class="entry-divider">&middot;&nbsp; &middot;&nbsp; &middot;</div>
+
+    <section class="entry" id="q12">
+      <div class="entry-meta"><span class="entry-index">12 / 14</span><span>23:03 &middot; 17.08.2026</span></div>
+      <h2 class="question">Yeah, I use AI. Where does AI start and where does your hands take over?</h2>
+      <div class="answer">
+        <p>So similar to how I said I build it, I build my work through collage and reference points and understanding design and composition. I build it through the structure and layout of the scene that I want, to strengthen my idea and message that I'm putting together &mdash; whether it be a seat at the table with a family of African royalty. I put that together through collage and research, understanding what kind of lighting I need, understanding what scene needs to take place or what angle needs to take place in order to make this the best idea.</p>
+        <p>And then once I get to a good place, I use AI to blend this research to make it more cohesive. And once I get to a place that I am happy with, I take it out of there and then I go into a photo grading process to give my image an overarching lighting mood, and also make sure that the gold that I'm using is still the statement piece &mdash; that the gold and the skin tone were married with the pattern, or have a significant centre-stage feature to the image. So it's a secondary thing, but also after that secondary process using AI, I step away from it again to then find that grade that feels intrinsically me.</p>
+      </div>
+    </section>
+
+    <div class="entry-divider">&middot;&nbsp; &middot;&nbsp; &middot;</div>
+
+    <section class="entry" id="q13">
+      <div class="entry-meta"><span class="entry-index">13 / 14</span><span>23:10 &middot; 17.08.2026</span></div>
+      <h2 class="question">Where does art, fashion and culture meet for me?</h2>
+      <div class="answer">
+        <p>I think it's an interesting one, because I think it's always been a marriage, it's always been together. Especially when your culture is rich in celebration. My culture is my African culture, and African culture in general is so rich in celebration. Everything &mdash; every moment of success, whether it's marriage or birthdays or christenings &mdash; these are all extremely rich in ceremony, in dressing. I think it's a marriage, it's something that's deeply rooted together.</p>
+        <p>I never knew, growing up, watching my mother get changed and matching her gold with her outfits &mdash; I never knew that process was a process. I didn't think anything of it, but that was fashion, that was culture, and that was art, because the fabric was art, the pattern was art. The composition of all together was beyond art. It was a statement, and it was effortless. It didn't feel at all try hard. It just feels intrinsically African. I think it's always been that intersection. I believe I'm trying to make people aware of that, that that intersection exists.</p>
+        <p>I want it that, with the pieces I'm putting together, you have more African women that want to wear their gele with denim on a regular day. Some of these pieces are not only worn at African functions &mdash; some of these pieces become part of everyday. That intersection has always existed. It's just &mdash; have we been ready and confident enough to own it in a Western society? And I think this is the time. I think they have always been joint at the hip.</p>
+      </div>
+    </section>
+
+    <div class="entry-divider">&middot;&nbsp; &middot;&nbsp; &middot;</div>
+
+    <section class="entry" id="q14">
+      <div class="entry-meta"><span class="entry-index">14 / 14</span><span>23:13 &middot; 17.08.2026</span></div>
+      <h2 class="question">What kind of future do you want to create through your work?</h2>
+      <div class="answer">
+        <p>So I want &mdash; I want it down that with an abundance of my work being displayed everywhere, and used as reference points for music videos, for everything, art for movies, for just anything &mdash; beyond my country of being Nigerian, beyond my nationality of being Nigerian. I want my art to make everyone feel comfortable with being African. Some people &mdash; I've had messages of people saying thank you, you make me proud to be Nigerian.</p>
+        <p>I want this normality of fashion and art being intrinsically African to push people to be themselves outside of their homes. I don't want it that people have to change the second they leave their homes. I would love it that African people that live in the Western world can feel confident enough to take their food into their corporate offices and warm it up in the microwave. I want to normalize African beauty and richness, so people don't have to have that huge difference of who you are inside your home to who you are outside your home &mdash; because at the end of the day, living like that is crippling.</p>
+        <p>That's part of the mission, and why I want to show the beautiful aspects of Africa &mdash; because there are a lot of people who don't know Africa looks as beautiful as I portray it to.</p>
+      </div>
+    </section>
+
+    <div class="interview-end">
+      <div class="interview-eyebrow">Fola Adeleke&#174;</div>
+      <a class="back-to-top" href="#top">Back to top</a>
+    </div>
+
+  </main>
+
+  <footer>
+    <div class="footer-social">
+      <a href="https://www.instagram.com/fola_adeleke" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://www.tiktok.com/@folaadeleke" target="_blank" rel="noopener">TikTok</a>
+    </div>
+    <p>&#169; 2026 Fola Adeleke&#174;. All rights reserved.</p>
+  </footer>
+
+  <script>
+    function openDrawer() {
+      document.getElementById('drawer').classList.add('open');
+      document.getElementById('drawerOverlay').classList.add('open');
+    }
+    function closeDrawer() {
+      document.getElementById('drawer').classList.remove('open');
+      document.getElementById('drawerOverlay').classList.remove('open');
+    }
+    function toggleDrawerGroup() {
+      var group = document.getElementById('productsDrawerGroup');
+      var isOpen = group.classList.toggle('open');
+      group.querySelector('.drawer-group-toggle').setAttribute('aria-expanded', isOpen);
+    }
+  </script>
+
+  <!-- ── Music node ───────────────────────────── -->
+  <style>
+    #music-node { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; align-items: center; gap: 10px; }
+    #music-pill { display: flex; align-items: center; gap: 8px; font-family: 'Courier New', Courier, monospace; font-size: 10px; letter-spacing: 0.18em; color: #999; white-space: nowrap; background: #fff; border: 1px solid #e0e0e0; border-radius: 24px; padding: 6px 12px; opacity: 0; transform: translateX(8px); transition: opacity 0.3s ease, transform 0.3s ease; pointer-events: none; }
+    #music-node:hover #music-pill, #music-node.playing #music-pill { opacity: 1; transform: translateX(0); pointer-events: auto; }
+    #music-label { text-decoration: none; color: #999; transition: color 0.15s; }
+    #music-label:hover { color: #000; }
+    #music-btn { width: 40px; height: 40px; border-radius: 50%; border: 1px solid #ccc; background: #fff; color: #000; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: border-color 0.2s, transform 0.15s; position: relative; }
+    #music-btn:hover { border-color: #000; transform: scale(1.06); }
+    #music-node.playing #music-btn { border-color: #000; }
+    #music-node.playing #music-btn::after { content: ''; position: absolute; inset: -1px; border-radius: 50%; border: 1px solid #999; animation: music-pulse 2s ease-out infinite; }
+    @keyframes music-pulse { 0% { transform: scale(1); opacity: 0.6; } 100% { transform: scale(2); opacity: 0; } }
+  </style>
+  <div id="music-node">
+    <div id="music-pill">
+      <a id="music-label" href="https://open.spotify.com/playlist/2EvrAgnHW9v3V2P5GMELXu" target="_blank" rel="noopener noreferrer">Fola's vibe</a>
+    </div>
+    <button id="music-btn" aria-label="Play / pause">
+      <svg id="icon-play" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3 2L10 6L3 10V2Z" fill="currentColor"/></svg>
+      <svg id="icon-pause" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true" style="display:none"><rect x="2.5" y="2" width="2.5" height="8" rx="1" fill="currentColor"/><rect x="7" y="2" width="2.5" height="8" rx="1" fill="currentColor"/></svg>
+    </button>
+    <iframe id="music-iframe" src="" width="0" height="0" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" style="display:none"></iframe>
+  </div>
+  <script>
+    (function () {
+      var node = document.getElementById('music-node');
+      var btn = document.getElementById('music-btn');
+      var iframe = document.getElementById('music-iframe');
+      var iconPlay = document.getElementById('icon-play');
+      var iconPause = document.getElementById('icon-pause');
+      var playing = false, controller = null;
+      window.onSpotifyIframeApiReady = function (IFrameAPI) {
+        IFrameAPI.createController(iframe, { uri: 'spotify:playlist:2EvrAgnHW9v3V2P5GMELXu', width: 0, height: 0 }, function (c) {
+          controller = c;
+          if (sessionStorage.getItem('music_playing') === '1') {
+            playing = true; node.classList.add('playing');
+            iconPlay.style.display = 'none'; iconPause.style.display = '';
+            controller.resume();
+          }
+        });
+      };
+      btn.addEventListener('click', function () {
+        if (!controller) return;
+        if (playing) { controller.pause(); node.classList.remove('playing'); iconPlay.style.display = ''; iconPause.style.display = 'none'; sessionStorage.removeItem('music_playing'); }
+        else { controller.resume(); node.classList.add('playing'); iconPlay.style.display = 'none'; iconPause.style.display = ''; sessionStorage.setItem('music_playing', '1'); }
+        playing = !playing;
+      });
+    })();
+  </script>
+  <script src="https://open.spotify.com/embed/iframe-api/v1" async></script>
+
+  <script>
+    (function() {
+      var loader = document.getElementById('page-loader');
+      var FADE = 608;
+      var MIN_SHOW = 1800;
+      var start = Date.now();
+      function fadeOut() {
+        loader.style.transition = 'opacity ' + FADE + 'ms ease';
+        loader.style.opacity = '0';
+        setTimeout(function() { loader.classList.add('hidden'); }, FADE);
+      }
+      window.addEventListener('load', function() {
+        var elapsed = Date.now() - start;
+        var remaining = Math.max(0, MIN_SHOW - elapsed);
+        setTimeout(fadeOut, remaining);
+      });
+      document.addEventListener('click', function(e) {
+        var link = e.target.closest('a[href]');
+        if (!link) return;
+        var href = link.getAttribute('href');
+        if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:') || link.target === '_blank' || link.hostname !== location.hostname) return;
+        e.preventDefault();
+        loader.classList.remove('hidden');
+        loader.style.opacity = '0';
+        loader.offsetHeight;
+        loader.style.transition = 'opacity ' + FADE + 'ms ease';
+        loader.style.opacity = '1';
+        setTimeout(function() { window.location.href = href; }, FADE);
+      });
+    })();
+  </script>
+
+</body>
+</html>
