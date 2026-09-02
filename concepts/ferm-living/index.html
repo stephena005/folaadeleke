@@ -12,7 +12,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <title>Products — Fola Adeleke®</title>
+  <title>Fola Adeleke &#215; Ferm Living — Fola Adeleke&#174;</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -76,8 +76,8 @@
     .trust-bar-item { font-family: var(--font); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--black); flex: 1; text-align: center; }
     .trust-bar-divider { width: 1px; height: 20px; background: var(--divider); flex-shrink: 0; margin: 0 24px; }
 
-    /* ── PAGE HEADER ── */
-    .shop-page {
+    /* ── PAGE LAYOUT ── */
+    .concept-page {
       padding-top: calc(var(--nav-height) + 40px + 48px);
       padding-bottom: 60px;
       max-width: 1100px;
@@ -85,36 +85,46 @@
       padding-left: 64px;
       padding-right: 64px;
     }
-    .shop-header { margin-bottom: 40px; }
-    .shop-kicker { font-family: var(--font); font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
-    .shop-title { font-family: var(--font); font-size: 22px; letter-spacing: 0.04em; color: var(--black); margin-bottom: 10px; }
-    .shop-subtitle { font-family: var(--font); font-size: 12px; line-height: 1.8; color: #444; max-width: 520px; }
 
-    /* ── PRODUCT GRID ── */
-    .product-grid { display: grid; grid-template-columns: 1fr; gap: 32px; }
-
-    .product-card {
-      display: grid;
-      grid-template-columns: 0.85fr 1.15fr;
-      gap: 48px;
-      align-items: center;
-      text-decoration: none;
-      color: var(--black);
-      border: 1px solid var(--divider);
-      padding: 32px;
-      transition: border-color 0.2s;
+    .product-breadcrumb {
+      font-family: var(--font); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 24px;
     }
-    .product-card:hover { border-color: var(--black); }
-    .product-card:hover .card-cta { opacity: 0.75; }
+    .product-breadcrumb a { color: var(--muted); text-decoration: none; }
+    .product-breadcrumb a:hover { color: var(--black); text-decoration: underline; }
 
-    .card-image { aspect-ratio: 1290 / 2796; max-height: 480px; overflow: hidden; background: #f5f5f5; justify-self: center; }
-    .card-image img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
+    /* ── HERO ── */
+    .concept-hero-image { width: 100%; aspect-ratio: 1233 / 1276; max-height: 640px; overflow: hidden; background: #f5f5f5; margin-bottom: 40px; }
+    .concept-hero-image img { width: 100%; height: 100%; object-fit: cover; object-position: center 30%; display: block; }
 
-    .card-kicker { font-family: var(--font); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
-    .card-title { font-family: var(--font); font-size: 18px; letter-spacing: 0.03em; color: var(--black); margin-bottom: 10px; }
-    .card-desc { font-family: var(--font); font-size: 12px; line-height: 1.8; color: #444; margin-bottom: 16px; }
-    .card-price { font-family: var(--font); font-size: 13px; letter-spacing: 0.05em; color: var(--black); margin-bottom: 20px; }
-    .card-cta { display: inline-block; font-family: var(--font); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--black); border-bottom: 1px solid var(--black); padding-bottom: 2px; transition: opacity 0.15s; }
+    .concept-header { max-width: 640px; margin-bottom: 56px; }
+    .concept-kicker { font-family: var(--font); font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+    .concept-title { font-family: var(--font); font-size: 22px; letter-spacing: 0.04em; color: var(--black); margin-bottom: 6px; }
+    .concept-subname { font-family: var(--font); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 22px; }
+    .concept-copy { font-family: var(--font); font-size: 12px; line-height: 1.9; color: #444; margin-bottom: 16px; }
+    .concept-copy:last-child { margin-bottom: 0; }
+    .concept-copy em { font-style: italic; color: #222; }
+
+    /* ── MATERIALS ── */
+    .materials-section { margin-bottom: 56px; }
+    .section-kicker { font-family: var(--font); font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted); margin-bottom: 18px; }
+    .materials-list { display: flex; flex-wrap: wrap; gap: 8px; }
+    .materials-tag { font-family: var(--font); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--black); border: 1px solid var(--divider); padding: 6px 10px; }
+
+    /* ── PIECES GRID ── */
+    .pieces-section { margin-bottom: 24px; }
+    .pieces-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+
+    .piece-card { border: 1px solid var(--divider); padding: 20px; }
+    .piece-image { aspect-ratio: 4 / 3; overflow: hidden; background: #f5f5f5; margin-bottom: 16px; }
+    .piece-image img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
+    .piece-name { font-family: var(--font); font-size: 13px; letter-spacing: 0.04em; color: var(--black); margin-bottom: 8px; }
+    .piece-desc { font-family: var(--font); font-size: 11px; line-height: 1.8; color: #444; }
+
+    /* ── NOTE ── */
+    .concept-note { margin-top: 56px; border-top: 1px solid var(--divider); padding-top: 24px; }
+    .concept-note p { font-family: var(--font); font-size: 11px; letter-spacing: 0.05em; line-height: 1.8; color: var(--muted); }
+    .concept-note a { color: var(--black); }
 
     /* ── FOOTER ── */
     footer {
@@ -130,9 +140,8 @@
     .footer-copy { font-family: var(--font); font-size: 10px; letter-spacing: 0.08em; color: var(--muted); text-align: right; }
 
     /* ── RESPONSIVE ── */
-    @media (max-width: 860px) {
-      .product-card { grid-template-columns: 1fr; gap: 24px; padding: 24px; }
-      .card-image { max-height: 420px; }
+    @media (max-width: 700px) {
+      .pieces-grid { grid-template-columns: 1fr; }
     }
     @media (max-width: 768px) {
       nav { padding: 0 20px; }
@@ -140,7 +149,9 @@
       .trust-bar::-webkit-scrollbar { display: none; }
       .trust-bar-item { font-size: 8px; letter-spacing: 0.1em; flex: none; }
       .trust-bar-divider { margin: 0 10px; }
-      .shop-page { padding-top: calc(var(--nav-height) + 34px + 48px); padding-left: 24px; padding-right: 24px; }
+      .concept-page { padding-top: calc(var(--nav-height) + 34px + 48px); padding-left: 24px; padding-right: 24px; }
+      .concept-hero-image { max-height: 420px; margin-bottom: 32px; }
+      .concept-header { margin-bottom: 40px; }
       footer { grid-template-columns: 1fr; text-align: center; padding: 28px 24px; gap: 16px; }
       .footer-copy { text-align: center; }
     }
@@ -173,62 +184,118 @@
   <div class="drawer" id="drawer" aria-label="Navigation drawer">
     <button class="drawer-close" onclick="closeDrawer()" aria-label="Close menu">&#x2715;</button>
     <a href="/">Home</a>
-    <div class="drawer-group open" id="productsDrawerGroup">
-      <button class="drawer-group-toggle" onclick="toggleDrawerGroup()" aria-expanded="true">Products <span class="drawer-caret">▼</span></button>
+    <div class="drawer-group" id="productsDrawerGroup">
+      <button class="drawer-group-toggle" onclick="toggleDrawerGroup()" aria-expanded="false">Products <span class="drawer-caret">▼</span></button>
       <div class="drawer-submenu">
         <a href="/prints">Prints</a>
-        <a href="/products" aria-current="page">World</a>
+        <a href="/products">World</a>
       </div>
     </div>
-    <a href="/concepts/ferm-living">Concepts</a>
+    <a href="/concepts/ferm-living" aria-current="page">Concepts</a>
     <a href="/artist">Artist</a>
     <a href="/press">Press</a>
     <a href="/contact">Contact</a>
   </div>
 
   <!-- ── TRUST BAR ── -->
-  <div class="trust-bar" aria-label="Shop details">
-    <span class="trust-bar-item">Original Work</span>
+  <div class="trust-bar" aria-label="Concept details">
+    <span class="trust-bar-item">Concept Collaboration</span>
     <span class="trust-bar-divider" aria-hidden="true"></span>
-    <span class="trust-bar-item">Secure Checkout</span>
+    <span class="trust-bar-item">Not For Sale</span>
     <span class="trust-bar-divider" aria-hidden="true"></span>
-    <span class="trust-bar-item">New Products Added Regularly</span>
+    <span class="trust-bar-item">Six Imagined Pieces</span>
   </div>
 
-  <!-- ── SHOP ── -->
-  <main class="shop-page" aria-label="Products">
-    <div class="shop-header">
-      <p class="shop-kicker">Shop</p>
-      <h1 class="shop-title">Products</h1>
-      <p class="shop-subtitle">Goods inspired by the wider body of work — digital and, in time, physical. New products added regularly.</p>
+  <!-- ── CONCEPT ── -->
+  <main class="concept-page" aria-label="Fola Adeleke x Ferm Living concept collaboration">
+
+    <p class="product-breadcrumb"><a href="/products">Products</a> <span>/</span> <span>Fola Adeleke &#215; Ferm Living</span></p>
+
+    <div class="concept-hero-image">
+      <img src="/images/ferm-living/hero-room.jpg" alt="Imagined living room featuring the Kuba Shelf, Olumole Ceiling Lamp, Isale Sofa, Ayo Lounge Chair and ORIKI Rug together" />
     </div>
 
-    <div class="product-grid">
-      <a class="product-card" href="/products/propeller-wallpaper-pack">
-        <div class="card-image">
-          <img src="/images/Propeller/propeller-wallpapers-1290x2796/propeller-indigo-1290x2796.jpg" alt="Propeller Wallpaper Collection — Indigo colorway" />
-        </div>
-        <div class="card-body">
-          <p class="card-kicker">Digital Product</p>
-          <h2 class="card-title">Propeller Wallpaper Collection</h2>
-          <p class="card-desc">5 phone wallpapers, one per colorway — Indigo, Denim, Green, Gold and Sand.</p>
-          <p class="card-price">&#163;9.99</p>
-          <span class="card-cta">View Collection</span>
-        </div>
-      </a>
-      <a class="product-card" href="/concepts/ferm-living">
-        <div class="card-image">
-          <img src="/images/ferm-living/hero-kuba-shelf.jpg" alt="Fola Adeleke × Ferm Living — Kuba Shelf concept" />
-        </div>
-        <div class="card-body">
-          <p class="card-kicker">Concept Collaboration</p>
-          <h2 class="card-title">Fola Adeleke &#215; Ferm Living</h2>
-          <p class="card-desc">An imagined homeware collaboration — Kuba Shelf, Isale Sofa, Ayo Lounge Chair, Rafia Chair and the ORIKI Rug.</p>
-          <p class="card-price">Concept only</p>
-          <span class="card-cta">View Collaboration</span>
-        </div>
-      </a>
+    <div class="concept-header">
+      <p class="concept-kicker">Concept Collaboration</p>
+      <h1 class="concept-title">Fola Adeleke &#215; Ferm Living</h1>
+      <p class="concept-subname">&#8220;Ethnic Isle&#8221; &mdash; an imagined homeware collection</p>
+
+      <p class="concept-copy">What would the future look like if Africa were allowed to design itself?</p>
+      <p class="concept-copy">For generations, Africa has inspired the world while rarely receiving the same recognition for its own design philosophies. Yet our homes have always carried stories. <em>Ethnic Isle</em> &mdash; the title speaks for itself &mdash; is cultures from across Africa meeting without borders, where tradition is not preserved behind glass and continues to evolve through everyday living. It is an imagined destination where African creativity occupies the space it has always deserved.</p>
+      <p class="concept-copy">For me, home is comfortability and identity. Home is the feeling of being understood without explanation. <em>Ethnic Isle</em> is my attempt to build that feeling.</p>
     </div>
+
+    <div class="materials-section">
+      <p class="section-kicker">Rooted In</p>
+      <div class="materials-list">
+        <span class="materials-tag">Pottery</span>
+        <span class="materials-tag">Textile Weaving</span>
+        <span class="materials-tag">Woven Baskets</span>
+        <span class="materials-tag">Natural Fibres</span>
+        <span class="materials-tag">Handmade Joinery</span>
+        <span class="materials-tag">Kuba Cloth Geometry</span>
+      </div>
+    </div>
+
+    <div class="pieces-section">
+      <p class="section-kicker">The Pieces</p>
+      <div class="pieces-grid">
+
+        <div class="piece-card">
+          <div class="piece-image">
+            <img src="/images/ferm-living/hero-kuba-shelf.jpg" alt="Kuba Shelf — dark wood open shelving unit with a honeycomb frame inspired by Kuba textile geometry" />
+          </div>
+          <h2 class="piece-name">Kuba Shelf</h2>
+          <p class="piece-desc">Inspired by the rhythmic geometry of Kuba textiles and the continuous weaving traditions found across Central and West Africa. The shelving system transforms decorative pattern into load-bearing structure &mdash; storage, structure and storytelling becoming one.</p>
+        </div>
+
+        <div class="piece-card">
+          <div class="piece-image">
+            <img src="/images/ferm-living/isale-sofa.jpg" alt="Isale Sofa — a single-seat lounge chair with an angled dark wood frame and patterned cream cushions" />
+          </div>
+          <h2 class="piece-name">Isale Sofa</h2>
+          <p class="piece-desc">A low, angled frame in dark wood carrying cushions patterned with the same honeycomb motif that runs through the collection &mdash; natural, simple, and built to work in any room.</p>
+        </div>
+
+        <div class="piece-card">
+          <div class="piece-image">
+            <img src="/images/ferm-living/ayo-lounge-chair.jpg" alt="Ayo Lounge Chair — a two-seat sofa with a dark wood frame and cream patterned cushions" />
+          </div>
+          <h2 class="piece-name">Ayo Lounge Chair</h2>
+          <p class="piece-desc">A wider companion piece to the Isale Sofa, sharing its angled joinery and upholstery language while offering room for two.</p>
+        </div>
+
+        <div class="piece-card">
+          <div class="piece-image">
+            <img src="/images/ferm-living/rafia-chair.jpg" alt="Rafia Chair — a woven natural fibre armchair with a curved spindle back" />
+          </div>
+          <h2 class="piece-name">Rafia Chair</h2>
+          <p class="piece-desc">Fully hand-wrapped in natural fibre, drawing on woven basket and rafia traditions &mdash; simple, strong, natural and timeless from every angle.</p>
+        </div>
+
+        <div class="piece-card">
+          <div class="piece-image">
+            <img src="/images/ferm-living/olumole-ceiling-lamp.jpg" alt="Olumole Ceiling Lamp — a spherical woven jute pendant light" />
+          </div>
+          <h2 class="piece-name">Olumole Ceiling Lamp</h2>
+          <p class="piece-desc">A hand-knotted jute pendant built from the same hexagonal weave found across the collection, softening the light it holds.</p>
+        </div>
+
+        <div class="piece-card">
+          <div class="piece-image">
+            <img src="/images/ferm-living/oriki-rug.jpg" alt="ORIKI Rug — a dark woven rug with portrait imagery and fringed edges" />
+          </div>
+          <h2 class="piece-name">ORIKI Rug</h2>
+          <p class="piece-desc">Woven portraiture bordered in hand-knotted fringe &mdash; a floor piece that carries a story rather than simply grounding a room.</p>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="concept-note">
+      <p>This is a speculative design collaboration imagined by Fola Adeleke and is not an official Ferm Living product line. None of the pieces shown are currently for sale. For collaboration enquiries, <a href="/contact">get in touch</a>.</p>
+    </div>
+
   </main>
 
   <!-- ── FOOTER ── -->
