@@ -16,11 +16,12 @@
 
   BEFORE SENDING — DO THIS IN ORDER
   ──────────────────────────────────
-  1. In /rearrange/index.html, set:
-       CAMPAIGN_END → exactly 24h after send time (UTC)
-     DISCOUNT_CODE is already set to PUZZLE0926 — confirm it still
-     matches the live Shopify code before sending.
-     Deploy the site so /rearrange is live with those values.
+  1. /rearrange/index.html is already configured:
+       CAMPAIGN_END  = 2026-09-05T08:00:00Z (24h after the scheduled
+                        09:00 BST go-live on 2026-09-04)
+       DISCOUNT_CODE  = PUZZLE0926 — confirm it still matches the
+                        live Shopify code before sending.
+     If the go-live time slips, update CAMPAIGN_END to match.
      Note: /rearrange is now also linked from the homepage banner
      (.puzzle-banner in index.html) — not just this email.
   2. In Shopify Admin → Discounts, create/verify PUZZLE0926:
