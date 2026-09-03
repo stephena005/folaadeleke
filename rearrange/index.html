@@ -14,9 +14,8 @@
 
   BEFORE SENDING THE NEWSLETTER
   ──────────────────────────────
-  1. CAMPAIGN_END is set for 24h after the scheduled go-live
-     (09:00 BST / 08:00 UTC on 2026-09-04) → 2026-09-05T08:00:00Z.
-     If the actual merge-to-main time slips, update this to match.
+  1. CAMPAIGN_END is set for 24h after go-live: merged to main at
+     2026-09-03T22:12 UTC → expires 2026-09-04T22:15:00Z.
   2. Confirm DISCOUNT_CODE matches the live Shopify code.
   3. Create/verify that code in Shopify Admin → Discounts:
        • Applies to: Prints collection only
@@ -173,7 +172,7 @@
     var ART_URL = '/images/prints/Loud Celebration/Loud Celebration.jpeg';
     var GRID = 3; // 3x3 = 9 pieces
     var DISCOUNT_CODE = 'PUZZLE0926';
-    var CAMPAIGN_END = '2026-09-05T08:00:00Z';   // 24h after 09:00 BST go-live on 2026-09-04
+    var CAMPAIGN_END = '2026-09-04T22:15:00Z';   // 24h after go-live (merged 2026-09-03T22:12 UTC)
     var STORAGE_KEY = 'fa_rearrange_v1';
     // ════════════════════════════════════════════════════════════
 
