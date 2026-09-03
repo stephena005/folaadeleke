@@ -115,6 +115,9 @@
     .code-box .copy-hint { font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
     .code-box.copied { background: var(--black); }
     .code-box.copied .code, .code-box.copied .copy-hint { color: var(--white); }
+    .code-box.expired { border-color: var(--divider); cursor: default; }
+    .code-box.expired .code { color: #bbb; letter-spacing: 0.15em; }
+    .code-box.expired .copy-hint { color: var(--muted); }
     #countdown { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--black); margin-bottom: 28px; }
     .cta {
       display: inline-block; background: var(--black); color: var(--white); text-decoration: none;
@@ -152,7 +155,7 @@
     <div id="reveal">
       <p class="reveal-eyebrow">Solved</p>
       <h2 class="reveal-title">Put Back Together</h2>
-      <p class="reveal-copy">Here's your code — good for 24 hours on any print.</p>
+      <p class="reveal-copy" id="revealCopy">Here's your code — good for 24 hours on any print.</p>
       <div class="code-box" id="codeBox" onclick="copyCode()">
         <span class="code" id="codeText">••••••••</span>
         <span class="copy-hint" id="copyHint">Tap to copy</span>
@@ -311,13 +314,37 @@
     });
 
     // ── REVEAL / CODE / COUNTDOWN ──
+    function isExpired() {
+      return Date.now() >= new Date(CAMPAIGN_END).getTime();
+    }
+
+    function updateCodeDisplay() {
+      var box = document.getElementById('codeBox');
+      var text = document.getElementById('codeText');
+      var hint = document.getElementById('copyHint');
+      var copy = document.getElementById('revealCopy');
+      if (isExpired()) {
+        box.classList.add('expired');
+        box.classList.remove('copied');
+        text.textContent = 'EXPIRED';
+        hint.textContent = 'Offer ended';
+        copy.textContent = 'This window has closed — keep an eye out for the next drop.';
+      } else {
+        box.classList.remove('expired');
+        text.textContent = DISCOUNT_CODE;
+        hint.textContent = 'Tap to copy';
+        copy.textContent = "Here's your code — good for 24 hours on any print.";
+      }
+    }
+
     function showReveal() {
       document.getElementById('reveal').classList.add('show');
-      document.getElementById('codeText').textContent = DISCOUNT_CODE;
+      updateCodeDisplay();
       startCountdown();
     }
 
     function copyCode() {
+      if (isExpired()) return;
       var box = document.getElementById('codeBox');
       var hint = document.getElementById('copyHint');
       var finish = function (ok) {
@@ -340,6 +367,7 @@
         var diff = end - Date.now();
         if (diff <= 0) {
           document.getElementById('countdown').textContent = 'This code has expired';
+          updateCodeDisplay();
           clearInterval(countdownTimer);
           return;
         }
