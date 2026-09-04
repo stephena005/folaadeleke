@@ -29,6 +29,14 @@
   ═══════════════════════════════════════════════════════════════
 -->
 <head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7ZCQ4YEN6"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-K7ZCQ4YEN6');
+  </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -190,6 +198,7 @@
     var moves = loadMoves();
     var selected = null;
     var solved = false;
+    var attemptTracked = moves > 0; // don't double-count a returning, already-swapping visitor
 
     function loadState() {
       try {
@@ -278,6 +287,11 @@
       order[slot] = tmp;
       moves++;
 
+      if (!attemptTracked) {
+        attemptTracked = true;
+        if (window.gtag) gtag('event', 'puzzle_attempt', { puzzle_name: 'rearrange_the_print' });
+      }
+
       var prevTile = puzzleEl.children[selected];
       prevTile.classList.remove('selected');
       selected = null;
@@ -299,6 +313,7 @@
         solved = true;
         puzzleEl.classList.add('solved');
         messageEl.textContent = '';
+        if (window.gtag) gtag('event', 'puzzle_solved', { puzzle_name: 'rearrange_the_print', moves: moves });
         setTimeout(showReveal, 400);
       }
     }
@@ -383,6 +398,7 @@
     }
 
     // ── INIT ──
+    if (window.gtag) gtag('event', 'puzzle_view', { puzzle_name: 'rearrange_the_print' });
     buildGrid();
     if (order.every(function (v, i) { return v === i; })) {
       solved = true;
