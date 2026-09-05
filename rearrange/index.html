@@ -2,30 +2,13 @@
 <html lang="en">
 <!--
   ═══════════════════════════════════════════════════════════════
-  FOLA ADELEKE® — "REARRANGE THE PRINT" PUZZLE
+  FOLA ADELEKE® — "REARRANGE THE PRINT" (CLOSED)
   ═══════════════════════════════════════════════════════════════
-  Linked from the homepage banner (see .puzzle-banner in index.html)
-  and from the newsletter.
-
-  A tap-to-swap image puzzle built from a real print. Putting the
-  nine tiles back in order reveals a time-boxed discount code for
-  /prints. There's no way to "lose" — it's always solvable, so it
-  just takes however many swaps it takes.
-
-  BEFORE SENDING THE NEWSLETTER
-  ──────────────────────────────
-  1. CAMPAIGN_END is set for 24h after the newsletter's 09:00 BST
-     (08:00 UTC) send on 2026-09-04 → expires 2026-09-05T08:00:00Z.
-     The site itself went live earlier than that; the window is
-     anchored to the send time, not the deploy time.
-  2. Confirm DISCOUNT_CODE matches the live Shopify code.
-  3. Create/verify that code in Shopify Admin → Discounts:
-       • Applies to: Prints collection only
-       • Active dates: matches CAMPAIGN_END below (24h window)
-       • No minimum spend, one shared code — this page has no
-         backend, so it can't issue unique per-subscriber codes
-  4. Deploy, open /rearrange live, and play it through once.
-  5. Send a live test link to yourself before the send.
+  The 24-hour print drop this page ran ended 2026-09-05T08:00:00Z.
+  The interactive puzzle and its discount code have been removed;
+  this static page just tells anyone who still has the link (from
+  the homepage banner or the newsletter) that the drop is over,
+  and points them to /prints and the newsletter for the next one.
   ═══════════════════════════════════════════════════════════════
 -->
 <head>
@@ -72,69 +55,17 @@
     .nav-right { justify-self: end; }
 
     /* ── WRAP ── */
-    main { max-width: 460px; margin: 0 auto; padding: 48px 24px 80px; text-align: center; }
+    main { max-width: 460px; margin: 0 auto; padding: 64px 24px 96px; text-align: center; }
     .eyebrow { font-size: 9px; letter-spacing: 0.35em; text-transform: uppercase; color: var(--muted); margin-bottom: 18px; }
     h1 { font-size: 26px; font-weight: normal; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 18px; line-height: 1.3; }
-    .subcopy { font-size: 11px; letter-spacing: 0.08em; line-height: 1.9; color: #444; margin-bottom: 28px; }
-    .artwork-credit { font-size: 8px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-bottom: 28px; }
-
-    /* ── STATUS ROW ── */
-    .status-row {
-      display: flex; align-items: center; justify-content: space-between;
-      max-width: 340px; margin: 0 auto 12px; font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted);
-    }
-    .status-row .moves span { color: var(--black); font-variant-numeric: tabular-nums; }
-    .reshuffle-link { background: none; border: none; font-family: var(--font); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); text-decoration: underline; cursor: pointer; padding: 4px; }
-    .reshuffle-link:hover { color: var(--black); }
-
-    /* ── PUZZLE GRID ── */
-    #puzzle {
-      display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr);
-      gap: 3px; width: 100%; max-width: 340px; aspect-ratio: 1 / 1;
-      margin: 0 auto 14px; background: var(--divider); border: 1px solid var(--divider);
-    }
-    .piece {
-      position: relative; width: 100%; height: 100%; cursor: pointer;
-      background-size: 300% 300%;
-      transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.4s ease;
-    }
-    .piece:hover { filter: brightness(1.06); }
-    .piece.selected { box-shadow: inset 0 0 0 3px var(--black); transform: scale(0.96); z-index: 2; }
-    .piece.swapping { animation: pop 0.25s ease; }
-    @keyframes pop {
-      0% { transform: scale(0.9); }
-      60% { transform: scale(1.04); }
-      100% { transform: scale(1); }
-    }
-    #puzzle.solved .piece { box-shadow: none; }
-
-    #message { min-height: 16px; font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--black); margin-bottom: 28px; }
-
-    /* ── REVEAL ── */
-    #reveal { display: none; margin-top: 12px; padding-top: 36px; border-top: 1px solid var(--divider); }
-    #reveal.show { display: block; }
-    .reveal-eyebrow { font-size: 9px; letter-spacing: 0.35em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
-    .reveal-title { font-size: 20px; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 14px; }
-    .reveal-copy { font-size: 11px; letter-spacing: 0.06em; line-height: 1.9; color: #444; margin-bottom: 24px; }
-    .code-box {
-      display: flex; align-items: center; justify-content: center; gap: 12px;
-      border: 1px solid var(--black); padding: 16px 20px; margin-bottom: 12px; cursor: pointer;
-      user-select: none;
-    }
-    .code-box .code { font-size: 20px; letter-spacing: 0.3em; }
-    .code-box .copy-hint { font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
-    .code-box.copied { background: var(--black); }
-    .code-box.copied .code, .code-box.copied .copy-hint { color: var(--white); }
-    .code-box.expired { border-color: var(--divider); cursor: default; }
-    .code-box.expired .code { color: #bbb; letter-spacing: 0.15em; }
-    .code-box.expired .copy-hint { color: var(--muted); }
-    #countdown { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--black); margin-bottom: 28px; }
+    .subcopy { font-size: 11px; letter-spacing: 0.08em; line-height: 1.9; color: #444; margin-bottom: 36px; }
     .cta {
       display: inline-block; background: var(--black); color: var(--white); text-decoration: none;
       font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; padding: 14px 36px; border: 1px solid var(--black);
     }
     .cta:hover { background: var(--white); color: var(--black); }
-    .fineprint { font-size: 8px; letter-spacing: 0.06em; color: var(--muted); line-height: 1.8; margin-top: 20px; }
+    .secondary-link { display: block; margin-top: 20px; font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); text-decoration: underline; }
+    .secondary-link:hover { color: var(--black); }
 
     footer { text-align: center; padding: 24px; border-top: 1px solid var(--divider); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
     footer a { color: var(--muted); }
@@ -149,262 +80,16 @@
   </nav>
 
   <main>
-    <p class="eyebrow">Print Drop &middot; 50% Off &middot; 24 Hours Only</p>
-    <h1>Rearrange The Print</h1>
-    <p class="subcopy">Nine tiles, out of order. Tap two to swap them.<br>Put the print back together and a 50% off code unlocks below.</p>
-    <p class="artwork-credit">&ldquo;Loud Celebration&rdquo; &mdash; Fola Adeleke</p>
-
-    <div class="status-row">
-      <span class="moves">Swaps &nbsp;<span id="moveCount">0</span></span>
-      <button class="reshuffle-link" id="reshuffleBtn">Reshuffle</button>
-    </div>
-
-    <div id="puzzle"></div>
-    <p id="message"></p>
-
-    <div id="reveal">
-      <p class="reveal-eyebrow">Solved</p>
-      <h2 class="reveal-title">Put Back Together</h2>
-      <p class="reveal-copy" id="revealCopy">Here's your 50% off code — good for 24 hours on any print.</p>
-      <div class="code-box" id="codeBox" onclick="copyCode()">
-        <span class="code" id="codeText">••••••••</span>
-        <span class="copy-hint" id="copyHint">Tap to copy</span>
-      </div>
-      <p id="countdown">Expires in <span class="t" id="countdownT">--:--:--</span></p>
-      <a class="cta" href="/prints">Shop The Prints &rarr;</a>
-      <p class="fineprint">50% off, one code, one use per order, while the 24-hour window lasts. No minimum spend. Can't be combined with other offers.</p>
-    </div>
+    <p class="eyebrow">Print Drop &middot; Closed</p>
+    <h1>This Drop Has Ended</h1>
+    <p class="subcopy">Rearrange The Print ran for 24 hours and the discount code has now expired.<br>Keep an eye on the newsletter for the next one.</p>
+    <a class="cta" href="/prints">Shop The Prints &rarr;</a>
+    <a class="secondary-link" href="/newsletter.html">Join The Newsletter</a>
   </main>
 
   <footer>
     Fola Adeleke&#174; &nbsp;&middot;&nbsp; <a href="/">folaadeleke.com</a>
   </footer>
 
-  <script>
-    // ═══════════════════════════ CONFIG ═══════════════════════════
-    var ART_URL = '/images/prints/Loud Celebration/Loud Celebration.jpeg';
-    var GRID = 3; // 3x3 = 9 pieces
-    var DISCOUNT_CODE = 'PUZZLE0926';
-    var CAMPAIGN_END = '2026-09-05T08:00:00Z';   // 24h after 09:00 BST send on 2026-09-04
-    var STORAGE_KEY = 'fa_rearrange_v1';
-    // ════════════════════════════════════════════════════════════
-
-    var TOTAL = GRID * GRID;
-    var puzzleEl = document.getElementById('puzzle');
-    var moveCountEl = document.getElementById('moveCount');
-    var messageEl = document.getElementById('message');
-
-    var order = loadState(); // order[slot] = pieceIndex currently shown in that slot
-    var moves = loadMoves();
-    var selected = null;
-    var solved = false;
-    var attemptTracked = moves > 0; // don't double-count a returning, already-swapping visitor
-
-    function loadState() {
-      try {
-        var raw = localStorage.getItem(STORAGE_KEY);
-        if (raw) {
-          var parsed = JSON.parse(raw);
-          if (parsed.order && parsed.order.length === TOTAL) return parsed.order;
-        }
-      } catch (e) {}
-      return shuffledOrder();
-    }
-
-    function loadMoves() {
-      try {
-        var raw = localStorage.getItem(STORAGE_KEY);
-        if (raw) return JSON.parse(raw).moves || 0;
-      } catch (e) {}
-      return 0;
-    }
-
-    function saveState() {
-      try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ order: order, moves: moves })); } catch (e) {}
-    }
-
-    function shuffledOrder() {
-      var arr = [];
-      for (var i = 0; i < TOTAL; i++) arr.push(i);
-      var isSolved = true;
-      do {
-        for (var i = arr.length - 1; i > 0; i--) {
-          var j = Math.floor(Math.random() * (i + 1));
-          var tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
-        }
-        isSolved = arr.every(function (v, i) { return v === i; });
-      } while (isSolved);
-      return arr;
-    }
-
-    function backgroundPositionFor(pieceIndex) {
-      var col = pieceIndex % GRID;
-      var row = Math.floor(pieceIndex / GRID);
-      var x = (col / (GRID - 1)) * 100;
-      var y = (row / (GRID - 1)) * 100;
-      return x + '% ' + y + '%';
-    }
-
-    function buildGrid() {
-      puzzleEl.innerHTML = '';
-      for (var slot = 0; slot < TOTAL; slot++) {
-        var tile = document.createElement('div');
-        tile.className = 'piece';
-        tile.dataset.slot = slot;
-        tile.style.backgroundImage = 'url(' + encodeURI(ART_URL) + ')';
-        tile.addEventListener('click', function () { handleTap(this); });
-        puzzleEl.appendChild(tile);
-      }
-      render();
-    }
-
-    function render() {
-      var tiles = puzzleEl.children;
-      for (var slot = 0; slot < TOTAL; slot++) {
-        tiles[slot].style.backgroundPosition = backgroundPositionFor(order[slot]);
-      }
-      moveCountEl.textContent = moves;
-      checkSolved();
-    }
-
-    function handleTap(tile) {
-      if (solved) return;
-      var slot = parseInt(tile.dataset.slot, 10);
-
-      if (selected === null) {
-        selected = slot;
-        tile.classList.add('selected');
-        return;
-      }
-      if (selected === slot) {
-        tile.classList.remove('selected');
-        selected = null;
-        return;
-      }
-
-      var tmp = order[selected];
-      order[selected] = order[slot];
-      order[slot] = tmp;
-      moves++;
-
-      if (!attemptTracked) {
-        attemptTracked = true;
-        if (window.gtag) gtag('event', 'puzzle_attempt', { puzzle_name: 'rearrange_the_print' });
-      }
-
-      var prevTile = puzzleEl.children[selected];
-      prevTile.classList.remove('selected');
-      selected = null;
-
-      saveState();
-      render();
-
-      tile.classList.add('swapping');
-      prevTile.classList.add('swapping');
-      setTimeout(function () {
-        tile.classList.remove('swapping');
-        prevTile.classList.remove('swapping');
-      }, 250);
-    }
-
-    function checkSolved() {
-      var isSolved = order.every(function (v, i) { return v === i; });
-      if (isSolved && !solved) {
-        solved = true;
-        puzzleEl.classList.add('solved');
-        messageEl.textContent = '';
-        if (window.gtag) gtag('event', 'puzzle_solved', { puzzle_name: 'rearrange_the_print', moves: moves });
-        setTimeout(showReveal, 400);
-      }
-    }
-
-    document.getElementById('reshuffleBtn').addEventListener('click', function () {
-      order = shuffledOrder();
-      moves = 0;
-      solved = false;
-      selected = null;
-      document.getElementById('reveal').classList.remove('show');
-      puzzleEl.classList.remove('solved');
-      if (countdownTimer) clearInterval(countdownTimer);
-      saveState();
-      render();
-    });
-
-    // ── REVEAL / CODE / COUNTDOWN ──
-    function isExpired() {
-      return Date.now() >= new Date(CAMPAIGN_END).getTime();
-    }
-
-    function updateCodeDisplay() {
-      var box = document.getElementById('codeBox');
-      var text = document.getElementById('codeText');
-      var hint = document.getElementById('copyHint');
-      var copy = document.getElementById('revealCopy');
-      if (isExpired()) {
-        box.classList.add('expired');
-        box.classList.remove('copied');
-        text.textContent = 'EXPIRED';
-        hint.textContent = 'Offer ended';
-        copy.textContent = 'This window has closed — keep an eye out for the next drop.';
-      } else {
-        box.classList.remove('expired');
-        text.textContent = DISCOUNT_CODE;
-        hint.textContent = 'Tap to copy';
-        copy.textContent = "Here's your 50% off code — good for 24 hours on any print.";
-      }
-    }
-
-    function showReveal() {
-      document.getElementById('reveal').classList.add('show');
-      updateCodeDisplay();
-      startCountdown();
-    }
-
-    function copyCode() {
-      if (isExpired()) return;
-      var box = document.getElementById('codeBox');
-      var hint = document.getElementById('copyHint');
-      var finish = function (ok) {
-        box.classList.add('copied');
-        hint.textContent = ok ? 'Copied' : 'Select & copy: ' + DISCOUNT_CODE;
-        setTimeout(function () { box.classList.remove('copied'); hint.textContent = 'Tap to copy'; }, 1600);
-      };
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(DISCOUNT_CODE).then(function () { finish(true); }, function () { finish(false); });
-      } else {
-        finish(false);
-      }
-    }
-
-    var countdownTimer = null;
-    function startCountdown() {
-      var end = new Date(CAMPAIGN_END).getTime();
-      var el = document.getElementById('countdownT');
-      function tick() {
-        var diff = end - Date.now();
-        if (diff <= 0) {
-          document.getElementById('countdown').textContent = 'This code has expired';
-          updateCodeDisplay();
-          clearInterval(countdownTimer);
-          return;
-        }
-        var h = Math.floor(diff / 3600000);
-        var m = Math.floor((diff % 3600000) / 60000);
-        var s = Math.floor((diff % 60000) / 1000);
-        el.textContent = String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
-      }
-      tick();
-      countdownTimer = setInterval(tick, 1000);
-    }
-
-    // ── INIT ──
-    if (window.gtag) gtag('event', 'puzzle_view', { puzzle_name: 'rearrange_the_print' });
-    buildGrid();
-    if (order.every(function (v, i) { return v === i; })) {
-      solved = true;
-      puzzleEl.classList.add('solved');
-      showReveal();
-    }
-  </script>
 </body>
 </html>
