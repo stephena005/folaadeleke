@@ -37,7 +37,7 @@
   <meta name="twitter:card" content="summary_large_image" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root { --black: #000; --white: #fff; --grey-light: #eee; --grey-mid: #999; --font: 'Courier New', Courier, monospace; --spacing: 0.2em; --nav-height: 56px; }
+    :root { --black: #000; --white: #fff; --grey-light: #eee; --grey-mid: #6f6f6f; --font: 'Courier New', Courier, monospace; --spacing: 0.2em; --nav-height: 56px; }
     html { scroll-behavior: smooth; }
     body { font-family: var(--font); background: var(--white); color: var(--black); min-height: 100vh; overflow-x: hidden; }
     nav { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-height); background: var(--white); border-bottom: 1px solid var(--grey-light); display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 0 20px; z-index: 100; }
@@ -88,25 +88,25 @@
     .art-label { position: absolute; left: 13px; bottom: 13px; font-size: 6px; letter-spacing: 0.2em; text-transform: uppercase; color: #fff; background: rgba(0,0,0,0.5); padding: 3px 7px; white-space: nowrap; }
     .content-panel { flex: 1; height: 560px; padding: 20px 26px; display: flex; flex-direction: column; }
     .top-meta { display: flex; justify-content: flex-end; padding-bottom: 8px; border-bottom: 1px solid #1a1a1a; margin-bottom: 13px; }
-    .top-meta-text { font-size: 6px; letter-spacing: 0.08em; text-transform: uppercase; color: #888; white-space: nowrap; }
+    .top-meta-text { font-size: 6px; letter-spacing: 0.08em; text-transform: uppercase; color: #6f6f6f; white-space: nowrap; }
     .top-meta-text span { margin-left: 5px; }
     .body-main { flex: 1; display: flex; flex-direction: column; justify-content: center; min-height: 0; }
-    .label { font-size: 6px; letter-spacing: 0.25em; text-transform: uppercase; color: #888; margin-bottom: 6px; }
+    .label { font-size: 6px; letter-spacing: 0.25em; text-transform: uppercase; color: #6f6f6f; margin-bottom: 6px; }
     .title { font-size: 22px; letter-spacing: 0.03em; text-transform: uppercase; font-weight: 700; line-height: 1.1; margin-bottom: 12px; }
     .year-row { display: flex; align-items: center; gap: 9px; margin-bottom: 17px; }
     .year { font-size: 8px; letter-spacing: 0.25em; color: #555; }
     .year-line { width: 26px; height: 1px; background: #1a1a1a; }
     .edition-section { display: flex; align-items: center; gap: 19px; }
     .edition-num { font-size: 40px; font-weight: 700; line-height: 1; color: #1a1a1a; }
-    .edition-slash { font-size: 40px; font-weight: 400; line-height: 1; color: #ccc; margin: 0 3px; }
-    .edition-total { font-size: 40px; font-weight: 700; line-height: 1; color: #bbb; }
+    .edition-slash { font-size: 40px; font-weight: 400; line-height: 1; color: #8f8f8f; margin: 0 3px; }
+    .edition-total { font-size: 40px; font-weight: 700; line-height: 1; color: #8f8f8f; }
     .edition-text { font-size: 7px; line-height: 1.6; color: #444; max-width: 166px; }
     .footer-block { border-top: 1px solid #ddd; padding-top: 12px; margin-top: 13px; display: grid; grid-template-columns: 1.1fr 1fr 1.1fr 1.3fr 38px; gap: 10px; align-items: start; }
     .footer-item .label { font-size: 5px; margin-bottom: 4px; white-space: nowrap; }
     .footer-value { font-size: 7px; line-height: 1.5; color: #1a1a1a; white-space: normal; overflow-wrap: break-word; }
     .signed-section { text-align: right; }
     .signature-line { width: 64px; height: 1px; background: #1a1a1a; margin-left: auto; margin-bottom: 4px; margin-top: 8px; }
-    .signed-by { font-size: 6px; color: #888; letter-spacing: 0.08em; white-space: nowrap; }
+    .signed-by { font-size: 6px; color: #6f6f6f; letter-spacing: 0.08em; white-space: nowrap; }
     .qr-section { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
     .qr-code svg { width: 29px; height: 29px; }
 
