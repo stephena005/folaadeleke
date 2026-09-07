@@ -1,17 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7ZCQ4YEN6"></script>
+  <!-- Google tag (gtag.js) — consent mode: analytics denied until accepted -->
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      analytics_storage: 'denied',
+      wait_for_update: 500
+    });
+    try {
+      if (localStorage.getItem('fa_consent') === 'granted') {
+        gtag('consent', 'update', { analytics_storage: 'granted' });
+      }
+    } catch (e) {}
     gtag('js', new Date());
     gtag('config', 'G-K7ZCQ4YEN6');
   </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7ZCQ4YEN6"></script>
+  <script defer src="/js/consent.js"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Newsletter — Fola Adeleke®</title>
+  <meta name="description" content="Join the Fola Adeleke newsletter for early access to new collections, behind-the-scenes studio process, and exclusive subscriber pricing on limited prints." />
+  <link rel="canonical" href="https://folaadeleke.com/newsletter.html" />
+
+  <!-- Open Graph / social preview -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Fola Adeleke®" />
+  <meta property="og:title" content="Newsletter — Fola Adeleke®" />
+  <meta property="og:description" content="Join the Fola Adeleke newsletter for early access to new collections, behind-the-scenes studio process, and exclusive subscriber pricing on limited prints." />
+  <meta property="og:url" content="https://folaadeleke.com/newsletter.html" />
+  <meta property="og:image" content="https://folaadeleke.com/images/social/og-image.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Framed prints by Fola Adeleke hung in a white gallery space" />
+  <meta property="og:locale" content="en_GB" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Newsletter — Fola Adeleke®" />
+  <meta name="twitter:description" content="Join the Fola Adeleke newsletter for early access to new collections, behind-the-scenes studio process, and exclusive subscriber pricing on limited prints." />
+  <meta name="twitter:image" content="https://folaadeleke.com/images/social/og-image.jpg" />
+
   <style>
     *, *::before, *::after {
       box-sizing: border-box;

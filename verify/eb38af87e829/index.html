@@ -1,18 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7ZCQ4YEN6"></script>
+  <!-- Google tag (gtag.js) — consent mode: analytics denied until accepted -->
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      analytics_storage: 'denied',
+      wait_for_update: 500
+    });
+    try {
+      if (localStorage.getItem('fa_consent') === 'granted') {
+        gtag('consent', 'update', { analytics_storage: 'granted' });
+      }
+    } catch (e) {}
     gtag('js', new Date());
     gtag('config', 'G-K7ZCQ4YEN6');
   </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7ZCQ4YEN6"></script>
+  <script defer src="/js/consent.js"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <title>Certificate Verified — Loud Community — Fola Adeleke&#174;</title>
+  <meta name="description" content="Certificate of authenticity for “Loud Community” by Fola Adeleke — verified against the studio register." />
+  <meta name="robots" content="noindex, follow" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Fola Adeleke®" />
+  <meta property="og:title" content="Certificate Verified — Loud Community — Fola Adeleke&#174;" />
+  <meta property="og:description" content="Certificate of authenticity for “Loud Community” by Fola Adeleke — verified against the studio register." />
+  <meta property="og:url" content="https://folaadeleke.com/verify/eb38af87e829" />
+  <meta property="og:image" content="https://folaadeleke.com/images/social/og-image.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root { --black: #000; --white: #fff; --grey-light: #eee; --grey-mid: #999; --font: 'Courier New', Courier, monospace; --spacing: 0.2em; --nav-height: 56px; }
@@ -36,6 +58,9 @@
     .footer-social { display: flex; justify-content: center; gap: 24px; margin-bottom: 12px; }
     .footer-social a { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--grey-mid); text-decoration: none; }
     .footer-social a:hover { color: var(--black); }
+    .footer-legal { display: flex; justify-content: center; gap: 20px; margin-bottom: 12px; flex-wrap: wrap; }
+    .footer-legal a { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--grey-mid); text-decoration: none; }
+    .footer-legal a:hover { color: var(--black); }
     footer p { font-size: 10px; letter-spacing: 0.08em; color: var(--grey-mid); }
 
     #page-loader { position: fixed; inset: 0; z-index: 9999; background: rgba(255,255,255,0.7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; }
@@ -287,6 +312,10 @@
     <div class="footer-social">
       <a href="https://www.instagram.com/fola_adeleke" target="_blank" rel="noopener">Instagram</a>
       <a href="https://www.tiktok.com/@folaadeleke" target="_blank" rel="noopener">TikTok</a>
+    </div>
+    <div class="footer-legal">
+      <a href="/privacy">Privacy</a>
+      <a href="/terms">Terms</a>
     </div>
     <p>&#169; 2026 Fola Adeleke&#174;. All rights reserved.</p>
   </footer>
