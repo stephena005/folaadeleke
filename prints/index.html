@@ -52,7 +52,7 @@
       --bg: #fff;
       --black: #000;
       --white: #fff;
-      --muted: #999;
+      --muted: #6f6f6f;
       --divider: #eee;
       --nav-height: 56px;
       --font: 'Courier New', Courier, monospace;
@@ -301,15 +301,15 @@
     .footer-social a { font-family: var(--font); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); text-decoration: none; }
     .footer-social a:hover { color: var(--black); }
     .footer-legal { display: flex; justify-content: center; gap: 20px; margin-bottom: 12px; flex-wrap: wrap; }
-    .footer-legal a { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--grey-mid); text-decoration: none; }
+    .footer-legal a { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); text-decoration: none; }
     .footer-legal a:hover { color: var(--black); }
     .footer-copy { font-family: var(--font); font-size: 10px; letter-spacing: 0.08em; color: var(--muted); text-align: right; }
 
     /* ── MUSIC ── */
     #music-node { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; align-items: center; gap: 10px; }
-    #music-pill { display: flex; align-items: center; gap: 8px; font-family: 'Courier New', Courier, monospace; font-size: 10px; letter-spacing: 0.18em; color: #999; white-space: nowrap; background: #fff; border: 1px solid #e0e0e0; border-radius: 24px; padding: 6px 12px; opacity: 0; transform: translateX(8px); transition: opacity 0.3s ease, transform 0.3s ease; pointer-events: none; }
+    #music-pill { display: flex; align-items: center; gap: 8px; font-family: 'Courier New', Courier, monospace; font-size: 10px; letter-spacing: 0.18em; color: #6f6f6f; white-space: nowrap; background: #fff; border: 1px solid #e0e0e0; border-radius: 24px; padding: 6px 12px; opacity: 0; transform: translateX(8px); transition: opacity 0.3s ease, transform 0.3s ease; pointer-events: none; }
     #music-node:hover #music-pill, #music-node.playing #music-pill { opacity: 1; transform: translateX(0); pointer-events: auto; }
-    #music-label { text-decoration: none; color: #999; transition: color 0.15s; }
+    #music-label { text-decoration: none; color: #6f6f6f; transition: color 0.15s; }
     #music-label:hover { color: #000; }
     #music-btn { width: 40px; height: 40px; border-radius: 50%; border: 1px solid #ccc; background: #fff; color: #000; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: border-color 0.2s, transform 0.15s; position: relative; }
     #music-btn:hover { border-color: #000; transform: scale(1.06); }
