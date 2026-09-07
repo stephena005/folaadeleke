@@ -1,0 +1,16 @@
+# folaadeleke.com
+
+# Pages that should stay out of search results carry a <meta name="robots"
+# content="noindex"> tag instead of a Disallow rule here. Blocking them in
+# robots.txt would stop crawlers reading that tag, which is what actually
+# removes a URL from the index.
+
+User-agent: *
+Allow: /
+
+# No noindex tag possible on these (non-HTML / private working files)
+Disallow: /back-office/
+Disallow: /html%20files/
+Disallow: /portfolio.pdf
+
+Sitemap: https://folaadeleke.com/sitemap.xml

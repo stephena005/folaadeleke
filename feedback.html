@@ -31,9 +31,49 @@
   ═══════════════════════════════════════════════════════════════
 -->
 <head>
+  <!-- Google tag (gtag.js) — consent mode: analytics denied until accepted -->
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      analytics_storage: 'denied',
+      wait_for_update: 500
+    });
+    try {
+      if (localStorage.getItem('fa_consent') === 'granted') {
+        gtag('consent', 'update', { analytics_storage: 'granted' });
+      }
+    } catch (e) {}
+    gtag('js', new Date());
+    gtag('config', 'G-K7ZCQ4YEN6');
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7ZCQ4YEN6"></script>
+  <script defer src="/js/consent.js"></script>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Share Your Feedback — Fola Adeleke®</title>
+  <meta name="description" content="Share your feedback on your Fola Adeleke print or order." />
+  <meta name="robots" content="noindex, follow" />
+
+  <!-- Open Graph / social preview -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Fola Adeleke®" />
+  <meta property="og:title" content="Share Your Feedback — Fola Adeleke®" />
+  <meta property="og:description" content="Share your feedback on your Fola Adeleke print or order." />
+  <meta property="og:url" content="https://folaadeleke.com/feedback.html" />
+  <meta property="og:image" content="https://folaadeleke.com/images/social/og-image.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Framed prints by Fola Adeleke hung in a white gallery space" />
+  <meta property="og:locale" content="en_GB" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Share Your Feedback — Fola Adeleke®" />
+  <meta name="twitter:description" content="Share your feedback on your Fola Adeleke print or order." />
+  <meta name="twitter:image" content="https://folaadeleke.com/images/social/og-image.jpg" />
+
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -66,7 +106,7 @@
       font-size: 9px;
       letter-spacing: 0.3em;
       text-transform: uppercase;
-      color: #999999;
+      color: #6f6f6f;
     }
 
     /* ── Brand ── */
@@ -109,7 +149,7 @@
       font-size: 11px;
       letter-spacing: 0.1em;
       line-height: 2;
-      color: #999999;
+      color: #6f6f6f;
       margin-bottom: 40px;
     }
 
@@ -118,7 +158,7 @@
       font-size: 9px;
       letter-spacing: 0.35em;
       text-transform: uppercase;
-      color: #999999;
+      color: #6f6f6f;
       text-align: center;
       margin-bottom: 16px;
     }
@@ -136,7 +176,7 @@
       font-family: 'Courier New', Courier, monospace;
       font-size: 15px;
       letter-spacing: 0.05em;
-      color: #999999;
+      color: #6f6f6f;
       cursor: pointer;
       transition: border-color 0.15s, color 0.15s, background 0.15s;
       display: flex;
@@ -177,7 +217,7 @@
       font-size: 9px;
       letter-spacing: 0.3em;
       text-transform: uppercase;
-      color: #999999;
+      color: #6f6f6f;
       display: block;
       margin-bottom: 10px;
     }
@@ -197,7 +237,7 @@
       transition: border-color 0.15s;
       margin-bottom: 24px;
     }
-    textarea::placeholder { color: #cccccc; }
+    textarea::placeholder { color: #6f6f6f; }
     textarea:focus { border-color: #000000; }
 
     /* ── Email input ── */
@@ -214,7 +254,7 @@
       transition: border-color 0.15s;
       margin-bottom: 24px;
     }
-    input[type="email"]::placeholder { color: #cccccc; }
+    input[type="email"]::placeholder { color: #6f6f6f; }
     input[type="email"]:focus { border-color: #000000; }
 
     /* ── Submit ── */
@@ -274,7 +314,7 @@
       font-size: 11px;
       letter-spacing: 0.1em;
       line-height: 2.2;
-      color: #999999;
+      color: #6f6f6f;
       margin-bottom: 36px;
     }
     .back-link {
@@ -285,7 +325,7 @@
       text-decoration: none;
       border-bottom: 1px solid #000000;
     }
-    .back-link:hover { color: #999999; border-bottom-color: #999999; }
+    .back-link:hover { color: #6f6f6f; border-bottom-color: #6f6f6f; }
 
     /* ── Footer ── */
     .footer {
