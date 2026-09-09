@@ -2,8 +2,10 @@
 // Renders the digital certificate delivery email for one buyer.
 //
 //   node scripts/render-coa-email.mjs \
-//     --certificate "back-office/certificates/html/<buyer>-<work>-a2.html" \
-//     --work-image "https://folaadeleke.com/images/newsletter/coa/<work>.jpg"
+//     --certificate "back-office/certificates/html/<buyer>-<work>-a2.html"
+//
+// The hero image is looked up by work in images/newsletter/coa/manifest.json,
+// which scripts/export-coa-heroes.py writes. Pass --work-image to override.
 //
 // Fills coa-email.html from the certificate itself and writes the result into
 // back-office/, which is gitignored. --data <json> takes the same fields from
@@ -39,6 +41,8 @@ const TEMPLATE = resolve(repoRoot, 'coa-email.html');
 const DEFAULT_OUT_DIR = resolve(repoRoot, 'back-office/certificates/emails');
 const VERIFY_DIR = resolve(repoRoot, 'verify');
 const VERIFY_BASE = 'https://folaadeleke.com/verify';
+const HERO_DIR = resolve(repoRoot, 'images/newsletter/coa');
+const HERO_BASE = 'https://folaadeleke.com/images/newsletter/coa';
 
 function fail(message) {
   console.error(`render-coa-email: ${message}`);
@@ -207,8 +211,26 @@ if (args.certificate) {
   }
 }
 
-const workImage = args['work-image'];
-if (!workImage) fail('--work-image is required: an absolute URL to the deployed 1120px export');
+// The hero is looked up, not derived: scripts/export-coa-heroes.py owns the
+// filename rule, and a second copy of it here — in another language — would
+// drift, with a broken image in a buyer's inbox as the first sign.
+function heroFor(title) {
+  const manifestPath = resolve(HERO_DIR, 'manifest.json');
+  if (!existsSync(manifestPath)) {
+    fail('no images/newsletter/coa/manifest.json — run: python3 scripts/export-coa-heroes.py');
+  }
+  const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
+  const file = manifest[title]
+    ?? Object.entries(manifest).find(([work]) => slugify(work) === slugify(title))?.[1];
+  if (!file) {
+    fail(`no hero image exported for "${title}".\n`
+      + '  Run: python3 scripts/export-coa-heroes.py\n'
+      + `  If the work is new, check the title matches the certificate exactly.`);
+  }
+  return `${HERO_BASE}/${file}`;
+}
+
+const workImage = args['work-image'] ?? heroFor(data.title);
 
 const required = ['title', 'year', 'editionNumber', 'editionTotal', 'issuedTo', 'medium', 'dimensions'];
 const missing = required.filter((key) => !data[key]);

@@ -35,8 +35,7 @@
   Do not hand-edit this file. Render a copy from the certificate:
 
       node scripts/render-coa-email.mjs \
-        --certificate back-office/certificates/html/<buyer>-<work>.html \
-        --work-image "https://folaadeleke.com/images/newsletter/coa/<work>.jpg"
+        --certificate back-office/certificates/html/<buyer>-<work>.html
 
   The renderer writes into back-office/, which is gitignored, and
   refuses to write anywhere git would track — the rendered file
@@ -72,10 +71,16 @@
       [EDITION TOTAL WORD] "fifteen"
       [VERIFY URL]         matched against verify/, or --verify-url
 
-  Passed on the command line, because it is not part of the
-  certificate:
+  And the hero, looked up by work in
+  images/newsletter/coa/manifest.json, which
+  scripts/export-coa-heroes.py writes:
 
-      [WORK IMAGE URL]  1120px export of the work, already deployed
+      [WORK IMAGE URL]  1120px export of the work
+
+  The renderer stops if the work has no export rather than sending a
+  broken image; --work-image overrides the lookup. The filename rule
+  lives in the exporter alone — a second copy of it in the renderer
+  would drift, and the first sign would be a hole in a buyer's inbox.
 
   If the data has no certRef the renderer deletes the REF block
   rather than printing an empty label. The verify token is the real
@@ -84,9 +89,10 @@
 
   BEFORE SENDING — non-negotiable
   ───────────────────────────────
-  · [WORK IMAGE URL] must already be live. Email clients have no
-    site to be relative to; an undeployed image is a broken box in
-    the inbox. Push first, then send. The renderer checks it.
+  · The hero must already be deployed. Email clients have no site to
+    be relative to; an undeployed image is a broken box in the inbox.
+    Push first, then send. The renderer checks it with a live request
+    and says so.
   · The verify page must be deployed, not just committed. The
     renderer checks that too, but check the page yourself: it
     carries this buyer's name, and sending the wrong link shows one

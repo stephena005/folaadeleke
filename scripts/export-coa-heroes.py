@@ -20,8 +20,8 @@ always preferred, because no conversion beats no conversion.
 
 import argparse
 import io
+import json
 import re
-import sys
 from html import unescape
 from pathlib import Path
 
@@ -33,6 +33,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 CERT_DIRS = ['back-office/certificates/format-1-split-panel-html', 'back-office/certificates/html']
 OUT_DIR = REPO_ROOT / 'images/newsletter/coa'
 
+MANIFEST = OUT_DIR / 'manifest.json'
 WIDTH = 1120
 MAX_BYTES = 260 * 1024
 QUALITIES = [82, 78, 74, 70]
@@ -140,8 +141,18 @@ def main():
         size, quality, written = export(source, destination)
         total += written
         print(f'{title:34} {f"{size[0]}x{size[1]}":13} {quality:>3} {written/1024:7.0f}K  {source.name}')
+    # The email renderer looks a work up here rather than re-deriving the
+    # slug. Two slug functions in two languages drift, and the failure would
+    # be a broken image in a buyer's inbox.
+    manifest = {title: f'{slugify(title)}.jpg' for title in sorted(works_from_certificates())}
+    missing = [t for t, f in manifest.items() if not (OUT_DIR / f).exists()]
+    if missing:
+        raise SystemExit('no export for: ' + ', '.join(missing))
+    MANIFEST.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + '\n')
+
     print(f'\n{len(list(OUT_DIR.glob("*.jpg")))} files, {total/1024/1024:.1f}MB total in '
           f'{OUT_DIR.relative_to(REPO_ROOT)}')
+    print(f'manifest: {MANIFEST.relative_to(REPO_ROOT)} ({len(manifest)} works)')
 
 
 if __name__ == '__main__':
