@@ -20,7 +20,7 @@ import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync } from 
 import { dirname, resolve, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { readCertificate, decodeEntities, CertificateError } from './lib/certificate.mjs';
+import { readCertificate, decodeEntities, escapeHtml, CertificateError } from './lib/certificate.mjs';
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(scriptDir, '..');
@@ -42,7 +42,15 @@ function fail(message) {
   process.exit(1);
 }
 
-const args = new Set(process.argv.slice(2).map((a) => a.replace(/^--/, '')));
+const argv = process.argv.slice(2);
+const args = new Set(argv.filter((a) => a.startsWith('--')).map((a) => a.replace(/^--/, '')));
+const onlyIndex = argv.indexOf('--only');
+const only = onlyIndex === -1 ? null : argv[onlyIndex + 1];
+if (onlyIndex !== -1) args.delete('only');
+if (onlyIndex !== -1 && !only) {
+  console.error('generate-verify-pages: --only needs a token or a certificate filename');
+  process.exit(1);
+}
 
 function displayName(issuedTo) {
   return KEEP_NAMED.has(decodeEntities(issuedTo).toLowerCase().trim()) ? issuedTo : ANONYMOUS;
@@ -64,7 +72,7 @@ function render(template, cert, token) {
     DIMENSIONS: cert.raw.dimensions,
     ISSUED_TO: displayName(cert.raw.issuedTo),
     SIGNED_DATE: cert.raw.signedDate,
-    ART_SRC: cert.artSrc,
+    ART_SRC: escapeHtml(cert.artSrc),
     QR_PATH: cert.qrPath,
   };
 
@@ -94,6 +102,7 @@ for (const dir of CERT_DIRS) {
     if (!token) {
       fail(`no token for ${entry} — re-run scripts/decode-certificate-qr.py`);
     }
+    if (only && only !== token && only !== entry && only !== entry.replace(/\.html$/, '')) continue;
     const out = resolve(VERIFY_DIR, token, 'index.html');
     if (existsSync(out) && !args.has('overwrite')) {
       skipped.push(`${token}  ${entry}`);
