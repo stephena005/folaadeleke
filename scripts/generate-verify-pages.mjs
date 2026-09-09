@@ -29,9 +29,31 @@ const TEMPLATE = resolve(scriptDir, 'templates/verify-page.html');
 const TOKENS = resolve(repoRoot, 'back-office/certificates/verify-tokens.json');
 const CERT_DIRS = ['back-office/certificates/format-1-split-panel-html', 'back-office/certificates/html'];
 const VERIFY_DIR = resolve(repoRoot, 'verify');
+const HERO_MANIFEST = resolve(repoRoot, 'images/newsletter/coa/manifest.json');
+const HERO_PATH = '/images/newsletter/coa';
 
 const ANONYMOUS = 'Private collection';
 const KEEP_NAMED = new Set(['wheatbaker hotel']);
+
+// The artwork shown here is the web export, not the file the certificate
+// links. A certificate is a print document and points at the print master —
+// SISTERHOOD.jpg is 16372x23177 and 17.9MB — which is fine on the way to a
+// press and absurd in a page that displays it in a 295px panel. The exports
+// in images/newsletter/coa/ are the same crop at 1120px, already deployed for
+// the email, and between 164K and 417K.
+function heroes() {
+  if (!existsSync(HERO_MANIFEST)) return {};
+  return JSON.parse(readFileSync(HERO_MANIFEST, 'utf8'));
+}
+
+function artworkFor(cert, manifest) {
+  const file = manifest[cert.text.title];
+  if (file) return `${HERO_PATH}/${file}`;
+  console.warn(`  warning: no web export for "${cert.text.title}" — falling back to the`);
+  console.warn('    certificate\'s own image, which may be a print master. Run:');
+  console.warn('    python3 scripts/export-coa-heroes.py');
+  return cert.artSrc;
+}
 
 const NUMBER_WORDS = ['', 'ONE', 'TWO', 'THREE', 'FOUR', 'FIVE', 'SIX', 'SEVEN', 'EIGHT', 'NINE',
   'TEN', 'ELEVEN', 'TWELVE', 'THIRTEEN', 'FOURTEEN', 'FIFTEEN', 'SIXTEEN', 'SEVENTEEN',
@@ -56,7 +78,7 @@ function displayName(issuedTo) {
   return KEEP_NAMED.has(decodeEntities(issuedTo).toLowerCase().trim()) ? issuedTo : ANONYMOUS;
 }
 
-function render(template, cert, token) {
+function render(template, cert, token, manifest) {
   const total = Number(cert.text.editionTotal);
   const totalWord = NUMBER_WORDS[total];
   if (!totalWord) fail(`${cert.file} has an edition total of ${cert.text.editionTotal}, which has no word form here`);
@@ -72,7 +94,7 @@ function render(template, cert, token) {
     DIMENSIONS: cert.raw.dimensions,
     ISSUED_TO: displayName(cert.raw.issuedTo),
     SIGNED_DATE: cert.raw.signedDate,
-    ART_SRC: escapeHtml(cert.artSrc),
+    ART_SRC: escapeHtml(artworkFor(cert, manifest)),
     QR_PATH: cert.qrPath,
   };
 
@@ -88,6 +110,7 @@ if (!existsSync(TOKENS)) {
 }
 const tokens = JSON.parse(readFileSync(TOKENS, 'utf8'));
 const template = readFileSync(TEMPLATE, 'utf8');
+const manifest = heroes();
 
 const written = [];
 const skipped = [];
@@ -115,7 +138,7 @@ for (const dir of CERT_DIRS) {
       if (error instanceof CertificateError) fail(error.message);
       throw error;
     }
-    const html = render(template, cert, token);
+    const html = render(template, cert, token, manifest);
     if (displayName(cert.raw.issuedTo) !== ANONYMOUS) named.push(`${token}  ${cert.text.issuedTo}`);
     if (!args.has('dry-run')) {
       mkdirSync(dirname(out), { recursive: true });
