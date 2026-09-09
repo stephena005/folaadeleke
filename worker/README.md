@@ -51,8 +51,21 @@ npm run configure -- \
 That writes the KV id and `SHOPIFY_SHOP` into `wrangler.toml`, `WORKER_ENDPOINT`
 into `claim/index.html`, and renders `welcome-email.rendered.html` at the repo
 root with a freshly generated `CLAIM_SECRET`. It prints the secret — you need it
-for step 4. Pass `--secret <hex>` to reuse an existing one instead. Re-running is
-safe; it overwrites the previous values.
+for step 4.
+
+Every flag is optional, so you can run it as the values arrive and it will report
+what is still unset. This matters for `--worker-url`: the `workers.dev` origin
+depends on your account subdomain, so if you do not know it yet, configure the
+worker side first, deploy, then re-run with the URL the deploy printed.
+
+```sh
+npm run configure -- --kv <id>                       # now
+npm run configure -- --worker-url https://...        # after the first deploy
+```
+
+The rendered email is only regenerated when you pass `--secret` or when no
+rendered file exists — a partial re-run will not silently mint a new secret and
+invalidate the one you have already deployed.
 
 `--shop` must be the `*.myshopify.com` **admin** domain. The storefront domain
 (`shop.folaadeleke.com`) is rejected — the Admin API does not answer on it.
