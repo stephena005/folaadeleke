@@ -6,11 +6,11 @@ pages, emails, product assets, or Claude Projects work for this brand. Use it
 to keep new work indistinguishable in tone and craft from the existing site.
 
 > **The site and the emails have diverged — deliberately.**
-> In September 2026 the email system was rebuilt around legibility: body
-> copy moved off Courier, and every colour was re-measured against WCAG
-> AA. The website has **not** yet followed. Where this document
-> describes the two differently that is a record of fact, not an
-> inconsistency to tidy away. See §9 for the email system;
+> In September 2026 the email system was rebuilt around legibility and
+> body copy moved off Courier. The site keeps Courier throughout — that
+> difference is deliberate, not an oversight to tidy away. Contrast is
+> **not** a point of difference: both were audited and both pass WCAG
+> AA (see Contrast below). See §9 for the email system;
 > `newsletter-template.html` is authoritative there and this document
 > defers to it.
 
@@ -41,7 +41,7 @@ Strictly monochrome. No accent colors anywhere in the product UI.
 | `--black` | `#000000` | Primary text, buttons, borders, hero/section backgrounds |
 | `--white` | `#ffffff` | Page background, inverted text on black |
 | `--grey-light` | `#eeeeee` | Hairline dividers, subtle borders |
-| `--grey-mid` | `#999999` | Secondary/muted text, placeholders, inactive labels |
+| `--grey-mid` | `#6f6f6f` | Secondary/muted text, placeholders, inactive labels — 5.02:1 on white |
 | `--grey-bg` | `#000000` | Media placeholder background (hero, product images) |
 
 Overlays use black at low opacity rather than a new color:
@@ -53,21 +53,40 @@ way on dark sections (`rgba(255,255,255,0.3–0.6)`).
 section needs emphasis, use black/white inversion (a full-bleed black
 section with white text) instead of color.
 
-### Known accessibility debt
+### Contrast — audited 2026-09-09
 
-`--grey-mid` is used for body copy and secondary text across the site,
-and it does not meet WCAG AA (4.5:1 for normal text). Measured:
+Every page was audited in the browser by computing each text element's
+rendered colour against its **effective** background (walking ancestors
+and compositing alpha), not by reading the stylesheet. That matters:
+source greps overstate the problem, because most `#999`/`#ccc` in this
+codebase are borders, not text.
 
-| Colour | On | Ratio | Verdict |
-|---|---|---|---|
-| `#999999` | white | **2.85:1** | fails |
-| `#cccccc` | white | **1.61:1** | fails badly |
+Result: the site passes WCAG AA. The token table above is current —
+`--grey-mid` is `#6f6f6f` (5.02:1), not the `#999999` an older draft of
+this document claimed.
 
-They remain documented because the site genuinely still uses them.
-**Do not carry them into new work.** The email rebuild replaced them
-with the scale below, and the site should follow when there is time —
-the "faint" complaint that triggered the email redesign applies to the
-site for exactly the same reason.
+Three genuine failures were found and fixed:
+
+| Where | Was | Now |
+|---|---|---|
+| `claim/index.html` `--muted` | `#999999` — 2.85:1 | `#6f6f6f` — 5.02:1 |
+| `feedback.html` rating labels + footer | `#cccccc` — 1.61:1 | `#6f6f6f` — 5.02:1 |
+| Disabled slider arrows (3 pages) | `#cccccc` — 1.61:1 | `#8f8f8f` — 3.23:1 |
+
+The disabled arrows are the one deliberate sub-4.5:1 value. WCAG 1.4.3
+exempts inactive controls, but at 1.61:1 they were invisible rather
+than merely dimmed; `#8f8f8f` still reads as disabled against the black
+of an active control.
+
+**Do not reintroduce `#999999` or `#cccccc` as a text colour.** They
+remain valid as hairlines and borders, which is what `--grey-light` is
+for.
+
+Two caveats on the audit. It measures colour, not size — the site still
+sets a lot of 9–10px type, which is legible at these ratios but tight,
+and is a separate question from contrast. And it skips text sitting on
+a background image, where contrast cannot be computed statically; the
+hero is the main such case and uses white on a dark image.
 
 ### Accessible greys — use these for anything new
 
