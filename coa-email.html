@@ -1,0 +1,408 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<!--
+  ════════════════════════════════════════════════════════════════
+  FOLA ADELEKE® — DIGITAL CERTIFICATE DELIVERY EMAIL
+  The house template for sending a buyer their COA. Design "A ·
+  The Deed", adopted 2026-09-09. Built on newsletter-template.html
+  — that file is still the source of truth for type, colour and
+  spacing; this one only adds the certificate panel.
+  ════════════════════════════════════════════════════════════════
+
+  WHERE THE BUTTON GOES
+  ─────────────────────
+  To the same URL the QR code on the printed certificate encodes:
+
+      https://folaadeleke.com/verify/<token>/
+
+  Those pages live in verify/ in this repository, one directory per
+  certificate, and they render the certificate in full. The print,
+  the email and the page therefore cannot drift apart — there is
+  one address for a certificate, not three.
+
+  The renderer finds the token itself by matching the work, the
+  edition and the buyer against the deployed verify pages, so the
+  button cannot be pointed at another buyer's certificate. If no
+  page matches, it stops: build the verify page first.
+
+  There is no PDF download in this email. The PDFs in
+  back-office/certificates/pdf/ are local only and are not served
+  anywhere. If that ever changes, it is a second link, not a
+  replacement for this one.
+
+  HOW TO SEND ONE
+  ───────────────
+  Do not hand-edit this file. Render a copy from the certificate:
+
+      node scripts/render-coa-email.mjs \
+        --certificate back-office/certificates/html/<buyer>-<work>.html \
+        --work-image "https://folaadeleke.com/images/newsletter/coa/<work>.jpg"
+
+  The renderer writes into back-office/, which is gitignored, and
+  refuses to write anywhere git would track — the rendered file
+  carries the buyer's name against their edition, and this
+  repository is public with GitHub Pages serving its root. Paste
+  the rendered HTML into whatever actually sends it.
+
+  THE DATA
+  ────────
+  Read straight out of the certificate HTML — it is the record, and a
+  JSON kept alongside it drifts from it with nothing to catch the
+  drift. (--data <json> with the same fields still works, for a
+  certificate that has not been generated yet.) There is no default
+  path: every value here is buyer-specific, so a forgotten flag has
+  to be an error rather than someone else's certificate.
+
+  The fields, and where they land:
+
+      title          "If You Know You Know Sha"   → [WORK TITLE]
+      year           "2026"                       → [YEAR]
+      editionNumber  "2"                          → [EDITION NO]
+      editionTotal   "15"                         → [EDITION TOTAL]
+      issuedTo       "Ada Nwosu"                  → [COLLECTOR NAME]
+      medium         "Archival giclée, …"         → [MEDIUM]
+      dimensions     "297 × 420 mm (A3)"          → [DIMENSIONS]
+      signedDate     "04 Sep 2026"                → [SIGNED DATE]
+      certRef        optional                     → [CERT REF]
+
+  Derived by the renderer:
+
+      [FIRST NAME]         first word of issuedTo
+      [EDITION NO WORD]    "Two"     — the sign-off reads better in words
+      [EDITION TOTAL WORD] "fifteen"
+      [VERIFY URL]         matched against verify/, or --verify-url
+
+  Passed on the command line, because it is not part of the
+  certificate:
+
+      [WORK IMAGE URL]  1120px export of the work, already deployed
+
+  If the data has no certRef the renderer deletes the REF block
+  rather than printing an empty label. The verify token is the real
+  per-certificate identifier; certRef is only a human-readable
+  label if you decide you want one.
+
+  BEFORE SENDING — non-negotiable
+  ───────────────────────────────
+  · [WORK IMAGE URL] must already be live. Email clients have no
+    site to be relative to; an undeployed image is a broken box in
+    the inbox. Push first, then send. The renderer checks it.
+  · The verify page must be deployed, not just committed. The
+    renderer checks that too, but check the page yourself: it
+    carries this buyer's name, and sending the wrong link shows one
+    buyer another buyer's certificate.
+  · Send yourself a test first. Check desktop AND mobile.
+
+  WHAT IS DELIBERATE HERE
+  ───────────────────────
+  · The certificate is reproduced in the body — numeral, no-restock
+    line, label/value grid — so a buyer who never follows the link
+    still has every fact. The verify page is corroboration, not the
+    reveal.
+  · ONE inverted band, the verify link. House rule: never two.
+  · The footer is transactional. It says why the email arrived and
+    gives a support address; it carries no marketing unsubscribe.
+    If this ever goes out through a marketing platform instead,
+    that platform will want its own unsubscribe token in here.
+  ════════════════════════════════════════════════════════════════
+-->
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Your certificate &mdash; [WORK TITLE], [EDITION NO]/[EDITION TOTAL]</title>
+  <!--[if mso]>
+  <noscript><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript>
+  <![endif]-->
+  <style type="text/css">
+    body, table, td, p, a { -webkit-text-size-adjust:100%; -ms-text-size-adjust:100%; }
+    table, td { mso-table-lspace:0pt; mso-table-rspace:0pt; }
+    img { -ms-interpolation-mode:bicubic; border:0; height:auto; line-height:100%; outline:none; text-decoration:none; }
+    body { margin:0 !important; padding:0 !important; background-color:#faf9f7; }
+    a { color:#111111; }
+    a[x-apple-data-detectors] { color:inherit !important; text-decoration:none !important; }
+    u + #body a { color:inherit; text-decoration:none; }
+    #MessageViewBody a { color:inherit; text-decoration:none; }
+
+    @media only screen and (max-width:620px) {
+      .email-container { width:100% !important; }
+      .mobile-padding  { padding-left:24px !important; padding-right:24px !important; }
+      .mobile-heading  { font-size:26px !important; letter-spacing:0.14em !important; }
+      .mobile-numeral  { font-size:52px !important; }
+      .mobile-stack    { display:block !important; width:100% !important; padding:0 0 18px 0 !important; }
+    }
+  </style>
+</head>
+<body id="body" style="margin:0; padding:0; background-color:#faf9f7;">
+
+  <div style="display:none; font-size:1px; color:#faf9f7; line-height:1px; max-height:0; max-width:0; opacity:0; overflow:hidden;">
+    Edition [EDITION NO] of [EDITION TOTAL], signed and recorded in your name. Your certificate is inside.
+  </div>
+
+  <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color:#faf9f7;">
+    <tr>
+      <td align="center" style="padding:32px 16px;">
+
+        <table role="presentation" class="email-container" border="0" cellpadding="0" cellspacing="0" width="560" style="max-width:560px; width:100%; background-color:#ffffff;">
+
+          <!-- ══ HEADER ══ -->
+          <tr>
+            <td class="mobile-padding" style="padding:22px 32px 20px; border-bottom:1px solid #111111;">
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tr>
+                  <td align="left">
+                    <p style="margin:0; font-family:'Courier New',Courier,monospace; font-size:13px; letter-spacing:0.26em; text-transform:uppercase; color:#111111;">
+                      Fola&nbsp;Adeleke<span style="font-size:9px; vertical-align:super; letter-spacing:0;">&reg;</span>
+                    </p>
+                  </td>
+                  <td align="right">
+                    <p style="margin:0; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.24em; text-transform:uppercase; color:#6f6f6f;">
+                      Certificate
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- ══ HERO: THE WORK ══ -->
+          <tr>
+            <td style="font-size:0; line-height:0;">
+              <img src="[WORK IMAGE URL]" width="560" alt="[WORK TITLE] &mdash; the print now in your edition" style="display:block; border:0; outline:none; text-decoration:none; width:100%; max-width:560px; height:auto;" />
+            </td>
+          </tr>
+          <tr>
+            <td class="mobile-padding" style="padding:14px 32px 0; border-bottom:1px solid #dcdcdc;">
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tr>
+                  <td align="left" style="padding-bottom:16px;">
+                    <p style="margin:0; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.18em; text-transform:uppercase; color:#111111;">
+                      [WORK TITLE]
+                    </p>
+                  </td>
+                  <td align="right" style="padding-bottom:16px;">
+                    <p style="margin:0; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:#6f6f6f;">
+                      [YEAR] &nbsp;&middot;&nbsp; Edition of [EDITION TOTAL]
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- ══ HEADLINE + INTRO ══ -->
+          <tr>
+            <td class="mobile-padding" style="padding:40px 32px 0;">
+              <h1 class="mobile-heading" style="margin:0; font-family:'Courier New',Courier,monospace; font-size:34px; font-weight:normal; letter-spacing:0.16em; text-transform:uppercase; color:#000000; line-height:1.2;">
+                Your certificate
+              </h1>
+            </td>
+          </tr>
+          <tr>
+            <td class="mobile-padding" style="padding:22px 32px 0;">
+              <p style="margin:0 0 16px; font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:1.65; color:#111111;">
+                [FIRST NAME] &mdash; your print has been signed, numbered and entered in the edition register. Everything below is the certificate of authenticity that travels with the work.
+              </p>
+              <p style="margin:0; font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:1.65; color:#4f4f4f;">
+                Keep it with the print. If the piece ever changes hands, the certificate goes with it &mdash; that is what makes the edition traceable.
+              </p>
+            </td>
+          </tr>
+
+          <!-- ══ THE CERTIFICATE PANEL ══
+               A bordered repeat of the printed COA's hierarchy:
+               numeral, rule, label/value grid. ══ -->
+          <tr>
+            <td class="mobile-padding" style="padding:36px 32px 0;">
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="border:1px solid #111111;">
+
+                <tr>
+                  <td class="mobile-padding" style="padding:20px 26px 0;">
+                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                      <tr>
+                        <td align="left">
+                          <p style="margin:0; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.3em; text-transform:uppercase; color:#6f6f6f;">
+                            The Work
+                          </p>
+                        </td>
+                        <td align="right">
+                          <p style="margin:0; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:#6f6f6f;">
+                            No restock
+                          </p>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="mobile-padding" style="padding:10px 26px 0;">
+                    <p style="margin:0; font-family:'Courier New',Courier,monospace; font-size:20px; font-weight:normal; letter-spacing:0.14em; text-transform:uppercase; color:#000000; line-height:1.35;">
+                      [WORK TITLE]
+                    </p>
+                    <p style="margin:8px 0 0; font-family:'Courier New',Courier,monospace; font-size:12px; letter-spacing:0.25em; color:#4f4f4f;">
+                      [YEAR]
+                    </p>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="mobile-padding" style="padding:22px 26px 0;">
+                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                      <tr>
+                        <td width="42%" valign="middle" class="mobile-stack">
+                          <p class="mobile-numeral" style="margin:0; font-family:'Courier New',Courier,monospace; font-size:56px; font-weight:bold; line-height:1; color:#111111;">
+                            [EDITION NO]<span style="font-weight:normal; color:#8a8a8a;">/</span><span style="color:#7a7a7a;">[EDITION TOTAL]</span>
+                          </p>
+                        </td>
+                        <td width="58%" valign="middle" class="mobile-stack">
+                          <p style="margin:0; font-family:Helvetica,Arial,sans-serif; font-size:15px; line-height:1.6; color:#4f4f4f;">
+                            Once they&rsquo;re gone, they&rsquo;re gone. There will be no further prints in this edition.
+                          </p>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="mobile-padding" style="padding:24px 26px 22px;">
+                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-top:1px solid #dcdcdc;">
+                      <tr>
+                        <td width="50%" valign="top" style="padding:18px 12px 0 0;">
+                          <p style="margin:0 0 6px; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.3em; text-transform:uppercase; color:#6f6f6f;">Medium</p>
+                          <p style="margin:0; font-family:Helvetica,Arial,sans-serif; font-size:15px; line-height:1.6; color:#111111;">[MEDIUM]</p>
+                        </td>
+                        <td width="50%" valign="top" style="padding:18px 0 0 12px;">
+                          <p style="margin:0 0 6px; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.3em; text-transform:uppercase; color:#6f6f6f;">Dimensions</p>
+                          <p style="margin:0; font-family:Helvetica,Arial,sans-serif; font-size:15px; line-height:1.6; color:#111111;">[DIMENSIONS]</p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td width="50%" valign="top" style="padding:20px 12px 0 0;">
+                          <p style="margin:0 0 6px; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.3em; text-transform:uppercase; color:#6f6f6f;">Issued to</p>
+                          <p style="margin:0; font-family:Helvetica,Arial,sans-serif; font-size:15px; line-height:1.6; color:#111111;">[COLLECTOR NAME]</p>
+                        </td>
+                        <td width="50%" valign="top" style="padding:20px 0 0 12px;">
+                          <p style="margin:0 0 6px; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.3em; text-transform:uppercase; color:#6f6f6f;">Signed</p>
+                          <p style="margin:0; font-family:Helvetica,Arial,sans-serif; font-size:15px; line-height:1.6; color:#111111;">Fola Adeleke&reg; &middot; [SIGNED DATE]</p>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+
+              </table>
+              <!-- REF:START — the renderer deletes this block when the data has no certRef -->
+              <p style="margin:12px 0 0; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:#6f6f6f;">
+                Ref. [CERT REF]
+              </p>
+              <!-- REF:END -->
+            </td>
+          </tr>
+
+          <!-- ══ INVERTED BAND — the one per email ══ -->
+          <tr>
+            <td style="padding:40px 0 0;">
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color:#000000;">
+                <tr>
+                  <td class="mobile-padding" align="center" style="padding:44px 32px;">
+                    <p style="margin:0 0 16px; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.3em; text-transform:uppercase; color:#9a9a9a;">
+                      Verified original
+                    </p>
+                    <p style="margin:0 0 18px; font-family:'Courier New',Courier,monospace; font-size:30px; letter-spacing:0.1em; text-transform:uppercase; line-height:1.3; color:#ffffff;">
+                      View your<br />certificate
+                    </p>
+                    <p style="margin:0 0 30px; font-family:Helvetica,Arial,sans-serif; font-size:15px; line-height:1.65; color:#c9c9c9;">
+                      This is the page the QR code on your certificate opens: the work, the edition and the date it was signed, held on record. Bookmark it &mdash; it stays valid for as long as the print exists.
+                    </p>
+                    <!--[if mso]>
+                    <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word"
+                      href="[VERIFY URL]"
+                      style="height:50px; v-text-anchor:middle; width:260px;"
+                      arcsize="0%" strokecolor="#ffffff" fillcolor="#ffffff">
+                      <w:anchorlock/>
+                      <center style="color:#000000; font-family:'Courier New',Courier,monospace; font-size:13px; letter-spacing:0.18em;">
+                        View certificate
+                      </center>
+                    </v:roundrect>
+                    <![endif]-->
+                    <!--[if !mso]><!-->
+                    <a href="[VERIFY URL]"
+                      style="display:inline-block; background-color:#ffffff; color:#000000; font-family:'Courier New',Courier,monospace; font-size:13px; letter-spacing:0.18em; text-transform:uppercase; text-decoration:none; padding:17px 40px; border:1px solid #ffffff;">
+                      View certificate &rarr;
+                    </a>
+                    <!--<![endif]-->
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- ══ WHAT HAPPENS NEXT ══ -->
+          <tr>
+            <td class="mobile-padding" style="padding:40px 32px 0;">
+              <p style="margin:0 0 20px; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.3em; text-transform:uppercase; color:#6f6f6f; border-bottom:1px solid #111111; padding-bottom:12px;">
+                01 &nbsp;&middot;&nbsp; The print itself
+              </p>
+              <p style="margin:0; font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:1.65; color:#111111;">
+                It ships rolled in a rigid tube within three working days, with the signature and edition number pencilled below the image. Let it rest flat for a day before framing, and keep it out of direct sun once it is up.
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td class="mobile-padding" style="padding:40px 32px 0;">
+              <p style="margin:0 0 20px; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.3em; text-transform:uppercase; color:#6f6f6f; border-bottom:1px solid #111111; padding-bottom:12px;">
+                02 &nbsp;&middot;&nbsp; If it ever moves on
+              </p>
+              <p style="margin:0 0 18px; font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:1.65; color:#111111;">
+                Sell it, gift it or leave it to someone &mdash; the certificate transfers with the print. Tell me who now holds it and the register is updated in the new name.
+              </p>
+              <p style="margin:0; font-family:'Courier New',Courier,monospace; font-size:12px; letter-spacing:0.14em; text-transform:uppercase;">
+                <a href="mailto:hello@folaadeleke.com" style="color:#111111; text-decoration:none; border-bottom:1px solid #111111; padding-bottom:2px;">Transfer a certificate &rarr;</a>
+              </p>
+            </td>
+          </tr>
+
+          <!-- ══ SIGN-OFF ══ -->
+          <tr>
+            <td class="mobile-padding" style="padding:40px 32px 40px;">
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tr><td style="border-top:1px solid #dcdcdc; padding-top:28px;">
+                  <p style="margin:0 0 14px; font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:1.65; color:#111111;">
+                    Thank you for taking one. [EDITION NO WORD] of [EDITION TOTAL WORD] &mdash; that is a small room to be in.
+                  </p>
+                  <p style="margin:0; font-family:'Courier New',Courier,monospace; font-size:14px; letter-spacing:0.18em; color:#111111;">
+                    &mdash; Fola
+                  </p>
+                </td></tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- ══ FOOTER — transactional, no marketing unsubscribe ══ -->
+          <tr>
+            <td class="mobile-padding" style="padding:26px 32px; background-color:#f2f0ed; border-top:1px solid #dcdcdc;">
+              <p style="margin:0 0 10px; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.26em; text-transform:uppercase; color:#111111;">
+                Fola Adeleke&reg;
+              </p>
+              <p style="margin:0 0 14px; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.05em; color:#666666;">
+                &copy; 2026 Fola Adeleke. All rights reserved.
+              </p>
+              <p style="margin:0; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.03em; color:#666666; line-height:1.9;">
+                You're receiving this because you bought edition [EDITION NO]/[EDITION TOTAL] of [WORK TITLE].<br />
+                Questions about the order? <a href="mailto:hello@folaadeleke.com" style="color:#111111; text-decoration:underline;">hello@folaadeleke.com</a>
+                &nbsp;&middot;&nbsp;
+                <a href="https://folaadeleke.com" style="color:#111111; text-decoration:underline;">Visit the site</a>
+              </p>
+            </td>
+          </tr>
+
+        </table>
+
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>

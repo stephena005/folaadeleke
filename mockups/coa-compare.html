@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>COA delivery email — two designs</title>
+<style>
+  :root{
+    --paper:#f4f4f2; --ink:#111; --soft:#5a5a5a; --rule:#d6d4d0;
+    --mono:'Courier New',Courier,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--mono);}
+  header{padding:28px 32px 20px;border-bottom:1px solid var(--ink);background:#fff;position:sticky;top:0;z-index:10}
+  h1{margin:0 0 6px;font-size:14px;font-weight:normal;letter-spacing:.28em;text-transform:uppercase}
+  .sub{margin:0;font-size:12px;letter-spacing:.06em;color:var(--soft);line-height:1.7}
+  .controls{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  button{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+    padding:9px 16px;border:1px solid var(--ink);background:#fff;color:var(--ink);cursor:pointer}
+  button[aria-pressed="true"]{background:var(--ink);color:#fff}
+  .hint{font-size:11px;letter-spacing:.06em;color:var(--soft);margin-left:4px}
+
+  .grid{display:flex;gap:24px;padding:28px 32px 60px;align-items:flex-start;overflow-x:auto}
+  .col{flex:0 0 auto}
+  .cap{margin:0 0 4px;font-size:11px;letter-spacing:.24em;text-transform:uppercase}
+  .cap .tag{color:var(--soft)}
+  .note{margin:0 0 12px;font-size:11px;letter-spacing:.03em;color:var(--soft);line-height:1.7;max-width:34ch}
+  .frame{border:1px solid var(--rule);background:#fff;overflow:hidden;box-shadow:0 1px 0 rgba(0,0,0,.04)}
+  iframe{display:block;border:0;background:#fff;transform-origin:0 0}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>COA delivery email — two designs</h1>
+  <p class="sub">
+    Same certificate — If You Know You Know Sha, edition 2/15 — same house design language.<br />
+    Both follow newsletter-template.html: Courier furniture, Helvetica body, one inverted band, AA contrast throughout.
+  </p>
+  <div class="controls">
+    <button id="w-desktop" aria-pressed="true">Desktop 560</button>
+    <button id="w-mobile"  aria-pressed="false">Mobile 375</button>
+    <span class="hint">|</span>
+    <button id="z-fit" aria-pressed="true">Fit</button>
+    <button id="z-full" aria-pressed="false">100%</button>
+  </div>
+</header>
+
+<div class="grid" id="grid"></div>
+
+<script>
+  var VARIANTS = [
+    { id:'a', file:'coa-email-a-the-deed.html',
+      name:'A · The Deed', tag:'document',
+      note:'The work opens, then the certificate is reproduced in the body: giant edition numeral, no-restock rule, 2x2 label/value grid inside a ruled panel. The PDF is the archive copy, not the reveal. Black band = download.' },
+    { id:'b', file:'coa-email-b-the-seal.html',
+      name:'B · The Seal', tag:'ink-first',
+      note:'Opens on ink — masthead, title and 2/15 reversed out of black, with the download above the fold. Then the work, then the facts as a contact-sheet ledger and a verify strip. Quieter, more official.' }
+  ];
+
+  var state = { width:560, fit:true };
+  var HEIGHT = 2600;
+
+  function render(){
+    var grid = document.getElementById('grid');
+    grid.innerHTML = '';
+    VARIANTS.forEach(function(v){
+      var w = state.width;
+      var h = HEIGHT;
+      var scale = state.fit ? (state.width === 560 ? 0.55 : 0.8) : 1;
+
+      var col = document.createElement('div');
+      col.className = 'col';
+      col.style.width = Math.round(w * scale) + 'px';
+
+      var cap = document.createElement('p');
+      cap.className = 'cap';
+      cap.innerHTML = v.name + ' <span class="tag">' + v.tag + '</span>';
+
+      var note = document.createElement('p');
+      note.className = 'note';
+      note.textContent = v.note;
+
+      var frame = document.createElement('div');
+      frame.className = 'frame';
+      frame.style.width  = Math.round(w * scale) + 'px';
+      frame.style.height = Math.round(h * scale) + 'px';
+
+      var f = document.createElement('iframe');
+      f.src = v.file;
+      f.width = w;
+      f.height = h;
+      f.style.transform = 'scale(' + scale + ')';
+      f.setAttribute('title', v.name + ' preview');
+
+      frame.appendChild(f);
+      col.appendChild(cap);
+      col.appendChild(note);
+      col.appendChild(frame);
+      grid.appendChild(col);
+    });
+  }
+
+  function pair(aId, bId, onA, onB){
+    var a = document.getElementById(aId), b = document.getElementById(bId);
+    a.onclick = function(){ a.setAttribute('aria-pressed','true');  b.setAttribute('aria-pressed','false'); onA(); render(); };
+    b.onclick = function(){ b.setAttribute('aria-pressed','true');  a.setAttribute('aria-pressed','false'); onB(); render(); };
+  }
+
+  pair('w-desktop','w-mobile', function(){ state.width = 560; }, function(){ state.width = 375; });
+  pair('z-fit','z-full', function(){ state.fit = true; }, function(){ state.fit = false; });
+
+  render();
+</script>
+
+</body>
+</html>
