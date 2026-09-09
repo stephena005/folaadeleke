@@ -1,10 +1,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <!--
-  ═══════════════════════════════════════════════════════════════
+  ════════════════════════════════════════════════════════════════
   FOLA ADELEKE® — AUTOMATED WELCOME EMAIL
   Fola Adeleke's Notes
-  ═══════════════════════════════════════════════════════════════
+  ════════════════════════════════════════════════════════════════
 
   HOW TO SET THIS UP IN BEEHIIV
   ─────────────────────────────
@@ -12,17 +12,92 @@
   2. Trigger: "New subscriber"
   3. Action: "Send email"
   4. In the email editor click "Custom HTML" and paste
-     everything between the <body> tags below
+     everything between the <body> tags — but paste it from
+     welcome-email.rendered.html, NOT from this file. This file
+     carries the CLAIM_SECRET placeholder; the rendered one has
+     the real secret and is kept out of git on purpose.
+     Regenerate it with:  node worker/configure.mjs --secret <hex>
   5. Set the subject line to:
        You're in. — Fola Adeleke's Notes
   6. Save and activate the automation
 
   MERGE TAGS (Beehiiv fills these in automatically)
-  ──────────────────────────────────────────────────
+  ──────────────────────────────────
+  {{email}}            →  subscriber's address, used in the claim link
   {{unsubscribe_url}}  →  subscriber's unsubscribe link
   {{first_name}}       →  subscriber's first name (if collected)
 
-  ═══════════════════════════════════════════════════════════════
+  ════════════════════════════════════════════════════════════════
+  DESIGN — "GALLERY HANG" (adopted 2026-09-09)
+  ════════════════════════════════════════════════════════════════
+
+  The work opens the email, not the copy. A subscriber's first
+  scroll is a full-width print — the reason they signed up — and
+  the words arrive underneath it, already earned.
+
+  TYPE
+  ────
+  Courier New carries the brand furniture only: wordmark, eyebrow
+  labels, headlines, captions and buttons. Body copy is a system
+  sans (Helvetica/Arial) at 16px/1.65. The previous all-Courier
+  setting — 11px at 0.12em tracking, 2.2 line-height, centred —
+  was the cause of the faint, airy look: mono has thin uniform
+  strokes, and tracking it that far at that size stops the eye
+  grouping letters into words.
+
+  COLOUR — every value below is measured, not estimated
+  ───────────────────────────────────────────────────
+  Body        #111111 on #ffffff   18.9:1
+  Secondary   #4f4f4f on #ffffff    8.2:1   (was #999999, 2.9:1 — failed AA)
+  Labels      #6f6f6f on #ffffff    5.0:1   (was #999999 at 9px)
+  Reversed    #c9c9c9 on #000000   12.7:1
+  Footer      #666666 on #f2f0ed    5.1:1   (was #cccccc, 1.6:1 — failed AA)
+              NB the footer ground is #f2f0ed, not white — #6f6f6f only
+              reaches 4.42:1 there, so it is darkened for this block.
+  WCAG AA for normal text is 4.5:1. Nothing here is below it.
+
+  LAYOUT
+  ──────
+  · Hero print above the headline, full-bleed at 560px; the other
+    three hang as a 3-up row further down, like a wall.
+
+  IMAGES (regenerated 2026-09-09 from the print masters)
+  ──────────────────────────────────
+  The earlier tiles were 504x630 with the artwork letterboxed on
+  white — 48-56px of dead margin on three of four, art filling only
+  73-77% of the frame. These are re-exported full-bleed from the
+  masters in images/prints/, so nothing is padded:
+    hero-mother-of-a-nation.jpg  1024x1536 native, no crop
+    tile-*.jpg                   480x600 (4:5) cover crops, 3x the
+                                 ~159px desktop render
+  The 3-up shares one aspect so the row and its captions align.
+
+  Brotherhood and One Vow were dropped from the archive row. Measured
+  over the whole library, they are 99% and 97% near-black with a
+  tonal standard deviation of 7 and 10 — at the 92px the row gets on
+  mobile they read as dark smudges, not artworks. Loud Celebration
+  and Sisterhood are the two most graphic works with live product
+  pages, so they hold at thumbnail size. This is a curatorial call,
+  not a technical one: to put the originals back, swap the src,
+  href and caption in the three archive cells.
+  · The offer is a full-bleed black band — the only inverted
+    element in the email, so it is unmissable without shouting.
+  · Warm paper ground (#faf9f7) behind the white card; reduces the
+    glare that makes fine grey type disappear.
+  · Hairlines #eeeeee → #dcdcdc so the structure is actually visible.
+  · Spacing on an 8px rhythm (32/40) rather than 36/44/48.
+  · Prints carry titles. An unlabelled grid is decoration; a
+    labelled one is a catalogue.
+
+  Alternative concepts A ("Ink Masthead") and C ("Contact Sheet")
+  are kept in mockups/ alongside compare.html, a side-by-side viewer.
+
+  NO WEB FONTS
+  ────────────
+  Helvetica/Arial and Courier New ship with every mail client, so
+  Outlook and the Gmail app render this as designed. Do not swap in
+  a Google Font: it will silently fall back and break the rhythm.
+  ════════════════════════════════════════════════════════════════
 -->
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -36,8 +111,8 @@
     body, table, td, p, a { -webkit-text-size-adjust:100%; -ms-text-size-adjust:100%; }
     table, td { mso-table-lspace:0pt; mso-table-rspace:0pt; }
     img { -ms-interpolation-mode:bicubic; border:0; height:auto; line-height:100%; outline:none; text-decoration:none; }
-    body { margin:0 !important; padding:0 !important; background-color:#ffffff; }
-    a { color:#000000; }
+    body { margin:0 !important; padding:0 !important; background-color:#faf9f7; }
+    a { color:#111111; }
     a[x-apple-data-detectors] { color:inherit !important; text-decoration:none !important; }
     u + #body a { color:inherit; text-decoration:none; }
     #MessageViewBody a { color:inherit; text-decoration:none; }
@@ -45,39 +120,35 @@
     @media only screen and (max-width:620px) {
       .email-container { width:100% !important; }
       .mobile-padding  { padding-left:24px !important; padding-right:24px !important; }
-      .mobile-heading  { font-size:22px !important; }
+      .mobile-heading  { font-size:26px !important; letter-spacing:0.14em !important; }
     }
   </style>
 </head>
 
-<body id="body" style="margin:0; padding:0; background-color:#ffffff;">
+<body id="body" style="margin:0; padding:0; background-color:#faf9f7;">
 
-  <!-- Preheader: hidden preview text shown in inbox -->
-  <div style="display:none; font-size:1px; color:#ffffff; line-height:1px; max-height:0; max-width:0; opacity:0; overflow:hidden;">
-    Welcome to Fola Adeleke's Notes. You'll hear from us before anyone else.
+  <div style="display:none; font-size:1px; color:#faf9f7; line-height:1px; max-height:0; max-width:0; opacity:0; overflow:hidden;">
+    You're in. 25% off any print, and the work before anyone else sees it.
   </div>
 
-  <!-- Outer wrapper -->
-  <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color:#ffffff;">
+  <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color:#faf9f7;">
     <tr>
-      <td align="center" style="padding:40px 20px;">
+      <td align="center" style="padding:32px 16px;">
 
-        <!-- Container -->
-        <table role="presentation" class="email-container" border="0" cellpadding="0" cellspacing="0" width="560" style="max-width:560px; width:100%;">
+        <table role="presentation" class="email-container" border="0" cellpadding="0" cellspacing="0" width="560" style="max-width:560px; width:100%; background-color:#ffffff;">
 
-
-          <!-- ── HEADER: label + date ── -->
+          <!-- ══ SLIM HEADER ══ -->
           <tr>
-            <td class="mobile-padding" style="padding:0 40px 0; border-bottom:1px solid #eeeeee;">
+            <td class="mobile-padding" style="padding:22px 32px 20px; border-bottom:1px solid #111111;">
               <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
                 <tr>
-                  <td align="left" style="padding:24px 0 20px;">
-                    <p style="margin:0; font-family:'Courier New',Courier,monospace; font-size:9px; letter-spacing:0.3em; text-transform:uppercase; color:#999999;">
-                      Fola Adeleke's Notes
+                  <td align="left">
+                    <p style="margin:0; font-family:'Courier New',Courier,monospace; font-size:13px; letter-spacing:0.26em; text-transform:uppercase; color:#111111;">
+                      Fola&nbsp;Adeleke<span style="font-size:9px; vertical-align:super; letter-spacing:0;">&reg;</span>
                     </p>
                   </td>
-                  <td align="right" style="padding:24px 0 20px;">
-                    <p style="margin:0; font-family:'Courier New',Courier,monospace; font-size:9px; letter-spacing:0.15em; text-transform:uppercase; color:#999999;">
+                  <td align="right">
+                    <p style="margin:0; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.24em; text-transform:uppercase; color:#6f6f6f;">
                       Welcome
                     </p>
                   </td>
@@ -87,139 +158,81 @@
           </tr>
 
 
-          <!-- ── BRAND ── -->
+          <!-- ══ HERO PRINT ══ -->
           <tr>
-            <td class="mobile-padding" align="center" style="padding:40px 40px 32px;">
-              <h1 style="margin:0; font-family:'Courier New',Courier,monospace; font-size:18px; font-weight:normal; letter-spacing:0.4em; text-transform:uppercase; color:#000000;">
-                Fola Adeleke<span style="font-size:12px; vertical-align:super; letter-spacing:0;">®</span>
+            <td style="font-size:0; line-height:0;">
+              <a href="https://shop.folaadeleke.com/products/mother-of-a-nation" style="text-decoration:none;">
+                <img src="https://folaadeleke.com/images/newsletter/welcome/hero-mother-of-a-nation.jpg" width="560" alt="Mother of a Nation &#8212; fine art print by Fola Adeleke" style="display:block; border:0; outline:none; text-decoration:none; width:100%; max-width:560px; height:auto;" />
+              </a>
+            </td>
+          </tr>
+          <tr>
+            <td class="mobile-padding" style="padding:14px 32px 0; border-bottom:1px solid #dcdcdc;">
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tr>
+                  <td align="left" style="padding-bottom:16px;">
+                    <p style="margin:0; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.18em; text-transform:uppercase; color:#111111;">
+                      Mother of a Nation
+                    </p>
+                  </td>
+                  <td align="right" style="padding-bottom:16px;">
+                    <p style="margin:0; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:#6f6f6f;">
+                      Fine art print
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+
+          <!-- ══ HEADLINE ══ -->
+          <tr>
+            <td class="mobile-padding" style="padding:40px 32px 0;">
+              <h1 class="mobile-heading" style="margin:0; font-family:'Courier New',Courier,monospace; font-size:34px; font-weight:normal; letter-spacing:0.16em; text-transform:uppercase; color:#000000; line-height:1.2;">
+                You're in.
               </h1>
             </td>
           </tr>
 
-          <!-- ── RULE ── -->
           <tr>
-            <td align="center" style="padding:0 0 40px;">
-              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="48">
-                <tr>
-                  <td style="border-top:1px solid #000000; font-size:0; line-height:0;">&nbsp;</td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-
-
-          <!-- ── HEADLINE ── -->
-          <tr>
-            <td class="mobile-padding" align="center" style="padding:0 40px 24px;">
-              <h2 class="mobile-heading" style="margin:0; font-family:'Courier New',Courier,monospace; font-size:26px; font-weight:normal; letter-spacing:0.3em; text-transform:uppercase; color:#000000; line-height:1.4;">
-                You're in.
-              </h2>
-            </td>
-          </tr>
-
-
-          <!-- ── OPENING COPY ── -->
-          <tr>
-            <td class="mobile-padding" align="center" style="padding:0 40px 36px;">
-              <p style="margin:0 0 18px; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.12em; line-height:2.2; color:#000000; text-align:center;">
-                Thank you for subscribing.<br>
-                You're now part of a small, direct list.
+            <td class="mobile-padding" style="padding:22px 32px 0;">
+              <p style="margin:0 0 16px; font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:1.65; color:#111111;">
+                Thank you for subscribing. You're now part of a small, direct list.
               </p>
-              <p style="margin:0; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.12em; line-height:2.2; color:#999999; text-align:center;">
-                No noise. No filler. Just the work —<br>
-                when it's ready, before anyone else sees it.
+              <p style="margin:0; font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:1.65; color:#4f4f4f;">
+                No noise. No filler. Just the work &mdash; when it's ready, before anyone else sees it.
               </p>
             </td>
           </tr>
 
 
-          <!-- ── DIVIDER ── -->
+          <!-- ══ WHAT TO EXPECT ══ -->
           <tr>
-            <td class="mobile-padding" style="padding:0 40px 36px;">
-              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
-                <tr>
-                  <td style="border-top:1px solid #eeeeee; font-size:0; line-height:0;">&nbsp;</td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-
-
-          <!-- ── WHAT TO EXPECT ── -->
-          <tr>
-            <td class="mobile-padding" align="center" style="padding:0 40px 16px;">
-              <p style="margin:0; font-family:'Courier New',Courier,monospace; font-size:9px; letter-spacing:0.35em; text-transform:uppercase; color:#999999;">
+            <td class="mobile-padding" style="padding:40px 32px 0;">
+              <p style="margin:0 0 8px; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.3em; text-transform:uppercase; color:#6f6f6f; border-bottom:1px solid #111111; padding-bottom:12px;">
                 What to expect
               </p>
-            </td>
-          </tr>
-
-          <!-- Item 1 -->
-          <tr>
-            <td class="mobile-padding" style="padding:0 40px;">
               <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
                 <tr>
-                  <td style="padding:14px 0; border-bottom:1px solid #eeeeee;">
-                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
-                      <tr>
-                        <td width="20" valign="top" style="padding-top:1px;">
-                          <span style="font-family:'Courier New',Courier,monospace; font-size:11px; color:#999999;">—</span>
-                        </td>
-                        <td style="padding-left:12px;">
-                          <p style="margin:0; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.1em; line-height:1.8; color:#000000;">
-                            <strong style="font-weight:normal;">Early access</strong> to every new drop — 24hrs before anyone else
-                          </p>
-                        </td>
-                      </tr>
-                    </table>
+                  <td style="padding:18px 0; border-bottom:1px solid #dcdcdc;">
+                    <p style="margin:0; font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:1.55; color:#111111;">
+                      <strong style="font-weight:bold;">Early access</strong><span style="color:#4f4f4f;"> to every new drop &mdash; 24 hours before anyone else.</span>
+                    </p>
                   </td>
                 </tr>
-              </table>
-            </td>
-          </tr>
-
-          <!-- Item 2 -->
-          <tr>
-            <td class="mobile-padding" style="padding:0 40px;">
-              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
                 <tr>
-                  <td style="padding:14px 0; border-bottom:1px solid #eeeeee;">
-                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
-                      <tr>
-                        <td width="20" valign="top" style="padding-top:1px;">
-                          <span style="font-family:'Courier New',Courier,monospace; font-size:11px; color:#999999;">—</span>
-                        </td>
-                        <td style="padding-left:12px;">
-                          <p style="margin:0; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.1em; line-height:1.8; color:#000000;">
-                            <strong style="font-weight:normal;">Studio updates</strong> — process, archive, and work in progress
-                          </p>
-                        </td>
-                      </tr>
-                    </table>
+                  <td style="padding:18px 0; border-bottom:1px solid #dcdcdc;">
+                    <p style="margin:0; font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:1.55; color:#111111;">
+                      <strong style="font-weight:bold;">Studio updates</strong><span style="color:#4f4f4f;"> &mdash; process, archive, and work in progress.</span>
+                    </p>
                   </td>
                 </tr>
-              </table>
-            </td>
-          </tr>
-
-          <!-- Item 3 -->
-          <tr>
-            <td class="mobile-padding" style="padding:0 40px 44px;">
-              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
                 <tr>
-                  <td style="padding:14px 0; border-bottom:1px solid #eeeeee;">
-                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
-                      <tr>
-                        <td width="20" valign="top" style="padding-top:1px;">
-                          <span style="font-family:'Courier New',Courier,monospace; font-size:11px; color:#999999;">—</span>
-                        </td>
-                        <td style="padding-left:12px;">
-                          <p style="margin:0; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.1em; line-height:1.8; color:#000000;">
-                            <strong style="font-weight:normal;">Direct notes</strong> from Fola — unfiltered, unscheduled
-                          </p>
-                        </td>
-                      </tr>
-                    </table>
+                  <td style="padding:18px 0; border-bottom:1px solid #dcdcdc;">
+                    <p style="margin:0; font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:1.55; color:#111111;">
+                      <strong style="font-weight:bold;">Direct notes</strong><span style="color:#4f4f4f;"> from Fola &mdash; unfiltered, unscheduled.</span>
+                    </p>
                   </td>
                 </tr>
               </table>
@@ -227,88 +240,40 @@
           </tr>
 
 
-          <!-- ── RECENT WORK ── -->
+          <!-- ══ INVERTED OFFER BAND ══ -->
           <!--
-            Tiles are 504x630 (2x for a 232x290 render), each work scaled to a
-            common height on white so the grid reads as an even hang. Absolute
-            URLs: email clients have no site to be relative to.
+            Beehiiv merge tag {{email}} plus the campaign secret
+            (CLAIM_SECRET in the Worker). Swap REPLACE_WITH_CLAIM_SECRET
+            for the deployed value before sending.
           -->
           <tr>
-            <td class="mobile-padding" style="padding:0 40px 40px;">
-              <p style="margin:0 0 16px; font-family:'Courier New',Courier,monospace; font-size:9px; letter-spacing:0.35em; text-transform:uppercase; color:#999999;">
-                Recent Work
-              </p>
-              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+            <td style="padding:40px 0 0;">
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color:#000000;">
                 <tr>
-                  <td width="232" valign="top" style="padding-bottom:16px;">
-                    <a href="https://shop.folaadeleke.com/products/mother-of-a-nation" style="text-decoration:none;">
-                      <img src="https://folaadeleke.com/images/newsletter/welcome/mother-of-a-nation.jpg" width="232" alt="Mother of a Nation &#8212; fine art print by Fola Adeleke" style="display:block; border:0; outline:none; text-decoration:none; width:100%; max-width:232px; height:auto;" />
-                    </a>
-                  </td>
-                  <td width="16" style="font-size:0; line-height:0;">&nbsp;</td>
-                  <td width="232" valign="top" style="padding-bottom:16px;">
-                    <a href="https://shop.folaadeleke.com/products/girl-dad" style="text-decoration:none;">
-                      <img src="https://folaadeleke.com/images/newsletter/welcome/girl-dad.jpg" width="232" alt="Girl Dad &#8212; fine art print by Fola Adeleke" style="display:block; border:0; outline:none; text-decoration:none; width:100%; max-width:232px; height:auto;" />
-                    </a>
-                  </td>
-                </tr>
-                <tr>
-                  <td width="232" valign="top" style="padding-bottom:16px;">
-                    <a href="https://shop.folaadeleke.com/products/brotherhood" style="text-decoration:none;">
-                      <img src="https://folaadeleke.com/images/newsletter/welcome/brotherhood.jpg" width="232" alt="Brotherhood &#8212; fine art print by Fola Adeleke" style="display:block; border:0; outline:none; text-decoration:none; width:100%; max-width:232px; height:auto;" />
-                    </a>
-                  </td>
-                  <td width="16" style="font-size:0; line-height:0;">&nbsp;</td>
-                  <td width="232" valign="top" style="padding-bottom:16px;">
-                    <a href="https://shop.folaadeleke.com/products/one-vow" style="text-decoration:none;">
-                      <img src="https://folaadeleke.com/images/newsletter/welcome/one-vow.jpg" width="232" alt="One Vow &#8212; fine art print by Fola Adeleke" style="display:block; border:0; outline:none; text-decoration:none; width:100%; max-width:232px; height:auto;" />
-                    </a>
-                  </td>
-                </tr>
-              </table>
-              <p style="margin:12px 0 0; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.1em; line-height:1.8;">
-                <a href="https://folaadeleke.com/prints" style="color:#000000; text-decoration:underline;">View all prints &rarr;</a>
-              </p>
-            </td>
-          </tr>
-
-
-          <!-- ── SUBSCRIBER CODE ── -->
-          <!--
-            The href carries the beehiiv email merge tag and the campaign
-            secret (CLAIM_SECRET in the Worker). Confirm the merge-tag
-            syntax against your beehiiv account before sending, and swap
-            REPLACE_WITH_CLAIM_SECRET for the deployed value.
-            The 24 hours start when this is tapped, not at signup.
-          -->
-          <tr>
-            <td class="mobile-padding" style="padding:0 40px 44px;">
-              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="border:1px solid #000000;">
-                <tr>
-                  <td align="center" style="padding:32px 24px;">
-                    <p style="margin:0 0 10px; font-family:'Courier New',Courier,monospace; font-size:9px; letter-spacing:0.35em; text-transform:uppercase; color:#999999;">
+                  <td class="mobile-padding" align="center" style="padding:44px 32px;">
+                    <p style="margin:0 0 16px; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.3em; text-transform:uppercase; color:#9a9a9a;">
                       Subscriber Offer
                     </p>
-                    <p style="margin:0 0 18px; font-family:'Courier New',Courier,monospace; font-size:14px; letter-spacing:0.18em; text-transform:uppercase; line-height:1.5; color:#000000;">
-                      25% Off Any Print
+                    <p style="margin:0 0 18px; font-family:'Courier New',Courier,monospace; font-size:30px; letter-spacing:0.1em; text-transform:uppercase; line-height:1.3; color:#ffffff;">
+                      25% Off<br />Any Print
                     </p>
-                    <p style="margin:0 0 26px; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.08em; line-height:1.9; color:#444444;">
+                    <p style="margin:0 0 30px; font-family:Helvetica,Arial,sans-serif; font-size:15px; line-height:1.65; color:#c9c9c9;">
                       Yours alone, one use only. The clock starts the moment you claim it &mdash; then you have 24 hours.
                     </p>
                     <!--[if mso]>
                     <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word"
                       href="https://folaadeleke.com/claim/?e={{email}}&amp;c=REPLACE_WITH_CLAIM_SECRET"
-                      style="height:46px; v-text-anchor:middle; width:240px;"
-                      arcsize="0%" strokecolor="#000000" fillcolor="#000000">
+                      style="height:50px; v-text-anchor:middle; width:260px;"
+                      arcsize="0%" strokecolor="#ffffff" fillcolor="#ffffff">
                       <w:anchorlock/>
-                      <center style="color:#ffffff; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.2em;">
+                      <center style="color:#000000; font-family:'Courier New',Courier,monospace; font-size:13px; letter-spacing:0.18em;">
                         CLAIM YOUR CODE
                       </center>
                     </v:roundrect>
                     <![endif]-->
                     <!--[if !mso]><!-->
                     <a href="https://folaadeleke.com/claim/?e={{email}}&amp;c=REPLACE_WITH_CLAIM_SECRET"
-                      style="display:inline-block; background-color:#000000; color:#ffffff; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.25em; text-transform:uppercase; text-decoration:none; padding:14px 36px; border:1px solid #000000;">
+                      style="display:inline-block; background-color:#ffffff; color:#000000; font-family:'Courier New',Courier,monospace; font-size:13px; letter-spacing:0.18em; text-transform:uppercase; text-decoration:none; padding:17px 40px; border:1px solid #ffffff;">
                       Claim Your Code &rarr;
                     </a>
                     <!--<![endif]-->
@@ -319,74 +284,88 @@
           </tr>
 
 
-          <!-- ── CTA ── -->
+          <!-- ══ THE HANG: 3-UP ══ -->
           <tr>
-            <td align="center" style="padding:0 40px 48px;">
-              <!--[if mso]>
-              <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word"
-                href="https://folaadeleke.com"
-                style="height:46px; v-text-anchor:middle; width:220px;"
-                arcsize="0%" strokecolor="#000000" fillcolor="#000000">
-                <w:anchorlock/>
-                <center style="color:#ffffff; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.2em;">
-                  VIEW THE WORK
-                </center>
-              </v:roundrect>
-              <![endif]-->
-              <!--[if !mso]><!-->
-              <a href="https://folaadeleke.com"
-                style="display:inline-block; background-color:#000000; color:#ffffff; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.25em; text-transform:uppercase; text-decoration:none; padding:14px 36px; border:1px solid #000000;">
-                View the Work &rarr;
-              </a>
-              <!--<![endif]-->
-            </td>
-          </tr>
-
-
-          <!-- ── DIVIDER ── -->
-          <tr>
-            <td class="mobile-padding" style="padding:0 40px 40px;">
+            <td class="mobile-padding" style="padding:40px 32px 0;">
+              <p style="margin:0 0 20px; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.3em; text-transform:uppercase; color:#6f6f6f; border-bottom:1px solid #111111; padding-bottom:12px;">
+                More from the archive
+              </p>
               <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
                 <tr>
-                  <td style="border-top:1px solid #eeeeee; font-size:0; line-height:0;">&nbsp;</td>
+                  <td width="33.33%" valign="top" style="padding-right:8px;">
+                    <a href="https://shop.folaadeleke.com/products/girl-dad" style="text-decoration:none;">
+                      <img src="https://folaadeleke.com/images/newsletter/welcome/tile-girl-dad.jpg" alt="Girl Dad &#8212; fine art print by Fola Adeleke" width="480" height="600" style="display:block; border:1px solid #e4e4e4; outline:none; text-decoration:none; width:100%; height:auto;" />
+                      <p style="margin:10px 0 0; font-family:'Courier New',Courier,monospace; font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:#111111; line-height:1.5;">Girl Dad</p>
+                    </a>
+                  </td>
+                  <td width="33.33%" valign="top" style="padding-left:4px; padding-right:4px;">
+                    <a href="https://shop.folaadeleke.com/products/loud-celebration" style="text-decoration:none;">
+                      <img src="https://folaadeleke.com/images/newsletter/welcome/tile-loud-celebration.jpg" alt="Loud Celebration &#8212; fine art print by Fola Adeleke" width="480" height="600" style="display:block; border:1px solid #e4e4e4; outline:none; text-decoration:none; width:100%; height:auto;" />
+                      <p style="margin:10px 0 0; font-family:'Courier New',Courier,monospace; font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:#111111; line-height:1.5;">Loud Celebration</p>
+                    </a>
+                  </td>
+                  <td width="33.33%" valign="top" style="padding-left:8px;">
+                    <a href="https://shop.folaadeleke.com/products/sisterhood" style="text-decoration:none;">
+                      <img src="https://folaadeleke.com/images/newsletter/welcome/tile-sisterhood.jpg" alt="Sisterhood &#8212; fine art print by Fola Adeleke" width="480" height="600" style="display:block; border:1px solid #e4e4e4; outline:none; text-decoration:none; width:100%; height:auto;" />
+                      <p style="margin:10px 0 0; font-family:'Courier New',Courier,monospace; font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:#111111; line-height:1.5;">Sisterhood</p>
+                    </a>
+                  </td>
                 </tr>
               </table>
             </td>
           </tr>
 
 
-          <!-- ── SIGN-OFF ── -->
+          <!-- ══ SECONDARY CTA ══ -->
           <tr>
-            <td class="mobile-padding" align="center" style="padding:0 40px 48px;">
-              <p style="margin:0; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.15em; color:#000000; text-align:center;">
-                — Fola
-              </p>
+            <td class="mobile-padding" style="padding:28px 32px 40px;">
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tr>
+                  <td align="left">
+                    <p style="margin:0; font-family:'Courier New',Courier,monospace; font-size:12px; letter-spacing:0.14em; text-transform:uppercase;">
+                      <a href="https://folaadeleke.com/prints" style="color:#111111; text-decoration:none; border-bottom:1px solid #111111; padding-bottom:2px;">View all prints &rarr;</a>
+                    </p>
+                  </td>
+                </tr>
+              </table>
             </td>
           </tr>
 
 
-          <!-- ── FOOTER ── -->
+          <!-- ══ SIGN-OFF ══ -->
           <tr>
-            <td class="mobile-padding" align="center" style="padding:24px 40px; border-top:1px solid #eeeeee;">
-              <p style="margin:0 0 8px; font-family:'Courier New',Courier,monospace; font-size:9px; letter-spacing:0.2em; text-transform:uppercase; color:#999999;">
-                Fola Adeleke®
+            <td class="mobile-padding" style="padding:0 32px 40px;">
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tr><td style="border-top:1px solid #dcdcdc; padding-top:28px;">
+                  <p style="margin:0; font-family:'Courier New',Courier,monospace; font-size:14px; letter-spacing:0.18em; color:#111111;">
+                    &mdash; Fola
+                  </p>
+                </td></tr>
+              </table>
+            </td>
+          </tr>
+
+
+          <!-- ══ FOOTER ══ -->
+          <tr>
+            <td class="mobile-padding" style="padding:26px 32px; background-color:#f2f0ed; border-top:1px solid #dcdcdc;">
+              <p style="margin:0 0 10px; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.26em; text-transform:uppercase; color:#111111;">
+                Fola Adeleke&reg;
               </p>
-              <p style="margin:0 0 16px; font-family:'Courier New',Courier,monospace; font-size:9px; letter-spacing:0.1em; color:#999999;">
-                © 2026 Fola Adeleke. All rights reserved.
+              <p style="margin:0 0 14px; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.05em; color:#666666;">
+                &copy; 2026 Fola Adeleke. All rights reserved.
               </p>
-              <p style="margin:0; font-family:'Courier New',Courier,monospace; font-size:9px; letter-spacing:0.08em; color:#cccccc; line-height:1.8;">
+              <p style="margin:0; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.03em; color:#666666; line-height:1.9;">
                 You're receiving this because you subscribed at
-                <a href="https://folaadeleke.com" style="color:#999999; text-decoration:underline;">folaadeleke.com</a>.<br>
-                <a href="{{unsubscribe_url}}" style="color:#999999; text-decoration:underline;">Unsubscribe</a>
-                &nbsp;·&nbsp;
-                <a href="https://folaadeleke.com" style="color:#999999; text-decoration:underline;">Visit the site</a>
+                <a href="https://folaadeleke.com" style="color:#111111; text-decoration:underline;">folaadeleke.com</a>.<br />
+                <a href="{{unsubscribe_url}}" style="color:#111111; text-decoration:underline;">Unsubscribe</a>
+                &nbsp;&middot;&nbsp;
+                <a href="https://folaadeleke.com" style="color:#111111; text-decoration:underline;">Visit the site</a>
               </p>
             </td>
           </tr>
-
 
         </table>
-        <!-- End container -->
 
       </td>
     </tr>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Welcome email — three redesigns</title>
+<style>
+  :root{
+    --paper:#f4f4f2; --ink:#111; --soft:#5a5a5a; --rule:#d6d4d0;
+    --mono:'Courier New',Courier,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--mono);}
+  header{padding:28px 32px 20px;border-bottom:1px solid var(--ink);background:#fff;position:sticky;top:0;z-index:10}
+  h1{margin:0 0 6px;font-size:14px;font-weight:normal;letter-spacing:.28em;text-transform:uppercase}
+  .sub{margin:0;font-size:12px;letter-spacing:.06em;color:var(--soft);line-height:1.7}
+  .controls{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  button{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+    padding:9px 16px;border:1px solid var(--ink);background:#fff;color:var(--ink);cursor:pointer}
+  button[aria-pressed="true"]{background:var(--ink);color:#fff}
+  .hint{font-size:11px;letter-spacing:.06em;color:var(--soft);margin-left:4px}
+
+  .grid{display:flex;gap:24px;padding:28px 32px 60px;align-items:flex-start;overflow-x:auto}
+  .col{flex:0 0 auto}
+  .cap{margin:0 0 4px;font-size:11px;letter-spacing:.24em;text-transform:uppercase}
+  .cap .tag{color:var(--soft)}
+  .note{margin:0 0 12px;font-size:11px;letter-spacing:.03em;color:var(--soft);line-height:1.7;max-width:34ch}
+  .frame{border:1px solid var(--rule);background:#fff;overflow:hidden;box-shadow:0 1px 0 rgba(0,0,0,.04)}
+  iframe{display:block;border:0;background:#fff;transform-origin:0 0}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Welcome email — three redesigns</h1>
+  <p class="sub">
+    Same content, same brand. Courier keeps the wordmark, labels, headlines and buttons;<br />
+    body copy moves to a real reading face. Every grey now passes WCAG AA.
+  </p>
+  <div class="controls">
+    <button id="w-desktop" aria-pressed="true">Desktop 560</button>
+    <button id="w-mobile"  aria-pressed="false">Mobile 375</button>
+    <span class="hint">|</span>
+    <button id="z-fit" aria-pressed="true">Fit</button>
+    <button id="z-full" aria-pressed="false">100%</button>
+    <span class="hint">|</span>
+    <button id="t-current" aria-pressed="false">Show current version</button>
+  </div>
+</header>
+
+<div class="grid" id="grid"></div>
+
+<script>
+  var VARIANTS = [
+    { id:'cur', file:'../welcome-email.html',
+      name:'Current', tag:'— live',
+      note:'Courier throughout at 11px / 0.12em, centred. Greys at #999 and #ccc.' },
+    { id:'a', file:'welcome-email-a-ink-masthead.html',
+      name:'A · Ink Masthead', tag:'serif',
+      note:'Opens on a black slab. Georgia body, numbered list, 2x2 grid with titles, ink footer.' },
+    { id:'b', file:'../welcome-email.html',
+      name:'B · Gallery Hang', tag:'sans — ADOPTED',
+      note:'ADOPTED — this frame is the live welcome-email.html. Helvetica body, full-bleed black offer band, 3-up hang below.' },
+    { id:'c', file:'welcome-email-c-contact-sheet.html',
+      name:'C · Contact Sheet', tag:'serif',
+      note:'Archival index card. Left-aligned label/value rows, numbered contact sheet, ink base.' }
+  ];
+
+  var state = { width:560, fit:true, showCurrent:false };
+  var HEIGHT = 2400;
+
+  function render(){
+    var grid = document.getElementById('grid');
+    grid.innerHTML = '';
+    VARIANTS.forEach(function(v){
+      if (v.id === 'cur' && !state.showCurrent) return;
+      var scale = state.fit ? (state.width === 560 ? 0.55 : 0.8) : 1;
+
+      var col = document.createElement('div');
+      col.className = 'col';
+      col.style.width = Math.round(state.width * scale) + 'px';
+
+      var cap = document.createElement('p');
+      cap.className = 'cap';
+      cap.innerHTML = v.name + ' <span class="tag">' + v.tag + '</span>';
+
+      var note = document.createElement('p');
+      note.className = 'note';
+      note.textContent = v.note;
+
+      var frame = document.createElement('div');
+      frame.className = 'frame';
+      frame.style.width  = Math.round(state.width * scale) + 'px';
+      frame.style.height = Math.round(HEIGHT * scale) + 'px';
+
+      var f = document.createElement('iframe');
+      f.src = v.file;
+      f.width = state.width;
+      f.height = HEIGHT;
+      f.style.transform = 'scale(' + scale + ')';
+      f.setAttribute('title', v.name + ' preview');
+
+      frame.appendChild(f);
+      col.appendChild(cap);
+      col.appendChild(note);
+      col.appendChild(frame);
+      grid.appendChild(col);
+    });
+  }
+
+  function pair(aId, bId, onA, onB){
+    var a = document.getElementById(aId), b = document.getElementById(bId);
+    a.onclick = function(){ a.setAttribute('aria-pressed','true');  b.setAttribute('aria-pressed','false'); onA(); render(); };
+    b.onclick = function(){ b.setAttribute('aria-pressed','true');  a.setAttribute('aria-pressed','false'); onB(); render(); };
+  }
+
+  pair('w-desktop','w-mobile', function(){ state.width = 560; }, function(){ state.width = 375; });
+  pair('z-fit','z-full', function(){ state.fit = true; }, function(){ state.fit = false; });
+
+  var tc = document.getElementById('t-current');
+  tc.onclick = function(){
+    state.showCurrent = !state.showCurrent;
+    tc.setAttribute('aria-pressed', String(state.showCurrent));
+    tc.textContent = state.showCurrent ? 'Hide current version' : 'Show current version';
+    render();
+  };
+
+  render();
+</script>
+
+</body>
+</html>
