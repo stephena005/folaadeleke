@@ -8,7 +8,7 @@ crons = ["15 2 * * *"]
 
 [[kv_namespaces]]
 binding = "CLAIMS"
-id = "REPLACE_WITH_KV_NAMESPACE_ID"
+id = "49c69dcd4ad34a2dad5879be470dd7e2"
 
 [vars]
 ALLOWED_ORIGIN      = "https://folaadeleke.com"
