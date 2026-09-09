@@ -21,7 +21,8 @@ welcome email  →  /claim/?e={{email}}&c=<secret>  →  this Worker
 |---|---|
 | `worker/src/index.js` | The Worker: `POST /claim`, `GET /health`, nightly cleanup cron |
 | `claim/index.html` | Static claim page on folaadeleke.com (code / expired / error states) |
-| `welcome-email.html` | Carries the *Claim Your Code* button |
+| `welcome-email.html` | Carries the *Claim Your Code* button (secret placeholder, tracked) |
+| `worker/configure.mjs` | Fills in deploy-time config; renders the email with the secret |
 
 ## Setup
 
@@ -38,14 +39,35 @@ npm install
 npx wrangler kv namespace create CLAIMS
 ```
 
-Paste the returned id into `wrangler.toml` (`REPLACE_WITH_KV_NAMESPACE_ID`) and
-set `SHOPIFY_SHOP` to your `*.myshopify.com` domain.
+**3. Fill in the config** — one command, rather than hand-editing three files:
 
-**3. Secrets**
+```sh
+npm run configure -- \
+  --shop <name>.myshopify.com \
+  --kv <id from step 2> \
+  --worker-url https://<worker>.<subdomain>.workers.dev
+```
+
+That writes the KV id and `SHOPIFY_SHOP` into `wrangler.toml`, `WORKER_ENDPOINT`
+into `claim/index.html`, and renders `welcome-email.rendered.html` at the repo
+root with a freshly generated `CLAIM_SECRET`. It prints the secret — you need it
+for step 4. Pass `--secret <hex>` to reuse an existing one instead. Re-running is
+safe; it overwrites the previous values.
+
+`--shop` must be the `*.myshopify.com` **admin** domain. The storefront domain
+(`shop.folaadeleke.com`) is rejected — the Admin API does not answer on it.
+
+> **This repository is public and GitHub Pages serves its root.** Anything
+> committed here is readable at `folaadeleke.com/<path>`. That is why the secret
+> only ever lands in `welcome-email.rendered.html`, which is gitignored — the
+> tracked `welcome-email.html` keeps the `REPLACE_WITH_CLAIM_SECRET` placeholder.
+> Commit `wrangler.toml` and `claim/index.html`; never the rendered email.
+
+**4. Secrets**
 
 ```sh
 npx wrangler secret put SHOPIFY_ADMIN_TOKEN      # shpat_... from step 1
-npx wrangler secret put CLAIM_SECRET             # e.g. openssl rand -hex 16
+npx wrangler secret put CLAIM_SECRET             # the value step 3 printed
 npx wrangler secret put BEEHIIV_API_KEY          # optional
 npx wrangler secret put BEEHIIV_PUBLICATION_ID   # optional, pub_...
 ```
@@ -58,16 +80,14 @@ The two beehiiv values are optional. Set both and the Worker will only mint for
 addresses that are active subscribers; leave them unset and any well-formed
 address that has the campaign secret gets one code.
 
-**4. Deploy**
+**5. Deploy**
 
 ```sh
 npx wrangler deploy
 ```
 
-**5. Wire up the front end** — in `claim/index.html`, set `WORKER_ENDPOINT` to
-the deployed URL. In `welcome-email.html`, replace both
-`REPLACE_WITH_CLAIM_SECRET` occurrences with the `CLAIM_SECRET` value, then
-paste the email into beehiiv.
+**6. Wire up the front end** — step 3 already set `WORKER_ENDPOINT` and rendered
+the email. Paste `welcome-email.rendered.html` into beehiiv as the welcome email.
 
 > **Verify before sending:** the email link uses `{{email}}` as beehiiv's merge
 > tag. Confirm that syntax in your beehiiv account — send yourself a test and
