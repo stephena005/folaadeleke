@@ -5,6 +5,15 @@ Adeleke website (folaadeleke.com), for use as reference when designing new
 pages, emails, product assets, or Claude Projects work for this brand. Use it
 to keep new work indistinguishable in tone and craft from the existing site.
 
+> **The site and the emails have diverged — deliberately.**
+> In September 2026 the email system was rebuilt around legibility: body
+> copy moved off Courier, and every colour was re-measured against WCAG
+> AA. The website has **not** yet followed. Where this document
+> describes the two differently that is a record of fact, not an
+> inconsistency to tidy away. See §9 for the email system;
+> `newsletter-template.html` is authoritative there and this document
+> defers to it.
+
 ## 1. Design Philosophy
 
 The site reads like a **gallery catalogue crossed with a terminal** —
@@ -44,6 +53,39 @@ way on dark sections (`rgba(255,255,255,0.3–0.6)`).
 section needs emphasis, use black/white inversion (a full-bleed black
 section with white text) instead of color.
 
+### Known accessibility debt
+
+`--grey-mid` is used for body copy and secondary text across the site,
+and it does not meet WCAG AA (4.5:1 for normal text). Measured:
+
+| Colour | On | Ratio | Verdict |
+|---|---|---|---|
+| `#999999` | white | **2.85:1** | fails |
+| `#cccccc` | white | **1.61:1** | fails badly |
+
+They remain documented because the site genuinely still uses them.
+**Do not carry them into new work.** The email rebuild replaced them
+with the scale below, and the site should follow when there is time —
+the "faint" complaint that triggered the email redesign applies to the
+site for exactly the same reason.
+
+### Accessible greys — use these for anything new
+
+| Role | Hex | On | Ratio |
+|---|---|---|---|
+| Body ink | `#111111` | white | 18.9:1 |
+| Secondary | `#4f4f4f` | white | 8.2:1 |
+| Label | `#6f6f6f` | white | 5.0:1 |
+| Footer ink | `#666666` | `#f2f0ed` | 5.1:1 |
+| Reversed body | `#c9c9c9` | black | 12.7:1 |
+| Reversed label | `#9a9a9a` | black | 7.5:1 |
+| Hairline | `#dcdcdc` | white | structure only, never text |
+
+Always measure a grey against the background it actually sits on, not
+against white. `#6f6f6f` passes on white at 5.0:1 but reaches only
+4.42:1 on the `#f2f0ed` footer ground — which is why the footer uses
+`#666666`.
+
 ## 3. Typography
 
 One typeface, used for literally everything — headings, body, buttons, forms,
@@ -56,6 +98,15 @@ font-family: 'Courier New', Courier, monospace;
 This is intentional: a monospace, typewriter-like face gives the site its
 catalogue/dossier feel. Do not substitute a grotesk or serif; do not add a
 second display face.
+
+**Email is the one deliberate exception.** There, Courier carries the
+wordmark, labels, headlines, captions, numerals and buttons — the brand
+furniture — while body copy is set in Helvetica/Arial at 16px/1.65.
+Mono has thin, uniform strokes; at 11px with wide tracking the eye stops
+grouping letters into words, and the email reads faint no matter how
+much white space surrounds it. That was the central fault in the
+pre-2026 templates. The rule below about small sizes and loose tracking
+describes the **site**; do not apply it to email body copy.
 
 **Type scale and treatment:**
 
@@ -173,7 +224,75 @@ Motion is subtle, fast, and functional — never decorative:
 - Footer is minimal: social links (Instagram, TikTok) + a single copyright
   line, muted grey, tiny type.
 
-## 9. Applying This System
+## 9. Email system
+
+`newsletter-template.html` at the repo root is the authoritative
+template and carries the full spec in its own header comment. Copy it
+to `newsletter-issue-0NN.html`, fill the `[PLACEHOLDERS]` (square
+brackets, so they can never be confused with Beehiiv's
+`{{merge_tags}}`), delete blocks marked OPTIONAL, repeat those marked
+REPEATABLE. This section is the summary; the template wins on any
+disagreement.
+
+**Type**
+
+| Role | Face | Size | Tracking |
+|---|---|---|---|
+| Wordmark | Courier | 13px | 0.26em |
+| Section label | Courier | 11px | 0.30em |
+| Headline | Courier | 34px (26px mobile) | 0.16em |
+| Sub-headline | Courier | 20px | 0.14em |
+| Caption / numerals | Courier | 10–12px | 0.10–0.18em |
+| Button | Courier | 13px | 0.18em |
+| **Body copy** | **Helvetica/Arial** | **16px / 1.65** | — |
+
+**Structure**
+
+Preheader (write it as a real sentence — it is the second thing read),
+header with wordmark left and issue label right, full-bleed hero with a
+caption bar, headline and intro, repeatable numbered items, at most
+**one** inverted black band, optional 3-up tile row, `— Fola`, footer
+on `#f2f0ed`.
+
+**Rules**
+
+- 560px card on a `#faf9f7` ground; 32px side padding, 24px mobile
+- Spacing on an 8px rhythm — 32 and 40 between sections. White space is
+  not the same as air: faint text in a large gap reads as emptiness,
+  not elegance
+- Multi-column rows use **percentage widths, never fixed px**. Fixed
+  columns distribute unevenly across images of differing aspect and the
+  row ends up ragged with misaligned captions
+- All padding inline; responsive breakpoint at 620px
+- MSO/Outlook VML fallback on every CTA button
+- **No web fonts.** Helvetica, Arial, Courier New and Georgia ship with
+  every mail client; a Google Font silently falls back in Outlook and
+  the Gmail app and breaks the rhythm
+
+**Images**
+
+Hero 1120px wide; 2-up tiles 720x900; 3-up tiles 480x600 — one shared
+aspect ratio per row or the captions will not line up. Export
+full-bleed from the masters in `images/prints/`. Never letterbox
+artwork on white, and never point an email or a web page at a print
+master — they run to 50 MB and beyond.
+
+Every image must be **deployed before the send**. Email clients have no
+site to be relative to, so all `src` values are absolute URLs and an
+undeployed file is a broken box in the inbox.
+
+**Dark work at small sizes.** Most pieces in the catalogue are more
+than 85% near-black. Before putting one in a 3-up row, check it still
+reads at 92px — what that row gets on a phone. If it does not, give it
+a larger slot or pick a more graphic piece.
+
+**Campaign emails** must not leak the answer or the mechanic in an
+asset path, filename or alt text. Serve crops from a neutral directory.
+A time-boxed offer must state its **real** deadline: if the landing
+page enforces a fixed end instant, saying "24 hours" tells a late
+opener they have longer than they do.
+
+## 10. Applying This System
 
 When designing something new for Fola Adeleke (a page, email, product
 graphic, or social asset), check it against this list:
@@ -181,6 +300,7 @@ graphic, or social asset), check it against this list:
 1. Is it black, white, or a grey-on-white/grey-on-black variant only?
 2. Is the typeface Courier New/monospace, with hierarchy coming from
    letter-spacing and uppercase rather than new fonts or heavy weights?
+   (Email is the exception — body copy there is Helvetica/Arial; see §9.)
 3. Are corners sharp (0 radius) except for genuinely circular/pill controls?
 4. Is depth expressed with hairline borders and flat contrast, not shadows
    or gradients?
@@ -188,6 +308,8 @@ graphic, or social asset), check it against this list:
    rather than flashy?
 6. Does copy stay terse, uppercase for labels, sentence-case and short for
    body text?
+7. Does every piece of text clear WCAG AA (4.5:1) against the background
+   it actually sits on — not against white?
 
 If a new element fails more than one of these, it's off-brand — simplify it
 back toward the system rather than adding a one-off exception.
