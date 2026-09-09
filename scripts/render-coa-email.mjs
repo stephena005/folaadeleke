@@ -360,4 +360,13 @@ if (!args.flags.has('no-check')) {
   }
 }
 
-console.log('  now open it, read it, and send yourself a test before it goes to the buyer');
+console.log('\n  To send it (beehiiv, one post per buyer):');
+console.log('    1. the buyer must be a subscriber — if not, add them and tag them `coa-only`');
+console.log('    2. put their email in the manual segment "Certificate recipient"');
+console.log('    3. New Post -> + -> Custom HTML -> paste everything inside <body>');
+console.log('    4. Audience: Email = "Certificate recipient".  Web = REMOVE EVERY GROUP');
+console.log('    5. send yourself a test, then send. Afterwards, empty the segment.');
+console.log('\n  The Web Audience is the one that matters: a beehiiv post publishes a');
+console.log('  public web version by default, and this email names the buyer against');
+console.log('  their edition. Leave a group in there and it is on the open web, on a');
+console.log('  domain you cannot purge.');

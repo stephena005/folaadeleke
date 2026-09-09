@@ -87,6 +87,41 @@
   per-certificate identifier; certRef is only a human-readable
   label if you decide you want one.
 
+  SENDING IT THROUGH BEEHIIV
+  ─────────────────────────
+  beehiiv's Send API is Enterprise-only and in beta, so this goes
+  through the ordinary post flow, one post per buyer:
+
+  1. The buyer has to exist as a subscriber to receive anything.
+     If they are not one, add them AND tag them `coa-only`.
+  2. Segment: keep one MANUAL segment named "Certificate recipient".
+     Before each send, replace its contents with this buyer's email
+     (manual segments take a pasted address or a CSV).
+  3. New Post → + → Custom HTML → paste everything between the
+     <body> tags of the rendered file.
+  4. Audience → Email: "Certificate recipient".
+     Audience → Web: REMOVE EVERY GROUP.
+  5. Send. Then empty the segment, so the next send cannot go out
+     to the last buyer as well.
+
+  THE WEB AUDIENCE IS THE ONE THAT MATTERS
+  ────────────────────────────────────────
+  A beehiiv post publishes a web version by default, at a public
+  URL, in the archive. This email carries the buyer's full name
+  against their edition. Publish it and you have recreated exactly
+  what anonymising the verify pages was meant to stop — except on
+  a domain you do not control and cannot purge. Removing every
+  group from the Web Audience is what makes the post email-only.
+
+  CONSENT — worth being deliberate about
+  ──────────────────────────────────────
+  A certificate is transactional; a newsletter list is marketing.
+  Adding a buyer to the audience to send them their certificate
+  puts a customer into a marketing list they did not ask to join.
+  The `coa-only` tag is the fix: exclude that segment from every
+  marketing broadcast, so buyers who never subscribed only ever
+  get the thing they bought.
+
   BEFORE SENDING — non-negotiable
   ───────────────────────────────
   · The hero must already be deployed. Email clients have no site to
@@ -98,6 +133,8 @@
     carries this buyer's name, and sending the wrong link shows one
     buyer another buyer's certificate.
   · Send yourself a test first. Check desktop AND mobile.
+  · Check the Web Audience is empty. Every time. It is the one
+    mistake here that cannot be taken back.
 
   WHAT IS DELIBERATE HERE
   ───────────────────────
@@ -106,10 +143,11 @@
     still has every fact. The verify page is corroboration, not the
     reveal.
   · ONE inverted band, the verify link. House rule: never two.
-  · The footer is transactional. It says why the email arrived and
-    gives a support address; it carries no marketing unsubscribe.
-    If this ever goes out through a marketing platform instead,
-    that platform will want its own unsubscribe token in here.
+  · The footer carries {{unsubscribe_url}} because beehiiv sends it
+    and beehiiv requires one — not because a certificate is a
+    marketing email. It says the unsubscribe governs the newsletter
+    and that the certificate stands either way, so nobody reads it
+    as a way to forfeit the record of what they own.
   ════════════════════════════════════════════════════════════════
 -->
 <head>
@@ -386,7 +424,10 @@
             </td>
           </tr>
 
-          <!-- ══ FOOTER — transactional, no marketing unsubscribe ══ -->
+          <!-- ══ FOOTER ══ The unsubscribe is beehiiv's requirement, not
+               this email's nature. Say plainly that it governs the newsletter
+               and not the certificate, or a buyer reads it as a way to lose
+               the record of what they own. ══ -->
           <tr>
             <td class="mobile-padding" style="padding:26px 32px; background-color:#f2f0ed; border-top:1px solid #dcdcdc;">
               <p style="margin:0 0 10px; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.26em; text-transform:uppercase; color:#111111;">
@@ -399,7 +440,8 @@
                 You're receiving this because you bought edition [EDITION NO]/[EDITION TOTAL] of [WORK TITLE].<br />
                 Questions about the order? <a href="mailto:hello@folaadeleke.com" style="color:#111111; text-decoration:underline;">hello@folaadeleke.com</a>
                 &nbsp;&middot;&nbsp;
-                <a href="https://folaadeleke.com" style="color:#111111; text-decoration:underline;">Visit the site</a>
+                <a href="https://folaadeleke.com" style="color:#111111; text-decoration:underline;">Visit the site</a><br />
+                <a href="{{unsubscribe_url}}" style="color:#111111; text-decoration:underline;">Unsubscribe from the newsletter</a> &mdash; your certificate stands either way.
               </p>
             </td>
           </tr>
