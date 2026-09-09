@@ -130,7 +130,7 @@ const CREATE_MUTATION = `
 
 async function createDiscountCode(env, startsAt, endsAt) {
   const prefix = env.CODE_PREFIX || 'FA-WELCOME-';
-  const percentage = Number(env.DISCOUNT_PERCENTAGE || 10) / 100;
+  const percentage = Number(env.DISCOUNT_PERCENTAGE || 25) / 100;
 
   // Collisions are vanishingly unlikely with 8 chars, but Shopify
   // rejects duplicates outright, so retry rather than fail the click.

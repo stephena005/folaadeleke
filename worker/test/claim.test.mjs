@@ -29,7 +29,7 @@ globalThis.fetch = async (url, init) => {
   throw new Error('unexpected query');
 };
 
-const env = { CLAIMS: KV, CLAIM_SECRET: 's3cret', SHOPIFY_SHOP: 'x.myshopify.com', SHOPIFY_ADMIN_TOKEN: 't', DISCOUNT_HOURS: '24' };
+const env = { CLAIMS: KV, CLAIM_SECRET: 's3cret', SHOPIFY_SHOP: 'x.myshopify.com', SHOPIFY_ADMIN_TOKEN: 't', DISCOUNT_HOURS: '24', DISCOUNT_PERCENTAGE: '25' };
 const claim = (body, ip='1.1.1.1') => worker.fetch(new Request('https://w/claim', {
   method: 'POST', headers: { 'Content-Type': 'application/json', 'CF-Connecting-IP': ip }, body: JSON.stringify(body),
 }), env, { waitUntil() {} });
@@ -44,7 +44,7 @@ check('first claim returns ok', s === 200 && d.status === 'ok' && /^FA-WELCOME-[
 const firstCode = d.code;
 const hours = (Date.parse(d.expiresAt) - Date.now()) / 3600000;
 check('window is ~24h', hours > 23.9 && hours < 24.1, String(hours));
-check('usageLimit 1 + percentage sent', created[0].usageLimit === 1 && created[0].customerGets.value.percentage === 0.1, JSON.stringify(created[0]));
+check('usageLimit 1 + percentage sent', created[0].usageLimit === 1 && created[0].customerGets.value.percentage === 0.25, JSON.stringify(created[0]));
 
 // 2. re-click, case/whitespace normalised
 [s, d] = await j(await claim({ email: 'a@example.com', c: 's3cret' }));

@@ -111,7 +111,7 @@ the email. Paste `welcome-email.rendered.html` into beehiiv as the welcome email
 
 | Var | Default | Notes |
 |---|---|---|
-| `DISCOUNT_PERCENTAGE` | `10` | Percent off, whole number |
+| `DISCOUNT_PERCENTAGE` | `25` | Percent off, whole number. Must match the rate stated in welcome-email.html |
 | `DISCOUNT_HOURS` | `24` | Length of the window |
 | `CODE_PREFIX` | `FA-WELCOME-` | Also how the cleanup cron identifies its own codes |
 | `SHOPIFY_API_VERSION` | `2026-07` | Supported until 2027-07-16. Bump deliberately; check the mutation shapes when you do |
