@@ -1041,6 +1041,24 @@
       grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 28px;
     }
+
+    /* Disclosure that the work is AI-assisted. Sits with the featured
+       prints rather than in the footer, so it is read at the point the
+       work is being considered, not after. Mirrors the wording of the
+       trust bar on /prints; /artist carries the full explanation. */
+    .featured-disclosure {
+      font-family: var(--font);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      line-height: 2;
+      text-transform: uppercase;
+      text-align: center;
+      color: var(--grey-mid);
+      border-top: 1px solid var(--grey-light);
+      margin: 40px 0 0;
+      padding-top: 28px;
+    }
+    .featured-disclosure a { color: var(--grey-mid); }
     .featured-item {
       display: block;
       color: #000;
@@ -1079,6 +1097,7 @@
       .statement-text { font-size: 17px; }
       .featured-section { padding: 0 24px 56px; }
       .featured-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+      .featured-disclosure { letter-spacing: 0.12em; margin-top: 28px; padding-top: 22px; }
     }
 
     /* ──────────────────────────────────────────
@@ -1277,6 +1296,7 @@
           <p class="featured-item-name">Unapologetic</p>
         </a>
       </div>
+      <p class="featured-disclosure">Mixed Media &amp; AI-Assisted Digital Artwork &mdash; <a class="underline-link" href="/artist">how the work is made &rarr;</a></p>
     </div>
 
     <!-- ── COUNTDOWN + EMAIL ── -->
