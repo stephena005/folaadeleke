@@ -1,0 +1,17 @@
+{
+  "name": "fa-subscriber-discount",
+  "private": true,
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Issues a 24-hour, single-use Shopify discount code to newsletter subscribers who claim it.",
+  "scripts": {
+    "dev": "wrangler dev",
+    "test": "node test/claim.test.mjs",
+    "configure": "node configure.mjs",
+    "deploy": "wrangler deploy",
+    "tail": "wrangler tail"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
+}

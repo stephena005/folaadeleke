@@ -251,6 +251,52 @@
           </tr>
 
 
+          <!-- ── SUBSCRIBER CODE ── -->
+          <!--
+            The href carries the beehiiv email merge tag and the campaign
+            secret (CLAIM_SECRET in the Worker). Confirm the merge-tag
+            syntax against your beehiiv account before sending, and swap
+            REPLACE_WITH_CLAIM_SECRET for the deployed value.
+            The 24 hours start when this is tapped, not at signup.
+          -->
+          <tr>
+            <td class="mobile-padding" style="padding:0 40px 44px;">
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="border:1px solid #000000;">
+                <tr>
+                  <td align="center" style="padding:32px 24px;">
+                    <p style="margin:0 0 10px; font-family:'Courier New',Courier,monospace; font-size:9px; letter-spacing:0.35em; text-transform:uppercase; color:#999999;">
+                      Subscriber Offer
+                    </p>
+                    <p style="margin:0 0 18px; font-family:'Courier New',Courier,monospace; font-size:14px; letter-spacing:0.18em; text-transform:uppercase; line-height:1.5; color:#000000;">
+                      10% Off Any Print
+                    </p>
+                    <p style="margin:0 0 26px; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.08em; line-height:1.9; color:#444444;">
+                      Yours alone, one use only. The clock starts the moment you claim it &mdash; then you have 24 hours.
+                    </p>
+                    <!--[if mso]>
+                    <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word"
+                      href="https://folaadeleke.com/claim/?e={{email}}&amp;c=REPLACE_WITH_CLAIM_SECRET"
+                      style="height:46px; v-text-anchor:middle; width:240px;"
+                      arcsize="0%" strokecolor="#000000" fillcolor="#000000">
+                      <w:anchorlock/>
+                      <center style="color:#ffffff; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.2em;">
+                        CLAIM YOUR CODE
+                      </center>
+                    </v:roundrect>
+                    <![endif]-->
+                    <!--[if !mso]><!-->
+                    <a href="https://folaadeleke.com/claim/?e={{email}}&amp;c=REPLACE_WITH_CLAIM_SECRET"
+                      style="display:inline-block; background-color:#000000; color:#ffffff; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.25em; text-transform:uppercase; text-decoration:none; padding:14px 36px; border:1px solid #000000;">
+                      Claim Your Code &rarr;
+                    </a>
+                    <!--<![endif]-->
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+
           <!-- ── CTA ── -->
           <tr>
             <td align="center" style="padding:0 40px 48px;">

@@ -1,0 +1,26 @@
+name = "fa-subscriber-discount"
+main = "src/index.js"
+compatibility_date = "2025-09-01"
+
+# Nightly sweep of expired subscriber codes (02:15 UTC).
+[triggers]
+crons = ["15 2 * * *"]
+
+[[kv_namespaces]]
+binding = "CLAIMS"
+id = "49c69dcd4ad34a2dad5879be470dd7e2"
+
+[vars]
+ALLOWED_ORIGIN      = "https://folaadeleke.com"
+SHOPIFY_SHOP        = "fola-adeleke.myshopify.com"
+SHOPIFY_API_VERSION = "2026-07"
+DISCOUNT_PERCENTAGE = "10"
+DISCOUNT_HOURS      = "24"
+DISCOUNT_TITLE      = "Subscriber welcome"
+CODE_PREFIX         = "FA-WELCOME-"
+
+# Secrets — set with `wrangler secret put <NAME>`, never in this file:
+#   SHOPIFY_ADMIN_TOKEN      custom app token with write_discounts
+#   CLAIM_SECRET             the ?c= value in the welcome-email link
+#   BEEHIIV_API_KEY          (optional) verify the address is on the list
+#   BEEHIIV_PUBLICATION_ID   (optional) pub_... id
