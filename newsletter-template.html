@@ -1,0 +1,382 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<!--
+  ════════════════════════════════════════════════════════════════
+  FOLA ADELEKE® — NEWSLETTER TEMPLATE
+  The house design for every issue. Copy this file, fill in the
+  [PLACEHOLDERS], delete the blocks you don't need.
+  ════════════════════════════════════════════════════════════════
+
+  HOW TO USE
+  ──────────
+  1. cp newsletter-template.html newsletter-issue-0NN.html
+  2. Replace every [PLACEHOLDER] — they are in square brackets so
+     they can never be confused with Beehiiv's {{merge_tags}}.
+  3. Delete any block marked OPTIONAL that this issue doesn't use.
+     Repeat any block marked REPEATABLE as many times as needed.
+  4. In Beehiiv: new Post → + → "Custom HTML" → paste everything
+     between the <body> tags.
+  5. Send yourself a test. Check desktop AND mobile in Beehiiv's
+     preview panel before scheduling.
+
+  BEFORE SENDING — non-negotiable
+  ───────────────────────────────
+  · Every image must already be live at folaadeleke.com. Email
+    clients have no site to be relative to, so all src values are
+    absolute URLs and a file that is not deployed renders as a
+    broken box in the inbox. Push first, then send.
+  · Check every href resolves (200, not 301/404).
+  · Leave {{unsubscribe_url}} exactly as-is; Beehiiv fills it in.
+
+  ════════════════════════════════════════════════════════════════
+  THE DESIGN SPEC — follow this, don't improvise
+  ════════════════════════════════════════════════════════════════
+
+  The rule in one line: Courier is the brand's voice, not its
+  body copy. It carries the wordmark, labels, headlines, captions,
+  numerals and buttons. Everything a reader actually has to read
+  is set in Helvetica/Arial.
+
+  TYPE
+  ────
+  Wordmark        Courier  13px  0.26em  uppercase
+  Section label   Courier  11px  0.30em  uppercase  #6f6f6f
+  Headline        Courier  34px  0.16em  uppercase  (mobile 26px/0.14em)
+  Sub-headline    Courier  20px  0.14em  uppercase
+  Caption         Courier  11px  0.18em  uppercase
+  Numerals        Courier  12px  0.10em
+  Button          Courier  13px  0.18em  uppercase
+  Inline link     Courier  12px  0.14em  uppercase, 1px underline border
+  BODY COPY       Helvetica/Arial 16px / 1.65   #111111
+  Body secondary  Helvetica/Arial 16px / 1.65   #4f4f4f
+  Small print     Helvetica/Arial 15px / 1.6
+
+  Never set body copy in Courier. Mono has thin uniform strokes;
+  at 11px with wide tracking the eye stops grouping letters into
+  words and the whole email reads faint. That was the old design's
+  central mistake.
+
+  COLOUR — measured contrast, not eyeballed
+  ─────────────────────────────────────────
+  Body       #111111 on #ffffff  18.9:1
+  Secondary  #4f4f4f on #ffffff   8.2:1
+  Labels     #6f6f6f on #ffffff   5.0:1
+  Reversed   #c9c9c9 on #000000  12.7:1
+  Rev. label #9a9a9a on #000000   7.5:1
+  Footer     #666666 on #f2f0ed   5.1:1
+  Hairline   #dcdcdc              (structure, not text)
+  Paper      #faf9f7 ground, #ffffff card, #f2f0ed footer
+
+  WCAG AA for normal text is 4.5:1. Nothing may go below it.
+  Check greys against the background they actually sit on, not
+  against white — #6f6f6f passes on white but fails on the
+  #f2f0ed footer, which is why the footer uses #666666.
+
+  LAYOUT
+  ──────
+  · 560px card on a #faf9f7 ground; 32px side padding, 24px mobile.
+  · Spacing on an 8px rhythm — 32 and 40 between sections. Resist
+    padding things out; white space is not the same as air, and
+    the old design proved that faint text in a large gap reads as
+    emptiness rather than elegance.
+  · At most ONE inverted black band per issue. It is the loudest
+    thing in the email; two of them and neither lands.
+  · Images run full-bleed. Never letterbox artwork on white —
+    export it cropped to the tile instead. See IMAGES below.
+  · Multi-column rows use percentage widths, never fixed px.
+    Fixed columns distribute unevenly across images of differing
+    aspect and the row ends up ragged.
+
+  IMAGES
+  ──────
+  Hero          1120px wide (2x of 560). Full-bleed, no white.
+  2-up tile     720x900   (4:5)
+  3-up tile     480x600   (4:5)
+  Keep the whole issue under ~1MB of images.
+
+  Give every tile in a row the SAME aspect ratio, or the row and
+  its captions will not align. Export from the masters in
+  images/prints/ — those are the artwork with no padding.
+
+  Fola's work is overwhelmingly low-key: most pieces are more than
+  85% near-black. Dark works die at thumbnail size. Before putting
+  a piece in a 3-up row, check it still reads at 92px, which is
+  what that row gets on a phone. If it doesn't, either give it a
+  larger slot (2-up or hero) or choose a more graphic piece.
+
+  NO WEB FONTS
+  ────────────
+  Helvetica, Arial, Courier New and Georgia ship with every mail
+  client. A Google Font will silently fall back in Outlook and the
+  Gmail app and break the rhythm. Don't.
+
+  ════════════════════════════════════════════════════════════════
+-->
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>[SUBJECT LINE] — Fola Adeleke's Notes</title>
+  <!--[if mso]>
+  <noscript><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript>
+  <![endif]-->
+  <style type="text/css">
+    body, table, td, p, a { -webkit-text-size-adjust:100%; -ms-text-size-adjust:100%; }
+    table, td { mso-table-lspace:0pt; mso-table-rspace:0pt; }
+    img { -ms-interpolation-mode:bicubic; border:0; height:auto; line-height:100%; outline:none; text-decoration:none; }
+    body { margin:0 !important; padding:0 !important; background-color:#faf9f7; }
+    a { color:#111111; }
+    a[x-apple-data-detectors] { color:inherit !important; text-decoration:none !important; }
+    u + #body a { color:inherit; text-decoration:none; }
+    #MessageViewBody a { color:inherit; text-decoration:none; }
+
+    @media only screen and (max-width:620px) {
+      .email-container { width:100% !important; }
+      .mobile-padding  { padding-left:24px !important; padding-right:24px !important; }
+      .mobile-heading  { font-size:26px !important; letter-spacing:0.14em !important; }
+    }
+  </style>
+</head>
+
+<body id="body" style="margin:0; padding:0; background-color:#faf9f7;">
+
+  <!-- Preheader: the grey line the inbox shows after the subject.
+       Write it as a real sentence — it is the second thing read. -->
+  <div style="display:none; font-size:1px; color:#faf9f7; line-height:1px; max-height:0; max-width:0; opacity:0; overflow:hidden;">
+    [PREHEADER — one sentence, roughly 90 characters]
+  </div>
+
+  <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color:#faf9f7;">
+    <tr>
+      <td align="center" style="padding:32px 16px;">
+
+        <table role="presentation" class="email-container" border="0" cellpadding="0" cellspacing="0" width="560" style="max-width:560px; width:100%; background-color:#ffffff;">
+
+          <!-- ══ HEADER ══ -->
+          <tr>
+            <td class="mobile-padding" style="padding:22px 32px 20px; border-bottom:1px solid #111111;">
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tr>
+                  <td align="left">
+                    <p style="margin:0; font-family:'Courier New',Courier,monospace; font-size:13px; letter-spacing:0.26em; text-transform:uppercase; color:#111111;">
+                      Fola&nbsp;Adeleke<span style="font-size:9px; vertical-align:super; letter-spacing:0;">&reg;</span>
+                    </p>
+                  </td>
+                  <td align="right">
+                    <p style="margin:0; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.24em; text-transform:uppercase; color:#6f6f6f;">
+                      Issue No. [NNN]
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+
+          <!-- ══ HERO IMAGE ══ OPTIONAL, but strongly preferred.
+               Leading with the work is the whole point of this design.
+               1120px wide export, full-bleed, no white margin. ══ -->
+          <tr>
+            <td style="font-size:0; line-height:0;">
+              <a href="[HERO LINK]" style="text-decoration:none;">
+                <img src="https://folaadeleke.com/images/[HERO IMAGE].jpg" width="560" alt="[HERO ALT TEXT — describe the work, not 'image']" style="display:block; border:0; outline:none; text-decoration:none; width:100%; max-width:560px; height:auto;" />
+              </a>
+            </td>
+          </tr>
+          <tr>
+            <td class="mobile-padding" style="padding:14px 32px 0; border-bottom:1px solid #dcdcdc;">
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tr>
+                  <td align="left" style="padding-bottom:16px;">
+                    <p style="margin:0; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.18em; text-transform:uppercase; color:#111111;">
+                      [WORK TITLE]
+                    </p>
+                  </td>
+                  <td align="right" style="padding-bottom:16px;">
+                    <p style="margin:0; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:#6f6f6f;">
+                      [CAPTION META]
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <!-- ══ END HERO ══ -->
+
+
+          <!-- ══ HEADLINE + INTRO ══ -->
+          <tr>
+            <td class="mobile-padding" style="padding:40px 32px 0;">
+              <h1 class="mobile-heading" style="margin:0; font-family:'Courier New',Courier,monospace; font-size:34px; font-weight:normal; letter-spacing:0.16em; text-transform:uppercase; color:#000000; line-height:1.2;">
+                [HEADLINE]
+              </h1>
+            </td>
+          </tr>
+          <tr>
+            <td class="mobile-padding" style="padding:22px 32px 0;">
+              <p style="margin:0 0 16px; font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:1.65; color:#111111;">
+                [OPENING PARAGRAPH]
+              </p>
+              <p style="margin:0; font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:1.65; color:#4f4f4f;">
+                [SECOND PARAGRAPH — optional, sits back in the lighter grey]
+              </p>
+            </td>
+          </tr>
+
+
+          <!-- ══ NUMBERED ITEM ══ REPEATABLE.
+               The workhorse block: a labelled section with a
+               sub-headline, copy, an optional image and a link.
+               Copy this whole <tr> for 02, 03, … ══ -->
+          <tr>
+            <td class="mobile-padding" style="padding:40px 32px 0;">
+
+              <p style="margin:0 0 20px; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.3em; text-transform:uppercase; color:#6f6f6f; border-bottom:1px solid #111111; padding-bottom:12px;">
+                01 &nbsp;&middot;&nbsp; [SECTION LABEL]
+              </p>
+
+              <!-- item image — OPTIONAL, delete if this item has none -->
+              <a href="[ITEM LINK]" style="text-decoration:none;">
+                <img src="https://folaadeleke.com/images/[ITEM IMAGE].jpg" width="496" alt="[ITEM ALT TEXT]" style="display:block; border:0; outline:none; text-decoration:none; width:100%; height:auto; margin-bottom:20px;" />
+              </a>
+
+              <p style="margin:0 0 14px; font-family:'Courier New',Courier,monospace; font-size:20px; font-weight:normal; letter-spacing:0.14em; text-transform:uppercase; color:#000000; line-height:1.35;">
+                [ITEM HEADLINE]
+              </p>
+
+              <p style="margin:0 0 18px; font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:1.65; color:#111111;">
+                [ITEM COPY]
+              </p>
+
+              <p style="margin:0; font-family:'Courier New',Courier,monospace; font-size:12px; letter-spacing:0.14em; text-transform:uppercase;">
+                <a href="[ITEM LINK]" style="color:#111111; text-decoration:none; border-bottom:1px solid #111111; padding-bottom:2px;">[LINK TEXT] &rarr;</a>
+              </p>
+
+            </td>
+          </tr>
+          <!-- ══ END NUMBERED ITEM ══ -->
+
+
+          <!-- ══ INVERTED BAND ══ OPTIONAL. At most ONE per issue.
+               Use it for the single thing you most want acted on:
+               a drop, an offer, a deadline. ══ -->
+          <tr>
+            <td style="padding:40px 0 0;">
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color:#000000;">
+                <tr>
+                  <td class="mobile-padding" align="center" style="padding:44px 32px;">
+                    <p style="margin:0 0 16px; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.3em; text-transform:uppercase; color:#9a9a9a;">
+                      [BAND LABEL]
+                    </p>
+                    <p style="margin:0 0 18px; font-family:'Courier New',Courier,monospace; font-size:30px; letter-spacing:0.1em; text-transform:uppercase; line-height:1.3; color:#ffffff;">
+                      [BAND HEADLINE]
+                    </p>
+                    <p style="margin:0 0 30px; font-family:Helvetica,Arial,sans-serif; font-size:15px; line-height:1.65; color:#c9c9c9;">
+                      [BAND COPY — let it wrap naturally, no hard &lt;br&gt;]
+                    </p>
+                    <!--[if mso]>
+                    <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word"
+                      href="[BAND BUTTON LINK]"
+                      style="height:50px; v-text-anchor:middle; width:260px;"
+                      arcsize="0%" strokecolor="#ffffff" fillcolor="#ffffff">
+                      <w:anchorlock/>
+                      <center style="color:#000000; font-family:'Courier New',Courier,monospace; font-size:13px; letter-spacing:0.18em;">
+                        [BUTTON TEXT]
+                      </center>
+                    </v:roundrect>
+                    <![endif]-->
+                    <!--[if !mso]><!-->
+                    <a href="[BAND BUTTON LINK]"
+                      style="display:inline-block; background-color:#ffffff; color:#000000; font-family:'Courier New',Courier,monospace; font-size:13px; letter-spacing:0.18em; text-transform:uppercase; text-decoration:none; padding:17px 40px; border:1px solid #ffffff;">
+                      [BUTTON TEXT] &rarr;
+                    </a>
+                    <!--<![endif]-->
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <!-- ══ END INVERTED BAND ══ -->
+
+
+          <!-- ══ 3-UP ROW ══ OPTIONAL.
+               Equal percentage columns with split padding so the
+               gutters are even and the captions align. Tiles must
+               share one aspect ratio (480x600). Check each piece
+               still reads at 92px before using it here. ══ -->
+          <tr>
+            <td class="mobile-padding" style="padding:40px 32px 0;">
+              <p style="margin:0 0 20px; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.3em; text-transform:uppercase; color:#6f6f6f; border-bottom:1px solid #111111; padding-bottom:12px;">
+                [ROW LABEL]
+              </p>
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tr>
+                  <td width="33.33%" valign="top" style="padding-right:8px;">
+                    <a href="[TILE 1 LINK]" style="text-decoration:none;">
+                      <img src="https://folaadeleke.com/images/[TILE 1].jpg" width="480" height="600" alt="[TILE 1 ALT]" style="display:block; border:1px solid #e4e4e4; outline:none; text-decoration:none; width:100%; height:auto;" />
+                      <p style="margin:10px 0 0; font-family:'Courier New',Courier,monospace; font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:#111111; line-height:1.5;">[TILE 1 TITLE]</p>
+                    </a>
+                  </td>
+                  <td width="33.33%" valign="top" style="padding-left:4px; padding-right:4px;">
+                    <a href="[TILE 2 LINK]" style="text-decoration:none;">
+                      <img src="https://folaadeleke.com/images/[TILE 2].jpg" width="480" height="600" alt="[TILE 2 ALT]" style="display:block; border:1px solid #e4e4e4; outline:none; text-decoration:none; width:100%; height:auto;" />
+                      <p style="margin:10px 0 0; font-family:'Courier New',Courier,monospace; font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:#111111; line-height:1.5;">[TILE 2 TITLE]</p>
+                    </a>
+                  </td>
+                  <td width="33.33%" valign="top" style="padding-left:8px;">
+                    <a href="[TILE 3 LINK]" style="text-decoration:none;">
+                      <img src="https://folaadeleke.com/images/[TILE 3].jpg" width="480" height="600" alt="[TILE 3 ALT]" style="display:block; border:1px solid #e4e4e4; outline:none; text-decoration:none; width:100%; height:auto;" />
+                      <p style="margin:10px 0 0; font-family:'Courier New',Courier,monospace; font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:#111111; line-height:1.5;">[TILE 3 TITLE]</p>
+                    </a>
+                  </td>
+                </tr>
+              </table>
+              <p style="margin:22px 0 0; font-family:'Courier New',Courier,monospace; font-size:12px; letter-spacing:0.14em; text-transform:uppercase;">
+                <a href="https://folaadeleke.com/prints" style="color:#111111; text-decoration:none; border-bottom:1px solid #111111; padding-bottom:2px;">View all prints &rarr;</a>
+              </p>
+            </td>
+          </tr>
+          <!-- ══ END 3-UP ROW ══ -->
+
+
+          <!-- ══ SIGN-OFF ══ -->
+          <tr>
+            <td class="mobile-padding" style="padding:40px 32px 40px;">
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tr><td style="border-top:1px solid #dcdcdc; padding-top:28px;">
+                  <p style="margin:0; font-family:'Courier New',Courier,monospace; font-size:14px; letter-spacing:0.18em; color:#111111;">
+                    &mdash; Fola
+                  </p>
+                </td></tr>
+              </table>
+            </td>
+          </tr>
+
+
+          <!-- ══ FOOTER ══ Do not lighten these greys. ══ -->
+          <tr>
+            <td class="mobile-padding" style="padding:26px 32px; background-color:#f2f0ed; border-top:1px solid #dcdcdc;">
+              <p style="margin:0 0 10px; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.26em; text-transform:uppercase; color:#111111;">
+                Fola Adeleke&reg;
+              </p>
+              <p style="margin:0 0 14px; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.05em; color:#666666;">
+                &copy; 2026 Fola Adeleke. All rights reserved.
+              </p>
+              <p style="margin:0; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.03em; color:#666666; line-height:1.9;">
+                You're receiving this because you subscribed at
+                <a href="https://folaadeleke.com" style="color:#111111; text-decoration:underline;">folaadeleke.com</a>.<br />
+                <a href="{{unsubscribe_url}}" style="color:#111111; text-decoration:underline;">Unsubscribe</a>
+                &nbsp;&middot;&nbsp;
+                <a href="https://folaadeleke.com" style="color:#111111; text-decoration:underline;">Visit the site</a>
+              </p>
+            </td>
+          </tr>
+
+        </table>
+
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>

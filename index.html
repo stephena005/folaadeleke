@@ -1080,6 +1080,44 @@
       .featured-section { padding: 0 24px 56px; }
       .featured-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
     }
+
+    /* ──────────────────────────────────────────
+       PUZZLE DROP BANNER
+       Campaign furniture. Reveals itself at go-live and hides
+       itself again at campaign end, so a stale banner never
+       advertises an expired offer. Safe to delete wholesale
+       once the drop is over.
+    ────────────────────────────────────────── */
+    .puzzle-banner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      padding: 22px 20px;
+      text-align: center;
+      text-decoration: none;
+      background: var(--white);
+      border-bottom: 1px solid var(--grey-light);
+    }
+
+    .puzzle-banner:hover .puzzle-banner-title { text-decoration: underline; }
+
+    .puzzle-banner-eyebrow {
+      font-family: var(--font);
+      font-size: 11px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--grey-mid);
+    }
+
+    .puzzle-banner-title {
+      font-family: var(--font);
+      font-size: 13px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--black);
+    }
   </style>
 </head>
 <body>
@@ -1172,6 +1210,39 @@
         <a class="hero-cta underline-link fade-up" href="/prints" style="animation-delay: 0.75s;">View The Prints &rarr;</a>
       </div>
     </div>
+
+    <!-- ── PUZZLE DROP BANNER ──
+         Hidden until 15:00 BST Fri 11 Sep 2026, then hidden again at
+         campaign end. BANNER_START must stay in step with CAMPAIGN_END
+         in guess/index.html — they are separate constants, so if the
+         go-live slips, change both. -->
+    <a class="puzzle-banner" href="/guess" id="puzzleBanner" style="display:none;">
+      <span class="puzzle-banner-eyebrow">Print&nbsp;Drop &middot; 50%&nbsp;Off &middot; 24&nbsp;Hours&nbsp;Only</span>
+      <span class="puzzle-banner-title">Guess The Print &mdash; Unlock 50% Off &rarr;</span>
+    </a>
+    <script>
+      (function () {
+        var BANNER_START = new Date('2026-09-11T14:00:00Z').getTime(); // 15:00 BST Fri 11 Sep
+        var BANNER_END   = new Date('2026-09-12T14:00:00Z').getTime(); // matches CAMPAIGN_END
+        var el = document.getElementById('puzzleBanner');
+        if (!el) return;
+        var MAX_DELAY = 2147483647; // setTimeout overflows past ~24.8 days and fires immediately
+
+        function apply() {
+          var now = Date.now();
+          if (now >= BANNER_START && now < BANNER_END) {
+            el.style.display = 'flex';
+          } else {
+            el.style.display = 'none';
+          }
+          var next = now < BANNER_START ? BANNER_START - now
+                   : now < BANNER_END   ? BANNER_END - now
+                   : null;
+          if (next !== null && next <= MAX_DELAY) setTimeout(apply, next + 500);
+        }
+        apply();
+      })();
+    </script>
 
     <!-- ARTIST STATEMENT -->
     <div class="statement-section">

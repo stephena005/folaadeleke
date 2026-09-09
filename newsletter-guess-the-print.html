@@ -1,0 +1,322 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<!--
+  ════════════════════════════════════════════════════════════════
+  FOLA ADELEKE® — "GUESS THE PRINT" DROP
+  Built on newsletter-template.html — see that file for the spec.
+  ════════════════════════════════════════════════════════════════
+
+  HOW TO USE IN BEEHIIV
+  ─────────────────────
+  1. New Post → + → "Custom HTML" block.
+  2. Paste everything between the <body> tags.
+  3. Leave {{unsubscribe_url}} as-is.
+  4. Send yourself a test, check desktop AND mobile, then schedule.
+
+  ════════════════════════════════════════════════════════════════
+  BEFORE SENDING — TWO HARD BLOCKERS
+  ════════════════════════════════════════════════════════════════
+
+  1. folaadeleke.com/guess must be DEPLOYED. The page is now built
+     at guess/index.html and the homepage banner is wired up, but
+     both have to be pushed live before this sends — the button and
+     the whole premise depend on it.
+
+  2. images/newsletter/guess/detail-1.jpg must be pushed live.
+     Email clients have no site to be relative to.
+
+  Also confirm before sending:
+  · The 50% discount code exists in Shopify Admin → Discounts,
+    scoped to the Prints collection, no minimum spend, with an
+    active window matching the 24 hours promised below.
+  · The answer on /guess is Loud Ancestors and the three decoys
+    match the four names listed here. (Verified 2026-09-09.)
+
+  The deadline wording is deliberate. guess/index.html enforces a
+  FIXED end instant (CAMPAIGN_END = 2026-09-12T14:00:00Z), not a
+  rolling 24 hours from when each reader opens the email. Saying
+  "24 hours" would tell a Saturday-morning opener they have a day
+  left when they have two. If the go-live slips, change this copy,
+  CAMPAIGN_END in guess/index.html, and BANNER_START/BANNER_END in
+  index.html together.
+
+  ════════════════════════════════════════════════════════════════
+  SPOILER FIX — do not undo this
+  ════════════════════════════════════════════════════════════════
+
+  The previous draft loaded the crop from:
+      /images/prints/Loud%20Ancestors/newsletter-crop/detail-1.jpg
+  The answer was sitting in the image URL, in an email whose own
+  section header read "No Spoilers". Anyone who long-pressed the
+  image, hovered it, viewed source, or read the filename in a
+  client with images blocked had the answer handed to them.
+
+  The crop now lives at /images/newsletter/guess/detail-1.jpg,
+  which names no print. Keep it that way: if you re-export the
+  crop, do not put it back under the artwork's folder, and do not
+  put the print's name in the alt text.
+
+  ════════════════════════════════════════════════════════════════
+  DESIGN NOTES
+  ════════════════════════════════════════════════════════════════
+  · The crop is now the hero, full-bleed at 560px instead of a
+    160px square. It is the entire hook of the campaign — it
+    should be the first and largest thing in the email.
+  · The four names went from 9px to 13px Courier. 9px uppercase at
+    0.1em tracking is not a reliably tappable or readable size.
+  · The old draft had #999 body copy (2.9:1) and a #ccc footer
+    (1.6:1), both below the WCAG AA 4.5:1 floor. Body is now
+    Helvetica 16px/1.65 at #111; every grey is measured against
+    the background it actually sits on.
+  · One inverted band, carrying the offer and the single CTA.
+  · The names are deliberately NOT links: tapping one here must
+    not read as registering a guess. The button is the only route
+    into the game.
+  ════════════════════════════════════════════════════════════════
+-->
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Guess the print — Fola Adeleke's Notes</title>
+  <!--[if mso]>
+  <noscript><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript>
+  <![endif]-->
+  <style type="text/css">
+    body, table, td, p, a { -webkit-text-size-adjust:100%; -ms-text-size-adjust:100%; }
+    table, td { mso-table-lspace:0pt; mso-table-rspace:0pt; }
+    img { -ms-interpolation-mode:bicubic; border:0; height:auto; line-height:100%; outline:none; text-decoration:none; }
+    body { margin:0 !important; padding:0 !important; background-color:#faf9f7; }
+    a { color:#111111; }
+    a[x-apple-data-detectors] { color:inherit !important; text-decoration:none !important; }
+    u + #body a { color:inherit; text-decoration:none; }
+    #MessageViewBody a { color:inherit; text-decoration:none; }
+
+    @media only screen and (max-width:620px) {
+      .email-container { width:100% !important; }
+      .mobile-padding  { padding-left:24px !important; padding-right:24px !important; }
+      .mobile-heading  { font-size:26px !important; letter-spacing:0.14em !important; }
+    }
+  </style>
+</head>
+
+<body id="body" style="margin:0; padding:0; background-color:#faf9f7;">
+
+  <div style="display:none; font-size:1px; color:#faf9f7; line-height:1px; max-height:0; max-width:0; opacity:0; overflow:hidden;">
+    One print, cropped in close. Name it right and 50% off unlocks &mdash; for 24 hours only.
+  </div>
+
+  <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color:#faf9f7;">
+    <tr>
+      <td align="center" style="padding:32px 16px;">
+
+        <table role="presentation" class="email-container" border="0" cellpadding="0" cellspacing="0" width="560" style="max-width:560px; width:100%; background-color:#ffffff;">
+
+          <!-- ══ HEADER ══ -->
+          <tr>
+            <td class="mobile-padding" style="padding:22px 32px 20px; border-bottom:1px solid #111111;">
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tr>
+                  <td align="left">
+                    <p style="margin:0; font-family:'Courier New',Courier,monospace; font-size:13px; letter-spacing:0.26em; text-transform:uppercase; color:#111111;">
+                      Fola&nbsp;Adeleke<span style="font-size:9px; vertical-align:super; letter-spacing:0;">&reg;</span>
+                    </p>
+                  </td>
+                  <td align="right">
+                    <p style="margin:0; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.24em; text-transform:uppercase; color:#6f6f6f;">
+                      Print Drop
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+
+          <!-- ══ HERO: THE CROP ══
+               Neutral path on purpose — see SPOILER FIX above. -->
+          <tr>
+            <td style="font-size:0; line-height:0;">
+              <img src="https://folaadeleke.com/images/newsletter/guess/detail-1.jpg" width="560" alt="A tight crop of one print &#8212; pattern and colour, no context" style="display:block; border:0; outline:none; text-decoration:none; width:100%; max-width:560px; height:auto;" />
+            </td>
+          </tr>
+          <tr>
+            <td class="mobile-padding" style="padding:14px 32px 0; border-bottom:1px solid #dcdcdc;">
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tr>
+                  <td align="left" style="padding-bottom:16px;">
+                    <p style="margin:0; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.18em; text-transform:uppercase; color:#111111;">
+                      The Crop
+                    </p>
+                  </td>
+                  <td align="right" style="padding-bottom:16px;">
+                    <p style="margin:0; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:#6f6f6f;">
+                      No Spoilers
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+
+          <!-- ══ HEADLINE + INTRO ══ -->
+          <tr>
+            <td class="mobile-padding" style="padding:40px 32px 0;">
+              <h1 class="mobile-heading" style="margin:0; font-family:'Courier New',Courier,monospace; font-size:34px; font-weight:normal; letter-spacing:0.16em; text-transform:uppercase; color:#000000; line-height:1.2;">
+                Guess the<br />Print
+              </h1>
+            </td>
+          </tr>
+          <tr>
+            <td class="mobile-padding" style="padding:22px 32px 0;">
+              <p style="margin:0 0 16px; font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:1.65; color:#111111;">
+                One print, cropped in close. Four names below, only one is right.
+              </p>
+              <p style="margin:0; font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:1.65; color:#4f4f4f;">
+                Name it correctly and a 50% off code unlocks &mdash; good on every print, for 24 hours.
+              </p>
+            </td>
+          </tr>
+
+
+          <!-- ══ THE FOUR NAMES ══
+               Not links: tapping one here must not read as
+               registering a guess.
+               Fixed 68px cell height with valign middle: at 375px
+               "Elders" fits one line while the other three wrap to
+               two, and without it the first row sits 52px against
+               70px. Don't remove the height. -->
+          <tr>
+            <td class="mobile-padding" style="padding:40px 32px 0;">
+              <p style="margin:0 0 20px; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.3em; text-transform:uppercase; color:#6f6f6f; border-bottom:1px solid #111111; padding-bottom:12px;">
+                The Four Names
+              </p>
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tr>
+                  <td width="50%" valign="top" style="padding:0 6px 12px 0;">
+                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                      <tr><td align="center" height="68" valign="middle" style="border:1px solid #111111; padding:8px; height:68px;">
+                        <p style="margin:0; font-family:'Courier New',Courier,monospace; font-size:13px; letter-spacing:0.14em; text-transform:uppercase; color:#111111; line-height:1.4;">Elders</p>
+                      </td></tr>
+                    </table>
+                  </td>
+                  <td width="50%" valign="top" style="padding:0 0 12px 6px;">
+                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                      <tr><td align="center" height="68" valign="middle" style="border:1px solid #111111; padding:8px; height:68px;">
+                        <p style="margin:0; font-family:'Courier New',Courier,monospace; font-size:13px; letter-spacing:0.14em; text-transform:uppercase; color:#111111; line-height:1.4;">Loud Community</p>
+                      </td></tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr>
+                  <td width="50%" valign="top" style="padding:0 6px 0 0;">
+                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                      <tr><td align="center" height="68" valign="middle" style="border:1px solid #111111; padding:8px; height:68px;">
+                        <p style="margin:0; font-family:'Courier New',Courier,monospace; font-size:13px; letter-spacing:0.14em; text-transform:uppercase; color:#111111; line-height:1.4;">Husband &amp; Wife</p>
+                      </td></tr>
+                    </table>
+                  </td>
+                  <td width="50%" valign="top" style="padding:0 0 0 6px;">
+                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                      <tr><td align="center" height="68" valign="middle" style="border:1px solid #111111; padding:8px; height:68px;">
+                        <p style="margin:0; font-family:'Courier New',Courier,monospace; font-size:13px; letter-spacing:0.14em; text-transform:uppercase; color:#111111; line-height:1.4;">Loud Ancestors</p>
+                      </td></tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+
+          <!-- ══ HOW IT WORKS ══ -->
+          <tr>
+            <td class="mobile-padding" style="padding:28px 32px 0;">
+              <p style="margin:0; font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:1.65; color:#4f4f4f;">
+                Tap a wrong name on the site and it's eliminated &mdash; and the crop zooms out a little. Keep going until the right one's all that's left. No penalty, just however many guesses it takes.
+              </p>
+            </td>
+          </tr>
+
+
+          <!-- ══ INVERTED BAND: THE OFFER + THE ONLY CTA ══ -->
+          <tr>
+            <td style="padding:40px 0 0;">
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color:#000000;">
+                <tr>
+                  <td class="mobile-padding" align="center" style="padding:44px 32px;">
+                    <p style="margin:0 0 16px; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.3em; text-transform:uppercase; color:#9a9a9a;">
+                      24 Hours Only
+                    </p>
+                    <p style="margin:0 0 18px; font-family:'Courier New',Courier,monospace; font-size:30px; letter-spacing:0.1em; text-transform:uppercase; line-height:1.3; color:#ffffff;">
+                      50% Off<br />Every Print
+                    </p>
+                    <p style="margin:0 0 30px; font-family:Helvetica,Arial,sans-serif; font-size:15px; line-height:1.65; color:#c9c9c9;">
+                      The code works from the moment this lands until 3pm Saturday. No minimum spend, one code per order.
+                    </p>
+                    <!--[if mso]>
+                    <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word"
+                      href="https://folaadeleke.com/guess"
+                      style="height:50px; v-text-anchor:middle; width:260px;"
+                      arcsize="0%" strokecolor="#ffffff" fillcolor="#ffffff">
+                      <w:anchorlock/>
+                      <center style="color:#000000; font-family:'Courier New',Courier,monospace; font-size:13px; letter-spacing:0.18em;">
+                        GUESS THE PRINT
+                      </center>
+                    </v:roundrect>
+                    <![endif]-->
+                    <!--[if !mso]><!-->
+                    <a href="https://folaadeleke.com/guess"
+                      style="display:inline-block; background-color:#ffffff; color:#000000; font-family:'Courier New',Courier,monospace; font-size:13px; letter-spacing:0.18em; text-transform:uppercase; text-decoration:none; padding:17px 40px; border:1px solid #ffffff;">
+                      Guess the Print &rarr;
+                    </a>
+                    <!--<![endif]-->
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+
+          <!-- ══ SIGN-OFF ══ -->
+          <tr>
+            <td class="mobile-padding" style="padding:40px 32px 40px;">
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tr><td style="border-top:1px solid #dcdcdc; padding-top:28px;">
+                  <p style="margin:0; font-family:'Courier New',Courier,monospace; font-size:14px; letter-spacing:0.18em; color:#111111;">
+                    &mdash; Fola
+                  </p>
+                </td></tr>
+              </table>
+            </td>
+          </tr>
+
+
+          <!-- ══ FOOTER ══ -->
+          <tr>
+            <td class="mobile-padding" style="padding:26px 32px; background-color:#f2f0ed; border-top:1px solid #dcdcdc;">
+              <p style="margin:0 0 10px; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.26em; text-transform:uppercase; color:#111111;">
+                Fola Adeleke&reg;
+              </p>
+              <p style="margin:0 0 14px; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.05em; color:#666666;">
+                &copy; 2026 Fola Adeleke. All rights reserved.
+              </p>
+              <p style="margin:0; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.03em; color:#666666; line-height:1.9;">
+                You're receiving this because you signed up at
+                <a href="https://folaadeleke.com" style="color:#111111; text-decoration:underline;">folaadeleke.com</a>.<br />
+                <a href="{{unsubscribe_url}}" style="color:#111111; text-decoration:underline;">Unsubscribe</a>
+                &nbsp;&middot;&nbsp;
+                <a href="https://folaadeleke.com" style="color:#111111; text-decoration:underline;">Visit the site</a>
+              </p>
+            </td>
+          </tr>
+
+        </table>
+
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>
