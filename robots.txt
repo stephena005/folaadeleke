@@ -9,7 +9,6 @@ User-agent: *
 Allow: /
 
 # No noindex tag possible on these (non-HTML / private working files)
-Disallow: /back-office/
 Disallow: /html%20files/
 Disallow: /portfolio.pdf
 
