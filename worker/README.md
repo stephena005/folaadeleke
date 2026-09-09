@@ -114,7 +114,7 @@ the email. Paste `welcome-email.rendered.html` into beehiiv as the welcome email
 | `DISCOUNT_PERCENTAGE` | `10` | Percent off, whole number |
 | `DISCOUNT_HOURS` | `24` | Length of the window |
 | `CODE_PREFIX` | `FA-WELCOME-` | Also how the cleanup cron identifies its own codes |
-| `SHOPIFY_API_VERSION` | `2025-07` | Bump deliberately; check the mutation shape when you do |
+| `SHOPIFY_API_VERSION` | `2026-07` | Supported until 2027-07-16. Bump deliberately; check the mutation shapes when you do |
 | `ALLOWED_ORIGIN` | `https://folaadeleke.com` | CORS |
 
 ## Behaviour

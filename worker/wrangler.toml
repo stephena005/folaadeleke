@@ -13,7 +13,7 @@ id = "49c69dcd4ad34a2dad5879be470dd7e2"
 [vars]
 ALLOWED_ORIGIN      = "https://folaadeleke.com"
 SHOPIFY_SHOP        = "fola-adeleke.myshopify.com"
-SHOPIFY_API_VERSION = "2025-07"
+SHOPIFY_API_VERSION = "2026-07"
 DISCOUNT_PERCENTAGE = "10"
 DISCOUNT_HOURS      = "24"
 DISCOUNT_TITLE      = "Subscriber welcome"

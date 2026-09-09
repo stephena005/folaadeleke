@@ -173,7 +173,7 @@ async function createDiscountCode(env, startsAt, endsAt) {
 }
 
 async function shopifyGraphQL(env, query, variables) {
-  const version = env.SHOPIFY_API_VERSION || '2025-07';
+  const version = env.SHOPIFY_API_VERSION || '2026-07';
   const endpoint = `https://${env.SHOPIFY_SHOP}/admin/api/${version}/graphql.json`;
 
   const res = await fetch(endpoint, {
@@ -201,6 +201,9 @@ async function shopifyGraphQL(env, query, variables) {
 
 /* ── nightly cleanup ───────────────────────────────────────── */
 
+// codeDiscountNodes is deprecated in favour of discountNodes. Still served in
+// 2026-07, so left as is rather than migrated blind; revisit before the next
+// version bump, since the replacement returns a different node shape.
 const EXPIRED_QUERY = `
   query expiredCodes($cursor: String) {
     codeDiscountNodes(first: 50, after: $cursor, query: "status:expired") {
