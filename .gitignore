@@ -20,3 +20,7 @@ back-office/
 
 # macOS
 .DS_Store
+
+# Trade programme sources — room renders, build scripts, lookbook masters.
+# Only the published trade/<token>/ page is tracked.
+trade/lookbook-src/
