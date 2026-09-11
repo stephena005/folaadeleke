@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex" />
+<title>Pop-Up Motion Concepts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;900&display=swap" />
+<style>
+  :root{
+    --ink:#0b0b0b;
+    --paper:#ffffff;
+    --ground:#f2f1ee;
+    --rule:#d9d7d2;
+    --mute:#6f6f6f;
+    --mono:'Courier New',Courier,monospace;
+    --display:'Archivo','Helvetica Neue',Arial,sans-serif;
+    --speed:1;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    background:var(--ground);
+    color:var(--ink);
+    font-family:var(--mono);
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1120px;margin:0 auto;padding-inline:20px;padding-block:0 72px}
+
+  /* ── type ─────────────────────────────────── */
+  .eyebrow{font-size:9px;letter-spacing:.35em;text-transform:uppercase;color:var(--mute);margin:0}
+  h1{
+    font-family:var(--display);font-weight:900;
+    font-size:clamp(32px,7vw,60px);line-height:.94;letter-spacing:-.035em;
+    text-transform:uppercase;margin:14px 0 0;text-wrap:balance;
+  }
+  h2{
+    font-family:var(--display);font-weight:900;
+    font-size:clamp(38px,8vw,68px);line-height:.9;letter-spacing:-.04em;
+    text-transform:uppercase;margin:6px 0 0;
+  }
+  h3{font-size:10px;letter-spacing:.3em;text-transform:uppercase;margin:0}
+  p{font-size:12px;line-height:1.95;letter-spacing:.02em;color:var(--mute);margin:0;max-width:60ch}
+  strong{color:var(--ink);font-weight:normal;border-bottom:1px solid var(--ink)}
+  a{color:var(--ink)}
+
+  /* ── masthead ─────────────────────────────── */
+  header{border-bottom:1px solid var(--ink);padding-block:34px 26px;margin-bottom:0}
+  .masthead-top{display:flex;flex-wrap:wrap;gap:10px 24px;justify-content:space-between;align-items:baseline}
+  .intro{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:32px;margin-top:26px;align-items:start}
+  @media(max-width:760px){.intro{grid-template-columns:1fr;gap:20px}}
+  .rule-note{border-left:1px solid var(--ink);padding-left:16px;display:grid;gap:10px}
+  .rule-note div{display:flex;gap:10px;align-items:baseline}
+  .rule-note b{font-weight:normal;font-size:9px;letter-spacing:.28em;text-transform:uppercase;min-width:84px}
+  .rule-note span{font-size:11px;line-height:1.7;color:var(--mute)}
+
+  /* ── controls ─────────────────────────────── */
+  .controls{
+    position:sticky;top:0;z-index:20;background:var(--ground);
+    display:flex;flex-wrap:wrap;gap:10px;align-items:center;
+    padding-block:12px;border-bottom:1px solid var(--rule);
+  }
+  button{font-family:var(--mono);cursor:pointer}
+  .btn{
+    background:var(--paper);color:var(--ink);border:1px solid var(--ink);
+    font-size:9px;letter-spacing:.22em;text-transform:uppercase;padding:9px 14px;
+    transition:background .15s,color .15s;
+  }
+  .btn:hover,.btn:focus-visible{background:var(--ink);color:var(--paper)}
+  .btn[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+  .controls .hint{font-size:9px;letter-spacing:.16em;color:var(--mute);margin-left:auto;text-transform:uppercase}
+
+  /* ── concept block ────────────────────────── */
+  .concept{
+    display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);
+    gap:44px;padding-block:56px;border-bottom:1px solid var(--rule);
+  }
+  @media(max-width:900px){.concept{grid-template-columns:1fr;gap:30px}}
+  .spec dl{display:grid;grid-template-columns:88px minmax(0,1fr);gap:9px 14px;margin:26px 0 0;font-size:10px}
+  .spec dt{letter-spacing:.22em;text-transform:uppercase;color:var(--mute)}
+  .spec dd{margin:0;letter-spacing:.06em;line-height:1.6}
+  .verdict{margin-top:24px;display:grid;gap:8px;font-size:11px;line-height:1.75}
+  .verdict div{display:flex;gap:10px}
+  .verdict i{font-style:normal;width:14px;flex:none}
+  .tagline{margin-top:14px;font-size:12px;line-height:1.9;color:var(--ink);max-width:44ch}
+
+  /* ── preview stages ───────────────────────── */
+  .stages{display:grid;gap:26px}
+  .stage-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:8px}
+  .stage-head span{font-size:9px;letter-spacing:.3em;text-transform:uppercase}
+  .stage-head em{font-style:normal;font-size:9px;letter-spacing:.14em;color:var(--mute);text-transform:uppercase}
+  .replay{background:none;border:none;font-size:9px;letter-spacing:.24em;text-transform:uppercase;padding:4px 0;border-bottom:1px solid var(--ink)}
+  .replay:hover{color:var(--mute);border-color:var(--mute)}
+
+  .frame{
+    position:relative;width:100%;aspect-ratio:16/10;overflow:hidden;
+    background:var(--paper);border:1px solid var(--ink);
+    container-type:inline-size;          /* every size below scales with the frame */
+    --nav:4.2cqw;
+  }
+  /* miniature of the live site */
+  .mini-nav{
+    position:absolute;top:0;left:0;right:0;height:var(--nav);z-index:4;
+    background:var(--paper);border-bottom:1px solid var(--ink);
+    display:flex;align-items:center;justify-content:space-between;padding:0 2cqw;
+    font-size:1.3cqw;letter-spacing:.24em;text-transform:uppercase;
+  }
+  .mini-nav u{text-decoration:none;color:var(--mute);letter-spacing:.2em}
+  .mini-body{position:absolute;inset:var(--nav) 0 0;padding:2.4cqw 2.4cqw 0;display:flex;flex-direction:column;gap:1.8cqw;z-index:1}
+  .mini-hero{
+    flex:0 0 44%;background:var(--ink);color:var(--paper);position:relative;
+    display:flex;align-items:flex-end;padding:2cqw;
+  }
+  .mini-hero b{font-weight:normal;font-size:1.35cqw;letter-spacing:.3em;text-transform:uppercase}
+  .mini-hero:after{content:"";position:absolute;inset:1.2cqw;border:1px solid rgba(255,255,255,.35)}
+  .mini-grid{display:flex;gap:1.8cqw;flex:1}
+  .mini-grid i{flex:1;background:#e7e5e0;border:1px solid var(--rule)}
+  .mini-lines{display:flex;gap:1.5cqw;padding-bottom:2.2cqw}
+  .mini-lines i{display:block;height:.7cqw;background:var(--rule);flex:1}
+  .mini-lines i:nth-child(2){flex:.6}
+  .mini-lines i:nth-child(3){flex:.35}
+
+  /* Reset must SNAP. Without this, removing .is-in animates the pop-up back
+     out over its full duration, and re-adding it two frames later reverses a
+     journey that has barely started — so nothing appears to move. */
+  .frame.no-anim .pop,
+  .frame.no-anim .strip,
+  .frame.no-anim .shut,
+  .frame.no-anim .dim{transition:none!important}
+
+  /* dim overlay — sits above the nav, because it blocks the whole page */
+  .dim{
+    position:absolute;inset:0;z-index:5;background:rgba(0,0,0,.34);
+    opacity:0;transition:opacity calc(420ms * var(--speed)) linear;
+  }
+  .frame.is-in .dim{opacity:1}
+
+  /* shared pop-up skin */
+  .pop{
+    position:absolute;background:var(--paper);border:1px solid var(--ink);
+    text-align:center;padding:2.6cqw 2.8cqw 2.4cqw;
+  }
+  .frame .k{font-size:1.15cqw;letter-spacing:.34em;text-transform:uppercase;color:var(--mute)}
+  .frame .h{font-size:1.75cqw;letter-spacing:.26em;text-transform:uppercase;margin-top:1.1cqw}
+  .frame .s{font-size:1.25cqw;letter-spacing:.08em;color:var(--mute);margin-top:1.1cqw;line-height:1.7}
+  .frame .field-narrow{max-width:46cqw;margin-left:auto;margin-right:auto}
+  .frame .field{display:flex;border:1px solid var(--ink);margin-top:1.8cqw}
+  .frame .field span{flex:1;font-size:1.25cqw;letter-spacing:.2em;color:var(--mute);padding:1.2cqw 1.4cqw;text-align:left}
+  .frame .field b{background:var(--ink);color:var(--paper);font-weight:normal;font-size:1.25cqw;letter-spacing:.2em;padding:1.2cqw 1.8cqw}
+  .frame .x{position:absolute;top:1cqw;right:1.4cqw;font-size:1.4cqw;color:var(--mute);line-height:1}
+
+  /* strip skin (inner-page, non-blocking) */
+  .strip{
+    position:absolute;left:0;right:0;background:var(--paper);
+    border-bottom:1px solid var(--ink);
+    display:flex;align-items:center;justify-content:center;gap:2.6cqw;
+    height:5.4cqw;font-size:1.3cqw;letter-spacing:.24em;text-transform:uppercase;
+  }
+  .strip u{text-decoration:none;border-bottom:1px solid var(--ink);padding-bottom:.3cqw}
+  .strip .x{position:absolute;right:1.8cqw;top:50%;transform:translateY(-50%);font-size:1.4cqw;color:var(--mute)}
+
+  /* anything that descends passes BEHIND the nav (z-index 2 < nav 4) */
+  .from-top{z-index:2}
+  .from-bottom{z-index:6}
+
+  /* ── CONCEPT 01 · DRIFT ───────────────────── */
+  #c1{--dur:900ms;--ease:cubic-bezier(.16,1,.3,1)}
+  .drift-home{
+    left:50%;bottom:50%;width:58%;transform:translate(-50%,calc(50% + 26cqw));opacity:0;
+    transition:transform calc(var(--dur) * var(--speed)) var(--ease),opacity calc(var(--dur) * var(--speed)) linear;
+  }
+  .is-in .drift-home{transform:translate(-50%,50%);opacity:1}
+  .drift-inner{
+    top:var(--nav);transform:translateY(calc(-100% - var(--nav)));
+    transition:transform calc(var(--dur) * var(--speed)) var(--ease);
+  }
+  .is-in .drift-inner{transform:translateY(0)}
+
+  /* ── CONCEPT 02 · SLIP ────────────────────── */
+  #c2{--dur:700ms;--ease:cubic-bezier(.22,1.22,.36,1)}
+  .slip-home{
+    left:0;right:0;bottom:0;border-left:none;border-right:none;border-bottom:none;
+    padding:2.8cqw 3cqw 3cqw;transform:translateY(100%);
+    box-shadow:0 0 0 rgba(0,0,0,0);
+    transition:transform calc(var(--dur) * var(--speed)) var(--ease),
+               box-shadow calc(var(--dur) * var(--speed)) linear;
+  }
+  .is-in .slip-home{transform:translateY(0);box-shadow:0 -2cqw 4cqw rgba(0,0,0,.13)}
+  .slip-inner{
+    left:50%;top:var(--nav);width:54%;transform:translate(-50%,calc(-100% - var(--nav)));
+    box-shadow:0 0 0 rgba(0,0,0,0);
+    transition:transform calc(var(--dur) * var(--speed)) var(--ease),
+               box-shadow calc(var(--dur) * var(--speed)) linear;
+  }
+  .is-in .slip-inner{transform:translate(-50%,0);box-shadow:0 2.5cqw 5cqw rgba(0,0,0,.15)}
+
+  /* ── CONCEPT 03 · SHUTTER ─────────────────── */
+  /* 0fr → 1fr: the copy sets the height, so nothing is ever clipped */
+  #c3{--dur:1100ms;--ease:cubic-bezier(.65,0,.35,1)}
+  .shut{
+    position:absolute;left:0;right:0;background:var(--paper);
+    display:grid;grid-template-rows:0fr;
+    transition:grid-template-rows calc(var(--dur) * var(--speed)) var(--ease);
+  }
+  .shut-home{bottom:0;border-top:1px solid var(--ink)}
+  .shut-inner{top:var(--nav);border-bottom:1px solid var(--ink)}
+  .shut-clip{overflow:hidden;min-height:0}
+  .shut-home .shut-clip{display:flex;align-items:flex-end}   /* revealed bottom-up, copy stays put */
+  .shut-pad{padding:2.6cqw 3cqw;text-align:center;width:100%}
+  .frame.is-in .shut{grid-template-rows:1fr}
+
+  /* ── comparison + wiring ──────────────────── */
+  .compare{padding-block:56px;border-bottom:1px solid var(--rule)}
+  .scroller{overflow-x:auto;margin-top:24px;border:1px solid var(--ink);background:var(--paper)}
+  table{border-collapse:collapse;width:100%;min-width:620px;font-size:10px}
+  th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--rule);letter-spacing:.08em;vertical-align:top;line-height:1.6}
+  thead th{font-size:9px;letter-spacing:.28em;text-transform:uppercase;background:var(--ink);color:var(--paper);border-bottom:none}
+  tbody th{font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:var(--mute);width:150px;font-weight:normal}
+  tr:last-child th,tr:last-child td{border-bottom:none}
+
+  .wiring{padding-block:56px}
+  .cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:36px;margin-top:26px}
+  @media(max-width:760px){.cols{grid-template-columns:1fr;gap:26px}}
+  ul{margin:14px 0 0;padding-left:16px}
+  li{font-size:11px;line-height:1.95;color:var(--mute);margin-bottom:7px}
+  li b{color:var(--ink);font-weight:normal}
+  pre{
+    background:var(--ink);color:#f4f3f1;padding:16px;overflow-x:auto;
+    font-family:var(--mono);font-size:10.5px;line-height:1.75;margin:16px 0 0;
+  }
+  .pick{border:1px solid var(--ink);background:var(--paper);padding:22px 24px;margin-top:34px}
+  .pick p{color:var(--ink);margin-top:12px}
+  footer{border-top:1px solid var(--ink);padding-block:22px;font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:var(--mute);display:flex;flex-wrap:wrap;gap:10px 20px;justify-content:space-between}
+
+  @media (prefers-reduced-motion: reduce){
+    :root:not([data-motion="force"]) .pop,
+    :root:not([data-motion="force"]) .strip{transition:opacity calc(200ms * var(--speed)) linear!important;opacity:0}
+    :root:not([data-motion="force"]) .frame.is-in .pop,
+    :root:not([data-motion="force"]) .frame.is-in .strip{opacity:1}
+    :root:not([data-motion="force"]) .drift-home{transform:translate(-50%,50%)!important}
+    :root:not([data-motion="force"]) .drift-inner{transform:translateY(0)!important}
+    :root:not([data-motion="force"]) .slip-home{transform:translateY(0)!important}
+    :root:not([data-motion="force"]) .slip-inner{transform:translate(-50%,0)!important}
+    :root:not([data-motion="force"]) .shut{transition:opacity calc(200ms * var(--speed)) linear!important;grid-template-rows:1fr!important;opacity:0}
+    :root:not([data-motion="force"]) .frame.is-in .shut{opacity:1}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="masthead-top">
+      <p class="eyebrow">Fola Adeleke &middot; folaadeleke.com</p>
+      <p class="eyebrow">Motion study &middot; Newsletter pop-up</p>
+    </div>
+    <h1>Pop-up motion<br />concepts</h1>
+    <div class="intro">
+      <p>Three ways to bring the newsletter pop-up in. Each concept is shown twice &mdash; once
+      on the homepage, where it rises from the bottom edge, and once on an inner page, where it
+      comes down from under the nav. Same copy, same 25% offer, same Courier skin. Only the
+      motion and the level of interruption change. Each preview plays once as it scrolls into view. Press <strong>replay</strong> to see it again,
+      or slow everything to a quarter speed to inspect the easing.</p>
+      <div class="rule-note">
+        <div><b>Homepage</b><span>Up from the bottom. First impression, full attention, dim behind it.</span></div>
+        <div><b>Inner pages</b><span>Down from the top. Second ask, lighter touch, never blocks the print.</span></div>
+        <div><b>Today</b><span>Instant <em>display:flex</em> 400ms after load, homepage only, every visit.</span></div>
+      </div>
+    </div>
+  </header>
+
+  <div class="controls">
+    <button class="btn" id="playAll" type="button">&#9654;&nbsp; Play all six</button>
+    <button class="btn" id="slowBtn" type="button" aria-pressed="false">Quarter speed</button>
+    <button class="btn" id="motionBtn" type="button" aria-pressed="false" hidden>Reduced motion is on &mdash; play anyway</button>
+    <span class="hint">Each preview plays once as it scrolls in &middot; replay any frame</span>
+  </div>
+
+  <!-- ═══ CONCEPT 01 ═══════════════════════════════════════ -->
+  <section class="concept" id="c1">
+    <div class="spec">
+      <p class="eyebrow">Concept 01</p>
+      <h2>Drift</h2>
+      <p class="tagline">Long expo-out travel, nothing else moving. It decelerates for almost
+      the whole of its 900ms, so it reads as slow without ever feeling like it has stalled.</p>
+      <dl>
+        <dt>Motion</dt><dd>translateY only, 120px of travel, opacity 0&rarr;1</dd>
+        <dt>Duration</dt><dd>900ms card &middot; 420ms dim</dd>
+        <dt>Easing</dt><dd>cubic-bezier(.16, 1, .3, 1)</dd>
+        <dt>Homepage</dt><dd>Centred card rises from below the fold, dim overlay behind</dd>
+        <dt>Inner page</dt><dd>Full-width strip drops under the nav. No dim, no scroll lock</dd>
+        <dt>Dismiss</dt><dd>&times;, Esc, overlay click. Strip self-retracts after 12s &mdash; not shown in the preview</dd>
+      </dl>
+      <div class="verdict">
+        <div><i>+</i><span>Cheapest to build &mdash; two transitions, no new layout.</span></div>
+        <div><i>+</i><span>The strip is genuinely ignorable, which is the point on repeat views.</span></div>
+        <div><i>&minus;</i><span>The safest of the three. Elegant, not memorable.</span></div>
+      </div>
+    </div>
+    <div class="stages">
+      <div class="stage">
+        <div class="stage-head"><span>Homepage</span><em>Rises &middot; blocking</em><button class="replay" type="button">Replay &#8599;</button></div>
+        <div class="frame is-in">
+          <div class="mini-nav"><span>Fola Adeleke</span><u>Prints &nbsp;Studio&nbsp; Press</u></div>
+          <div class="mini-body"><div class="mini-hero"><b>Give Thanks &middot; Archival Print</b></div><div class="mini-grid"><i></i><i></i><i></i></div><div class="mini-lines"><i></i><i></i><i></i></div></div>
+          <div class="dim"></div>
+          <div class="pop from-bottom drift-home">
+            <span class="x">&times;</span>
+            <div class="k">Fola Adeleke&rsquo;s Notes</div>
+            <div class="h">25% off your first order</div>
+            <div class="s">First access to every drop, direct from Fola.</div>
+            <div class="field"><span>Your email</span><b>Join</b></div>
+          </div>
+        </div>
+      </div>
+      <div class="stage">
+        <div class="stage-head"><span>Inner page</span><em>Descends &middot; passive</em><button class="replay" type="button">Replay &#8600;</button></div>
+        <div class="frame is-in">
+          <div class="mini-nav"><span>Fola Adeleke</span><u>Prints &nbsp;Studio&nbsp; Press</u></div>
+          <div class="mini-body"><div class="mini-hero"><b>No VC &middot; Edition of 50</b></div><div class="mini-grid"><i></i><i></i><i></i></div><div class="mini-lines"><i></i><i></i><i></i></div></div>
+          <div class="strip from-top drift-inner"><span>25% off your first order</span><u>Join the Notes</u><span class="x">&times;</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ CONCEPT 02 ═══════════════════════════════════════ -->
+  <section class="concept" id="c2">
+    <div class="spec">
+      <p class="eyebrow">Concept 02</p>
+      <h2>Slip</h2>
+      <p class="tagline">Paper sliding across a desk. Faster travel with a small overshoot, and
+      a shadow that only appears as it settles &mdash; so the panel reads as a physical sheet
+      landing on top of the page rather than a layer being faded in.</p>
+      <dl>
+        <dt>Motion</dt><dd>translateY with 1.22 overshoot + shadow on settle</dd>
+        <dt>Duration</dt><dd>700ms, shadow tracking the same curve</dd>
+        <dt>Easing</dt><dd>cubic-bezier(.22, 1.22, .36, 1)</dd>
+        <dt>Homepage</dt><dd>Full-width sheet docked to the bottom edge, never centred</dd>
+        <dt>Inner page</dt><dd>Card drops and docks flush under the nav</dd>
+        <dt>Dismiss</dt><dd>&times;, Esc, or scroll past 40% &mdash; slips back out the way it came</dd>
+      </dl>
+      <div class="verdict">
+        <div><i>+</i><span>Most personality; the overshoot gives it weight without being bouncy.</span></div>
+        <div><i>+</i><span>A docked sheet leaves the hero print fully visible on the homepage.</span></div>
+        <div><i>&minus;</i><span>Shadows are a new material for this site &mdash; everything else is hairline rules.</span></div>
+      </div>
+    </div>
+    <div class="stages">
+      <div class="stage">
+        <div class="stage-head"><span>Homepage</span><em>Docks bottom &middot; non-modal</em><button class="replay" type="button">Replay &#8599;</button></div>
+        <div class="frame is-in">
+          <div class="mini-nav"><span>Fola Adeleke</span><u>Prints &nbsp;Studio&nbsp; Press</u></div>
+          <div class="mini-body"><div class="mini-hero"><b>Council &middot; Archival Print</b></div><div class="mini-grid"><i></i><i></i><i></i></div><div class="mini-lines"><i></i><i></i><i></i></div></div>
+          <div class="pop from-bottom slip-home">
+            <span class="x">&times;</span>
+            <div class="k">Fola Adeleke&rsquo;s Notes &middot; Newsletter</div>
+            <div class="h">25% off your first order</div>
+            <div class="field field-narrow"><span>Your email</span><b>Join</b></div>
+          </div>
+        </div>
+      </div>
+      <div class="stage">
+        <div class="stage-head"><span>Inner page</span><em>Drops &middot; docked card</em><button class="replay" type="button">Replay &#8600;</button></div>
+        <div class="frame is-in">
+          <div class="mini-nav"><span>Fola Adeleke</span><u>Prints &nbsp;Studio&nbsp; Press</u></div>
+          <div class="mini-body"><div class="mini-hero"><b>Studio &middot; Process Notes</b></div><div class="mini-grid"><i></i><i></i><i></i></div><div class="mini-lines"><i></i><i></i><i></i></div></div>
+          <div class="pop from-top slip-inner">
+            <span class="x">&times;</span>
+            <div class="k">Fola Adeleke&rsquo;s Notes</div>
+            <div class="h">25% off your first order</div>
+            <div class="field"><span>Your email</span><b>Join</b></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ CONCEPT 03 ═══════════════════════════════════════ -->
+  <section class="concept" id="c3">
+    <div class="spec">
+      <p class="eyebrow">Concept 03</p>
+      <h2>Shutter</h2>
+      <p class="tagline">Nothing slides. The panel&rsquo;s edge travels and the content behind it is
+      revealed in place, like a blind being drawn &mdash; up from the bottom on the homepage, down
+      from the top everywhere else. The slowest and the most editorial.</p>
+      <dl>
+        <dt>Motion</dt><dd>Grid-row reveal (0fr&rarr;1fr); the 1px rule is the thing that moves</dd>
+        <dt>Duration</dt><dd>1100ms</dd>
+        <dt>Easing</dt><dd>cubic-bezier(.65, 0, .35, 1) &mdash; slow in, slow out</dd>
+        <dt>Homepage</dt><dd>Full-bleed plinth unrolls upward off the bottom edge</dd>
+        <dt>Inner page</dt><dd>Same panel unrolls downward from beneath the nav</dd>
+        <dt>Dismiss</dt><dd>Rolls back to zero height on close &mdash; no fade</dd>
+      </dl>
+      <div class="verdict">
+        <div><i>+</i><span>Unmistakably this site: it&rsquo;s a moving rule, not a floating card.</span></div>
+        <div><i>+</i><span>Full-bleed both ways, so home and inner are visibly the same object.</span></div>
+        <div><i>&minus;</i><span>The copy sets the height, so it reflows on narrow screens &mdash; check it at 375px.</span></div>
+        <div><i>&minus;</i><span>At 1100ms it&rsquo;s long enough to be felt on a slow connection.</span></div>
+      </div>
+    </div>
+    <div class="stages">
+      <div class="stage">
+        <div class="stage-head"><span>Homepage</span><em>Unrolls up &middot; full bleed</em><button class="replay" type="button">Replay &#8599;</button></div>
+        <div class="frame is-in">
+          <div class="mini-nav"><span>Fola Adeleke</span><u>Prints &nbsp;Studio&nbsp; Press</u></div>
+          <div class="mini-body"><div class="mini-hero"><b>Give Thanks &middot; Archival Print</b></div><div class="mini-grid"><i></i><i></i><i></i></div><div class="mini-lines"><i></i><i></i><i></i></div></div>
+          <div class="from-bottom shut shut-home">
+            <div class="shut-clip"><div class="shut-pad">
+              <div class="k">Fola Adeleke&rsquo;s Notes &middot; Newsletter</div>
+              <div class="h">25% off your first order</div>
+              <div class="field field-narrow"><span>Your email</span><b>Join</b></div>
+            </div></div>
+          </div>
+        </div>
+      </div>
+      <div class="stage">
+        <div class="stage-head"><span>Inner page</span><em>Unrolls down &middot; full bleed</em><button class="replay" type="button">Replay &#8600;</button></div>
+        <div class="frame is-in">
+          <div class="mini-nav"><span>Fola Adeleke</span><u>Prints &nbsp;Studio&nbsp; Press</u></div>
+          <div class="mini-body"><div class="mini-hero"><b>Press &middot; Selected Coverage</b></div><div class="mini-grid"><i></i><i></i><i></i></div><div class="mini-lines"><i></i><i></i><i></i></div></div>
+          <div class="from-top shut shut-inner">
+            <div class="shut-clip"><div class="shut-pad">
+              <div class="k">Fola Adeleke&rsquo;s Notes &middot; Newsletter</div>
+              <div class="h">25% off your first order</div>
+              <div class="field field-narrow"><span>Your email</span><b>Join</b></div>
+            </div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ COMPARISON ═══════════════════════════════════════ -->
+  <section class="compare">
+    <p class="eyebrow">Side by side</p>
+    <h1 style="font-size:clamp(24px,4vw,34px)">The trade-offs</h1>
+    <div class="scroller">
+      <table>
+        <thead>
+          <tr><th scope="col">&nbsp;</th><th scope="col">01 Drift</th><th scope="col">02 Slip</th><th scope="col">03 Shutter</th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">Perceived speed</th><td>Slow, never sluggish</td><td>Brisk with weight</td><td>Deliberately slow</td></tr>
+          <tr><th scope="row">Interruption</th><td>High on home, near zero inner</td><td>Medium &mdash; nothing is blocked</td><td>Medium-high &mdash; full bleed</td></tr>
+          <tr><th scope="row">Hero print visible</th><td>Dimmed on home</td><td>Always fully visible</td><td>Bottom third covered</td></tr>
+          <tr><th scope="row">Build cost</th><td>~20 lines of CSS</td><td>Adds a shadow token + scroll trigger</td><td>One grid-row transition</td></tr>
+          <tr><th scope="row">Reduced motion</th><td>Straight fade</td><td>Straight fade, no shadow travel</td><td>Appears at full height</td></tr>
+          <tr><th scope="row">Risk</th><td>Forgettable</td><td>Off-brand shadow</td><td>Long copy makes it tall on mobile</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="pick">
+      <p class="eyebrow">Recommendation</p>
+      <p><strong>Concept 01 for the mechanics, Concept 03 for the inner-page panel.</strong>
+      Drift&rsquo;s expo-out is the curve that actually delivers &ldquo;slow&rdquo; without dead time, and its
+      inner-page strip is the only treatment here that a returning visitor can genuinely ignore.
+      If you want the pop-up to feel like part of the site rather than a widget bolted onto it,
+      take Shutter&rsquo;s travelling rule for the inner pages and keep Drift on the homepage &mdash;
+      they share a vocabulary. Concept 02 is the one to pick if you&rsquo;d rather it had a bit of swagger.</p>
+    </div>
+  </section>
+
+  <!-- ═══ WIRING ═══════════════════════════════════════════ -->
+  <section class="wiring">
+    <p class="eyebrow">Implementation &middot; shipped</p>
+    <h1 style="font-size:clamp(24px,4vw,34px)">What changed</h1>
+    <p style="margin-top:14px">Concept 01 is live. The pop-up now lives in one place &mdash; <em>js/newsletter-popup.js</em> &mdash; loaded on every page alongside <em>js/consent.js</em>. The blockers below are the ones it had to clear.</p>
+    <div class="cols">
+      <div>
+        <h3>Three blockers in the current build</h3>
+        <ul>
+          <li><b>display:none &rarr; flex can&rsquo;t transition.</b> <em>index.html:270</em> toggles
+          <em>display</em>, which is a binary property &mdash; no easing curve will ever apply. It has to
+          become visibility + opacity + transform.</li>
+          <li><b>The pop-up only exists on the homepage.</b> <em>index.html</em> is the only page with
+          <em>#modalOverlay</em>. Inner pages need the markup before they can have a down-transition.</li>
+          <li><b>No frequency cap.</b> <em>setTimeout(openModal, 400)</em> at <em>index.html:1428</em> fires on
+          every single load, including for people who already subscribed.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Suggested rules</h3>
+        <ul>
+          <li>Homepage: <b>1.2s</b> after load &mdash; long enough for the hero to land first.</li>
+          <li>Inner pages: on the <b>second</b> page view of a session, not the first.</li>
+          <li>Cap at once per <b>14 days</b>; suppress permanently once <em>fa_subscribed</em> is set.</li>
+          <li>Never on <em>/claim</em>, <em>/verify/*</em>, <em>/guess</em> &mdash; those are campaign
+          landings with their own call to action.</li>
+          <li>Stack below the cookie banner, which already owns the bottom edge at <em>z-index:10000</em>.</li>
+        </ul>
+      </div>
+    </div>
+<pre>/* replaces .modal-overlay { display:none } */
+.modal-overlay{
+  position:fixed; inset:0; z-index:300;
+  display:flex; align-items:center; justify-content:center; padding:20px;
+  background:rgba(0,0,0,0);
+  visibility:hidden;                      /* keeps it out of the tab order */
+  transition:background .42s linear, visibility 0s linear .9s;
+}
+.modal-overlay.open{
+  background:rgba(0,0,0,.45);
+  visibility:visible;
+  transition:background .42s linear, visibility 0s;
+}
+.modal{                                   /* homepage: up from the bottom */
+  transform:translateY(120px); opacity:0;
+  transition:transform .9s cubic-bezier(.16,1,.3,1), opacity .9s linear;
+}
+.modal-overlay.open .modal{ transform:translateY(0); opacity:1 }
+
+.modal-overlay.from-top .modal{           /* inner pages: down from the top */
+  transform:translateY(-120px);
+}
+@media (prefers-reduced-motion: reduce){
+  .modal{ transform:none !important; transition:opacity .2s linear }
+}</pre>
+  </section>
+
+  <footer>
+    <span>Concept sheet &middot; not live</span>
+    <span>Courier New &middot; 0.2em &middot; #000 / #fff / #6f6f6f</span>
+  </footer>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  var root   = document.documentElement;
+  var stages = Array.prototype.slice.call(document.querySelectorAll('.stage'));
+  var timers = new WeakMap();
+
+  function speed(){ return parseFloat(getComputedStyle(root).getPropertyValue('--speed')) || 1; }
+
+  function durationOf(frame){
+    var v = getComputedStyle(frame).getPropertyValue('--dur');
+    return (parseFloat(v) || 900) * speed();
+  }
+
+  function play(stage){
+    var frame = stage.querySelector('.frame');
+    var btn   = stage.querySelector('.replay');
+    var label = btn.dataset.label || (btn.dataset.label = btn.textContent);
+    clearTimeout(timers.get(frame));
+
+    var moving = frame.querySelectorAll('.pop, .strip, .shut');
+    function flush(){
+      // .frame is a container-query container, so reading ITS offsetWidth does
+      // not flush the descendants' styles — read the animated children instead.
+      moving.forEach(function(el){ void getComputedStyle(el).transform; });
+    }
+
+    frame.classList.add('no-anim');     // snap back to the start, do not animate there
+    frame.classList.remove('is-in');
+    flush();
+    requestAnimationFrame(function(){
+      frame.classList.remove('no-anim');
+      flush();                          // commit transition:none before re-arming
+      frame.classList.add('is-in');
+      btn.textContent = 'Playing';
+      timers.set(frame, setTimeout(function(){ btn.textContent = label; }, durationOf(frame)));
+    });
+  }
+
+  stages.forEach(function(stage){
+    stage.querySelector('.replay').addEventListener('click', function(){ play(stage); });
+  });
+
+  document.getElementById('playAll').addEventListener('click', function(){
+    stages.forEach(function(stage, i){ setTimeout(function(){ play(stage); }, i * 160); });
+  });
+
+  if ('IntersectionObserver' in window) {
+    var seen = new WeakSet();
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (e.isIntersecting && !seen.has(e.target)) { seen.add(e.target); play(e.target); }
+      });
+    }, { threshold: 0.55 });
+    stages.forEach(function(stage){ io.observe(stage); });
+  }
+
+  // A motion study is useless as six still frames, so offer a way past the
+  // OS-level reduced-motion setting rather than silently showing fades.
+  var rm = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var motionBtn = document.getElementById('motionBtn');
+  if (rm.matches) motionBtn.hidden = false;
+  motionBtn.addEventListener('click', function(){
+    var on = root.getAttribute('data-motion') !== 'force';
+    root.setAttribute('data-motion', on ? 'force' : 'system');
+    motionBtn.setAttribute('aria-pressed', String(on));
+    motionBtn.textContent = on ? 'Motion on' : 'Reduced motion is on \u2014 play anyway';
+  });
+
+  var slow = document.getElementById('slowBtn');
+  slow.addEventListener('click', function(){
+    var on = slow.getAttribute('aria-pressed') !== 'true';
+    slow.setAttribute('aria-pressed', String(on));
+    root.style.setProperty('--speed', on ? '4' : '1');
+    slow.textContent = on ? 'Full speed' : 'Quarter speed';
+  });
+})();
+</script>
+</body>
+</html>

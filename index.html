@@ -22,6 +22,7 @@
   </script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7ZCQ4YEN6"></script>
   <script defer src="/js/consent.js"></script>
+  <script defer src="/js/newsletter-popup.js"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -262,82 +263,6 @@
       object-fit: cover;
       object-position: center center;
       display: block;
-    }
-
-    /* ──────────────────────────────────────────
-       MODAL
-    ────────────────────────────────────────── */
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.45);
-      z-index: 300;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-
-    .modal-overlay.open {
-      display: flex;
-    }
-
-    .modal {
-      background: var(--white);
-      border: 1px solid var(--grey-light);
-      padding: 40px 36px 32px;
-      max-width: 420px;
-      width: 100%;
-      text-align: center;
-      position: relative;
-    }
-
-    .modal-close {
-      position: absolute;
-      top: 14px;
-      right: 16px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: 18px;
-      color: var(--grey-mid);
-      line-height: 1;
-      font-family: var(--font);
-    }
-
-    .modal h2 {
-      font-family: var(--font);
-      font-size: 14px;
-      font-weight: normal;
-      letter-spacing: var(--spacing);
-      text-transform: uppercase;
-      margin-bottom: 16px;
-    }
-
-    .modal p {
-      font-size: 12px;
-      line-height: 1.8;
-      color: var(--grey-mid);
-      margin-bottom: 28px;
-      letter-spacing: 0.05em;
-    }
-
-    .modal input[type="email"] {
-      width: 100%;
-      border: 1px solid var(--black);
-      padding: 12px 14px;
-      font-family: var(--font);
-      font-size: 12px;
-      letter-spacing: var(--spacing);
-      text-transform: uppercase;
-      outline: none;
-      margin-bottom: 14px;
-      background: var(--white);
-      color: var(--black);
-    }
-
-    .modal input[type="email"]::placeholder {
-      color: var(--grey-mid);
     }
 
     .btn-primary {
@@ -653,10 +578,6 @@
       .contact-wrap h1 {
         font-size: 24px;
         letter-spacing: 0.25em;
-      }
-
-      .modal {
-        padding: 40px 24px 32px;
       }
 
       nav {
@@ -1179,40 +1100,6 @@
     <a href="/contact">Contact</a>
   </div>
 
-  <!-- ── MODAL ── -->
-  <div class="modal-overlay" id="modalOverlay" onclick="handleOverlayClick(event)">
-    <div class="modal" id="modal">
-      <button class="modal-close" onclick="closeModal()" aria-label="Close">✕</button>
-
-      <!-- subscribe form -->
-      <div id="modalForm">
-        <p style="font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.35em;text-transform:uppercase;color:#6f6f6f;margin-bottom:14px;">Fola Adeleke's Notes — Newsletter</p>
-        <h2 style="font-family:'Courier New',Courier,monospace;font-size:14px;font-weight:normal;letter-spacing:0.3em;text-transform:uppercase;margin-bottom:10px;">25% off your first order</h2>
-        <p style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.08em;line-height:1.9;color:#6f6f6f;margin-bottom:28px;">Subscribe and get 25% off your first order.<br>Plus first access to every drop, direct from Fola.</p>
-        <input type="text" id="modalHoneypot" style="display:none" tabindex="-1" autocomplete="off" />
-        <div style="display:flex;width:100%;margin-bottom:10px;gap:0;border:1px solid #000;">
-          <input type="email" id="modalEmail" placeholder="YOUR EMAIL" autocomplete="email"
-            style="flex:1;min-width:0;border:none;padding:13px 14px;font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;outline:none;background:#fff;color:#000;border-radius:0;-webkit-appearance:none;margin:0;" />
-          <button onclick="handleJoin()" id="joinBtn"
-            style="background:#000;color:#fff;border:none;border-left:1px solid #000;padding:13px 18px;font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;cursor:pointer;white-space:nowrap;border-radius:0;flex-shrink:0;margin:0;">
-            Subscribe
-          </button>
-        </div>
-        <p id="modalMessage" style="font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.1em;color:#6f6f6f;min-height:14px;margin-bottom:12px;"></p>
-        <p style="font-family:'Courier New',Courier,monospace;font-size:8px;letter-spacing:0.06em;color:#6f6f6f;line-height:1.9;">
-          By subscribing you agree to receive emails from Fola Adeleke.
-          <a href="/unsubscribe.html" style="color:#6f6f6f;text-decoration:underline;">Unsubscribe</a> any time.
-        </p>
-      </div>
-
-      <!-- success -->
-      <div id="modalSuccess" style="display:none;">
-        <p style="font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.35em;text-transform:uppercase;color:#6f6f6f;margin-bottom:14px;">Fola Adeleke's Notes</p>
-        <p style="font-family:'Courier New',Courier,monospace;font-size:14px;letter-spacing:0.3em;text-transform:uppercase;margin-bottom:12px;">Almost there.</p>
-        <p style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.08em;line-height:1.9;color:#6f6f6f;">Check the new tab to confirm your<br>subscription and unlock your 25% off.</p>
-      </div>
-    </div>
-  </div>
 
   <!-- ═══════════════════════════════════════
        PAGE 1 — HOME
@@ -1363,48 +1250,6 @@
       group.querySelector('.drawer-group-toggle').setAttribute('aria-expanded', isOpen);
     }
 
-    // ── MODAL ──────────────────────────────────────────────
-    function openModal() {
-      document.getElementById('modalOverlay').classList.add('open');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeModal() {
-      document.getElementById('modalOverlay').classList.remove('open');
-      document.body.style.overflow = '';
-    }
-
-    function handleOverlayClick(e) {
-      if (e.target === document.getElementById('modalOverlay')) {
-        closeModal();
-      }
-    }
-
-    function handleJoin() {
-      var email    = document.getElementById('modalEmail').value.trim();
-      var honeypot = document.getElementById('modalHoneypot').value;
-      var btn      = document.getElementById('joinBtn');
-      var msg      = document.getElementById('modalMessage');
-
-      if (honeypot) { closeModal(); return; }
-
-      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        msg.style.color = '#c00';
-        msg.textContent = 'Please enter a valid email address.';
-        document.getElementById('modalEmail').focus();
-        return;
-      }
-
-      // Open Beehiiv's hosted subscribe form in a new tab with email pre-filled.
-      // This is the only guaranteed-working approach — no guessed API endpoints.
-      var beehiivUrl = 'https://subscribe-forms.beehiiv.com/b64503cb-8e19-4aec-9d50-a7a707588ca5'
-                     + '?email=' + encodeURIComponent(email);
-      window.open(beehiivUrl, '_blank');
-      document.getElementById('modalForm').style.display = 'none';
-      document.getElementById('modalSuccess').style.display = 'block';
-    }
-
-
     // ── IMAGE PLACEHOLDER LOGIC ────────────────────────────
     // Hide placeholder label when image actually loads with a valid src
     ['no-vc', 'give-thanks', 'council'].forEach(function(id) {
@@ -1424,12 +1269,6 @@
         }
       }
     });
-
-    // ── INIT ───────────────────────────────────────────────
-    window.addEventListener('load', function() {
-      setTimeout(openModal, 400);
-    });
-
 
     // ── LIGHTBOX ───────────────────────────────────────────
     function openLightbox(img) {
@@ -1455,7 +1294,6 @@
     // Keyboard: Escape closes modal or drawer
     document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') {
-        closeModal();
         closeDrawer();
       }
     });
