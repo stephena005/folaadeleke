@@ -20,12 +20,13 @@
   var STRIP_SEEN = 'fa_strip_seen';    // ISO date the strip last ran
   var SUBBED     = 'fa_subscribed';    // '1' once they have joined
   var VIEWS      = 'fa_popup_views';   // page views this session
-  var CARD_TODAY = 'fa_card_shown';    // card already ran this session
   var CLOCK_INIT = 'fa_strip_clock';   // the strip's clock has been initialised
   var CONSENT    = 'fa_consent';       // set by js/consent.js
 
   // The card blocks the page, so it asks rarely. The strip blocks nothing and
-  // is easy to ignore, so it may ask more often.
+  // is easy to ignore, so it may ask more often — including later in the same
+  // visit as the card, since most visitors arrive on the homepage and the strip
+  // would otherwise almost never reach them.
   var CARD_COOLDOWN  = 14 * 24 * 60 * 60 * 1000;
   var STRIP_COOLDOWN = 3 * 24 * 60 * 60 * 1000;
   var HOME_DELAY   = 700;    // measured from when the loading curtain clears
@@ -93,14 +94,10 @@
     if (isHome()) return !within(get(CARD_SEEN), CARD_COOLDOWN);
 
     if (views < 2) return false;                  // inner pages: second view onward
-    if (get(CARD_TODAY, sessionStorage)) return false;  // never both in one visit
     return !within(get(STRIP_SEEN), STRIP_COOLDOWN);
   }
 
-  function markCardSeen() {
-    set(CARD_SEEN, new Date().toISOString());
-    set(CARD_TODAY, '1', sessionStorage);
-  }
+  function markCardSeen() { set(CARD_SEEN, new Date().toISOString()); }
 
   function markStripSeen() { set(STRIP_SEEN, new Date().toISOString()); }
 
