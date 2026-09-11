@@ -97,28 +97,30 @@
   .frame{
     position:relative;width:100%;aspect-ratio:16/10;overflow:hidden;
     background:var(--paper);border:1px solid var(--ink);
+    container-type:inline-size;          /* every size below scales with the frame */
+    --nav:4.2cqw;
   }
   /* miniature of the live site */
   .mini-nav{
-    position:absolute;top:0;left:0;right:0;height:17px;z-index:3;
+    position:absolute;top:0;left:0;right:0;height:var(--nav);z-index:4;
     background:var(--paper);border-bottom:1px solid var(--ink);
-    display:flex;align-items:center;justify-content:space-between;padding:0 8px;
-    font-size:5.5px;letter-spacing:.24em;text-transform:uppercase;
+    display:flex;align-items:center;justify-content:space-between;padding:0 2cqw;
+    font-size:1.3cqw;letter-spacing:.24em;text-transform:uppercase;
   }
   .mini-nav u{text-decoration:none;color:var(--mute);letter-spacing:.2em}
-  .mini-body{position:absolute;inset:17px 0 0;padding:10px 10px 0;display:flex;flex-direction:column;gap:7px}
+  .mini-body{position:absolute;inset:var(--nav) 0 0;padding:2.4cqw 2.4cqw 0;display:flex;flex-direction:column;gap:1.8cqw;z-index:1}
   .mini-hero{
     flex:1;background:var(--ink);color:var(--paper);position:relative;
-    display:flex;align-items:flex-end;padding:8px;
+    display:flex;align-items:flex-end;padding:2cqw;
   }
-  .mini-hero b{font-weight:normal;font-size:6px;letter-spacing:.3em;text-transform:uppercase}
-  .mini-hero:after{content:"";position:absolute;inset:5px;border:1px solid rgba(255,255,255,.35)}
-  .mini-lines{display:flex;gap:6px;padding-bottom:9px}
-  .mini-lines i{display:block;height:3px;background:var(--rule);flex:1}
+  .mini-hero b{font-weight:normal;font-size:1.35cqw;letter-spacing:.3em;text-transform:uppercase}
+  .mini-hero:after{content:"";position:absolute;inset:1.2cqw;border:1px solid rgba(255,255,255,.35)}
+  .mini-lines{display:flex;gap:1.5cqw;padding-bottom:2.2cqw}
+  .mini-lines i{display:block;height:.7cqw;background:var(--rule);flex:1}
   .mini-lines i:nth-child(2){flex:.6}
   .mini-lines i:nth-child(3){flex:.35}
 
-  /* dim overlay */
+  /* dim overlay — sits above the nav, because it blocks the whole page */
   .dim{
     position:absolute;inset:0;z-index:5;background:rgba(0,0,0,.42);
     opacity:0;transition:opacity calc(420ms * var(--speed)) linear;
@@ -127,36 +129,41 @@
 
   /* shared pop-up skin */
   .pop{
-    position:absolute;z-index:6;background:var(--paper);border:1px solid var(--ink);
-    text-align:center;padding:11px 12px 10px;
+    position:absolute;background:var(--paper);border:1px solid var(--ink);
+    text-align:center;padding:2.6cqw 2.8cqw 2.4cqw;
   }
-  .pop .k{font-size:5px;letter-spacing:.34em;text-transform:uppercase;color:var(--mute)}
-  .pop .h{font-size:7.5px;letter-spacing:.26em;text-transform:uppercase;margin-top:5px}
-  .pop .s{font-size:5.5px;letter-spacing:.08em;color:var(--mute);margin-top:5px;line-height:1.7}
-  .pop .field{display:flex;border:1px solid var(--ink);margin-top:8px}
-  .pop .field span{flex:1;font-size:5.5px;letter-spacing:.2em;color:var(--mute);padding:5px 6px;text-align:left}
-  .pop .field b{background:var(--ink);color:var(--paper);font-weight:normal;font-size:5.5px;letter-spacing:.2em;padding:5px 8px}
-  .pop .x{position:absolute;top:4px;right:6px;font-size:6px;color:var(--mute)}
+  .frame .k{font-size:1.15cqw;letter-spacing:.34em;text-transform:uppercase;color:var(--mute)}
+  .frame .h{font-size:1.75cqw;letter-spacing:.26em;text-transform:uppercase;margin-top:1.1cqw}
+  .frame .s{font-size:1.25cqw;letter-spacing:.08em;color:var(--mute);margin-top:1.1cqw;line-height:1.7}
+  .frame .field-narrow{max-width:46cqw;margin-left:auto;margin-right:auto}
+  .frame .field{display:flex;border:1px solid var(--ink);margin-top:1.8cqw}
+  .frame .field span{flex:1;font-size:1.25cqw;letter-spacing:.2em;color:var(--mute);padding:1.2cqw 1.4cqw;text-align:left}
+  .frame .field b{background:var(--ink);color:var(--paper);font-weight:normal;font-size:1.25cqw;letter-spacing:.2em;padding:1.2cqw 1.8cqw}
+  .frame .x{position:absolute;top:1cqw;right:1.4cqw;font-size:1.4cqw;color:var(--mute);line-height:1}
 
   /* strip skin (inner-page, non-blocking) */
   .strip{
-    position:absolute;left:0;right:0;z-index:6;background:var(--paper);
+    position:absolute;left:0;right:0;background:var(--paper);
     border-bottom:1px solid var(--ink);
-    display:flex;align-items:center;justify-content:center;gap:12px;
-    height:26px;font-size:5.5px;letter-spacing:.24em;text-transform:uppercase;
+    display:flex;align-items:center;justify-content:center;gap:2.6cqw;
+    height:5.4cqw;font-size:1.3cqw;letter-spacing:.24em;text-transform:uppercase;
   }
-  .strip u{text-decoration:none;border-bottom:1px solid var(--ink);padding-bottom:1px}
-  .strip .x{position:absolute;right:7px;top:50%;transform:translateY(-50%);font-size:6px;color:var(--mute)}
+  .strip u{text-decoration:none;border-bottom:1px solid var(--ink);padding-bottom:.3cqw}
+  .strip .x{position:absolute;right:1.8cqw;top:50%;transform:translateY(-50%);font-size:1.4cqw;color:var(--mute)}
+
+  /* anything that descends passes BEHIND the nav (z-index 2 < nav 4) */
+  .from-top{z-index:2}
+  .from-bottom{z-index:6}
 
   /* ── CONCEPT 01 · DRIFT ───────────────────── */
   #c1{--dur:900ms;--ease:cubic-bezier(.16,1,.3,1)}
   .drift-home{
-    left:50%;bottom:50%;width:60%;transform:translate(-50%,calc(50% + 120px));opacity:0;
+    left:50%;bottom:50%;width:58%;transform:translate(-50%,calc(50% + 26cqw));opacity:0;
     transition:transform calc(var(--dur) * var(--speed)) var(--ease),opacity calc(var(--dur) * var(--speed)) linear;
   }
   .is-in .drift-home{transform:translate(-50%,50%);opacity:1}
   .drift-inner{
-    top:17px;transform:translateY(-100%);
+    top:var(--nav);transform:translateY(calc(-100% - var(--nav)));
     transition:transform calc(var(--dur) * var(--speed)) var(--ease);
   }
   .is-in .drift-inner{transform:translateY(0)}
@@ -165,32 +172,34 @@
   #c2{--dur:700ms;--ease:cubic-bezier(.22,1.22,.36,1)}
   .slip-home{
     left:0;right:0;bottom:0;border-left:none;border-right:none;border-bottom:none;
-    padding:13px 14px 14px;transform:translateY(100%);
+    padding:2.8cqw 3cqw 3cqw;transform:translateY(100%);
     box-shadow:0 0 0 rgba(0,0,0,0);
     transition:transform calc(var(--dur) * var(--speed)) var(--ease),
                box-shadow calc(var(--dur) * var(--speed)) linear;
   }
-  .is-in .slip-home{transform:translateY(0);box-shadow:0 -10px 24px rgba(0,0,0,.13)}
+  .is-in .slip-home{transform:translateY(0);box-shadow:0 -2cqw 4cqw rgba(0,0,0,.13)}
   .slip-inner{
-    left:50%;top:17px;width:56%;transform:translate(-50%,calc(-100% - 17px));
+    left:50%;top:var(--nav);width:54%;transform:translate(-50%,calc(-100% - var(--nav)));
     box-shadow:0 0 0 rgba(0,0,0,0);
     transition:transform calc(var(--dur) * var(--speed)) var(--ease),
                box-shadow calc(var(--dur) * var(--speed)) linear;
   }
-  .is-in .slip-inner{transform:translate(-50%,0);box-shadow:0 12px 26px rgba(0,0,0,.15)}
+  .is-in .slip-inner{transform:translate(-50%,0);box-shadow:0 2.5cqw 5cqw rgba(0,0,0,.15)}
 
   /* ── CONCEPT 03 · SHUTTER ─────────────────── */
+  /* 0fr → 1fr: the copy sets the height, so nothing is ever clipped */
   #c3{--dur:1100ms;--ease:cubic-bezier(.65,0,.35,1)}
   .shut{
-    position:absolute;left:0;right:0;z-index:6;overflow:hidden;background:var(--paper);
-    height:0;transition:height calc(var(--dur) * var(--speed)) var(--ease);
+    position:absolute;left:0;right:0;background:var(--paper);
+    display:grid;grid-template-rows:0fr;
+    transition:grid-template-rows calc(var(--dur) * var(--speed)) var(--ease);
   }
   .shut-home{bottom:0;border-top:1px solid var(--ink)}
-  .shut-inner{top:17px;border-bottom:1px solid var(--ink)}
-  .shut-inner .shut-in{position:absolute;top:0;left:0;right:0}
-  .shut-home .shut-in{position:absolute;bottom:0;left:0;right:0}
-  .shut-in{padding:12px 14px 13px;text-align:center}
-  .frame.is-in .shut{height:76px}
+  .shut-inner{top:var(--nav);border-bottom:1px solid var(--ink)}
+  .shut-clip{overflow:hidden;min-height:0}
+  .shut-home .shut-clip{display:flex;align-items:flex-end}   /* revealed bottom-up, copy stays put */
+  .shut-pad{padding:2.6cqw 3cqw;text-align:center;width:100%}
+  .frame.is-in .shut{grid-template-rows:1fr}
 
   /* ── comparison + wiring ──────────────────── */
   .compare{padding-block:56px;border-bottom:1px solid var(--rule)}
@@ -216,10 +225,14 @@
   footer{border-top:1px solid var(--ink);padding-block:22px;font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:var(--mute);display:flex;flex-wrap:wrap;gap:10px 20px;justify-content:space-between}
 
   @media (prefers-reduced-motion: reduce){
-    .pop,.strip,.shut,.dim{transition-duration:180ms!important;transition-property:opacity!important;transform:none!important;height:auto!important}
-    .shut{height:76px!important}
-    .drift-home{left:50%;bottom:20%;transform:translateX(-50%)!important}
-    .slip-inner{transform:translateX(-50%)!important}
+    .pop,.strip{transition:opacity calc(200ms * var(--speed)) linear!important;opacity:0}
+    .frame.is-in .pop,.frame.is-in .strip{opacity:1}
+    .drift-home{transform:translate(-50%,50%)!important}
+    .drift-inner{transform:translateY(0)!important}
+    .slip-home{transform:translateY(0)!important}
+    .slip-inner{transform:translate(-50%,0)!important}
+    .shut{transition:opacity calc(200ms * var(--speed)) linear!important;grid-template-rows:1fr!important;opacity:0}
+    .frame.is-in .shut{opacity:1}
   }
 </style>
 </head>
@@ -249,7 +262,7 @@
   <div class="controls">
     <button class="btn" id="playAll" type="button">&#9654;&nbsp; Play all six</button>
     <button class="btn" id="slowBtn" type="button" aria-pressed="false">Quarter speed</button>
-    <span class="hint">Frames rest in their settled state</span>
+    <span class="hint">Frames rest settled &middot; previews scale with the frame</span>
   </div>
 
   <!-- ═══ CONCEPT 01 ═══════════════════════════════════════ -->
@@ -265,7 +278,7 @@
         <dt>Easing</dt><dd>cubic-bezier(.16, 1, .3, 1)</dd>
         <dt>Homepage</dt><dd>Centred card rises from below the fold, dim overlay behind</dd>
         <dt>Inner page</dt><dd>Full-width strip drops under the nav. No dim, no scroll lock</dd>
-        <dt>Dismiss</dt><dd>&times;, Esc, overlay click. Strip self-retracts after 12s</dd>
+        <dt>Dismiss</dt><dd>&times;, Esc, overlay click. Strip self-retracts after 12s &mdash; not shown in the preview</dd>
       </dl>
       <div class="verdict">
         <div><i>+</i><span>Cheapest to build &mdash; two transitions, no new layout.</span></div>
@@ -280,7 +293,7 @@
           <div class="mini-nav"><span>Fola Adeleke</span><u>Prints &nbsp;Studio&nbsp; Press</u></div>
           <div class="mini-body"><div class="mini-hero"><b>Give Thanks &middot; Archival Print</b></div><div class="mini-lines"><i></i><i></i><i></i></div></div>
           <div class="dim"></div>
-          <div class="pop drift-home">
+          <div class="pop from-bottom drift-home">
             <span class="x">&times;</span>
             <div class="k">Fola Adeleke&rsquo;s Notes</div>
             <div class="h">25% off your first order</div>
@@ -291,10 +304,10 @@
       </div>
       <div class="stage">
         <div class="stage-head"><span>Inner page</span><em>Descends &middot; passive</em><button class="replay" type="button">Replay &#8600;</button></div>
-        <div class="frame is-in" data-retract="5200">
+        <div class="frame is-in">
           <div class="mini-nav"><span>Fola Adeleke</span><u>Prints &nbsp;Studio&nbsp; Press</u></div>
           <div class="mini-body"><div class="mini-hero"><b>No VC &middot; Edition of 50</b></div><div class="mini-lines"><i></i><i></i><i></i></div></div>
-          <div class="strip drift-inner"><span>25% off your first order</span><u>Join the Notes</u><span class="x">&times;</span></div>
+          <div class="strip from-top drift-inner"><span>25% off your first order</span><u>Join the Notes</u><span class="x">&times;</span></div>
         </div>
       </div>
     </div>
@@ -328,11 +341,11 @@
         <div class="frame is-in">
           <div class="mini-nav"><span>Fola Adeleke</span><u>Prints &nbsp;Studio&nbsp; Press</u></div>
           <div class="mini-body"><div class="mini-hero"><b>Council &middot; Archival Print</b></div><div class="mini-lines"><i></i><i></i><i></i></div></div>
-          <div class="pop slip-home">
+          <div class="pop from-bottom slip-home">
             <span class="x">&times;</span>
             <div class="k">Fola Adeleke&rsquo;s Notes &middot; Newsletter</div>
             <div class="h">25% off your first order</div>
-            <div class="field" style="max-width:230px;margin-left:auto;margin-right:auto"><span>Your email</span><b>Join</b></div>
+            <div class="field field-narrow"><span>Your email</span><b>Join</b></div>
           </div>
         </div>
       </div>
@@ -341,7 +354,7 @@
         <div class="frame is-in">
           <div class="mini-nav"><span>Fola Adeleke</span><u>Prints &nbsp;Studio&nbsp; Press</u></div>
           <div class="mini-body"><div class="mini-hero"><b>Studio &middot; Process Notes</b></div><div class="mini-lines"><i></i><i></i><i></i></div></div>
-          <div class="pop slip-inner">
+          <div class="pop from-top slip-inner">
             <span class="x">&times;</span>
             <div class="k">Fola Adeleke&rsquo;s Notes</div>
             <div class="h">25% off your first order</div>
@@ -361,7 +374,7 @@
       revealed in place, like a blind being drawn &mdash; up from the bottom on the homepage, down
       from the top everywhere else. The slowest and the most editorial.</p>
       <dl>
-        <dt>Motion</dt><dd>Height reveal; the 1px rule is the thing that moves</dd>
+        <dt>Motion</dt><dd>Grid-row reveal (0fr&rarr;1fr); the 1px rule is the thing that moves</dd>
         <dt>Duration</dt><dd>1100ms</dd>
         <dt>Easing</dt><dd>cubic-bezier(.65, 0, .35, 1) &mdash; slow in, slow out</dd>
         <dt>Homepage</dt><dd>Full-bleed plinth unrolls upward off the bottom edge</dd>
@@ -371,7 +384,7 @@
       <div class="verdict">
         <div><i>+</i><span>Unmistakably this site: it&rsquo;s a moving rule, not a floating card.</span></div>
         <div><i>+</i><span>Full-bleed both ways, so home and inner are visibly the same object.</span></div>
-        <div><i>&minus;</i><span>Text sits still while the frame opens &mdash; needs a fixed panel height per breakpoint.</span></div>
+        <div><i>&minus;</i><span>The copy sets the height, so it reflows on narrow screens &mdash; check it at 375px.</span></div>
         <div><i>&minus;</i><span>At 1100ms it&rsquo;s long enough to be felt on a slow connection.</span></div>
       </div>
     </div>
@@ -381,12 +394,12 @@
         <div class="frame is-in">
           <div class="mini-nav"><span>Fola Adeleke</span><u>Prints &nbsp;Studio&nbsp; Press</u></div>
           <div class="mini-body"><div class="mini-hero"><b>Give Thanks &middot; Archival Print</b></div><div class="mini-lines"><i></i><i></i><i></i></div></div>
-          <div class="shut shut-home">
-            <div class="shut-in">
+          <div class="from-bottom shut shut-home">
+            <div class="shut-clip"><div class="shut-pad">
               <div class="k">Fola Adeleke&rsquo;s Notes &middot; Newsletter</div>
               <div class="h">25% off your first order</div>
-              <div class="field" style="max-width:230px;margin:7px auto 0"><span>Your email</span><b>Join</b></div>
-            </div>
+              <div class="field field-narrow"><span>Your email</span><b>Join</b></div>
+            </div></div>
           </div>
         </div>
       </div>
@@ -395,12 +408,12 @@
         <div class="frame is-in">
           <div class="mini-nav"><span>Fola Adeleke</span><u>Prints &nbsp;Studio&nbsp; Press</u></div>
           <div class="mini-body"><div class="mini-hero"><b>Press &middot; Selected Coverage</b></div><div class="mini-lines"><i></i><i></i><i></i></div></div>
-          <div class="shut shut-inner">
-            <div class="shut-in">
+          <div class="from-top shut shut-inner">
+            <div class="shut-clip"><div class="shut-pad">
               <div class="k">Fola Adeleke&rsquo;s Notes &middot; Newsletter</div>
               <div class="h">25% off your first order</div>
-              <div class="field" style="max-width:230px;margin:7px auto 0"><span>Your email</span><b>Join</b></div>
-            </div>
+              <div class="field field-narrow"><span>Your email</span><b>Join</b></div>
+            </div></div>
           </div>
         </div>
       </div>
@@ -420,9 +433,9 @@
           <tr><th scope="row">Perceived speed</th><td>Slow, never sluggish</td><td>Brisk with weight</td><td>Deliberately slow</td></tr>
           <tr><th scope="row">Interruption</th><td>High on home, near zero inner</td><td>Medium &mdash; nothing is blocked</td><td>Medium-high &mdash; full bleed</td></tr>
           <tr><th scope="row">Hero print visible</th><td>Dimmed on home</td><td>Always fully visible</td><td>Bottom third covered</td></tr>
-          <tr><th scope="row">Build cost</th><td>~20 lines of CSS</td><td>Adds a shadow token + scroll trigger</td><td>Fixed heights per breakpoint</td></tr>
+          <tr><th scope="row">Build cost</th><td>~20 lines of CSS</td><td>Adds a shadow token + scroll trigger</td><td>One grid-row transition</td></tr>
           <tr><th scope="row">Reduced motion</th><td>Straight fade</td><td>Straight fade, no shadow travel</td><td>Appears at full height</td></tr>
-          <tr><th scope="row">Risk</th><td>Forgettable</td><td>Off-brand shadow</td><td>Text reflow if copy grows</td></tr>
+          <tr><th scope="row">Risk</th><td>Forgettable</td><td>Off-brand shadow</td><td>Long copy makes it tall on mobile</td></tr>
         </tbody>
       </table>
     </div>
@@ -515,12 +528,6 @@
     void frame.offsetWidth;                       // force reflow so the transition re-runs
     requestAnimationFrame(function(){
       frame.classList.add('is-in');
-      var retract = parseInt(frame.dataset.retract || '0', 10);
-      if (retract) {
-        timers.set(frame, setTimeout(function(){
-          frame.classList.remove('is-in');
-        }, retract * speed()));
-      }
     });
   }
 
