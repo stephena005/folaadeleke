@@ -311,7 +311,52 @@ A time-boxed offer must state its **real** deadline: if the landing
 page enforces a fixed end instant, saying "24 hours" tells a late
 opener they have longer than they do.
 
-## 10. Applying This System
+## 10. The prints page — "The Hang"
+
+`prints/index.html` was rebuilt in September 2026 as one long gallery
+wall walked left to right, replacing the one-at-a-time slideshow. The
+markup is static and hand-editable; the script reads everything it
+needs from the DOM.
+
+**Structure.** Five rooms, each a `<section class="room">` with wall
+text (numeral, name, one italic line, work count). A print is an
+`<a class="hang">` inside its room carrying `data-title`,
+`data-edition`, `data-sizes`, `data-aspect`, `data-shop` (omit it and
+the work reads as sold out), optional `data-pair` (the "hangs well
+with" slug) and `data-new`. The caption sits in a hidden `<p>`. The
+`id` is the slug and doubles as the deep link: `/prints#anniversary`
+opens that print. Plate numbers (`data-n`) run in catalogue order and
+are shown in the detail view as `No. 11`.
+
+**To add a print:** export a web JPEG to `images/prints/web/<slug>.jpg`
+(1400px long edge, quality ~74; never the master), copy a `.hang` block
+into the right room, set `data-n` to the next number and add
+`data-new="1"` (remove it from the oldest of the three flagged). The
+floor plan, counts and the detail view pick it up.
+
+**Rooms** (order on the wall): Entrance · I Her · II Love · III Family ·
+IV The Function · V Heritage. The Entrance holds one work, the newest
+drop (No. 27, The Kingdom We Carry, at the time of writing). When the
+next print arrives it takes the Entrance and the previous one moves
+into the room its subject belongs to, not to the end of the wall. Keep
+`data-new="1"` on the three latest drops only.
+
+**Hang rhythm.** `.tall` / `.mid` / `.wide` set the frame height from
+the work's aspect; `.up` / `.down` nudge every other frame off the
+centre line so the wall reads as a salon hang, not a strip.
+
+**True scale.** The floor-plan bar toggles every frame to its real
+paper size (A1 594×841, A2 420×594, A3 297×420 mm) against a 2040 mm
+door drawn in each room, hung on a 1450 mm centre line. The detail
+view's *On the wall* mode draws the same elevation with an 850 mm sofa
+and dimension lines, 1 SVG unit = 1 mm. Square works are fitted inside
+A-series paper with white borders; if a work is printed square, add a
+sheet size to `WALL.SHEETS` rather than faking it.
+
+**Reference objects are hairline grey (`#8f8f8f`), the print is black.**
+That is the only hierarchy in the elevation; do not add colour or tone.
+
+## 11. Applying This System
 
 When designing something new for Fola Adeleke (a page, email, product
 graphic, or social asset), check it against this list:
