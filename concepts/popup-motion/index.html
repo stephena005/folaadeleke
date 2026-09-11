@@ -486,12 +486,13 @@
         <ul>
           <li>Homepage: <b>700ms</b> after the loading curtain clears &mdash; the curtain holds
           for 1.8s and then fades, so timing from <em>load</em> opens over a loading screen.</li>
-          <li>Inner pages: on the <b>second</b> page view of a session, not the first.</li>
-          <li>Separate clocks: the card once per <b>14 days</b>, the strip once per <b>3 days</b>.
-          The card blocks the page so it asks rarely; the strip blocks nothing so it may ask more
-          often &mdash; including later in the same visit as the card, since most visitors arrive on
-          the homepage and the strip would otherwise almost never reach them.</li>
-          <li>Suppress both permanently once <em>fa_subscribed</em> is set.</li>
+          <li>Both prompts run on <b>every navigation</b>: the card on every homepage view, the
+          strip on every other page view. The capping machinery is intact but switched off &mdash;
+          give <em>CARD_COOLDOWN</em> or <em>STRIP_COOLDOWN</em> a duration to reinstate it.</li>
+          <li><em>?popup=1</em> forces a prompt past every rule but the route blocklist, for
+          checking it without clearing storage.</li>
+          <li>Suppress both permanently once <em>fa_subscribed</em> is set, and until the cookie
+          banner has been answered.</li>
           <li>Never on <em>/claim</em>, <em>/verify/*</em>, <em>/guess</em> &mdash; those are campaign
           landings with their own call to action.</li>
           <li>Stack below the cookie banner, which already owns the bottom edge at <em>z-index:10000</em>.</li>

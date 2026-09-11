@@ -23,12 +23,14 @@
   var CLOCK_INIT = 'fa_strip_clock';   // the strip's clock has been initialised
   var CONSENT    = 'fa_consent';       // set by js/consent.js
 
-  // The card blocks the page, so it asks rarely. The strip blocks nothing and
-  // is easy to ignore, so it may ask more often — including later in the same
-  // visit as the card, since most visitors arrive on the homepage and the strip
-  // would otherwise almost never reach them.
-  var CARD_COOLDOWN  = 14 * 24 * 60 * 60 * 1000;
-  var STRIP_COOLDOWN = 3 * 24 * 60 * 60 * 1000;
+  // The prompts currently run on every navigation, by request: the card on
+  // every homepage view, the strip on every other page view. The capping
+  // machinery is intact, just switched off — give either cooldown a duration
+  // (e.g. 14 days for the card, 3 days for the strip) to reinstate it, or raise
+  // MIN_VIEWS to hold the strip back to a later page view of the session.
+  var CARD_COOLDOWN  = 0;
+  var STRIP_COOLDOWN = 0;
+  var MIN_VIEWS      = 1;
   var HOME_DELAY   = 700;    // measured from when the loading curtain clears
   var STRIP_DELAY  = 600;
   var CURTAIN_MAX  = 6000;   // safety net if the curtain never lifts
@@ -56,6 +58,12 @@
 
   function isHome() {
     return /^\/(index\.html)?$/.test(location.pathname);
+  }
+
+  // ?popup=1 forces the prompt past every display rule except the route
+  // blocklist, so a prompt can be checked on demand without clearing storage.
+  function forced() {
+    return /[?&]popup=1(&|$)/.test(location.search);
   }
 
   function blocked() {
@@ -87,13 +95,15 @@
   }
 
   function shouldRun(views) {
-    if (blocked()) return false;
+    if (blocked()) return false;                  // the blocklist always wins
+    if (forced()) return true;
+
     if (get(SUBBED) === '1') return false;
     if (!get(CONSENT)) return false;              // never stack two interruptions
 
     if (isHome()) return !within(get(CARD_SEEN), CARD_COOLDOWN);
 
-    if (views < 2) return false;                  // inner pages: second view onward
+    if (views < MIN_VIEWS) return false;
     return !within(get(STRIP_SEEN), STRIP_COOLDOWN);
   }
 
