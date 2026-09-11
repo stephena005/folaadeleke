@@ -110,19 +110,29 @@
   .mini-nav u{text-decoration:none;color:var(--mute);letter-spacing:.2em}
   .mini-body{position:absolute;inset:var(--nav) 0 0;padding:2.4cqw 2.4cqw 0;display:flex;flex-direction:column;gap:1.8cqw;z-index:1}
   .mini-hero{
-    flex:1;background:var(--ink);color:var(--paper);position:relative;
+    flex:0 0 44%;background:var(--ink);color:var(--paper);position:relative;
     display:flex;align-items:flex-end;padding:2cqw;
   }
   .mini-hero b{font-weight:normal;font-size:1.35cqw;letter-spacing:.3em;text-transform:uppercase}
   .mini-hero:after{content:"";position:absolute;inset:1.2cqw;border:1px solid rgba(255,255,255,.35)}
+  .mini-grid{display:flex;gap:1.8cqw;flex:1}
+  .mini-grid i{flex:1;background:#e7e5e0;border:1px solid var(--rule)}
   .mini-lines{display:flex;gap:1.5cqw;padding-bottom:2.2cqw}
   .mini-lines i{display:block;height:.7cqw;background:var(--rule);flex:1}
   .mini-lines i:nth-child(2){flex:.6}
   .mini-lines i:nth-child(3){flex:.35}
 
+  /* Reset must SNAP. Without this, removing .is-in animates the pop-up back
+     out over its full duration, and re-adding it two frames later reverses a
+     journey that has barely started — so nothing appears to move. */
+  .frame.no-anim .pop,
+  .frame.no-anim .strip,
+  .frame.no-anim .shut,
+  .frame.no-anim .dim{transition:none!important}
+
   /* dim overlay — sits above the nav, because it blocks the whole page */
   .dim{
-    position:absolute;inset:0;z-index:5;background:rgba(0,0,0,.42);
+    position:absolute;inset:0;z-index:5;background:rgba(0,0,0,.34);
     opacity:0;transition:opacity calc(420ms * var(--speed)) linear;
   }
   .frame.is-in .dim{opacity:1}
@@ -225,14 +235,16 @@
   footer{border-top:1px solid var(--ink);padding-block:22px;font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:var(--mute);display:flex;flex-wrap:wrap;gap:10px 20px;justify-content:space-between}
 
   @media (prefers-reduced-motion: reduce){
-    .pop,.strip{transition:opacity calc(200ms * var(--speed)) linear!important;opacity:0}
-    .frame.is-in .pop,.frame.is-in .strip{opacity:1}
-    .drift-home{transform:translate(-50%,50%)!important}
-    .drift-inner{transform:translateY(0)!important}
-    .slip-home{transform:translateY(0)!important}
-    .slip-inner{transform:translate(-50%,0)!important}
-    .shut{transition:opacity calc(200ms * var(--speed)) linear!important;grid-template-rows:1fr!important;opacity:0}
-    .frame.is-in .shut{opacity:1}
+    :root:not([data-motion="force"]) .pop,
+    :root:not([data-motion="force"]) .strip{transition:opacity calc(200ms * var(--speed)) linear!important;opacity:0}
+    :root:not([data-motion="force"]) .frame.is-in .pop,
+    :root:not([data-motion="force"]) .frame.is-in .strip{opacity:1}
+    :root:not([data-motion="force"]) .drift-home{transform:translate(-50%,50%)!important}
+    :root:not([data-motion="force"]) .drift-inner{transform:translateY(0)!important}
+    :root:not([data-motion="force"]) .slip-home{transform:translateY(0)!important}
+    :root:not([data-motion="force"]) .slip-inner{transform:translate(-50%,0)!important}
+    :root:not([data-motion="force"]) .shut{transition:opacity calc(200ms * var(--speed)) linear!important;grid-template-rows:1fr!important;opacity:0}
+    :root:not([data-motion="force"]) .frame.is-in .shut{opacity:1}
   }
 </style>
 </head>
@@ -249,7 +261,7 @@
       <p>Three ways to bring the newsletter pop-up in. Each concept is shown twice &mdash; once
       on the homepage, where it rises from the bottom edge, and once on an inner page, where it
       comes down from under the nav. Same copy, same 25% offer, same Courier skin. Only the
-      motion and the level of interruption change. Press <strong>replay</strong> on any frame,
+      motion and the level of interruption change. Each preview plays once as it scrolls into view. Press <strong>replay</strong> to see it again,
       or slow everything to a quarter speed to inspect the easing.</p>
       <div class="rule-note">
         <div><b>Homepage</b><span>Up from the bottom. First impression, full attention, dim behind it.</span></div>
@@ -262,7 +274,8 @@
   <div class="controls">
     <button class="btn" id="playAll" type="button">&#9654;&nbsp; Play all six</button>
     <button class="btn" id="slowBtn" type="button" aria-pressed="false">Quarter speed</button>
-    <span class="hint">Frames rest settled &middot; previews scale with the frame</span>
+    <button class="btn" id="motionBtn" type="button" aria-pressed="false" hidden>Reduced motion is on &mdash; play anyway</button>
+    <span class="hint">Each preview plays once as it scrolls in &middot; replay any frame</span>
   </div>
 
   <!-- ═══ CONCEPT 01 ═══════════════════════════════════════ -->
@@ -291,7 +304,7 @@
         <div class="stage-head"><span>Homepage</span><em>Rises &middot; blocking</em><button class="replay" type="button">Replay &#8599;</button></div>
         <div class="frame is-in">
           <div class="mini-nav"><span>Fola Adeleke</span><u>Prints &nbsp;Studio&nbsp; Press</u></div>
-          <div class="mini-body"><div class="mini-hero"><b>Give Thanks &middot; Archival Print</b></div><div class="mini-lines"><i></i><i></i><i></i></div></div>
+          <div class="mini-body"><div class="mini-hero"><b>Give Thanks &middot; Archival Print</b></div><div class="mini-grid"><i></i><i></i><i></i></div><div class="mini-lines"><i></i><i></i><i></i></div></div>
           <div class="dim"></div>
           <div class="pop from-bottom drift-home">
             <span class="x">&times;</span>
@@ -306,7 +319,7 @@
         <div class="stage-head"><span>Inner page</span><em>Descends &middot; passive</em><button class="replay" type="button">Replay &#8600;</button></div>
         <div class="frame is-in">
           <div class="mini-nav"><span>Fola Adeleke</span><u>Prints &nbsp;Studio&nbsp; Press</u></div>
-          <div class="mini-body"><div class="mini-hero"><b>No VC &middot; Edition of 50</b></div><div class="mini-lines"><i></i><i></i><i></i></div></div>
+          <div class="mini-body"><div class="mini-hero"><b>No VC &middot; Edition of 50</b></div><div class="mini-grid"><i></i><i></i><i></i></div><div class="mini-lines"><i></i><i></i><i></i></div></div>
           <div class="strip from-top drift-inner"><span>25% off your first order</span><u>Join the Notes</u><span class="x">&times;</span></div>
         </div>
       </div>
@@ -340,7 +353,7 @@
         <div class="stage-head"><span>Homepage</span><em>Docks bottom &middot; non-modal</em><button class="replay" type="button">Replay &#8599;</button></div>
         <div class="frame is-in">
           <div class="mini-nav"><span>Fola Adeleke</span><u>Prints &nbsp;Studio&nbsp; Press</u></div>
-          <div class="mini-body"><div class="mini-hero"><b>Council &middot; Archival Print</b></div><div class="mini-lines"><i></i><i></i><i></i></div></div>
+          <div class="mini-body"><div class="mini-hero"><b>Council &middot; Archival Print</b></div><div class="mini-grid"><i></i><i></i><i></i></div><div class="mini-lines"><i></i><i></i><i></i></div></div>
           <div class="pop from-bottom slip-home">
             <span class="x">&times;</span>
             <div class="k">Fola Adeleke&rsquo;s Notes &middot; Newsletter</div>
@@ -353,7 +366,7 @@
         <div class="stage-head"><span>Inner page</span><em>Drops &middot; docked card</em><button class="replay" type="button">Replay &#8600;</button></div>
         <div class="frame is-in">
           <div class="mini-nav"><span>Fola Adeleke</span><u>Prints &nbsp;Studio&nbsp; Press</u></div>
-          <div class="mini-body"><div class="mini-hero"><b>Studio &middot; Process Notes</b></div><div class="mini-lines"><i></i><i></i><i></i></div></div>
+          <div class="mini-body"><div class="mini-hero"><b>Studio &middot; Process Notes</b></div><div class="mini-grid"><i></i><i></i><i></i></div><div class="mini-lines"><i></i><i></i><i></i></div></div>
           <div class="pop from-top slip-inner">
             <span class="x">&times;</span>
             <div class="k">Fola Adeleke&rsquo;s Notes</div>
@@ -393,7 +406,7 @@
         <div class="stage-head"><span>Homepage</span><em>Unrolls up &middot; full bleed</em><button class="replay" type="button">Replay &#8599;</button></div>
         <div class="frame is-in">
           <div class="mini-nav"><span>Fola Adeleke</span><u>Prints &nbsp;Studio&nbsp; Press</u></div>
-          <div class="mini-body"><div class="mini-hero"><b>Give Thanks &middot; Archival Print</b></div><div class="mini-lines"><i></i><i></i><i></i></div></div>
+          <div class="mini-body"><div class="mini-hero"><b>Give Thanks &middot; Archival Print</b></div><div class="mini-grid"><i></i><i></i><i></i></div><div class="mini-lines"><i></i><i></i><i></i></div></div>
           <div class="from-bottom shut shut-home">
             <div class="shut-clip"><div class="shut-pad">
               <div class="k">Fola Adeleke&rsquo;s Notes &middot; Newsletter</div>
@@ -407,7 +420,7 @@
         <div class="stage-head"><span>Inner page</span><em>Unrolls down &middot; full bleed</em><button class="replay" type="button">Replay &#8600;</button></div>
         <div class="frame is-in">
           <div class="mini-nav"><span>Fola Adeleke</span><u>Prints &nbsp;Studio&nbsp; Press</u></div>
-          <div class="mini-body"><div class="mini-hero"><b>Press &middot; Selected Coverage</b></div><div class="mini-lines"><i></i><i></i><i></i></div></div>
+          <div class="mini-body"><div class="mini-hero"><b>Press &middot; Selected Coverage</b></div><div class="mini-grid"><i></i><i></i><i></i></div><div class="mini-lines"><i></i><i></i><i></i></div></div>
           <div class="from-top shut shut-inner">
             <div class="shut-clip"><div class="shut-pad">
               <div class="k">Fola Adeleke&rsquo;s Notes &middot; Newsletter</div>
@@ -521,13 +534,33 @@
 
   function speed(){ return parseFloat(getComputedStyle(root).getPropertyValue('--speed')) || 1; }
 
+  function durationOf(frame){
+    var v = getComputedStyle(frame).getPropertyValue('--dur');
+    return (parseFloat(v) || 900) * speed();
+  }
+
   function play(stage){
     var frame = stage.querySelector('.frame');
+    var btn   = stage.querySelector('.replay');
+    var label = btn.dataset.label || (btn.dataset.label = btn.textContent);
     clearTimeout(timers.get(frame));
+
+    var moving = frame.querySelectorAll('.pop, .strip, .shut');
+    function flush(){
+      // .frame is a container-query container, so reading ITS offsetWidth does
+      // not flush the descendants' styles — read the animated children instead.
+      moving.forEach(function(el){ void getComputedStyle(el).transform; });
+    }
+
+    frame.classList.add('no-anim');     // snap back to the start, do not animate there
     frame.classList.remove('is-in');
-    void frame.offsetWidth;                       // force reflow so the transition re-runs
+    flush();
     requestAnimationFrame(function(){
+      frame.classList.remove('no-anim');
+      flush();                          // commit transition:none before re-arming
       frame.classList.add('is-in');
+      btn.textContent = 'Playing';
+      timers.set(frame, setTimeout(function(){ btn.textContent = label; }, durationOf(frame)));
     });
   }
 
@@ -537,6 +570,28 @@
 
   document.getElementById('playAll').addEventListener('click', function(){
     stages.forEach(function(stage, i){ setTimeout(function(){ play(stage); }, i * 160); });
+  });
+
+  if ('IntersectionObserver' in window) {
+    var seen = new WeakSet();
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (e.isIntersecting && !seen.has(e.target)) { seen.add(e.target); play(e.target); }
+      });
+    }, { threshold: 0.55 });
+    stages.forEach(function(stage){ io.observe(stage); });
+  }
+
+  // A motion study is useless as six still frames, so offer a way past the
+  // OS-level reduced-motion setting rather than silently showing fades.
+  var rm = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var motionBtn = document.getElementById('motionBtn');
+  if (rm.matches) motionBtn.hidden = false;
+  motionBtn.addEventListener('click', function(){
+    var on = root.getAttribute('data-motion') !== 'force';
+    root.setAttribute('data-motion', on ? 'force' : 'system');
+    motionBtn.setAttribute('aria-pressed', String(on));
+    motionBtn.textContent = on ? 'Motion on' : 'Reduced motion is on \u2014 play anyway';
   });
 
   var slow = document.getElementById('slowBtn');
