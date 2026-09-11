@@ -21,6 +21,7 @@
   var SUBBED     = 'fa_subscribed';    // '1' once they have joined
   var VIEWS      = 'fa_popup_views';   // page views this session
   var CARD_TODAY = 'fa_card_shown';    // card already ran this session
+  var CLOCK_INIT = 'fa_strip_clock';   // the strip's clock has been initialised
   var CONSENT    = 'fa_consent';       // set by js/consent.js
 
   // The card blocks the page, so it asks rarely. The strip blocks nothing and
@@ -73,8 +74,16 @@
   }
 
   // Visitors from before the strip had its own clock only carry the card's
-  // timestamp. Seed from it so the split does not hand them a strip at once.
-  function stripLastSeen() { return get(STRIP_SEEN) || get(CARD_SEEN); }
+  // timestamp. Seed from it ONCE so the split does not hand them a strip
+  // immediately. This has to be a one-off: as a standing fallback it would let
+  // every card view reset the strip's clock, which is the opposite of giving
+  // the strip a cooldown of its own.
+  function initStripClock() {
+    if (get(CLOCK_INIT) === '1') return;
+    set(CLOCK_INIT, '1');
+    var card = get(CARD_SEEN);
+    if (card && !get(STRIP_SEEN)) set(STRIP_SEEN, card);
+  }
 
   function shouldRun(views) {
     if (blocked()) return false;
@@ -85,7 +94,7 @@
 
     if (views < 2) return false;                  // inner pages: second view onward
     if (get(CARD_TODAY, sessionStorage)) return false;  // never both in one visit
-    return !within(stripLastSeen(), STRIP_COOLDOWN);
+    return !within(get(STRIP_SEEN), STRIP_COOLDOWN);
   }
 
   function markCardSeen() {
@@ -327,6 +336,7 @@
   }
 
   function start() {
+    initStripClock();
     var views = bumpViews();
     if (!shouldRun(views)) return;
     injectStyles();
