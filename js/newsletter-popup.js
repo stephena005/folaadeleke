@@ -21,6 +21,7 @@
   var SUBBED     = 'fa_subscribed';    // '1' once they have joined
   var VIEWS      = 'fa_popup_views';   // page views this session
   var CLOCK_INIT = 'fa_strip_clock';   // the strip's clock has been initialised
+  var DISMISSED  = 'fa_prompt_closed'; // actively closed — quiet for this visit
   var CONSENT    = 'fa_consent';       // set by js/consent.js
 
   // The prompts currently run on every navigation, by request: the card on
@@ -99,6 +100,7 @@
     if (forced()) return true;
 
     if (get(SUBBED) === '1') return false;
+    if (get(DISMISSED, sessionStorage)) return false;   // they said no this visit
     if (!get(CONSENT)) return false;              // never stack two interruptions
 
     if (isHome()) return !within(get(CARD_SEEN), CARD_COOLDOWN);
@@ -110,6 +112,12 @@
   function markCardSeen() { set(CARD_SEEN, new Date().toISOString()); }
 
   function markStripSeen() { set(STRIP_SEEN, new Date().toISOString()); }
+
+  // Closing a prompt is an answer. Prompts run on every navigation, so without
+  // this the close button would mean nothing — dismiss it, click through, and
+  // it is back. Retracting on its own is not a dismissal; nor is taking the
+  // strip's call to action, which opens the card.
+  function markDismissed() { set(DISMISSED, '1', sessionStorage); }
 
   function navHeight() {
     var nav = document.querySelector('nav');
@@ -231,8 +239,8 @@
     formWrap   = overlay.querySelector('.fa-np-body');
     okWrap     = overlay.querySelector('.fa-np-ok');
 
-    overlay.addEventListener('click', function (e) { if (e.target === overlay) closeCard(); });
-    overlay.querySelector('.fa-np-close').addEventListener('click', closeCard);
+    overlay.addEventListener('click', function (e) { if (e.target === overlay) closeCard(true); });
+    overlay.querySelector('.fa-np-close').addEventListener('click', function () { closeCard(true); });
     overlay.querySelector('.fa-np-join').addEventListener('click', join);
     emailInput.addEventListener('keydown', function (e) { if (e.key === 'Enter') join(); });
   }
@@ -250,10 +258,10 @@
     document.body.appendChild(strip);
 
     strip.querySelector('.fa-np-cta').addEventListener('click', function () {
-      closeStrip();
+      closeStrip(false);          // taking the offer is not a dismissal
       openCard();
     });
-    strip.querySelector('.fa-np-close').addEventListener('click', closeStrip);
+    strip.querySelector('.fa-np-close').addEventListener('click', function () { closeStrip(true); });
     window.addEventListener('resize', function () { strip.style.top = navHeight() + 'px'; });
   }
 
@@ -275,11 +283,13 @@
     setTimeout(function () { emailInput.focus(); }, RISE);
   }
 
-  function closeCard() {
+  function closeCard(byUser) {
     if (!overlay) return;
+    var wasOpen = overlay.classList.contains('fa-open');
     overlay.classList.remove('fa-open');
     document.body.style.overflow = '';
     if (lastFocus && lastFocus.focus) lastFocus.focus();
+    if (byUser && wasOpen) markDismissed();
   }
 
   function openStrip() {
@@ -290,14 +300,17 @@
     stripTimer = setTimeout(closeStrip, STRIP_LIFE);
   }
 
-  function closeStrip() {
+  function closeStrip(byUser) {
     clearTimeout(stripTimer);
-    if (strip) strip.classList.remove('fa-open');
+    if (!strip) return;
+    var wasOpen = strip.classList.contains('fa-open');
+    strip.classList.remove('fa-open');
+    if (byUser && wasOpen) markDismissed();
   }
 
   // Keep Tab inside the card while it is open — it is a blocking dialog.
   function onKeydown(e) {
-    if (e.key === 'Escape') { closeCard(); closeStrip(); return; }
+    if (e.key === 'Escape') { closeCard(true); closeStrip(true); return; }
     if (e.key !== 'Tab' || !overlay || !overlay.classList.contains('fa-open')) return;
     var items = card.querySelectorAll('button, input[type="email"], a[href]');
     if (!items.length) return;
