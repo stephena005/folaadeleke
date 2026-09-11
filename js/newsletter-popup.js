@@ -42,8 +42,11 @@
   var BEEHIIV      = 'https://subscribe-forms.beehiiv.com/b64503cb-8e19-4aec-9d50-a7a707588ca5';
 
   // Campaign landings and transactional pages own their own call to action.
+  // /studio is the private archive tool: it loads neither this script nor the
+  // consent banner today, so it is listed to keep it exempt if a future edit
+  // copies another page's head into it.
   var BLOCKED = [
-    /^\/claim/, /^\/verify/, /^\/guess/, /^\/rearrange/,
+    /^\/claim/, /^\/verify/, /^\/guess/, /^\/rearrange/, /^\/studio/,
     /unsubscribe/, /newsletter/, /feedback/, /404/
   ];
 
