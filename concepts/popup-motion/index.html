@@ -484,9 +484,13 @@
       <div>
         <h3>Suggested rules</h3>
         <ul>
-          <li>Homepage: <b>1.2s</b> after load &mdash; long enough for the hero to land first.</li>
+          <li>Homepage: <b>700ms</b> after the loading curtain clears &mdash; the curtain holds
+          for 1.8s and then fades, so timing from <em>load</em> opens over a loading screen.</li>
           <li>Inner pages: on the <b>second</b> page view of a session, not the first.</li>
-          <li>Cap at once per <b>14 days</b>; suppress permanently once <em>fa_subscribed</em> is set.</li>
+          <li>Separate clocks: the card once per <b>14 days</b>, the strip once per <b>3 days</b>.
+          The card blocks the page so it asks rarely; the strip blocks nothing so it may ask more
+          often. Never both in one visit.</li>
+          <li>Suppress both permanently once <em>fa_subscribed</em> is set.</li>
           <li>Never on <em>/claim</em>, <em>/verify/*</em>, <em>/guess</em> &mdash; those are campaign
           landings with their own call to action.</li>
           <li>Stack below the cookie banner, which already owns the bottom edge at <em>z-index:10000</em>.</li>

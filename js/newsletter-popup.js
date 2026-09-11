@@ -16,12 +16,17 @@
 (function () {
   'use strict';
 
-  var SEEN    = 'fa_popup_seen';       // ISO date of the last time it ran
-  var SUBBED  = 'fa_subscribed';       // '1' once they have joined
-  var VIEWS   = 'fa_popup_views';      // page views this session
-  var CONSENT = 'fa_consent';          // set by js/consent.js
+  var CARD_SEEN  = 'fa_popup_seen';    // ISO date the card last ran
+  var STRIP_SEEN = 'fa_strip_seen';    // ISO date the strip last ran
+  var SUBBED     = 'fa_subscribed';    // '1' once they have joined
+  var VIEWS      = 'fa_popup_views';   // page views this session
+  var CARD_TODAY = 'fa_card_shown';    // card already ran this session
+  var CONSENT    = 'fa_consent';       // set by js/consent.js
 
-  var COOLDOWN     = 14 * 24 * 60 * 60 * 1000;
+  // The card blocks the page, so it asks rarely. The strip blocks nothing and
+  // is easy to ignore, so it may ask more often.
+  var CARD_COOLDOWN  = 14 * 24 * 60 * 60 * 1000;
+  var STRIP_COOLDOWN = 3 * 24 * 60 * 60 * 1000;
   var HOME_DELAY   = 700;    // measured from when the loading curtain clears
   var STRIP_DELAY  = 600;
   var CURTAIN_MAX  = 6000;   // safety net if the curtain never lifts
@@ -63,16 +68,32 @@
     return n;
   }
 
+  function within(stamp, cooldown) {
+    return !!stamp && (Date.now() - new Date(stamp).getTime()) < cooldown;
+  }
+
+  // Visitors from before the strip had its own clock only carry the card's
+  // timestamp. Seed from it so the split does not hand them a strip at once.
+  function stripLastSeen() { return get(STRIP_SEEN) || get(CARD_SEEN); }
+
   function shouldRun(views) {
     if (blocked()) return false;
     if (get(SUBBED) === '1') return false;
     if (!get(CONSENT)) return false;              // never stack two interruptions
-    var seen = get(SEEN);
-    if (seen && (Date.now() - new Date(seen).getTime()) < COOLDOWN) return false;
-    return isHome() ? true : views >= 2;          // inner pages: second view onward
+
+    if (isHome()) return !within(get(CARD_SEEN), CARD_COOLDOWN);
+
+    if (views < 2) return false;                  // inner pages: second view onward
+    if (get(CARD_TODAY, sessionStorage)) return false;  // never both in one visit
+    return !within(stripLastSeen(), STRIP_COOLDOWN);
   }
 
-  function markSeen() { set(SEEN, new Date().toISOString()); }
+  function markCardSeen() {
+    set(CARD_SEEN, new Date().toISOString());
+    set(CARD_TODAY, '1', sessionStorage);
+  }
+
+  function markStripSeen() { set(STRIP_SEEN, new Date().toISOString()); }
 
   function navHeight() {
     var nav = document.querySelector('nav');
@@ -234,7 +255,7 @@
     lastFocus = document.activeElement;
     reveal(card.parentNode);
     document.body.style.overflow = 'hidden';
-    markSeen();
+    markCardSeen();
     setTimeout(function () { emailInput.focus(); }, RISE);
   }
 
@@ -249,7 +270,7 @@
     if (!strip) buildStrip();
     strip.style.top = navHeight() + 'px';
     reveal(strip);
-    markSeen();
+    markStripSeen();
     stripTimer = setTimeout(closeStrip, STRIP_LIFE);
   }
 
