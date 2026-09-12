@@ -37,6 +37,36 @@
       node scripts/render-coa-email.mjs \
         --certificate back-office/certificates/html/<buyer>-<work>.html
 
+  MORE THAN ONE CERTIFICATE
+  ─────────────────────────
+  A buyer who took two or three prints gets one email, not one per
+  print. Pass --certificate once per certificate, in the order the
+  works should appear:
+
+      node scripts/render-coa-email.mjs \
+        --certificate back-office/certificates/html/<buyer>-<work-1>.html \
+        --certificate back-office/certificates/html/<buyer>-<work-2>.html
+
+  The renderer refuses if the certificates name different buyers, if
+  two of them certify the same edition, or if there are more than
+  three — the hero row is one row of tiles and a fourth does not fit.
+
+  How the markup supports it, so that one file stays the source of
+  truth for both shapes:
+
+      <!-- ONE:START --> … <!-- ONE:END -->     kept for one certificate
+      <!-- MANY:START --> … <!-- MANY:END -->   kept for two or three
+      <!-- TILE:START --> … <!-- TILE:END -->   the hero row, one per work
+      <!-- PANEL:START --> … <!-- PANEL:END --> the certificate panel, one per work
+      <!-- BUTTON:START --> … <!-- BUTTON:END --> the verify button, one per work
+
+  Everything else — header, band, notes, sign-off, footer — appears
+  once. Where a sentence has to read differently for two prints, it
+  sits in an ONE/MANY pair; keep the pairs together when editing so
+  neither shape drifts. Before putting a dark work in the 3-up row,
+  check it still reads at 109px, which is what that row gets on a
+  phone (see design.md §9).
+
   The renderer writes into back-office/, which is gitignored, and
   refuses to write anywhere git would track — the rendered file
   carries the buyer's name against their edition, and this
@@ -70,6 +100,20 @@
       [EDITION NO WORD]    "Two"     — the sign-off reads better in words
       [EDITION TOTAL WORD] "fifteen"
       [VERIFY URL]         matched against verify/, or --verify-url
+      [BUTTON LABEL]       "View certificate", or the work's title when
+                           there is a button per work
+      [PANEL GAP]          top padding of a panel: 36 for the first,
+                           24 for each that follows
+
+  And for two or three certificates only:
+
+      [COUNT], [COUNT WORD], [COUNT WORD CAP]   2 / two / Two
+      [BOTH OR ALL]            "both" for two, "all three" for three
+      [TILE WIDTH], [TILE PX]  the hero tile's share of the row
+      [WORKS LIST]             "No VC / No Vacation 5/15 and Anniversary 1/15"
+      [EDITIONS LIST]          "edition 5/15 of No VC / No Vacation and
+                                edition 1/15 of Anniversary"
+      [EDITION WORDS LIST]     "Five of fifteen, and one of fifteen"
 
   And the hero, looked up by work in
   images/newsletter/coa/manifest.json, which
@@ -154,7 +198,12 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <!-- ONE:START -->
   <title>Your certificate &mdash; [WORK TITLE], [EDITION NO]/[EDITION TOTAL]</title>
+  <!-- ONE:END -->
+  <!-- MANY:START -->
+  <title>Your certificates &mdash; [WORKS LIST]</title>
+  <!-- MANY:END -->
   <!--[if mso]>
   <noscript><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript>
   <![endif]-->
@@ -180,7 +229,7 @@
 <body id="body" style="margin:0; padding:0; background-color:#faf9f7;">
 
   <div style="display:none; font-size:1px; color:#faf9f7; line-height:1px; max-height:0; max-width:0; opacity:0; overflow:hidden;">
-    Edition [EDITION NO] of [EDITION TOTAL], signed and recorded in your name. Your certificate is inside.
+    <!-- ONE:START -->Edition [EDITION NO] of [EDITION TOTAL], signed and recorded in your name. Your certificate is inside.<!-- ONE:END --><!-- MANY:START -->[COUNT WORD CAP] editions, signed and recorded in your name. Every certificate is inside.<!-- MANY:END -->
   </div>
 
   <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color:#faf9f7;">
@@ -201,7 +250,7 @@
                   </td>
                   <td align="right">
                     <p style="margin:0; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.24em; text-transform:uppercase; color:#6f6f6f;">
-                      Certificate
+                      <!-- ONE:START -->Certificate<!-- ONE:END --><!-- MANY:START -->Certificates<!-- MANY:END -->
                     </p>
                   </td>
                 </tr>
@@ -210,6 +259,7 @@
           </tr>
 
           <!-- ══ HERO: THE WORK ══ -->
+          <!-- ONE:START -->
           <tr>
             <td style="font-size:0; line-height:0;">
               <img src="[WORK IMAGE URL]" width="560" alt="[WORK TITLE] &mdash; the print now in your edition" style="display:block; border:0; outline:none; text-decoration:none; width:100%; max-width:560px; height:auto;" />
@@ -233,31 +283,67 @@
               </table>
             </td>
           </tr>
+          <!-- ONE:END -->
+          <!-- MANY:START — one row of tiles, percentage widths, one caption per tile -->
+          <tr>
+            <td style="padding:0; border-bottom:1px solid #dcdcdc;">
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tr>
+                  <!-- TILE:START -->
+                  <td width="[TILE WIDTH]" valign="top" style="font-size:0; line-height:0; padding:0;">
+                    <img src="[WORK IMAGE URL]" width="[TILE PX]" alt="[WORK TITLE] &mdash; the print now in your edition" style="display:block; border:0; outline:none; text-decoration:none; width:100%; max-width:[TILE PX]px; height:auto;" />
+                    <p style="margin:12px 0 0; padding:0 16px; font-family:'Courier New',Courier,monospace; font-size:10px; line-height:1.6; letter-spacing:0.16em; text-transform:uppercase; color:#111111;">
+                      [WORK TITLE]
+                    </p>
+                    <p style="margin:2px 0 0; padding:0 16px; font-family:'Courier New',Courier,monospace; font-size:10px; line-height:1.6; letter-spacing:0.12em; text-transform:uppercase; color:#6f6f6f;">
+                      [YEAR] &nbsp;&middot;&nbsp; [EDITION NO]/[EDITION TOTAL]
+                    </p>
+                  </td>
+                  <!-- TILE:END -->
+                </tr>
+                <tr>
+                  <td colspan="[COUNT]" style="height:16px; font-size:0; line-height:0;">&nbsp;</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <!-- MANY:END -->
 
           <!-- ══ HEADLINE + INTRO ══ -->
           <tr>
             <td class="mobile-padding" style="padding:40px 32px 0;">
               <h1 class="mobile-heading" style="margin:0; font-family:'Courier New',Courier,monospace; font-size:34px; font-weight:normal; letter-spacing:0.16em; text-transform:uppercase; color:#000000; line-height:1.2;">
-                Your certificate
+                <!-- ONE:START -->Your certificate<!-- ONE:END --><!-- MANY:START -->Your certificates<!-- MANY:END -->
               </h1>
             </td>
           </tr>
           <tr>
             <td class="mobile-padding" style="padding:22px 32px 0;">
+              <!-- ONE:START -->
               <p style="margin:0 0 16px; font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:1.65; color:#111111;">
                 [FIRST NAME] &mdash; your print has been signed, numbered and entered in the edition register. Everything below is the certificate of authenticity that travels with the work.
               </p>
               <p style="margin:0; font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:1.65; color:#4f4f4f;">
                 Keep it with the print. If the piece ever changes hands, the certificate goes with it &mdash; that is what makes the edition traceable.
               </p>
+              <!-- ONE:END -->
+              <!-- MANY:START -->
+              <p style="margin:0 0 16px; font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:1.65; color:#111111;">
+                [FIRST NAME] &mdash; [BOTH OR ALL] prints have been signed, numbered and entered in their edition registers. Everything below is the certificate of authenticity that travels with each work.
+              </p>
+              <p style="margin:0; font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:1.65; color:#4f4f4f;">
+                Keep each one with its print. If a piece ever changes hands, its certificate goes with it &mdash; that is what makes the edition traceable.
+              </p>
+              <!-- MANY:END -->
             </td>
           </tr>
 
           <!-- ══ THE CERTIFICATE PANEL ══
                A bordered repeat of the printed COA's hierarchy:
-               numeral, rule, label/value grid. ══ -->
+               numeral, rule, label/value grid. One per certificate. ══ -->
+          <!-- PANEL:START -->
           <tr>
-            <td class="mobile-padding" style="padding:36px 32px 0;">
+            <td class="mobile-padding" style="padding:[PANEL GAP]px 32px 0;">
               <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="border:1px solid #111111;">
 
                 <tr>
@@ -344,6 +430,7 @@
               <!-- REF:END -->
             </td>
           </tr>
+          <!-- PANEL:END -->
 
           <!-- ══ INVERTED BAND — the one per email ══ -->
           <tr>
@@ -355,28 +442,33 @@
                       Verified original
                     </p>
                     <p style="margin:0 0 18px; font-family:'Courier New',Courier,monospace; font-size:30px; letter-spacing:0.1em; text-transform:uppercase; line-height:1.3; color:#ffffff;">
-                      View your<br />certificate
+                      View your<br /><!-- ONE:START -->certificate<!-- ONE:END --><!-- MANY:START -->certificates<!-- MANY:END -->
                     </p>
                     <p style="margin:0 0 30px; font-family:Helvetica,Arial,sans-serif; font-size:15px; line-height:1.65; color:#c9c9c9;">
-                      This is the page the QR code on your certificate opens: the work, the edition and the date it was signed, held on record. Bookmark it &mdash; it stays valid for as long as the print exists.
+                      <!-- ONE:START -->This is the page the QR code on your certificate opens: the work, the edition and the date it was signed, held on record. Bookmark it &mdash; it stays valid for as long as the print exists.<!-- ONE:END --><!-- MANY:START -->Each opens the page the QR code on that certificate opens: the work, the edition and the date it was signed, held on record. Bookmark them &mdash; they stay valid for as long as the prints exist.<!-- MANY:END -->
                     </p>
+                    <!-- BUTTON:START — one per certificate; the gap below separates them -->
                     <!--[if mso]>
                     <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word"
                       href="[VERIFY URL]"
-                      style="height:50px; v-text-anchor:middle; width:260px;"
+                      style="height:50px; v-text-anchor:middle; width:280px;"
                       arcsize="0%" strokecolor="#ffffff" fillcolor="#ffffff">
                       <w:anchorlock/>
                       <center style="color:#000000; font-family:'Courier New',Courier,monospace; font-size:13px; letter-spacing:0.18em;">
-                        View certificate
+                        [BUTTON LABEL]
                       </center>
                     </v:roundrect>
                     <![endif]-->
                     <!--[if !mso]><!-->
                     <a href="[VERIFY URL]"
                       style="display:inline-block; background-color:#ffffff; color:#000000; font-family:'Courier New',Courier,monospace; font-size:13px; letter-spacing:0.18em; text-transform:uppercase; text-decoration:none; padding:17px 40px; border:1px solid #ffffff;">
-                      View certificate &rarr;
+                      [BUTTON LABEL] &rarr;
                     </a>
                     <!--<![endif]-->
+                    <!-- BUTTON:END -->
+                    <!-- BUTTON GAP:START -->
+                    <div style="height:14px; font-size:0; line-height:0;">&nbsp;</div>
+                    <!-- BUTTON GAP:END -->
                   </td>
                 </tr>
               </table>
@@ -389,19 +481,33 @@
               <p style="margin:0 0 20px; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.3em; text-transform:uppercase; color:#6f6f6f; border-bottom:1px solid #111111; padding-bottom:12px;">
                 01 &nbsp;&middot;&nbsp; The print itself
               </p>
+              <!-- ONE:START -->
               <p style="margin:0; font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:1.65; color:#111111;">
                 It ships rolled in a rigid tube within three working days, with the signature and edition number pencilled below the image. Let it rest flat for a day before framing, and keep it out of direct sun once it is up.
               </p>
+              <!-- ONE:END -->
+              <!-- MANY:START -->
+              <p style="margin:0; font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:1.65; color:#111111;">
+                They ship rolled in a rigid tube within three working days, with the signature and edition number pencilled below each image. Let them rest flat for a day before framing, and keep them out of direct sun once they are up.
+              </p>
+              <!-- MANY:END -->
             </td>
           </tr>
           <tr>
             <td class="mobile-padding" style="padding:40px 32px 0;">
               <p style="margin:0 0 20px; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.3em; text-transform:uppercase; color:#6f6f6f; border-bottom:1px solid #111111; padding-bottom:12px;">
-                02 &nbsp;&middot;&nbsp; If it ever moves on
+                02 &nbsp;&middot;&nbsp; If <!-- ONE:START -->it<!-- ONE:END --><!-- MANY:START -->one<!-- MANY:END --> ever moves on
               </p>
+              <!-- ONE:START -->
               <p style="margin:0 0 18px; font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:1.65; color:#111111;">
                 Sell it, gift it or leave it to someone &mdash; the certificate transfers with the print. Tell me who now holds it and the register is updated in the new name.
               </p>
+              <!-- ONE:END -->
+              <!-- MANY:START -->
+              <p style="margin:0 0 18px; font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:1.65; color:#111111;">
+                Sell one, gift it or leave it to someone &mdash; its certificate transfers with the print. Tell me who now holds it and the register is updated in the new name.
+              </p>
+              <!-- MANY:END -->
               <p style="margin:0; font-family:'Courier New',Courier,monospace; font-size:12px; letter-spacing:0.14em; text-transform:uppercase;">
                 <a href="mailto:hello@folaadeleke.com" style="color:#111111; text-decoration:none; border-bottom:1px solid #111111; padding-bottom:2px;">Transfer a certificate &rarr;</a>
               </p>
@@ -414,7 +520,7 @@
               <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
                 <tr><td style="border-top:1px solid #dcdcdc; padding-top:28px;">
                   <p style="margin:0 0 14px; font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:1.65; color:#111111;">
-                    Thank you for taking one. [EDITION NO WORD] of [EDITION TOTAL WORD] &mdash; that is a small room to be in.
+                    <!-- ONE:START -->Thank you for taking one. [EDITION NO WORD] of [EDITION TOTAL WORD] &mdash; that is a small room to be in.<!-- ONE:END --><!-- MANY:START -->Thank you for taking [COUNT WORD]. [EDITION WORDS LIST] &mdash; those are small rooms to be in.<!-- MANY:END -->
                   </p>
                   <p style="margin:0; font-family:'Courier New',Courier,monospace; font-size:14px; letter-spacing:0.18em; color:#111111;">
                     &mdash; Fola
@@ -437,11 +543,11 @@
                 &copy; 2026 Fola Adeleke. All rights reserved.
               </p>
               <p style="margin:0; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.03em; color:#666666; line-height:1.9;">
-                You're receiving this because you bought edition [EDITION NO]/[EDITION TOTAL] of [WORK TITLE].<br />
+                You're receiving this because you bought <!-- ONE:START -->edition [EDITION NO]/[EDITION TOTAL] of [WORK TITLE]<!-- ONE:END --><!-- MANY:START -->[EDITIONS LIST]<!-- MANY:END -->.<br />
                 Questions about the order? <a href="mailto:hello@folaadeleke.com" style="color:#111111; text-decoration:underline;">hello@folaadeleke.com</a>
                 &nbsp;&middot;&nbsp;
                 <a href="https://folaadeleke.com" style="color:#111111; text-decoration:underline;">Visit the site</a><br />
-                <a href="{{unsubscribe_url}}" style="color:#111111; text-decoration:underline;">Unsubscribe from the newsletter</a> &mdash; your certificate stands either way.
+                <a href="{{unsubscribe_url}}" style="color:#111111; text-decoration:underline;">Unsubscribe from the newsletter</a> &mdash; <!-- ONE:START -->your certificate stands<!-- ONE:END --><!-- MANY:START -->your certificates stand<!-- MANY:END --> either way.
               </p>
             </td>
           </tr>

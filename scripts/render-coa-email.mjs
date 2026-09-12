@@ -4,6 +4,11 @@
 //   node scripts/render-coa-email.mjs \
 //     --certificate "back-office/certificates/html/<buyer>-<work>-a2.html"
 //
+// A buyer who took more than one print gets one email. Pass --certificate
+// once per certificate, in the order the works should appear (two or three;
+// the hero row is one row of tiles). Every certificate must name the same
+// buyer, and each must match its own verify page.
+//
 // The hero image is looked up by work in images/newsletter/coa/manifest.json,
 // which scripts/export-coa-heroes.py writes. Pass --work-image to override.
 //
@@ -53,8 +58,12 @@ function warn(message) {
   console.warn(`render-coa-email: warning: ${message}`);
 }
 
+// --certificate and --data may repeat: one email can carry several
+// certificates. Everything else is single-valued.
+const REPEATABLE = new Set(['certificate', 'data']);
+
 function parseArgs(argv) {
-  const out = { flags: new Set() };
+  const out = { flags: new Set(), certificate: [], data: [] };
   for (let i = 0; i < argv.length; i += 1) {
     const arg = argv[i];
     if (!arg.startsWith('--')) continue;
@@ -64,7 +73,8 @@ function parseArgs(argv) {
       out.flags.add(key);
       continue;
     }
-    out[key] = next;
+    if (REPEATABLE.has(key)) out[key].push(next);
+    else out[key] = next;
     i += 1;
   }
   return out;
@@ -87,6 +97,62 @@ function toWords(value) {
 
 function capitalise(word) {
   return word.charAt(0).toUpperCase() + word.slice(1);
+}
+
+// "a", "a and b", "a, b and c"
+function joinList(items) {
+  if (items.length <= 1) return items.join('');
+  return `${items.slice(0, -1).join(', ')} and ${items[items.length - 1]}`;
+}
+
+// ── template blocks ─────────────────────────────────────────────────────
+// <!-- NAME:START --> … <!-- NAME:END --> pairs mark what the template holds
+// for one shape but not the other (ONE / MANY), and what repeats once per
+// certificate (TILE, PANEL, BUTTON). A START marker may carry a note after
+// its name; the END marker is exact.
+const startMarker = (name) => `<!-- ${name}:START[^>]*-->`;
+const endMarker = (name) => `<!-- ${name}:END -->`;
+// A block's content may not contain another marker of the same name. Without
+// this, a lazy match from an inline START can run on to a later END that
+// happens to sit at a line end, and take everything between with it.
+const inside = (name) => `(?:(?!<!-- ${name}:)[\\s\\S])*?`;
+
+// Keep a block's content (markers removed) or drop the block entirely.
+// Markers alone on a line take the line with them; inline ones just vanish.
+function keepBlock(html, name, keep) {
+  const S = startMarker(name);
+  const E = endMarker(name);
+  if (keep) {
+    return html
+      .replace(new RegExp(`^[ \\t]*(?:${S}|${E})[ \\t]*\\n`, 'gm'), '')
+      .replace(new RegExp(`${S}|${E}`, 'g'), '');
+  }
+  return html
+    .replace(new RegExp(`^[ \\t]*${S}${inside(name)}${E}[ \\t]*\\n`, 'gm'), '')
+    .replace(new RegExp(`${S}${inside(name)}${E}`, 'g'), '');
+}
+
+// Cut a block out and return its content, or null if the template has none.
+function takeBlock(html, name) {
+  const match = html.match(new RegExp(`^[ \\t]*${startMarker(name)}[ \\t]*\\n(${inside(name)})^[ \\t]*${endMarker(name)}[ \\t]*\\n`, 'm'));
+  if (!match) return { html, content: null };
+  return { html: html.replace(match[0], '\x00'), content: match[1] };
+}
+
+// Replace a block with one filled copy per item, joined by `between`.
+function repeatBlock(html, name, items, fill, between = '') {
+  const taken = takeBlock(html, name);
+  if (taken.content === null) {
+    throw new Error(`the template has no ${name}:START … ${name}:END block`);
+  }
+  const copies = items.map((item, index) => fillTokens(taken.content, fill(item, index)));
+  return taken.html.replace('\x00', copies.join(between));
+}
+
+function fillTokens(html, fields) {
+  let out = html;
+  for (const [token, value] of Object.entries(fields)) out = out.split(token).join(value);
+  return out;
 }
 
 function firstMatch(html, pattern) {
@@ -180,36 +246,50 @@ if (args.flags.has('help') || args.flags.has('h')) {
   process.exit(0);
 }
 
-if (!args.certificate && !args.data) {
+if (!args.certificate.length && !args.data.length) {
   fail('give the certificate to render from:\n'
     + '    --certificate back-office/certificates/html/<file>.html   (preferred)\n'
     + '    --data        <json with the same fields>\n'
+    + '  Repeat the flag for a buyer who took more than one print.\n'
     + '  There is no default. A default would mean rendering one buyer\'s\n'
     + '  certificate whenever the flag is forgotten, and every value here is\n'
     + '  buyer-specific.');
 }
-if (args.certificate && args.data) fail('pass --certificate or --data, not both');
+if (args.certificate.length && args.data.length) fail('pass --certificate or --data, not both');
 
-const sourcePath = resolve(repoRoot, args.certificate ?? args.data);
-if (!existsSync(sourcePath)) fail(`nothing to read at ${sourcePath}`);
+// The hero row is one row of tiles. Four would be 109px each on a phone
+// before the caption, which is below what any dark work survives.
+const MAX_CERTIFICATES = 3;
+
+const sourcePaths = (args.certificate.length ? args.certificate : args.data)
+  .map((given) => resolve(repoRoot, given));
+if (sourcePaths.length > MAX_CERTIFICATES) {
+  fail(`${sourcePaths.length} certificates — the hero row holds at most ${MAX_CERTIFICATES}. Send the rest as a second email.`);
+}
+if (new Set(sourcePaths).size !== sourcePaths.length) fail('the same certificate was given twice');
+for (const sourcePath of sourcePaths) {
+  if (!existsSync(sourcePath)) fail(`nothing to read at ${sourcePath}`);
+}
 if (!existsSync(TEMPLATE)) fail(`no template at ${TEMPLATE}`);
 
-let data;
-if (args.certificate) {
-  try {
-    // The certificate is the record; read the fields straight out of it.
-    data = readCertificate(sourcePath, relative(repoRoot, sourcePath)).text;
-  } catch (error) {
-    if (error instanceof CertificateError) fail(error.message);
-    throw error;
+function readSource(sourcePath) {
+  if (args.certificate.length) {
+    try {
+      // The certificate is the record; read the fields straight out of it.
+      return readCertificate(sourcePath, relative(repoRoot, sourcePath)).text;
+    } catch (error) {
+      if (error instanceof CertificateError) fail(error.message);
+      throw error;
+    }
   }
-} else {
   try {
-    data = JSON.parse(readFileSync(sourcePath, 'utf8'));
+    return JSON.parse(readFileSync(sourcePath, 'utf8'));
   } catch (error) {
-    fail(`${sourcePath} is not valid JSON — ${error.message}`);
+    return fail(`${sourcePath} is not valid JSON — ${error.message}`);
   }
 }
+
+const sources = sourcePaths.map((sourcePath) => ({ sourcePath, data: readSource(sourcePath) }));
 
 // The hero is looked up, not derived: scripts/export-coa-heroes.py owns the
 // filename rule, and a second copy of it here — in another language — would
@@ -230,71 +310,127 @@ function heroFor(title) {
   return `${HERO_BASE}/${file}`;
 }
 
-const workImage = args['work-image'] ?? heroFor(data.title);
+if (args['work-image'] && sources.length > 1) {
+  fail('--work-image overrides one hero; with several certificates the heroes are looked up by work');
+}
+if (args['verify-url'] && sources.length > 1) {
+  fail('--verify-url overrides one link; with several certificates every link is matched against verify/');
+}
+if (args['signed-date'] && sources.length > 1) {
+  fail('--signed-date applies to one certificate; with several, put signedDate in each');
+}
 
 const required = ['title', 'year', 'editionNumber', 'editionTotal', 'issuedTo', 'medium', 'dimensions'];
-const missing = required.filter((key) => !data[key]);
-if (missing.length) fail(`${relative(repoRoot, sourcePath)} is missing: ${missing.join(', ')}`);
 
-const signedDate = data.signedDate ?? args['signed-date'];
-if (!signedDate) {
-  fail('no signed date — add "signedDate" to the certificate data, or pass --signed-date "04 Sep 2026"');
-}
+// Validate every certificate and find its verify page before anything is
+// written. The rules are the same for one certificate as for three.
+const certificates = sources.map(({ sourcePath, data }) => {
+  const label = relative(repoRoot, sourcePath).startsWith('..') ? sourcePath : relative(repoRoot, sourcePath);
 
-// ── the verify link: found, not trusted ─────────────────────────────────
-if (!/^https:\/\//i.test(workImage)) fail('--work-image must be an absolute https URL');
+  const missing = required.filter((key) => !data[key]);
+  if (missing.length) fail(`${label} is missing: ${missing.join(', ')}`);
 
-const collectorSlug = slugify(data.issuedTo);
-const titleSlug = slugify(data.title);
+  const signedDate = data.signedDate ?? args['signed-date'];
+  if (!signedDate) {
+    fail(`no signed date for ${label} — add "signedDate" to the certificate data, or pass --signed-date "04 Sep 2026"`);
+  }
 
-const matches = findVerifyToken(data);
-if (matches.length > 1) {
-  fail(`${matches.length} verify pages match this certificate (${matches.map((m) => m.token).join(', ')}).\n`
-    + '  Two pages certify the same work, edition and buyer. Fix that before sending.');
-}
-if (matches.length === 0) {
-  fail(`no verify page in verify/ certifies ${data.title} ${data.editionNumber}/${data.editionTotal}\n`
-    + `  for ${data.issuedTo}. Build the certificate's verify page first — the button in\n`
-    + '  this email is the same URL the QR code on the print encodes, so without that\n'
-    + '  page there is nothing for it to open.');
-}
+  const workImage = args['work-image'] ?? heroFor(data.title);
+  if (!/^https:\/\//i.test(workImage)) fail('--work-image must be an absolute https URL');
 
-if (contradictsBuyer(matches[0], data)) {
-  fail(`the verify page for ${data.title} ${data.editionNumber}/${data.editionTotal} names\n`
-    + `  ${matches[0].issuedTo}, but this certificate is issued to ${data.issuedTo}.\n`
-    + '  Refusing to send one buyer a link to another buyer\'s certificate.');
-}
-
-const verifyUrl = `${VERIFY_BASE}/${matches[0].token}/`;
-
-// An override is checked against the match, never trusted over it: pointing a
-// buyer at another buyer's certificate is the one unrecoverable mistake here.
-const override = args['verify-url'];
-if (override) {
-  if (!/^https:\/\//i.test(override)) fail('--verify-url must be an absolute https URL');
-  const overrideToken = new URL(override).pathname.replace(/^\/verify\//, '').replace(/\/$/, '');
-  if (overrideToken !== matches[0].token) {
-    fail(`--verify-url points at ${overrideToken || override}, but the verify page for\n`
-      + `  ${data.issuedTo}'s ${data.editionNumber}/${data.editionTotal} is ${matches[0].token}.\n`
+  // ── the verify link: found, not trusted ───────────────────────────────
+  const matches = findVerifyToken(data);
+  if (matches.length > 1) {
+    fail(`${matches.length} verify pages match ${label} (${matches.map((m) => m.token).join(', ')}).\n`
+      + '  Two pages certify the same work, edition and buyer. Fix that before sending.');
+  }
+  if (matches.length === 0) {
+    fail(`no verify page in verify/ certifies ${data.title} ${data.editionNumber}/${data.editionTotal}\n`
+      + `  for ${data.issuedTo}. Build the certificate's verify page first — the button in\n`
+      + '  this email is the same URL the QR code on the print encodes, so without that\n'
+      + '  page there is nothing for it to open.');
+  }
+  if (contradictsBuyer(matches[0], data)) {
+    fail(`the verify page for ${data.title} ${data.editionNumber}/${data.editionTotal} names\n`
+      + `  ${matches[0].issuedTo}, but this certificate is issued to ${data.issuedTo}.\n`
       + '  Refusing to send one buyer a link to another buyer\'s certificate.');
   }
+  const token = matches[0].token;
+  const verifyUrl = `${VERIFY_BASE}/${token}/`;
+
+  // An override is checked against the match, never trusted over it: pointing
+  // a buyer at another buyer's certificate is the one unrecoverable mistake.
+  const override = args['verify-url'];
+  if (override) {
+    if (!/^https:\/\//i.test(override)) fail('--verify-url must be an absolute https URL');
+    const overrideToken = new URL(override).pathname.replace(/^\/verify\//, '').replace(/\/$/, '');
+    if (overrideToken !== token) {
+      fail(`--verify-url points at ${overrideToken || override}, but the verify page for\n`
+        + `  ${data.issuedTo}'s ${data.editionNumber}/${data.editionTotal} is ${token}.\n`
+        + '  Refusing to send one buyer a link to another buyer\'s certificate.');
+    }
+  }
+
+  return { label, data, signedDate, workImage, token, verifyUrl };
+});
+
+// One email, one buyer. Two certificates in different names are two emails.
+const buyers = new Set(certificates.map((c) => slugify(c.data.issuedTo)));
+if (buyers.size > 1) {
+  fail('the certificates are issued to different buyers:\n'
+    + certificates.map((c) => `    ${c.label} — ${c.data.issuedTo}`).join('\n')
+    + '\n  One email goes to one buyer. Render them separately.');
+}
+const tokens = new Set(certificates.map((c) => c.token));
+if (tokens.size !== certificates.length) {
+  fail('two of the certificates resolve to the same verify page — the same edition was given twice');
 }
 
-const fields = {
-  '[WORK TITLE]': escapeHtml(data.title),
-  '[YEAR]': escapeHtml(data.year),
-  '[EDITION NO]': escapeHtml(data.editionNumber),
-  '[EDITION TOTAL]': escapeHtml(data.editionTotal),
-  '[EDITION NO WORD]': capitalise(toWords(data.editionNumber)),
-  '[EDITION TOTAL WORD]': toWords(data.editionTotal),
+const first = certificates[0];
+const data = first.data;
+const many = certificates.length > 1;
+
+// Per-certificate values, filled inside each TILE, PANEL and BUTTON copy.
+function certificateFields({ data, signedDate, workImage, verifyUrl }, index) {
+  return {
+    '[WORK TITLE]': escapeHtml(data.title),
+    '[YEAR]': escapeHtml(data.year),
+    '[EDITION NO]': escapeHtml(data.editionNumber),
+    '[EDITION TOTAL]': escapeHtml(data.editionTotal),
+    '[EDITION NO WORD]': capitalise(toWords(data.editionNumber)),
+    '[EDITION TOTAL WORD]': toWords(data.editionTotal),
+    '[MEDIUM]': escapeHtml(data.medium),
+    '[DIMENSIONS]': escapeHtml(data.dimensions),
+    '[SIGNED DATE]': escapeHtml(signedDate),
+    '[CERT REF]': escapeHtml(data.certRef ?? ''),
+    '[VERIFY URL]': escapeHtml(verifyUrl),
+    '[WORK IMAGE URL]': escapeHtml(workImage),
+    '[BUTTON LABEL]': many ? escapeHtml(data.title) : 'View certificate',
+    '[PANEL GAP]': index === 0 ? '36' : '24',
+  };
+}
+
+// Values shared by the whole email.
+const count = certificates.length;
+const countWord = toWords(count);
+const editionOf = (c) => `${c.data.editionNumber}/${c.data.editionTotal}`;
+const shared = {
   '[COLLECTOR NAME]': escapeHtml(data.issuedTo),
   '[FIRST NAME]': escapeHtml(String(data.issuedTo).trim().split(/\s+/)[0]),
-  '[MEDIUM]': escapeHtml(data.medium),
-  '[DIMENSIONS]': escapeHtml(data.dimensions),
-  '[SIGNED DATE]': escapeHtml(signedDate),
-  '[CERT REF]': escapeHtml(data.certRef ?? ''),
-  '[VERIFY URL]': escapeHtml(verifyUrl),
-  '[WORK IMAGE URL]': escapeHtml(workImage),
+  '[COUNT]': String(count),
+  '[COUNT WORD]': countWord,
+  '[COUNT WORD CAP]': capitalise(countWord),
+  '[BOTH OR ALL]': count === 2 ? 'both' : `all ${countWord}`,
+  '[TILE WIDTH]': `${(100 / count).toFixed(count === 3 ? 2 : 0)}%`,
+  '[TILE PX]': String(Math.floor(560 / count)),
+  '[WORKS LIST]': escapeHtml(joinList(certificates.map((c) => `${c.data.title} ${editionOf(c)}`))),
+  '[EDITIONS LIST]': escapeHtml(joinList(certificates.map((c) => `edition ${editionOf(c)} of ${c.data.title}`))),
+  '[EDITION WORDS LIST]': escapeHtml(joinList(certificates.map((c, i) => {
+    const words = `${toWords(c.data.editionNumber)} of ${toWords(c.data.editionTotal)}`;
+    return i === 0 ? capitalise(words) : words;
+  })).replace(/ and /, ', and ')),
+  // With one certificate the ONE blocks use these directly.
+  ...(many ? {} : certificateFields(first, 0)),
 };
 
 let html = readFileSync(TEMPLATE, 'utf8');
@@ -303,24 +439,54 @@ let html = readFileSync(TEMPLATE, 'utf8');
 // and has no business in a buyer's inbox.
 html = html.replace(/<!--\n {2}═+\n {2}FOLA ADELEKE® — DIGITAL CERTIFICATE[\s\S]*?-->\n/, '');
 
-// No certRef in the data means no reference line, not an empty label.
-if (data.certRef) {
-  html = html.replace(/\s*<!-- REF:START[^>]*-->/, '').replace(/\s*<!-- REF:END -->/, '');
-} else {
-  html = html.replace(/\n\s*<!-- REF:START[\s\S]*?<!-- REF:END -->/, '');
+// One shape or the other, never both.
+html = keepBlock(html, 'ONE', !many);
+html = keepBlock(html, 'MANY', many);
+
+// The button gap sits between buttons, so it is taken out and used as a joiner.
+const gap = takeBlock(html, 'BUTTON GAP');
+if (gap.content === null) fail('the template has no BUTTON GAP block');
+html = gap.html.replace('\x00', '');
+
+try {
+  // One panel and one button per certificate; a hero tile per certificate
+  // when there are several (the MANY hero), none when there is one.
+  html = repeatBlock(html, 'PANEL', certificates, (c, i) => {
+    // No certRef in the data means no reference line, not an empty label.
+    return certificateFields(c, i);
+  });
+  html = repeatBlock(html, 'BUTTON', certificates, certificateFields, gap.content);
+  if (many) html = repeatBlock(html, 'TILE', certificates, certificateFields);
+} catch (error) {
+  fail(error.message);
 }
 
-for (const [token, value] of Object.entries(fields)) {
-  html = html.split(token).join(value);
+// The REF block repeats inside each panel; settle each copy on its own data.
+{
+  const refs = [...html.matchAll(new RegExp(`^[ \\t]*${startMarker('REF')}${inside('REF')}${endMarker('REF')}[ \\t]*\\n`, 'gm'))];
+  if (refs.length !== certificates.length) fail(`expected ${certificates.length} REF blocks after filling the panels, found ${refs.length}`);
+  refs.reverse().forEach((match, reversedIndex) => {
+    const c = certificates[certificates.length - 1 - reversedIndex];
+    const settled = c.data.certRef ? keepBlock(match[0], 'REF', true) : '';
+    html = html.slice(0, match.index) + settled + html.slice(match.index + match[0].length);
+  });
 }
+
+html = fillTokens(html, shared);
 
 const leftovers = [...new Set(html.match(/\[[A-Z][A-Z ]+\]/g) ?? [])];
 if (leftovers.length) fail(`unfilled placeholders left in the render: ${leftovers.join(', ')}`);
 
+const bands = html.match(/background-color:#000000/g) ?? [];
+if (bands.length !== 1) fail(`the render has ${bands.length} inverted bands; the house rule is one`);
+
+const collectorSlug = slugify(data.issuedTo);
+const editionSlug = (c) => `${slugify(c.data.title)}-${slugify(c.data.editionNumber)}-of-${slugify(c.data.editionTotal)}`;
+
 // ── where it may be written ──────────────────────────────────────────────
 const outPath = args.out
   ? resolve(repoRoot, args.out)
-  : resolve(DEFAULT_OUT_DIR, `${collectorSlug}-${titleSlug}-${slugify(data.editionNumber)}-of-${slugify(data.editionTotal)}.html`);
+  : resolve(DEFAULT_OUT_DIR, `${collectorSlug}-${certificates.map(editionSlug).join('-and-')}.html`);
 
 if (isTracked(outPath) && !args.flags.has('force')) {
   fail(`refusing to write ${relative(repoRoot, outPath)} — git does not ignore that path, and\n`
@@ -334,29 +500,35 @@ writeFileSync(outPath, html);
 
 const shownPath = relative(repoRoot, outPath).startsWith('..') ? outPath : relative(repoRoot, outPath);
 console.log(`render-coa-email: wrote ${shownPath}`);
-console.log(`  ${data.title} — ${data.editionNumber}/${data.editionTotal} — ${data.issuedTo}`);
-console.log(`  verify link: ${verifyUrl}`);
-if (!data.certRef) console.log('  no certRef in the data, so the reference line was dropped');
+console.log(`  ${data.issuedTo}${many ? ` — ${count} certificates in one email` : ''}`);
+for (const c of certificates) {
+  console.log(`  ${c.data.title} — ${c.data.editionNumber}/${c.data.editionTotal}`);
+  console.log(`    verify link: ${c.verifyUrl}`);
+  if (!c.data.certRef) console.log('    no certRef in the data, so the reference line was dropped');
+}
 
-// ── the image must already be live, or it is a broken box in the inbox ───
+// ── the images must already be live, or they are broken boxes in the inbox ─
 if (!args.flags.has('no-check')) {
-  const status = await headStatus(workImage);
-  if (status === 200) {
-    console.log('  work image is live (200)');
-  } else if (status === null) {
-    warn('could not reach the work image — check it is deployed before sending');
-  } else {
-    warn(`the work image returned ${status}. Deploy it before sending, or the email`);
-    warn('  arrives with a broken box where the print should be.');
-  }
-  const verifyStatus = await headStatus(verifyUrl);
-  if (verifyStatus === 200) {
-    console.log('  verify page is live (200)');
-  } else if (verifyStatus === null) {
-    warn('could not reach the verify page — it must be deployed, not just committed');
-  } else {
-    warn(`the verify page returned ${verifyStatus}. It is committed but evidently not`);
-    warn('  deployed yet; the button in this email would land on nothing.');
+  for (const c of certificates) {
+    const which = many ? ` (${c.data.title})` : '';
+    const status = await headStatus(c.workImage);
+    if (status === 200) {
+      console.log(`  work image is live (200)${which}`);
+    } else if (status === null) {
+      warn(`could not reach the work image${which} — check it is deployed before sending`);
+    } else {
+      warn(`the work image${which} returned ${status}. Deploy it before sending, or the email`);
+      warn('  arrives with a broken box where the print should be.');
+    }
+    const verifyStatus = await headStatus(c.verifyUrl);
+    if (verifyStatus === 200) {
+      console.log(`  verify page is live (200)${which}`);
+    } else if (verifyStatus === null) {
+      warn(`could not reach the verify page${which} — it must be deployed, not just committed`);
+    } else {
+      warn(`the verify page${which} returned ${verifyStatus}. It is committed but evidently not`);
+      warn('  deployed yet; the button in this email would land on nothing.');
+    }
   }
 }
 
