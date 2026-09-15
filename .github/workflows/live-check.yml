@@ -1,0 +1,64 @@
+# Daily check of the live estate — folaadeleke.com, the verify pages the
+# printed QR codes open, the claim Worker and its nightly cron, and the
+# shop — via scripts/check-live.mjs.
+#
+# Daily rather than weekly because the welcome email goes out whenever
+# someone subscribes, and its claim link depends on the Worker being up.
+#
+# On failure it opens a GitHub issue titled "Live check failed" with the
+# report, or comments on the one already open; when everything answers
+# again it closes that issue. Nothing on the site is changed.
+
+name: Live check
+
+on:
+  schedule:
+    - cron: '10 6 * * *'   # 06:10 UTC daily, after the Worker's 02:15 sweep
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      TITLE: 'Live check failed: something on folaadeleke.com is not answering'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Probe the live estate
+        id: check
+        run: |
+          set +e
+          node scripts/check-live.mjs > report.txt 2>&1
+          echo "status=$?" >> "$GITHUB_OUTPUT"
+          cat report.txt
+
+      - name: Open or update the issue
+        if: steps.check.outputs.status != '0'
+        run: |
+          existing=$(gh issue list --state open --search "\"$TITLE\" in:title" --json number --jq '.[0].number')
+          {
+            echo "Found by [Live check](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) on $(date -u +%Y-%m-%dT%H:%MZ):"
+            echo
+            echo '```'
+            cat report.txt
+            echo '```'
+          } > body.md
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body-file body.md
+          else
+            gh issue create --title "$TITLE" --body-file body.md
+          fi
+
+      - name: Close the issue when everything answers again
+        if: steps.check.outputs.status == '0'
+        run: |
+          existing=$(gh issue list --state open --search "\"$TITLE\" in:title" --json number --jq '.[0].number')
+          [ -n "$existing" ] && gh issue close "$existing" --comment "Live check passed on $(date -u +%Y-%m-%dT%H:%MZ); closing." || true

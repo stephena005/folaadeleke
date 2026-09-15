@@ -33,7 +33,11 @@ export default {
     const url = new URL(request.url);
 
     if (request.method === 'GET' && url.pathname === '/health') {
-      return json({ ok: true }, 200, origin);
+      // lastSweep lets scripts/check-live.mjs confirm the nightly cron is
+      // actually firing, not just that the Worker answers.
+      let lastSweep = null;
+      try { const raw = await env.CLAIMS.get('meta:last-sweep'); lastSweep = raw ? JSON.parse(raw) : null; } catch (e) { /* KV unbound or bad JSON: report null */ }
+      return json({ ok: true, lastSweep }, 200, origin);
     }
 
     if (request.method !== 'POST' || url.pathname !== '/claim') {
@@ -49,7 +53,9 @@ export default {
   },
 
   async scheduled(event, env, ctx) {
-    ctx.waitUntil(deleteExpiredCodes(env));
+    ctx.waitUntil(deleteExpiredCodes(env).then(async (deleted) => {
+      await env.CLAIMS.put('meta:last-sweep', JSON.stringify({ at: new Date().toISOString(), deleted }));
+    }));
   },
 };
 
@@ -255,6 +261,7 @@ async function deleteExpiredCodes(env) {
   }
 
   console.log(`cleanup: deleted ${deleted} expired subscriber codes`);
+  return deleted;
 }
 
 /* ── beehiiv ───────────────────────────────────────────────── */

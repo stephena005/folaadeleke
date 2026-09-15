@@ -78,7 +78,9 @@ await new Promise(r => setTimeout(r, 50));
 check('cleanup deletes only FA-WELCOME codes', deleted.length === 1 && deleted[0] === 'gid://x/1', JSON.stringify(deleted));
 
 // 8. routing
-check('health ok', (await worker.fetch(new Request('https://w/health'), env, {})).status === 200);
+const [hs, hb] = await j(await worker.fetch(new Request('https://w/health'), env, {}));
+check('health ok', hs === 200 && hb.ok === true);
+check('health reports the sweep', hb.lastSweep && hb.lastSweep.deleted === 1 && !Number.isNaN(Date.parse(hb.lastSweep.at)), JSON.stringify(hb));
 check('unknown path 404', (await worker.fetch(new Request('https://w/nope'), env, {})).status === 404);
 const pre = await worker.fetch(new Request('https://w/claim', { method: 'OPTIONS' }), env, {});
 check('CORS preflight', pre.status === 204 && pre.headers.get('Access-Control-Allow-Origin') === 'https://folaadeleke.com');

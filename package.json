@@ -9,7 +9,8 @@
     "prepare": "git config core.hooksPath .githooks || true",
     "hang": "node scripts/hang-print.mjs",
     "sitemap": "node scripts/update-sitemap.mjs",
-    "shop": "node scripts/check-shop.mjs"
+    "shop": "node scripts/check-shop.mjs",
+    "live": "node scripts/check-live.mjs"
   },
   "repository": {
     "type": "git",
