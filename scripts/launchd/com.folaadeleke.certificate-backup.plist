@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Weekly off-account backup of back-office/certificates to Google Drive.
+  Runs scripts/backup-certificates.sh every Sunday at 20:00 local time;
+  if the Mac was asleep, launchd runs it at the next wake.
+
+  Install (once per Mac):
+    cp scripts/launchd/com.folaadeleke.certificate-backup.plist ~/Library/LaunchAgents/
+    launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.folaadeleke.certificate-backup.plist
+  Run now:
+    launchctl kickstart gui/$(id -u)/com.folaadeleke.certificate-backup
+  Remove:
+    launchctl bootout gui/$(id -u)/com.folaadeleke.certificate-backup
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.folaadeleke.certificate-backup</string>
+  <!--
+    macOS keeps background processes out of ~/Documents until the shell
+    has been granted Full Disk Access (System Settings → Privacy &
+    Security → Full Disk Access → add /bin/sh). Until then the script
+    cannot even be read, so this wrapper raises a notification instead
+    of failing silently every Sunday.
+  -->
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/sh</string>
+    <string>-c</string>
+    <string>/bin/sh "/Users/jide/Documents/Business/AI-projects/folaadeleke/scripts/backup-certificates.sh" || /usr/bin/osascript -e 'display notification "The weekly run could not read the repo. Grant /bin/sh Full Disk Access in System Settings → Privacy &amp; Security." with title "Certificate backup FAILED" subtitle "folaadeleke"'</string>
+  </array>
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Weekday</key>
+    <integer>0</integer>
+    <key>Hour</key>
+    <integer>20</integer>
+    <key>Minute</key>
+    <integer>0</integer>
+  </dict>
+  <key>RunAtLoad</key>
+  <false/>
+  <key>StandardOutPath</key>
+  <string>/Users/jide/Library/Logs/folaadeleke-certificate-backup.launchd.log</string>
+  <key>StandardErrorPath</key>
+  <string>/Users/jide/Library/Logs/folaadeleke-certificate-backup.launchd.log</string>
+</dict>
+</plist>
