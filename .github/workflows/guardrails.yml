@@ -1,0 +1,28 @@
+# Site guardrails — the same checks as the local pre-commit hook, run on
+# every push and pull request as a second layer (and the visible record).
+#
+# Note what this cannot do: GitHub Pages deploys main the moment it is
+# pushed, without waiting for this to pass. A red run here means the
+# problem is ALREADY live and needs a follow-up push. The pre-commit hook
+# (.githooks/pre-commit, enabled by `npm install`) is the gate that runs
+# before anything is public.
+
+name: Guardrails
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/check-site.mjs

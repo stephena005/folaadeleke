@@ -1,0 +1,75 @@
+# Closes any Friday puzzle drop whose 24-hour window has ended.
+#
+# Runs scripts/close-drop.mjs every hour. When a drop's CAMPAIGN_END has
+# passed, the live game page is replaced with the closed-state page and the
+# result is pushed straight to main, so the discount code leaves the public
+# source and late visitors see "This drop has ended" without anyone being
+# at a keyboard on Saturday afternoon. Most runs find nothing and exit.
+#
+# It pushes to main rather than opening a PR because a PR that waits for a
+# merge leaves the game page live meanwhile, which is what this exists to
+# prevent. The guardrail checks run before the commit; if they fail nothing
+# is pushed and the run goes red.
+#
+# Pushes made with the workflow token do not trigger other workflows, so the
+# Guardrails workflow will not run again on the bot's commit — the check is
+# run here instead. GitHub Pages does still rebuild on that push.
+
+name: Close ended drops
+
+on:
+  schedule:
+    - cron: '20 * * * *'   # hourly; a 14:00Z end is closed by ~14:20Z
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: close-drops
+  cancel-in-progress: false
+
+jobs:
+  close:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Close drops whose window has ended
+        id: close
+        run: |
+          node scripts/close-drop.mjs | tee close.log
+          if git diff --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            names=$(grep -o '"[^"]*" ended' close.log | sed 's/ ended$//; s/"//g' | paste -sd ',' - | sed 's/,/, /g')
+            echo "names=$names" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Guardrails on the closed page
+        if: steps.close.outputs.changed == 'true'
+        run: node scripts/check-site.mjs
+
+      - name: Commit and push
+        if: steps.close.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- '*/index.html'
+          git commit -m "Close the ${{ steps.close.outputs.names }} drop" \
+            -m "Replaced the live game page with the closed-state page after CAMPAIGN_END, taking the discount code out of the source. Run by .github/workflows/close-drops.yml."
+          git push origin HEAD:main
+
+      - name: Summary
+        run: |
+          {
+            echo '```'
+            cat close.log
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"

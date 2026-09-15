@@ -1,0 +1,27 @@
+{
+  "name": "folaadeleke",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "check": "node scripts/check-site.mjs",
+    "close-drop": "node scripts/close-drop.mjs",
+    "prepare": "git config core.hooksPath .githooks || true"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stephena005/folaadeleke.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/stephena005/folaadeleke/issues"
+  },
+  "homepage": "https://github.com/stephena005/folaadeleke#readme",
+  "dependencies": {
+    "docx": "^9.7.1",
+    "puppeteer": "^24.43.1"
+  }
+}

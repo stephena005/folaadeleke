@@ -1,0 +1,13 @@
+#!/bin/sh
+# Runs the site guardrails against what is about to be committed.
+#
+# This repo is public and GitHub Pages serves main's root with no CI gate,
+# so a bad commit is live a minute after it is pushed. This hook is the
+# only check that runs BEFORE that. Enable it once per clone:
+#
+#   git config core.hooksPath .githooks
+#
+# (npm install does this too, via the "prepare" script in package.json.)
+# Skip for one commit with:  git commit --no-verify
+
+exec node "$(git rev-parse --show-toplevel)/scripts/check-site.mjs"
