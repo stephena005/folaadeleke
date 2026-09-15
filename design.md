@@ -328,11 +328,15 @@ with" slug) and `data-new`. The caption sits in a hidden `<p>`. The
 opens that print. Plate numbers (`data-n`) run in catalogue order and
 are shown in the detail view as `No. 11`.
 
-**To add a print:** export a web JPEG to `images/prints/web/<slug>.jpg`
-(1400px long edge, quality ~74; never the master), copy a `.hang` block
-into the right room, set `data-n` to the next number and add
-`data-new="1"` (remove it from the oldest of the three flagged). The
-floor plan, counts and the detail view pick it up.
+**To add a print:** run `scripts/hang-print.mjs` — it exports the web
+JPEG to `images/prints/web/<slug>.jpg` (1400px long edge, quality 74;
+never the master), writes the `.hang` block at the Entrance, moves the
+previous Entrance work into the room you name, renumbers, re-flags the
+three newest, leads the home page featured strip with it, and updates
+this line and the sitemap. `--dry-run` first. By hand, the same steps:
+copy a `.hang` block into the right room, set `data-n` to the next
+number and add `data-new="1"` (remove it from the oldest of the three
+flagged). The floor plan, counts and the detail view pick it up.
 
 **Rooms** (order on the wall): Entrance · I Her · II Love · III Family ·
 IV The Function · V Heritage. The Entrance holds one work, the newest

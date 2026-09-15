@@ -6,7 +6,8 @@
   "scripts": {
     "check": "node scripts/check-site.mjs",
     "close-drop": "node scripts/close-drop.mjs",
-    "prepare": "git config core.hooksPath .githooks || true"
+    "prepare": "git config core.hooksPath .githooks || true",
+    "hang": "node scripts/hang-print.mjs"
   },
   "repository": {
     "type": "git",
