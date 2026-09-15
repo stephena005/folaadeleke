@@ -7,7 +7,8 @@
     "check": "node scripts/check-site.mjs",
     "close-drop": "node scripts/close-drop.mjs",
     "prepare": "git config core.hooksPath .githooks || true",
-    "hang": "node scripts/hang-print.mjs"
+    "hang": "node scripts/hang-print.mjs",
+    "sitemap": "node scripts/update-sitemap.mjs"
   },
   "repository": {
     "type": "git",

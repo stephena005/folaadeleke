@@ -29,11 +29,14 @@
 //   6. Drops — a puzzle page whose CAMPAIGN_END has passed must not still
 //      carry its DISCOUNT_CODE (run scripts/close-drop.mjs), and the home
 //      banner's timer must agree with the page it links to.
+//   7. Sitemap dates — every <lastmod> must match git (scripts/update-sitemap.mjs);
+//      skipped on a shallow clone, where git has no history to compare.
 
 import { execFileSync } from 'node:child_process';
 import { existsSync, readFileSync, statSync } from 'node:fs';
 import { dirname, posix, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { computeSitemap } from './update-sitemap.mjs';
 
 const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const SITE_HOST = 'folaadeleke.com';
@@ -251,6 +254,12 @@ if (trackedSet.has('index.html')) {
       fail('index.html', `banner links to ${target}, which is not a live drop, yet BANNER_END ${bEnd[1]} is in the future — visitors would be sent to a closed page`, lineOf(home, banner.index));
     }
   }
+}
+
+// ── 7: sitemap dates ─────────────────────────────────────────────────────
+if (trackedSet.has('sitemap.xml') && git('rev-parse', '--is-shallow-repository').trim() !== 'true') {
+  const { changes } = computeSitemap(contents('sitemap.xml'));
+  for (const c of changes) fail('sitemap.xml', `lastmod for ${c.loc} is ${c.from} but git says ${c.to} — run: node scripts/update-sitemap.mjs (the pre-commit hook does this)`);
 }
 
 // ── report ───────────────────────────────────────────────────────────────

@@ -35,8 +35,7 @@
 //   3. index.html — the featured strip leads with the new print, keeps
 //      four, and the fade-up delays are re-sequenced.
 //   4. design.md — the "at the time of writing" line.
-//   5. sitemap.xml — lastmod for / and /prints.
-//   6. Stages everything it wrote, runs scripts/check-site.mjs, and HEAD-
+//   5. Stages everything it wrote, runs scripts/check-site.mjs, and HEAD-
 //      checks the shop URL (a warning, not a failure — the product may not
 //      be published yet).
 // It does not commit. It does not touch the newsletter.
@@ -52,7 +51,6 @@ const repoRoot = resolve(scriptDir, '..');
 const PRINTS = resolve(repoRoot, 'prints/index.html');
 const HOME = resolve(repoRoot, 'index.html');
 const DESIGN = resolve(repoRoot, 'design.md');
-const SITEMAP = resolve(repoRoot, 'sitemap.xml');
 const WEB_DIR = 'images/prints/web';
 const SHOP = 'https://shop.folaadeleke.com/products/';
 const ROOMS = { her: 'her', love: 'love', family: 'family', function: 'function', 'the function': 'function', heritage: 'heritage' };
@@ -201,23 +199,16 @@ const designRe = /drop \(No\. \d+, [^)]*?, at the time of writing\)/;
 if (!designRe.test(design)) console.warn('warn    design.md: "at the time of writing" line not found, left alone');
 design = design.replace(designRe, `drop (No. ${number}, ${title}, at the time of writing)`);
 
-// ── 5. sitemap.xml ───────────────────────────────────────────────────────
-let sitemap = readFileSync(SITEMAP, 'utf8');
-for (const loc of ['https://folaadeleke.com/', 'https://folaadeleke.com/prints']) {
-  sitemap = sitemap.replace(new RegExp(`(<loc>${loc.replace(/[.]/g, '\\.')}</loc>\\s*<lastmod>)[^<]+`), `$1${today}`);
-}
-
 // ── write, stage, check ──────────────────────────────────────────────────
 if (dryRun) {
-  console.log(`\n[dry run] would write prints/index.html, index.html, design.md, sitemap.xml and ${webRel}; nothing written.`);
+  console.log(`\n[dry run] would write prints/index.html, index.html, design.md and ${webRel}; nothing written.`);
   console.log(`[dry run] export left at ${exportTo} for inspection.`);
   process.exit(0);
 }
 writeFileSync(PRINTS, prints);
 writeFileSync(HOME, home);
 writeFileSync(DESIGN, design);
-writeFileSync(SITEMAP, sitemap);
-const touched = ['prints/index.html', 'index.html', 'design.md', 'sitemap.xml', webRel];
+const touched = ['prints/index.html', 'index.html', 'design.md', webRel]; // sitemap dates follow at commit, via the hook
 execFileSync('git', ['add', '--', ...touched], { cwd: repoRoot });
 console.log(`staged  ${touched.join(', ')}`);
 

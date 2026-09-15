@@ -1,5 +1,10 @@
 #!/bin/sh
-# Runs the site guardrails against what is about to be committed.
+# Runs before every commit:
+#   1. scripts/update-sitemap.mjs — sets each sitemap <lastmod> from git
+#      (today for pages in this commit) and re-stages sitemap.xml so the
+#      date moves in the same commit as the page.
+#   2. scripts/check-site.mjs — the site guardrails, against what is
+#      about to be committed.
 #
 # This repo is public and GitHub Pages serves main's root with no CI gate,
 # so a bad commit is live a minute after it is pushed. This hook is the
@@ -10,4 +15,6 @@
 # (npm install does this too, via the "prepare" script in package.json.)
 # Skip for one commit with:  git commit --no-verify
 
-exec node "$(git rev-parse --show-toplevel)/scripts/check-site.mjs"
+root="$(git rev-parse --show-toplevel)"
+node "$root/scripts/update-sitemap.mjs" && git add -- "$root/sitemap.xml" || exit 1
+exec node "$root/scripts/check-site.mjs"
