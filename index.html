@@ -1118,18 +1118,18 @@
     </div>
 
     <!-- ── PUZZLE DROP BANNER ──
-         Hidden until 15:00 BST Fri 11 Sep 2026, then hidden again at
+         Hidden until 15:00 BST Fri 18 Sep 2026, then hidden again at
          campaign end. BANNER_START must stay in step with CAMPAIGN_END
-         in guess/index.html — they are separate constants, so if the
+         in find/index.html — they are separate constants, so if the
          go-live slips, change both. -->
-    <a class="puzzle-banner" href="/guess" id="puzzleBanner" style="display:none;">
+    <a class="puzzle-banner" href="/find" id="puzzleBanner" style="display:none;">
       <span class="puzzle-banner-eyebrow">Print&nbsp;Drop &middot; 50%&nbsp;Off &middot; 24&nbsp;Hours&nbsp;Only</span>
-      <span class="puzzle-banner-title">Guess The Print &mdash; Unlock 50% Off &rarr;</span>
+      <span class="puzzle-banner-title">Find The Five &mdash; Unlock 50% Off &rarr;</span>
     </a>
     <script>
       (function () {
-        var BANNER_START = new Date('2026-09-11T14:00:00Z').getTime(); // 15:00 BST Fri 11 Sep
-        var BANNER_END   = new Date('2026-09-12T14:00:00Z').getTime(); // matches CAMPAIGN_END
+        var BANNER_START = new Date('2026-09-18T14:00:00Z').getTime(); // 15:00 BST Fri 18 Sep
+        var BANNER_END   = new Date('2026-09-19T14:00:00Z').getTime(); // matches CAMPAIGN_END
         var el = document.getElementById('puzzleBanner');
         if (!el) return;
         var MAX_DELAY = 2147483647; // setTimeout overflows past ~24.8 days and fires immediately

@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+  ════════════════════════════════════════════════════════════════
+  FOLA ADELEKE® — "FIND THE FIVE"
+  Unlisted campaign page, built 2026-09-15 on the house design
+  (see newsletter-template.html for the spec). Third drop in the
+  series after Rearrange The Print and Guess The Print.
+  ════════════════════════════════════════════════════════════════
+
+  HOW IT PLAYS
+  ────────────
+  One print — Saturday Function — shown whole. Five details are
+  named below it. Tap each one in the picture. A hit drops a
+  numbered marker and ticks the clue; a miss just says "not there".
+  There is no way to lose and no penalty. Five of five unlocks the
+  code. Progress is kept in localStorage, so a reload does not
+  reset it. "Start Again" clears it.
+
+  Hit-testing: each target is one or more rectangles in fractions
+  of the image (TARGETS below). A tap counts if it lands inside a
+  rectangle grown by TAP_SLOP screen pixels on every side — the
+  maker's mark is 15px tall on a phone and needs the forgiveness.
+  The viewport is left user-scalable on purpose so people can
+  pinch in; taps are measured against the rendered image box, so
+  zoom does not break the maths.
+
+  LIVE CAMPAIGN — GO-LIVE 15:00 BST FRI 18 SEP 2026
+  ─────────────────────────────────────────────────
+  The homepage banner (.puzzle-banner in ../index.html) reveals and
+  links here on its own timer at 2026-09-18T14:00:00Z. No further
+  deploy needed at that moment.
+
+  STILL OUTSTANDING BEFORE FRIDAY
+  ───────────────────────────────
+  1. DISCOUNT_CODE is FIND0918 and DOES NOT EXIST IN SHOPIFY YET.
+     Create it: Prints collection only, no minimum spend, active
+     window matching CAMPAIGN_END, one shared code. This page has
+     no backend so it cannot issue per-subscriber codes — the code
+     is visible to anyone who solves it, and to anyone who reads
+     the source.
+  2. If go-live slips, update CAMPAIGN_END here AND BANNER_START /
+     BANNER_END in ../index.html together. They are separate
+     constants.
+  3. Play it through once on a real phone after deploying.
+
+  DO NOT REGRESS
+  ──────────────
+  · The image is /images/find/artwork.jpg, a 2000x1414 / 325 kB
+    export from the master. Never point this at a print master;
+    the masters are tens of MB and are not tracked in git.
+  · Type and contrast follow the house spec: body copy is
+    Helvetica/Arial, never Courier; nothing below WCAG AA 4.5:1.
+
+  SWAPPING IN A DIFFERENT PRINT
+  ─────────────────────────────
+  Change PRINT (name, image, width, height) and TARGETS. Each
+  target has a label and a list of rects [x0, y0, x1, y1] as
+  fractions 0–1 of the image; any rect counts. The marker sits at
+  the centre of the first rect that was hit.
+  ════════════════════════════════════════════════════════════════
+-->
+<head>
+  <!-- Google tag (gtag.js) — consent mode: analytics denied until accepted -->
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      analytics_storage: 'denied',
+      wait_for_update: 500
+    });
+    try {
+      if (localStorage.getItem('fa_consent') === 'granted') {
+        gtag('consent', 'update', { analytics_storage: 'granted' });
+      }
+    } catch (e) {}
+    gtag('js', new Date());
+    gtag('config', 'G-K7ZCQ4YEN6');
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7ZCQ4YEN6"></script>
+  <script defer src="/js/consent.js"></script>
+  <script defer src="/js/newsletter-popup.js"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <title>Find the Five — Fola Adeleke&#174;</title>
+  <meta name="description" content="Five details are hiding in one print. Find them all and a 50% off code unlocks." />
+
+  <style>
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+
+    :root {
+      --paper:#faf9f7;
+      --card:#ffffff;
+      --ink:#111111;
+      --ink-soft:#4f4f4f;
+      --label:#6f6f6f;
+      --rule:#dcdcdc;
+      --black:#000000;
+      --white:#ffffff;
+      --footer-bg:#f2f0ed;
+      --footer-ink:#666666;
+      --mono:'Courier New', Courier, monospace;
+      --sans:Helvetica, Arial, sans-serif;
+    }
+
+    html { scroll-behavior:smooth; }
+    body {
+      font-family:var(--sans); background:var(--paper); color:var(--ink);
+      min-height:100vh; display:flex; flex-direction:column;
+      -webkit-font-smoothing:antialiased;
+    }
+    :focus-visible { outline:2px solid var(--ink); outline-offset:2px; }
+    a { color:var(--ink); }
+
+    /* ── NAV ── */
+    nav {
+      height:56px; background:var(--card); border-bottom:1px solid var(--ink);
+      display:grid; grid-template-columns:1fr auto 1fr; align-items:center; padding:0 24px;
+    }
+    .nav-brand {
+      text-align:center; font-family:var(--mono); font-size:13px; letter-spacing:0.26em;
+      text-transform:uppercase; text-decoration:none; color:var(--ink);
+    }
+    .nav-link {
+      font-family:var(--mono); font-size:11px; letter-spacing:0.2em; text-transform:uppercase;
+      text-decoration:none; color:var(--label);
+    }
+    .nav-link:hover { color:var(--ink); text-decoration:underline; }
+    .nav-left { justify-self:start; } .nav-right { justify-self:end; }
+
+    /* ── CARD ── */
+    .shell { flex:1; padding:32px 16px 56px; }
+    main {
+      max-width:760px; margin:0 auto; background:var(--card);
+      padding:44px 32px 48px; text-align:center;
+    }
+
+    .eyebrow {
+      font-family:var(--mono); font-size:11px; letter-spacing:0.3em;
+      text-transform:uppercase; color:var(--label); margin-bottom:20px;
+    }
+    h1 {
+      font-family:var(--mono); font-size:34px; font-weight:normal; letter-spacing:0.16em;
+      text-transform:uppercase; line-height:1.2; margin-bottom:22px;
+    }
+    .subcopy {
+      font-size:16px; line-height:1.65; color:var(--ink-soft);
+      margin:0 auto 32px; max-width:46ch;
+    }
+
+    /* ── STATUS ROW ── */
+    .status-row {
+      display:flex; align-items:center; justify-content:space-between;
+      margin:0 auto 14px;
+      font-family:var(--mono); font-size:11px; letter-spacing:0.18em;
+      text-transform:uppercase; color:var(--label);
+    }
+    .status-row .found span { color:var(--ink); font-variant-numeric:tabular-nums; }
+    .reset-link {
+      background:none; border:none; font-family:var(--mono); font-size:11px;
+      letter-spacing:0.18em; text-transform:uppercase; color:var(--label);
+      text-decoration:underline; cursor:pointer; padding:8px 4px; min-height:44px;
+    }
+    .reset-link:hover { color:var(--ink); }
+
+    /* ── THE PICTURE ── */
+    .picture {
+      position:relative; width:100%; margin:0 auto 18px;
+      background:var(--black); border:1px solid var(--ink);
+      cursor:crosshair; user-select:none; -webkit-user-select:none;
+      touch-action:pinch-zoom; /* let people pinch in; taps still land */
+    }
+    .picture img { display:block; width:100%; height:auto; -webkit-user-drag:none; }
+    .picture.miss { animation:shake 0.35s ease; }
+    @keyframes shake {
+      0%,100% { transform:translateX(0); }
+      25% { transform:translateX(-4px); }
+      75% { transform:translateX(4px); }
+    }
+    .marker {
+      position:absolute; width:30px; height:30px; margin:-15px 0 0 -15px;
+      border-radius:50%; background:var(--white); color:var(--ink);
+      border:2px solid var(--ink); box-shadow:0 0 0 2px var(--white);
+      font-family:var(--mono); font-size:13px; line-height:26px; text-align:center;
+      pointer-events:none; animation:pop 0.35s ease;
+    }
+    @keyframes pop {
+      0% { transform:scale(0.3); opacity:0; }
+      70% { transform:scale(1.15); opacity:1; }
+      100% { transform:scale(1); }
+    }
+    .ripple {
+      position:absolute; width:36px; height:36px; margin:-18px 0 0 -18px;
+      border-radius:50%; border:2px solid var(--white); pointer-events:none;
+      animation:ripple 0.5s ease-out forwards;
+    }
+    @keyframes ripple {
+      0% { transform:scale(0.4); opacity:0.9; }
+      100% { transform:scale(1.6); opacity:0; }
+    }
+
+    #message {
+      min-height:20px; font-family:var(--mono); font-size:11px; letter-spacing:0.18em;
+      text-transform:uppercase; color:var(--ink); margin-bottom:22px;
+    }
+
+    /* ── THE CLUES ── */
+    .clues-label {
+      font-family:var(--mono); font-size:11px; letter-spacing:0.3em; text-transform:uppercase;
+      color:var(--label); border-bottom:1px solid var(--ink); padding-bottom:12px;
+      margin:0 auto 4px; max-width:480px; text-align:left;
+    }
+    #clues { list-style:none; max-width:480px; margin:0 auto 32px; text-align:left; }
+    .clue {
+      display:flex; align-items:center; gap:16px; padding:14px 0;
+      border-bottom:1px solid var(--rule);
+      font-family:var(--mono); font-size:13px; letter-spacing:0.14em; text-transform:uppercase;
+      color:var(--ink); line-height:1.4;
+    }
+    .clue .n {
+      flex:0 0 30px; width:30px; height:30px; border-radius:50%; border:1px solid var(--ink);
+      font-size:12px; line-height:28px; text-align:center; color:var(--ink);
+    }
+    .clue .txt { flex:1; }
+    .clue .state { font-size:11px; letter-spacing:0.18em; color:var(--label); }
+    .clue.found .n { background:var(--black); color:var(--white); border-color:var(--black); }
+    .clue.found .txt { color:var(--label); text-decoration:line-through; }
+    .clue.found .state { color:var(--ink); }
+
+    /* ── REVEAL ── */
+    #reveal { display:none; margin-top:16px; padding-top:36px; border-top:1px solid var(--rule); }
+    #reveal.show { display:block; }
+    .reveal-eyebrow {
+      font-family:var(--mono); font-size:11px; letter-spacing:0.3em;
+      text-transform:uppercase; color:var(--label); margin-bottom:16px;
+    }
+    .reveal-title {
+      font-family:var(--mono); font-size:24px; font-weight:normal; letter-spacing:0.12em;
+      text-transform:uppercase; margin-bottom:16px; line-height:1.3;
+    }
+    .reveal-copy { font-size:16px; line-height:1.65; color:var(--ink-soft); margin:0 auto 26px; max-width:40ch; }
+
+    .code-box {
+      display:flex; align-items:center; justify-content:center; gap:14px; flex-wrap:wrap;
+      border:2px solid var(--ink); padding:20px; margin:0 auto 14px; max-width:480px; cursor:pointer;
+      user-select:none; min-height:44px; background:var(--white);
+    }
+    .code-box .code { font-family:var(--mono); font-size:22px; letter-spacing:0.28em; color:var(--ink); }
+    .code-box .copy-hint {
+      font-family:var(--mono); font-size:11px; letter-spacing:0.14em;
+      text-transform:uppercase; color:var(--label);
+    }
+    .code-box.copied { background:var(--black); border-color:var(--black); }
+    .code-box.copied .code, .code-box.copied .copy-hint { color:var(--white); }
+    .code-box.expired { border-color:var(--rule); cursor:default; background:var(--paper); }
+    .code-box.expired .code { color:var(--label); letter-spacing:0.14em; }
+
+    #countdown {
+      font-family:var(--mono); font-size:12px; letter-spacing:0.18em;
+      text-transform:uppercase; color:var(--ink); margin-bottom:30px;
+    }
+    #countdown .t { font-variant-numeric:tabular-nums; }
+
+    .cta {
+      display:inline-block; background:var(--black); color:var(--white); text-decoration:none;
+      font-family:var(--mono); font-size:13px; letter-spacing:0.18em; text-transform:uppercase;
+      padding:17px 40px; border:1px solid var(--black);
+    }
+    .cta:hover { background:var(--white); color:var(--black); }
+    .fineprint { font-size:14px; line-height:1.7; color:var(--ink-soft); margin:24px auto 0; max-width:44ch; }
+
+    footer {
+      text-align:center; padding:26px 24px; background:var(--footer-bg);
+      border-top:1px solid var(--rule); font-family:var(--mono); font-size:11px;
+      letter-spacing:0.14em; text-transform:uppercase; color:var(--footer-ink);
+    }
+    footer a { color:var(--ink); }
+
+    @media (max-width:620px) {
+      .shell { padding:16px 8px 48px; }
+      main { padding:36px 16px 40px; }
+      .eyebrow { letter-spacing:0.2em; }
+      h1 { font-size:26px; letter-spacing:0.14em; }
+      .subcopy { margin-bottom:24px; }
+      .reveal-title { font-size:20px; }
+      .code-box .code { font-size:19px; letter-spacing:0.2em; }
+      .clue { gap:12px; font-size:12px; }
+      .marker { width:26px; height:26px; margin:-13px 0 0 -13px; font-size:12px; line-height:22px; }
+    }
+    @media (prefers-reduced-motion:reduce) {
+      .picture.miss { animation:none; }
+      .marker, .ripple { animation:none; }
+      .ripple { display:none; }
+      html { scroll-behavior:auto; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-left"><a class="nav-link" href="/">Home</a></div>
+    <a class="nav-brand" href="/">Fola&nbsp;Adeleke&#174;</a>
+    <div class="nav-right"><a class="nav-link" href="/prints">Prints</a></div>
+  </nav>
+
+  <div class="shell">
+    <main>
+      <p class="eyebrow">Print&nbsp;Drop &middot; 50%&nbsp;Off &middot; 24&nbsp;Hours&nbsp;Only</p>
+      <h1>Find the<br />Five</h1>
+      <p class="subcopy">Five details are hiding in <em>Saturday Function</em>. Tap each one in the picture. Find all five and a 50% off code unlocks below.</p>
+
+      <div class="status-row">
+        <span class="found">Found&nbsp;&nbsp;<span id="foundCount">0</span>&nbsp;/&nbsp;5</span>
+        <button class="reset-link" id="resetBtn">Start Again</button>
+      </div>
+
+      <div class="picture" id="picture">
+        <img id="artwork" src="" alt="Saturday Function &#8212; three women in matching indigo adire and gold jewellery, seated against a yellow bus" />
+      </div>
+      <p id="message" role="status" aria-live="polite">Tap the picture. Pinch to zoom in.</p>
+
+      <p class="clues-label">The Five</p>
+      <ol id="clues"></ol>
+
+      <div id="reveal">
+        <p class="reveal-eyebrow">Five of Five</p>
+        <h2 class="reveal-title" id="revealTitle">You Found Them All</h2>
+        <p class="reveal-copy" id="revealCopy">Here's your 50% off code.</p>
+        <div class="code-box" id="codeBox" onclick="copyCode()">
+          <span class="code" id="codeText">&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;</span>
+          <span class="copy-hint" id="copyHint">Tap to copy</span>
+        </div>
+        <p id="countdown">Expires in <span class="t" id="countdownT">--:--:--</span></p>
+        <a class="cta" href="/prints">Shop the Prints &rarr;</a>
+        <p class="fineprint">50% off, one code, one use per order, while the window lasts. No minimum spend. Can't be combined with other offers.</p>
+      </div>
+    </main>
+  </div>
+
+  <footer>
+    Fola Adeleke&#174; &nbsp;&middot;&nbsp; <a href="/">folaadeleke.com</a>
+  </footer>
+
+  <script>
+    // ═══════════════════════════ CONFIG ═══════════════════════════
+    var PRINT = {
+      name: 'Saturday Function',
+      image: '/images/find/artwork.jpg',
+      width: 2000,
+      height: 1414
+    };
+    // Each target: a label and one or more hit rectangles as fractions
+    // [x0, y0, x1, y1] of the image. Any rect counts. Keep the order —
+    // the marker numbers and the clue list follow it.
+    var TARGETS = [
+      { label: 'A name on the roof',              rects: [[0.490, 0.000, 0.600, 0.060]] }, // the bus maker's mark, top centre
+      { label: 'A single teardrop',               rects: [[0.150, 0.275, 0.215, 0.365]] }, // the left woman's drop earring
+      { label: 'A cuff of gold',                  rects: [[0.515, 0.755, 0.595, 0.860]] }, // the wide cuff, middle woman
+      { label: 'A ring',                          rects: [[0.455, 0.820, 0.530, 0.905]] }, // the rings on the middle woman's hand
+      { label: 'A chain at the edge of the frame', rects: [[0.000, 0.860, 0.085, 0.935],   // far-left wrist
+                                                          [0.930, 0.880, 1.000, 0.960]] }  // far-right wrist
+    ];
+    var TAP_SLOP = 18; // screen px of forgiveness around every rect
+
+    var DISCOUNT_CODE = 'FIND0918';                   // TODO: create this in Shopify before Fri 18 Sep
+    var CAMPAIGN_END = '2026-09-19T14:00:00Z';        // 24h after the 15:00 BST Fri 18 Sep go-live
+    var STORAGE_KEY = 'fa_find_v1';
+    // ════════════════════════════════════════════════════════════
+
+    var picture = document.getElementById('picture');
+    var artwork = document.getElementById('artwork');
+    var cluesEl = document.getElementById('clues');
+    var foundCountEl = document.getElementById('foundCount');
+    var messageEl = document.getElementById('message');
+
+    var state = loadState();
+    var found = state.found;     // array of {i, x, y} — target index and marker centre (fractions)
+    var misses = state.misses;
+    var solved = found.length === TARGETS.length;
+
+    function loadState() {
+      var fresh = { print: PRINT.name, found: [], misses: 0 };
+      try {
+        var raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          var parsed = JSON.parse(raw);
+          if (parsed && parsed.print === PRINT.name && parsed.found instanceof Array) return parsed;
+        }
+      } catch (e) {}
+      return fresh;
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ print: PRINT.name, found: found, misses: misses }));
+      } catch (e) {}
+    }
+
+    function isFound(i) {
+      for (var k = 0; k < found.length; k++) if (found[k].i === i) return true;
+      return false;
+    }
+
+    // ── RENDER ──
+    function renderClues() {
+      cluesEl.innerHTML = '';
+      TARGETS.forEach(function (t, i) {
+        var li = document.createElement('li');
+        li.className = 'clue' + (isFound(i) ? ' found' : '');
+        li.innerHTML = '<span class="n">' + (i + 1) + '</span>' +
+                       '<span class="txt"></span>' +
+                       '<span class="state">' + (isFound(i) ? 'Found' : '') + '</span>';
+        li.querySelector('.txt').textContent = t.label;
+        cluesEl.appendChild(li);
+      });
+      foundCountEl.textContent = found.length;
+    }
+
+    function renderMarkers() {
+      var old = picture.querySelectorAll('.marker');
+      for (var k = 0; k < old.length; k++) old[k].parentNode.removeChild(old[k]);
+      found.forEach(function (f) { addMarker(f); });
+    }
+
+    function addMarker(f) {
+      var m = document.createElement('span');
+      m.className = 'marker';
+      m.textContent = f.i + 1;
+      m.style.left = (f.x * 100) + '%';
+      m.style.top = (f.y * 100) + '%';
+      m.setAttribute('aria-hidden', 'true');
+      picture.appendChild(m);
+    }
+
+    function addRipple(fx, fy) {
+      var r = document.createElement('span');
+      r.className = 'ripple';
+      r.style.left = (fx * 100) + '%';
+      r.style.top = (fy * 100) + '%';
+      picture.appendChild(r);
+      setTimeout(function () { if (r.parentNode) r.parentNode.removeChild(r); }, 550);
+    }
+
+    // ── HIT TEST ──
+    function hitTarget(fx, fy, box) {
+      var sx = TAP_SLOP / box.width;   // slop as a fraction of the rendered image
+      var sy = TAP_SLOP / box.height;
+      for (var i = 0; i < TARGETS.length; i++) {
+        if (isFound(i)) continue;
+        var rects = TARGETS[i].rects;
+        for (var r = 0; r < rects.length; r++) {
+          var q = rects[r];
+          if (fx >= q[0] - sx && fx <= q[2] + sx && fy >= q[1] - sy && fy <= q[3] + sy) {
+            return { i: i, x: (q[0] + q[2]) / 2, y: (q[1] + q[3]) / 2 };
+          }
+        }
+      }
+      return null;
+    }
+
+    var totalTaps = 0;
+    function handleTap(clientX, clientY) {
+      if (solved) return;
+      var box = artwork.getBoundingClientRect();
+      if (!box.width || !box.height) return;
+      var fx = (clientX - box.left) / box.width;
+      var fy = (clientY - box.top) / box.height;
+      if (fx < 0 || fx > 1 || fy < 0 || fy > 1) return;
+
+      totalTaps++;
+      if (totalTaps === 1 && window.gtag) gtag('event', 'puzzle_attempt', { puzzle_name: 'find_the_five' });
+
+      var hit = hitTarget(fx, fy, box);
+      if (!hit) {
+        misses++;
+        addRipple(fx, fy);
+        messageEl.textContent = 'Not there. Keep looking.';
+        picture.classList.add('miss');
+        setTimeout(function () { picture.classList.remove('miss'); }, 350);
+        saveState();
+        return;
+      }
+
+      found.push(hit);
+      addMarker(hit);
+      renderClues();
+      saveState();
+      if (window.gtag) gtag('event', 'puzzle_found', { puzzle_name: 'find_the_five', detail: hit.i + 1 });
+
+      if (found.length === TARGETS.length) {
+        solved = true;
+        messageEl.textContent = '';
+        if (window.gtag) gtag('event', 'puzzle_solved', { puzzle_name: 'find_the_five', misses: misses });
+        setTimeout(showReveal, 500);
+      } else {
+        messageEl.textContent = 'Found it. ' + (TARGETS.length - found.length) + ' to go.';
+      }
+    }
+
+    // Pointer events cover mouse and touch; the click fallback is for
+    // anything old enough not to have them. Pinch gestures produce two
+    // pointers, so ignore any tap that arrives while another is down.
+    var activePointers = 0;
+    var downAt = null;
+    if (window.PointerEvent) {
+      picture.addEventListener('pointerdown', function (e) {
+        activePointers++;
+        downAt = activePointers === 1 ? { x: e.clientX, y: e.clientY, t: Date.now() } : null;
+      });
+      picture.addEventListener('pointerup', function (e) {
+        activePointers = Math.max(0, activePointers - 1);
+        if (!downAt || activePointers !== 0) return;
+        var moved = Math.abs(e.clientX - downAt.x) > 10 || Math.abs(e.clientY - downAt.y) > 10;
+        var slow = Date.now() - downAt.t > 600;
+        downAt = null;
+        if (moved || slow) return; // a drag or a scroll, not a tap
+        handleTap(e.clientX, e.clientY);
+      });
+      picture.addEventListener('pointercancel', function () { activePointers = 0; downAt = null; });
+    } else {
+      picture.addEventListener('click', function (e) { handleTap(e.clientX, e.clientY); });
+    }
+
+    document.getElementById('resetBtn').addEventListener('click', function () {
+      found = [];
+      misses = 0;
+      solved = false;
+      totalTaps = 0;
+      messageEl.textContent = 'Tap the picture. Pinch to zoom in.';
+      document.getElementById('reveal').classList.remove('show');
+      if (countdownTimer) clearInterval(countdownTimer);
+      saveState();
+      renderClues();
+      renderMarkers();
+    });
+
+    // ── REVEAL / CODE / COUNTDOWN ──
+    // The window is a FIXED end instant, not 24h from when you happen to
+    // open the page. Say the actual deadline rather than "24 hours", or a
+    // Saturday-morning opener is told they have longer than they do.
+    function endLabel() {
+      try {
+        return new Date(CAMPAIGN_END).toLocaleString('en-GB', {
+          weekday: 'long', hour: 'numeric', minute: '2-digit', timeZoneName: 'short'
+        });
+      } catch (e) { return 'the deadline'; }
+    }
+
+    function isExpired() {
+      return Date.now() >= new Date(CAMPAIGN_END).getTime();
+    }
+
+    function updateCodeDisplay() {
+      var box = document.getElementById('codeBox');
+      var text = document.getElementById('codeText');
+      var hint = document.getElementById('copyHint');
+      var copy = document.getElementById('revealCopy');
+      if (isExpired()) {
+        box.classList.add('expired');
+        box.classList.remove('copied');
+        text.textContent = 'EXPIRED';
+        hint.textContent = 'Offer ended';
+        copy.textContent = 'This window has closed — keep an eye out for the next drop.';
+      } else {
+        box.classList.remove('expired');
+        text.textContent = DISCOUNT_CODE;
+        hint.textContent = 'Tap to copy';
+        copy.textContent = "Here's your 50% off code, good on any print until " + endLabel() + ".";
+      }
+    }
+
+    function showReveal() {
+      document.getElementById('reveal').classList.add('show');
+      updateCodeDisplay();
+      startCountdown();
+    }
+
+    function copyCode() {
+      if (isExpired()) return;
+      var box = document.getElementById('codeBox');
+      var hint = document.getElementById('copyHint');
+      var finish = function (ok) {
+        box.classList.add('copied');
+        hint.textContent = ok ? 'Copied' : 'Select & copy: ' + DISCOUNT_CODE;
+        setTimeout(function () { box.classList.remove('copied'); hint.textContent = 'Tap to copy'; }, 1600);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(DISCOUNT_CODE).then(function () { finish(true); }, function () { finish(false); });
+      } else {
+        finish(false);
+      }
+    }
+
+    var countdownTimer = null;
+    function startCountdown() {
+      var end = new Date(CAMPAIGN_END).getTime();
+      var el = document.getElementById('countdownT');
+      function tick() {
+        var diff = end - Date.now();
+        if (diff <= 0) {
+          document.getElementById('countdown').textContent = 'This code has expired';
+          updateCodeDisplay();
+          clearInterval(countdownTimer);
+          return;
+        }
+        var h = Math.floor(diff / 3600000);
+        var m = Math.floor((diff % 3600000) / 60000);
+        var s = Math.floor((diff % 60000) / 1000);
+        el.textContent = String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+      }
+      tick();
+      countdownTimer = setInterval(tick, 1000);
+    }
+
+    // ── INIT ──
+    if (window.gtag) gtag('event', 'puzzle_view', { puzzle_name: 'find_the_five' });
+    artwork.width = PRINT.width;
+    artwork.height = PRINT.height; // reserves the box before the file arrives, so markers never jump
+    artwork.src = PRINT.image;
+    renderClues();
+    renderMarkers();
+    if (solved) { messageEl.textContent = ''; showReveal(); }
+  </script>
+</body>
+</html>
