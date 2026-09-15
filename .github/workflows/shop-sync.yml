@@ -1,0 +1,74 @@
+# Weekly check that the site still agrees with the Shopify store.
+#
+# Runs scripts/check-shop.mjs against the shop's public storefront JSON
+# (no credentials) every Monday morning. When something has drifted — a
+# price changed in Shopify Admin, a product unpublished, a buy button
+# pointing at a handle that no longer exists — it opens a GitHub issue
+# titled "Shop drift" with the report, or adds a comment to the one that
+# is already open, so Stephen gets an email rather than a buyer getting a
+# 404. When everything agrees and an issue is open, it closes it.
+#
+# Nothing is changed on the site automatically: a "sold out" on the wall
+# can be a deliberate call, so a human reads the report and runs
+# `node scripts/check-shop.mjs --fix` for the price strings if that is
+# what is wanted.
+
+name: Shop sync
+
+on:
+  schedule:
+    - cron: '30 7 * * 1'   # Mondays 07:30 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      TITLE: 'Shop drift: the site and shop.folaadeleke.com disagree'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Compare the site with the shop
+        id: check
+        run: |
+          set +e
+          node scripts/check-shop.mjs > report.txt 2>&1
+          echo "status=$?" >> "$GITHUB_OUTPUT"
+          cat report.txt
+
+      - name: Open or update the drift issue
+        if: steps.check.outputs.status == '1'
+        run: |
+          existing=$(gh issue list --state open --search "\"$TITLE\" in:title" --json number --jq '.[0].number')
+          {
+            echo "Found by [Shop sync](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) on $(date -u +%Y-%m-%d):"
+            echo
+            echo '```'
+            cat report.txt
+            echo '```'
+            echo
+            echo 'Prices on the wall: `node scripts/check-shop.mjs --fix`, review, commit. Sold-out and missing-handle rows need a decision.'
+          } > body.md
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body-file body.md
+          else
+            gh issue create --title "$TITLE" --body-file body.md
+          fi
+
+      - name: Close the drift issue when the site and shop agree
+        if: steps.check.outputs.status == '0'
+        run: |
+          existing=$(gh issue list --state open --search "\"$TITLE\" in:title" --json number --jq '.[0].number')
+          [ -n "$existing" ] && gh issue close "$existing" --comment "Shop sync passed on $(date -u +%Y-%m-%d); closing." || true
+
+      - name: Fail the run if the shop could not be read
+        if: steps.check.outputs.status == '2'
+        run: exit 2
