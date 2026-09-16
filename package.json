@@ -10,7 +10,8 @@
     "hang": "node scripts/hang-print.mjs",
     "sitemap": "node scripts/update-sitemap.mjs",
     "shop": "node scripts/check-shop.mjs",
-    "live": "node scripts/check-live.mjs"
+    "live": "node scripts/check-live.mjs",
+    "newsletter": "node scripts/new-newsletter.mjs"
   },
   "repository": {
     "type": "git",

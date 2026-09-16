@@ -9,11 +9,16 @@
 
   HOW TO USE
   ──────────
-  1. cp newsletter-template.html newsletter-issue-0NN.html
+  1. node scripts/new-newsletter.mjs --items 3 --hero <slug> [--band] [--row]
+     writes newsletter-issue-0NN.html from the blocks below, numbered,
+     with the hero filled from the gallery wall. Or write a brief
+     (--example prints one) and pass --brief to get the copy filled
+     in too. By hand: cp newsletter-template.html newsletter-issue-0NN.html
   2. Replace every [PLACEHOLDER] — they are in square brackets so
      they can never be confused with Beehiiv's {{merge_tags}}.
   3. Delete any block marked OPTIONAL that this issue doesn't use.
      Repeat any block marked REPEATABLE as many times as needed.
+     (The script has already done 3 for you.)
   4. In Beehiiv: new Post → + → "Custom HTML" → paste everything
      between the <body> tags.
   5. Send yourself a test. Check desktop AND mobile in Beehiiv's
