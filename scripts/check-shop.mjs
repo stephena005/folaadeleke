@@ -40,6 +40,11 @@ const SHOP = 'https://shop.folaadeleke.com';
 const fix = process.argv.includes('--fix');
 const SIZES = ['A1', 'A2', 'A3'];
 
+// Works Stephen has said are NOT for sale (2026-09-16: Loud Celebration).
+// The wall shows them sold out; anything that still sells them — the shop
+// itself, or a live email template — is the thing that is wrong.
+const NOT_FOR_SALE = new Map([['loud-celebration', 'Loud Celebration']]);
+
 const problems = [];
 const notes = [];
 const fail = (file, msg) => problems.push(`${file}  ${msg}`);
@@ -99,9 +104,10 @@ for (const file of tracked) {
   }
 }
 
-// 1. every link resolves
+// 1. every link resolves, and nothing sells a work that is not for sale
 for (const [handle, files] of linked) {
   if (!products.has(handle)) fail([...files].join(', '), `links to ${SHOP}/products/${handle}, which is not in the shop (404 for the buyer)`);
+  else if (NOT_FOR_SALE.has(handle)) fail([...files].join(', '), `sells ${NOT_FOR_SALE.get(handle)}, which is not for sale — replace the link or the tile`);
 }
 
 // availability for the handles the wall uses (one request each)
@@ -147,7 +153,10 @@ for (const h of hangs) {
       if (fix) { wall = wall.replace(`<b>${h.title.replace(/&/g, '&amp;')}</b><span>${h.tomb}</span>`, `<b>${h.title.replace(/&/g, '&amp;')}</b><span>${wantTomb}</span>`); fixed++; }
     }
   }
-  if (p.available === true && soldOutOnSite) fail('prints/index.html', `${h.title} is marked sold out on the wall but ${SHOP}/products/${handle} is available — sold out for real, or drift?`);
+  if (p.available === true && soldOutOnSite) {
+    if (NOT_FOR_SALE.has(handle)) fail('shop', `${h.title} is not for sale, but ${SHOP}/products/${handle} still takes orders — unpublish it or zero its inventory in Shopify Admin`);
+    else fail('prints/index.html', `${h.title} is marked sold out on the wall but ${SHOP}/products/${handle} is available — sold out for real, or drift? (if for real, add it to NOT_FOR_SALE in scripts/check-shop.mjs)`);
+  }
   if (p.available === false && !soldOutOnSite) fail('prints/index.html', `${h.title} is for sale on the wall but ${SHOP}/products/${handle} shows no stock — mark it sold out or restock`);
 }
 if (fix && fixed) { writeFileSync(prints, wall); console.log(`check-shop: rewrote ${fixed} price string${fixed === 1 ? '' : 's'} in prints/index.html — review the diff and commit`); }
