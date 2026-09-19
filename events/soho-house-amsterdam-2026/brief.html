@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<title>Fola Adeleke × Soho House Amsterdam — Event Brief</title>
+<style>
+  @page { size: A4; margin: 0; }
+  :root{
+    --black:#000; --white:#fff; --grey-light:#e6e6e6; --grey-mid:#6f6f6f; --grey-soft:#f4f4f4;
+    --sans:"Liberation Sans", Arial, Helvetica, sans-serif;
+    --mono:"Liberation Mono", "Courier New", monospace;
+    --serif:"Bitstream Charter", Charter, Georgia, serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#fff;color:#000;font-family:var(--sans);font-size:10pt;line-height:1.45;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .page{width:210mm;height:297mm;padding:17mm 18mm 18mm 18mm;position:relative;page-break-after:always;overflow:hidden}
+  .page:last-child{page-break-after:auto}
+  .label{font-family:var(--mono);font-size:7.5pt;letter-spacing:.18em;text-transform:uppercase;color:var(--grey-mid)}
+  .label.black{color:#000}
+  h1{font-family:var(--serif);font-weight:normal;font-size:34pt;line-height:1.08;letter-spacing:-.01em}
+  h2{font-family:var(--serif);font-weight:normal;font-size:20pt;line-height:1.15;margin-bottom:5mm}
+  h3{font-family:var(--mono);font-size:8pt;letter-spacing:.18em;text-transform:uppercase;font-weight:normal;margin:5mm 0 2mm;padding-top:1.8mm;border-top:1px solid #000}
+  h3:first-of-type{margin-top:0}
+  p{margin-bottom:2.6mm}
+  p.lead{font-family:var(--serif);font-size:12.5pt;line-height:1.38;margin-bottom:3.5mm}
+  ul{margin:0 0 3mm 4mm}
+  li{margin-bottom:.9mm;padding-left:1mm}
+  .muted{color:var(--grey-mid)}
+  .small{font-size:8.8pt}
+  .running{position:absolute;top:9mm;left:18mm;right:18mm;display:flex;justify-content:space-between;font-family:var(--mono);font-size:7pt;letter-spacing:.16em;text-transform:uppercase;color:var(--grey-mid)}
+  .running .num{color:#000}
+  .footer{position:absolute;bottom:9mm;left:18mm;right:18mm;display:flex;justify-content:space-between;font-family:var(--mono);font-size:7pt;letter-spacing:.14em;text-transform:uppercase;color:var(--grey-mid);border-top:1px solid var(--grey-light);padding-top:2mm}
+  table{width:100%;border-collapse:collapse;font-size:9.5pt}
+  th{font-family:var(--mono);font-size:7pt;letter-spacing:.16em;text-transform:uppercase;text-align:left;font-weight:normal;color:var(--grey-mid);padding:0 2mm 1.5mm 0;border-bottom:1px solid #000}
+  td{vertical-align:top;padding:1.6mm 2mm 1.6mm 0;border-bottom:1px solid var(--grey-light)}
+  tr:last-child td{border-bottom:none}
+  td.k{font-family:var(--mono);font-size:7.5pt;letter-spacing:.12em;text-transform:uppercase;width:34mm;color:#000;padding-top:2.6mm}
+  td.t{font-family:var(--mono);font-size:8.5pt;width:26mm;white-space:nowrap}
+  .tbc{font-family:var(--mono);font-size:7pt;letter-spacing:.1em;border:1px solid #000;padding:0 1mm;margin-left:1mm;vertical-align:middle;text-transform:uppercase}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:8mm}
+  .three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6mm}
+  .box{border:1px solid #000;padding:4.5mm 5.5mm}
+  .box.dark{background:#000;color:#fff;border-color:#000}
+  .box.dark .label{color:rgba(255,255,255,.6)}
+  .box.soft{background:var(--grey-soft);border:none}
+  .quote{font-family:var(--serif);font-size:11pt;line-height:1.45}
+  .quote p{margin-bottom:2.4mm}
+  .cover{padding:0;background:#000;color:#fff}
+  .cover .img{position:absolute;inset:0;background:url("img/kingdom-we-carry.jpg") center 30%/cover no-repeat;opacity:.92}
+  .cover .shade{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.35) 0%,rgba(0,0,0,0) 30%,rgba(0,0,0,0) 45%,rgba(0,0,0,.92) 78%,#000 100%)}
+  .cover .top{position:absolute;top:14mm;left:16mm;right:16mm;display:flex;justify-content:space-between;font-family:var(--mono);font-size:7.5pt;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.85)}
+  .cover .bottom{position:absolute;left:16mm;right:16mm;bottom:16mm}
+  .cover h1{color:#fff;font-size:40pt;margin:3mm 0 4mm}
+  .cover .sub{font-family:var(--serif);font-size:14pt;color:rgba(255,255,255,.85);margin-bottom:9mm;max-width:130mm}
+  .cover .meta{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5mm;border-top:1px solid rgba(255,255,255,.35);padding-top:4mm}
+  .cover .meta .label{color:rgba(255,255,255,.55);display:block;margin-bottom:1mm}
+  .cover .meta div{font-size:9.5pt;color:#fff}
+  .cover .credit{position:absolute;right:16mm;bottom:8mm;font-family:var(--mono);font-size:6.5pt;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.45)}
+  .portrait{width:100%;height:50mm;object-fit:cover;object-position:center 40%;filter:grayscale(1);display:block}
+  .art{width:100%;aspect-ratio:1/1;object-fit:cover;display:block}
+  .caption{font-family:var(--mono);font-size:6.8pt;letter-spacing:.12em;text-transform:uppercase;color:var(--grey-mid);margin-top:1.5mm}
+  .toc{display:grid;grid-template-columns:1fr 1fr;column-gap:8mm;margin:0}
+  .toc li{list-style:none;display:flex;justify-content:space-between;border-bottom:1px solid var(--grey-light);padding:1.6mm 0;margin:0}
+  .toc li span:last-child{font-family:var(--mono);font-size:8pt}
+  .kv{display:grid;grid-template-columns:36mm 1fr;row-gap:1.6mm;column-gap:4mm;font-size:9.5pt}
+  .kv .label{padding-top:.7mm}
+  .flag{display:grid;grid-template-columns:1fr 1fr 1fr;height:2mm;margin:3mm 0 4mm}
+  .flag div:nth-child(1),.flag div:nth-child(3){background:#000}
+  .flag div:nth-child(2){background:#fff;border-top:1px solid #000;border-bottom:1px solid #000}
+  .check li{list-style:none;padding-left:6mm;position:relative}
+  .check li:before{content:"";position:absolute;left:0;top:1.4mm;width:3mm;height:3mm;border:1px solid #000}
+</style>
+</head>
+<body>
+
+<!-- ============ COVER ============ -->
+<section class="page cover">
+  <div class="img"></div>
+  <div class="shade"></div>
+  <div class="top"><span>Event brief · Confidential</span><span>Soho House Amsterdam</span></div>
+  <div class="bottom">
+    <div class="label" style="color:rgba(255,255,255,.7)">An evening for Nigerian Independence Day</div>
+    <h1>Fola Adeleke<br>Made of Many Places</h1>
+    <div class="sub">An intimate Q&amp;A with the Nigerian‑British artist and designer on heritage, identity and the creative freedom of belonging to more than one place.</div>
+    <div class="meta">
+      <div><span class="label">Proposed date</span>Thursday 1 October 2026</div>
+      <div><span class="label">Capacity</span>100 invited guests</div>
+      <div><span class="label">Format</span>Q&amp;A · Drinks &amp; canapés · DJ</div>
+    </div>
+  </div>
+  <div class="credit">Artwork: Kingdom We Carry © Fola Adeleke</div>
+</section>
+
+<!-- ============ 1. OVERVIEW ============ -->
+<section class="page">
+  <div class="running"><span>Fola Adeleke × Soho House Amsterdam</span><span class="num">01 — Overview</span></div>
+
+  <div class="label">01</div>
+  <h2>At a glance</h2>
+  <p class="lead">A single, intimate evening at Soho House Amsterdam marking Nigerian Independence Day through the story and practice of one artist. Chic, Afrocentric and creative: a conversation first, a celebration second, and both done with restraint.</p>
+
+  <table>
+    <tr><td class="k">Event</td><td>Fola Adeleke: Made of Many Places — An Evening for Nigerian Independence</td></tr>
+    <tr><td class="k">Occasion</td><td>Nigerian Independence Day, 1 October (independence from Britain, 1960)</td></tr>
+    <tr><td class="k">Venue</td><td>Soho House Amsterdam, members' club. Preferred space: a room that can hold c. 100 with a lounge/salon layout and a DJ position <span class="tbc">Space TBC</span></td></tr>
+    <tr><td class="k">Date &amp; time</td><td>Thursday 1 October 2026, 19:00 – 23:00 (doors 19:00, talk 20:00). Alternative: Friday 2 October <span class="tbc">TBC</span></td></tr>
+    <tr><td class="k">Capacity</td><td>100 guests, invitation only. Mixed list: Soho House members, Fola's community and collectors, Amsterdam creative industry, press</td></tr>
+    <tr><td class="k">Format</td><td>Welcome drinks → moderated Q&amp;A (40 min) with audience questions → drinks, canapés and DJ set to close</td></tr>
+    <tr><td class="k">Speaker</td><td>Fola Adeleke, artist and Lead Designer at Daily Paper. Moderator <span class="tbc">TBC</span></td></tr>
+    <tr><td class="k">Food &amp; drink</td><td>Welcome cocktail, bar service, passed canapés with Nigerian-inspired items (see §06)</td></tr>
+    <tr><td class="k">Music</td><td>DJ, two sets: ambient Afro-soul/highlife on arrival, Afrobeats-led set after the talk (see §07)</td></tr>
+    <tr><td class="k">Feel</td><td>Chic · Intimate · Afrocentric · Creative</td></tr>
+    <tr><td class="k">Organiser contact</td><td>Studio Fola Adeleke — hello@folaadeleke.com — folaadeleke.com</td></tr>
+  </table>
+
+  <h3>Contents</h3>
+  <ul class="toc">
+    <li><span>01 At a glance</span><span>p.2</span></li>
+    <li><span>02 Purpose and concept</span><span>p.3</span></li>
+    <li><span>03 The blurb — approved copy</span><span>p.4</span></li>
+    <li><span>04 About Fola Adeleke</span><span>p.5</span></li>
+    <li><span>05 Format and running order</span><span>p.6</span></li>
+    <li><span>06 Food and drink</span><span>p.7</span></li>
+    <li><span>07 Music and sound</span><span>p.7</span></li>
+    <li><span>08 Look, feel and artwork</span><span>p.8</span></li>
+    <li><span>09 Production requirements</span><span>p.9</span></li>
+    <li><span>10 Guest list and communications</span><span>p.10</span></li>
+    <li><span>11 Roles and responsibilities</span><span>p.11</span></li>
+    <li><span>12 Commercial model and next steps</span><span>p.12</span></li>
+  </ul>
+  <p class="small muted" style="margin-top:4mm">Items marked <span class="tbc">TBC</span> are proposals for the Soho House events team to confirm or counter. Everything else is the organiser's brief.</p>
+
+  <div class="footer"><span>Event brief · v1.0 · 19 September 2026</span><span>Page 2</span></div>
+</section>
+
+<!-- ============ 2. PURPOSE ============ -->
+<section class="page">
+  <div class="running"><span>Fola Adeleke × Soho House Amsterdam</span><span class="num">02 — Purpose and concept</span></div>
+  <div class="label">02</div>
+  <h2>Purpose and concept</h2>
+
+  <p class="lead">Nigerian Independence Day is usually marked with scale: flags, parades, big rooms. This evening does the opposite. It celebrates the country through one person's story, told slowly, to a hundred people who are close enough to ask a question.</p>
+
+  <h3>Why this, why now</h3>
+  <p>On 1 October 1960 Nigeria became independent. Sixty-six years on, a generation of Nigerians raised abroad is shaping culture in London, Amsterdam, New York and Lagos at once. Fola Adeleke is one of them: born to Nigerian parents, raised in East London, now leading design at Daily Paper in Amsterdam and making artwork about the family, ceremony and memory that travelled with him.</p>
+  <p>The evening uses his experience as a lens. What does it mean to be Black, British and Nigerian? How does heritage show up in a fashion campaign, a print, a typeface, a colour choice? What does a Nigerian living room in Hackney have to say to a design studio in Amsterdam? These are the questions the Q&amp;A will work through.</p>
+
+  <h3>Why Soho House Amsterdam</h3>
+  <ul>
+    <li><strong>The right scale.</strong> A members' club room holds intimacy in a way a gallery or a venue cannot. One hundred people, one conversation, no stage distance.</li>
+    <li><strong>The right audience.</strong> Soho House's Amsterdam membership sits across fashion, design, music and film. That is exactly the room Fola's work speaks to, and the one Daily Paper helped build in this city.</li>
+    <li><strong>The right feel.</strong> The brief is chic and Afrocentric without costume or cliché. Soho House's interiors, service and standards do most of that work already.</li>
+  </ul>
+
+  <h3>The three ideas the evening must hold</h3>
+  <div class="three" style="margin-top:3mm">
+    <div class="box">
+      <div class="label black">Conversation</div>
+      <p class="small" style="margin-top:2mm">A candid, well-moderated Q&amp;A is the centre of the night. Everything else supports it. If the talk lands, the evening lands.</p>
+    </div>
+    <div class="box">
+      <div class="label black">Celebration</div>
+      <p class="small" style="margin-top:2mm">Independence is a joyful thing. After the talk the room should loosen: music up, drinks flowing, people meeting. Nigerian, but for everyone in the room.</p>
+    </div>
+    <div class="box">
+      <div class="label black">Craft</div>
+      <p class="small" style="margin-top:2mm">Fola is a designer. Details will be noticed: the typeface on the invitation, the lighting on the prints, the order of the canapés. Keep everything considered and restrained.</p>
+    </div>
+  </div>
+
+  <h3>What success looks like</h3>
+  <ul>
+    <li>100 guests in the room, with at least 60 present for the full talk.</li>
+    <li>A conversation people quote afterwards: honest, specific, not a panel of platitudes.</li>
+    <li>Guests staying past 22:00 because the room feels good, not because they were asked to.</li>
+    <li>Photography and a short film that Soho House, Fola and Daily Paper are all happy to publish.</li>
+    <li>A repeatable template: a Soho House "in conversation" format for diaspora creatives, in Amsterdam or another House.</li>
+  </ul>
+
+  <div class="footer"><span>Event brief · v1.0 · 19 September 2026</span><span>Page 3</span></div>
+</section>
+
+<!-- ============ 3. BLURB ============ -->
+<section class="page">
+  <div class="running"><span>Fola Adeleke × Soho House Amsterdam</span><span class="num">03 — The blurb</span></div>
+  <div class="label">03</div>
+  <h2>The blurb</h2>
+  <p>Approved copy for the Soho House listing, member app, invitations and social. Please use verbatim or send edits back for sign-off. The long version is for the event page; the short version for the app card, email subject lines and Instagram; the one-liner for the run-of-show and signage.</p>
+
+  <h3>Long version · c. 200 words · event page</h3>
+  <div class="box quote">
+    <p>To mark Nigerian Independence Day, Soho House Amsterdam hosts an intimate evening with artist and designer Fola Adeleke.</p>
+    <p>Nigerian-British, raised in East London and now based between Amsterdam and London, Fola is Lead Designer at Daily Paper and a mixed media artist whose limited-edition prints explore identity, family and cultural memory. His work sits at the meeting point of African heritage and city life, layering texture, portraiture and contemporary visual storytelling.</p>
+    <p>In a candid Q&amp;A, Fola will talk through the experiences that shaped him: growing up between two cultures, building a career in fashion and design, and how being Black, British and Nigerian informs the way he sees, makes and designs. Expect an honest conversation about heritage, craft and the creative freedom that comes from belonging to more than one place.</p>
+    <p>The evening is limited to 100 invited guests. Drinks and canapés will be served, with a DJ set moving from Afrobeats and highlife to the wider sounds of the diaspora.</p>
+    <p>Chic, intimate and unapologetically Afrocentric, this is a celebration of Nigerian independence through the lens of one of its diaspora's most distinctive creative voices.</p>
+  </div>
+
+  <div class="two" style="margin-top:6mm">
+    <div>
+      <h3>Short version · c. 70 words · app card, email, social</h3>
+      <div class="quote small">
+        <p>An intimate evening celebrating Nigerian Independence Day with Nigerian-British artist and Daily Paper Lead Designer Fola Adeleke. In a candid Q&amp;A, Fola reflects on growing up between cultures, his path through fashion and design, and how heritage shapes his art and practice. 100 invited guests, drinks, canapés and a DJ spanning Afrobeats, highlife and the sounds of the diaspora. Chic, Afrocentric and creative.</p>
+      </div>
+    </div>
+    <div>
+      <h3>One-liner · signage, run-of-show</h3>
+      <div class="quote small"><p>Fola Adeleke in conversation: an evening for Nigerian Independence Day.</p></div>
+      <h3>Title options</h3>
+      <ul class="small">
+        <li><strong>Made of Many Places</strong> — preferred. Works as a title alone and as a hashtag.</li>
+        <li><strong>Green, White, Green</strong> — the flag, understated.</li>
+        <li><strong>Lagos / London / Amsterdam</strong> — descriptive, good for a headline.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Copy rules</h3>
+  <ul class="small">
+    <li>"Nigerian-British" with a hyphen. "Black British Nigerian" only when quoting Fola directly.</li>
+    <li>Always "Fola Adeleke" in full on first mention, then "Fola". The brand mark is Fola Adeleke® where a logo is used.</li>
+    <li>Daily Paper is mentioned as his role, not as an event partner, unless Daily Paper confirms partnership <span class="tbc">TBC</span>.</li>
+    <li>Avoid "vibrant", "authentic" and "journey". Keep the tone quiet and confident.</li>
+  </ul>
+
+  <div class="footer"><span>Event brief · v1.0 · 19 September 2026</span><span>Page 4</span></div>
+</section>
+
+<!-- ============ 4. ABOUT FOLA ============ -->
+<section class="page">
+  <div class="running"><span>Fola Adeleke × Soho House Amsterdam</span><span class="num">04 — About Fola Adeleke</span></div>
+  <div class="label">04</div>
+  <h2>About Fola Adeleke</h2>
+
+  <div class="two">
+    <div>
+      <img class="portrait" src="img/portrait0.png" alt="Fola Adeleke">
+      <div class="caption">Fola Adeleke · portrait supplied by the studio</div>
+    </div>
+    <div>
+      <h3 style="margin-top:0">Biography · for programme and introduction</h3>
+      <p class="small">Fola Adeleke is a Nigerian-British mixed media digital artist and designer raised in East London, whose work explores identity, culture and emotional memory through layered contemporary visual storytelling. Influenced by the intersection of African heritage and urban life, his practice blends texture, symbolism, portraiture and graphic composition to create works that feel both deeply personal and culturally expansive.</p>
+      <p class="small">Adeleke is the Lead Designer at Daily Paper, where his visual language has been shaped by fashion, architecture, music and contemporary African creativity. Now based between Amsterdam and London, his work carries a strong sense of rhythm, design sensitivity and modern cultural dialogue.</p>
+      <p class="small">His limited-edition prints are released in small drops through folaadeleke.com, each supplied with a certificate of authenticity.</p>
+    </div>
+  </div>
+
+  <h3>The work · what guests will see</h3>
+  <div class="three">
+    <div>
+      <img class="art" src="img/kingdom-we-carry.jpg" alt="Kingdom We Carry">
+      <div class="caption">Kingdom We Carry</div>
+    </div>
+    <div>
+      <img class="art" src="img/loud-celebration.jpg" alt="Loud Celebration">
+      <div class="caption">Loud Celebration</div>
+    </div>
+    <div class="box soft" style="font-size:9pt">
+      <div class="label black">Recurring themes</div>
+      <ul style="margin-top:2mm;margin-left:3mm">
+        <li>Family, elders and ceremony</li>
+        <li>Aso-oke, gele and Nigerian dress placed in British and Dutch streets</li>
+        <li>Celebration as resistance: the "Loud" series</li>
+        <li>Portraiture, symbolism, layered texture</li>
+        <li>Monochrome brand, colour reserved for the art</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Suggested lines of questioning for the moderator</h3>
+  <div class="two small">
+    <ul>
+      <li>East London, Nigerian household. What did the two worlds look like from inside the front door, and where did they meet?</li>
+      <li>The path into design. Who let you in, and what did you have to unlearn?</li>
+      <li>Daily Paper: an African-diaspora brand built in Amsterdam. What does designing for that mean day to day?</li>
+      <li>When did the art practice start, and why prints rather than canvases?</li>
+    </ul>
+    <ul>
+      <li>Kingdom We Carry: full Nigerian dress against a London estate. Where does that image come from?</li>
+      <li>Working with AI-assisted tools as a Black artist: control, authorship, and what you refuse to let it decide.</li>
+      <li>What does Nigerian independence mean to someone who has never lived there full-time?</li>
+      <li>What do you want the next Nigerian-British kid in a design studio to have that you didn't?</li>
+    </ul>
+  </div>
+
+  <div class="footer"><span>Event brief · v1.0 · 19 September 2026</span><span>Page 5</span></div>
+</section>
+
+<!-- ============ 5. FORMAT & RUNNING ORDER ============ -->
+<section class="page">
+  <div class="running"><span>Fola Adeleke × Soho House Amsterdam</span><span class="num">05 — Format and running order</span></div>
+  <div class="label">05</div>
+  <h2>Format and running order</h2>
+  <p>Timings are proposed for a 19:00 start and a 23:00 close and can flex to Soho House's house rules. The one fixed point is the talk: it must start within 15 minutes of the published time so members can plan around it.</p>
+
+  <table>
+    <tr><th style="width:26mm">Time</th><th style="width:44mm">Segment</th><th>Detail</th></tr>
+    <tr><td class="t">15:00 – 18:30</td><td>Build and setup</td><td>Artwork hung or placed on easels; DJ and PA sound-checked; seating laid out; lighting set and walked with the studio. Fola and moderator run-through at 18:00 (20 min, in the room).</td></tr>
+    <tr><td class="t">18:45</td><td>Staff briefing</td><td>Door team has the guest list and plus-one rules. Floor team briefed on canapé descriptions and the two moments the room must go quiet (talk start, closing toast).</td></tr>
+    <tr><td class="t">19:00 – 20:00</td><td>Arrival and welcome drinks</td><td>Doors open. Welcome cocktail handed at entry. DJ set one: Afro-soul, highlife, jazz at conversation level. Guests view the prints. Photographer working the room.</td></tr>
+    <tr><td class="t">19:55</td><td>Call to seats</td><td>Music fades over two minutes. Host or moderator invites guests to sit. Bar stays open, service pauses for the talk.</td></tr>
+    <tr><td class="t">20:00 – 20:05</td><td>Welcome</td><td>Soho House host welcomes the room (1 min), hands to moderator. Moderator frames the evening and Nigerian Independence Day (3 min) and introduces Fola.</td></tr>
+    <tr><td class="t">20:05 – 20:35</td><td>In conversation</td><td>Moderated Q&amp;A, 30 minutes. Four to five themes (see §04). Two or three of Fola's works referenced on screen or in the room.</td></tr>
+    <tr><td class="t">20:35 – 20:50</td><td>Audience questions</td><td>15 minutes, roaming mic. Moderator holds one planted question in reserve to open if needed.</td></tr>
+    <tr><td class="t">20:50 – 20:55</td><td>Close and toast</td><td>Moderator closes. Fola thanks the room. A short toast to Nigeria at 66. DJ set two starts on the applause.</td></tr>
+    <tr><td class="t">20:55 – 22:45</td><td>Reception</td><td>Canapé service resumes in full. DJ set two: Afrobeats-led, building through the night. Fola available in the room; informal print enquiries handled by the studio.</td></tr>
+    <tr><td class="t">22:45</td><td>Last call</td><td>DJ eases down. Bar last orders per house policy.</td></tr>
+    <tr><td class="t">23:00</td><td>Close</td><td>Guests depart. Artwork packed by the studio. Derig complete by 00:00 <span class="tbc">TBC</span>.</td></tr>
+  </table>
+
+  <h3>Format notes</h3>
+  <div class="two small">
+    <ul>
+      <li><strong>Seating.</strong> Salon layout: c. 60 seats in loose arcs (banquettes, armchairs, stools) plus standing room at the back and sides. No rows, no stage riser above 20 cm. Fola and the moderator in two armchairs, side-on to each other, not behind a table.</li>
+      <li><strong>Moderator.</strong> A journalist, curator or fellow designer who knows the diaspora conversation and can push back warmly. The studio will propose two names; Soho House may also suggest a member <span class="tbc">TBC</span>.</li>
+    </ul>
+    <ul>
+      <li><strong>Visuals.</strong> Optional single screen or projection showing a slow loop of six to eight works during the talk, otherwise dark. No slides, no logos on screen.</li>
+      <li><strong>Recording.</strong> The talk to be filmed on two cameras and audio-captured from the desk for a short edit. Soho House to confirm filming policy for the space and member consent process <span class="tbc">TBC</span>.</li>
+    </ul>
+  </div>
+
+  <div class="footer"><span>Event brief · v1.0 · 19 September 2026</span><span>Page 6</span></div>
+</section>
+
+<!-- ============ 6/7. FOOD, DRINK, MUSIC ============ -->
+<section class="page">
+  <div class="running"><span>Fola Adeleke × Soho House Amsterdam</span><span class="num">06 — Food and drink · 07 — Music and sound</span></div>
+  <div class="label">06</div>
+  <h2>Food and drink</h2>
+  <p>A direction rather than a menu. Soho House's kitchen and bar to propose within it. The principle: Nigerian flavour, Soho House execution. Nothing served in a takeaway box, nothing labelled "fusion".</p>
+
+  <div class="two">
+    <div>
+      <h3>Drinks</h3>
+      <ul class="small">
+        <li><strong>Welcome cocktail (one, handed at the door).</strong> Suggested: a Chapman, the Lagos club-house classic, rebuilt with quality bitters and a grapefruit twist. Or a hibiscus (zobo) spritz.</li>
+        <li><strong>Bar.</strong> House cocktails plus two signatures: a palm-wine or hibiscus-led long drink and a dark spirit serve (Nigerian bar culture leans cognac and whisky). Champagne for the toast.</li>
+        <li><strong>Non-alcoholic.</strong> Chilled zobo (hibiscus, ginger, clove) and a ginger-pineapple cooler. Treated with the same care as the cocktails; a meaningful share of the room will not drink.</li>
+        <li><strong>Bar tab.</strong> Hosted bar 19:00 – 21:00, then cash bar or continued hosting <span class="tbc">TBC</span>.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Canapés</h3>
+      <p class="small">Eight to ten passed items over the evening, roughly 8 pieces per guest, weighted towards the reception after the talk. Suggested references for the kitchen:</p>
+      <ul class="small">
+        <li>Suya-spiced beef or chicken skewers, yaji dust, red onion</li>
+        <li>Jollof arancini with scotch-bonnet aioli</li>
+        <li>Plantain: crisp kelewele bites, or dodo with a peppered dip</li>
+        <li>Puff-puff, served warm, sugared or with a spiced honey</li>
+        <li>Moin-moin or akara (bean fritters), vegan by default</li>
+        <li>Grilled prawns with pepper sauce</li>
+        <li>Chin-chin as a bar snack in small bowls</li>
+      </ul>
+      <p class="small muted">Dietary: at least three vegan items and one gluten-free item on rotation. Allergen cards at the bar. Halal meat preferred <span class="tbc">TBC</span>.</p>
+    </div>
+  </div>
+
+  <div class="flag"><div></div><div></div><div></div></div>
+
+  <div class="label">07</div>
+  <h2>Music and sound</h2>
+  <p>Music carries the Afrocentric brief more than anything else in the room. Two sets, one DJ, a clear arc: from listening to dancing.</p>
+
+  <div class="two">
+    <div>
+      <h3>Set one · 19:00 – 19:55 · arrival</h3>
+      <p class="small">Warm, unhurried, at conversation level. Highlife, Afro-soul, jazz and the softer end of contemporary Afrobeats. Reference points: Ebo Taylor, Tony Allen, Fela's slower side, Asa, Tems, Cleo Sol, Sault, Obongjayar. Guests should notice the music without having to raise their voices.</p>
+      <h3>Set two · 20:55 – 22:45 · reception</h3>
+      <p class="small">Starts on the applause and builds. Afrobeats-led with room for amapiano, highlife classics and diaspora crossover. Reference points: Burna Boy, Wizkid, Asake, Rema, Ayra Starr, Davido, King Sunny Adé, Fela, and the UK-Nigerian sound (Skepta, J Hus, Odumodublvck). Peak around 22:00, then ease down. Nigerian, but built so the whole room can move.</p>
+    </div>
+    <div>
+      <h3>DJ</h3>
+      <ul class="small">
+        <li>Studio to propose a DJ from Fola's Amsterdam / London network with a Nigerian or diaspora selection; Soho House may counter-propose from its roster <span class="tbc">TBC</span>.</li>
+        <li>DJ positioned in the room, visible but not central. No booth branding.</li>
+        <li>Fee, travel and rider to be agreed between the studio and DJ; Soho House provides the technical setup.</li>
+      </ul>
+      <h3>Sound for the talk</h3>
+      <ul class="small">
+        <li>Two lapel or headset mics (Fola, moderator) plus two handheld radio mics for audience questions.</li>
+        <li>Speech-tuned PA separate from, or re-EQ'd from, the DJ system. Intelligibility at the back of the room is the test.</li>
+        <li>A sound engineer present for the talk. Desk feed to camera for recording.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer"><span>Event brief · v1.0 · 19 September 2026</span><span>Page 7</span></div>
+</section>
+
+<!-- ============ 8. LOOK & FEEL ============ -->
+<section class="page">
+  <div class="running"><span>Fola Adeleke × Soho House Amsterdam</span><span class="num">08 — Look, feel and artwork</span></div>
+  <div class="label">08</div>
+  <h2>Look, feel and artwork</h2>
+  <p class="lead">Chic. Intimate. Afrocentric. Creative. Four words, and the fourth is what keeps the first three honest. Nothing themed, nothing hired in from a party supplier. The room should look like Soho House on its best night, with Fola's work as the only colour in it.</p>
+
+  <div class="two">
+    <div>
+      <h3>Principles</h3>
+      <ul class="small">
+        <li><strong>Restraint.</strong> Fola's brand is monochrome: black, white, one typeface. The interface stays out of the way and the art carries the colour. The room should follow the same rule.</li>
+        <li><strong>The flag, quietly.</strong> Green, white, green appears once or twice as a detail (a cocktail, a ribbon on the programme, the floral), never as bunting or a colour wash.</li>
+        <li><strong>Warm and low.</strong> Candlelight and lamps over overheads. Prints lit properly; everything else dimmed. Aim for a room people photograph well in without a flash.</li>
+        <li><strong>Textile, not print.</strong> If any Nigerian material is used it is real aso-oke or adire as table or lectern cloth, sourced by the studio. No printed "Ankara" patterns on signage.</li>
+        <li><strong>Dress code.</strong> On the invitation: "Dress well. Nigerian dress welcomed and encouraged." Expect and celebrate agbada and gele in the room.</li>
+      </ul>
+
+      <h3>Print and signage</h3>
+      <ul class="small">
+        <li>One A2 or A1 title board at the entrance, black on white, typewritten style, carrying the one-liner and the Fola Adeleke® mark. Studio supplies artwork; Soho House prints or the studio delivers <span class="tbc">TBC</span>.</li>
+        <li>A folded A5 programme per guest: the blurb, Fola's bio, the works on show, the running order. Studio designs and supplies.</li>
+        <li>Small wall labels for each work: title, year, edition. Studio supplies.</li>
+        <li>No roll-up banners, no step-and-repeat.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Artwork on show</h3>
+      <p class="small">Six to eight limited-edition prints, framed, from the current and recent drops. Proposed selection to include Kingdom We Carry, Loud Celebration, Elders, Family Council, Mother of a Nation and Community; final list confirmed by the studio two weeks out.</p>
+      <ul class="small">
+        <li><strong>Display.</strong> Hung on existing picture rails or fixings where the space allows; otherwise on black or natural-wood easels supplied by the studio. Grouped in two or three clusters along the guest flow, not lined up in a row.</li>
+        <li><strong>Lighting.</strong> Each work individually lit (pin spots or adjustable track). Please confirm what the space has and whether the studio should bring supplementary lamps <span class="tbc">TBC</span>.</li>
+        <li><strong>Handling.</strong> Studio delivers, installs and derigs. Soho House to confirm load-in route, times and insurance position for artwork on site <span class="tbc">TBC</span>.</li>
+        <li><strong>Sales.</strong> No prices displayed and no selling from the floor. Guests who ask are given a card and followed up by the studio. If Soho House prefers a small edition available to members that evening, the studio is open to it <span class="tbc">TBC</span>.</li>
+      </ul>
+
+      <h3>Photography and film</h3>
+      <ul class="small">
+        <li>One stills photographer and one videographer (two-camera talk capture plus roaming) commissioned by the studio.</li>
+        <li>Style: reportage, low light, no flash during the talk. Portraits of guests in Nigerian dress against the prints are a priority set.</li>
+        <li>Edited stills within 72 hours; a 60–90 second film within 10 days. Shared usage rights for Soho House, the studio and Daily Paper <span class="tbc">TBC</span>.</li>
+        <li>Soho House to advise on member photography policy and any no-photo areas.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer"><span>Event brief · v1.0 · 19 September 2026</span><span>Page 8</span></div>
+</section>
+
+<!-- ============ 9. PRODUCTION ============ -->
+<section class="page">
+  <div class="running"><span>Fola Adeleke × Soho House Amsterdam</span><span class="num">09 — Production requirements</span></div>
+  <div class="label">09</div>
+  <h2>Production requirements</h2>
+  <p>What the studio needs from the space and the house team, and what the studio brings. Please mark anything the venue cannot provide and we will source it.</p>
+
+  <table>
+    <tr><th style="width:34mm">Area</th><th>Requirement</th><th style="width:30mm">Provided by</th></tr>
+    <tr><td class="k">Space</td><td>Room for 100 with c. 60 soft seats in a salon layout, standing room, a clear talk area of at least 3 × 3 m, and a DJ position with power. Adjacent or in-room bar. Cloakroom.</td><td>Soho House</td></tr>
+    <tr><td class="k">Furniture</td><td>Two armchairs and a low side table for the talk. Mixed seating from house stock. Two to three plinths or consoles for programmes and the entrance board.</td><td>Soho House</td></tr>
+    <tr><td class="k">Audio</td><td>Speech PA with engineer for 19:45 – 21:00. 2 × lapel/headset, 2 × handheld radio mics. DJ system: 2 × CDJ-3000 or equivalent, DJM-900 or equivalent mixer, monitors, booth table. Desk audio feed (XLR or line) to camera.</td><td>Soho House <span class="tbc">TBC</span></td></tr>
+    <tr><td class="k">Lighting</td><td>Dimmable house lighting, warm. Pin spots or adjustable track for 6–8 works. Candlelight where house policy allows. Two soft, warm lights on the talk area for camera.</td><td>Soho House / Studio</td></tr>
+    <tr><td class="k">Visuals</td><td>Optional: one screen or projector, 16:9, HDMI, for a silent loop of works during the talk. Off or dark at all other times.</td><td>Soho House <span class="tbc">TBC</span></td></tr>
+    <tr><td class="k">Artwork</td><td>6–8 framed prints, easels if needed, wall labels, hanging kit. Delivered and installed 15:00 – 17:30, derigged 23:00 – 00:00.</td><td>Studio</td></tr>
+    <tr><td class="k">Print</td><td>Entrance title board, A5 programmes, wall labels, allergen cards (copy from kitchen).</td><td>Studio</td></tr>
+    <tr><td class="k">Florals</td><td>Two or three low arrangements: dark foliage, one white flower, a touch of green. No colour clashes with the prints.</td><td>Soho House <span class="tbc">TBC</span></td></tr>
+    <tr><td class="k">Photography</td><td>Photographer and videographer, 18:30 – 23:00. Access to a small area for kit.</td><td>Studio</td></tr>
+    <tr><td class="k">Front of house</td><td>Guest list check-in on tablet, two staff 18:45 – 21:00. Wristbands or stamps not required. Plus-ones only where named.</td><td>Soho House</td></tr>
+    <tr><td class="k">Green room</td><td>A quiet space for Fola, moderator and DJ from 17:30, with water, tea and a mirror.</td><td>Soho House</td></tr>
+    <tr><td class="k">Access</td><td>Load-in route, parking or drop-off for artwork van, lift dimensions if applicable.</td><td>Soho House to advise</td></tr>
+    <tr><td class="k">Insurance &amp; risk</td><td>Studio insures artwork in transit. Venue to confirm cover for artwork on site, or studio extends its policy. Standard event risk assessment shared by Soho House.</td><td>Both <span class="tbc">TBC</span></td></tr>
+  </table>
+
+  <div class="footer"><span>Event brief · v1.0 · 19 September 2026</span><span>Page 9</span></div>
+</section>
+
+<!-- ============ 10. GUESTS & COMMS ============ -->
+<section class="page">
+  <div class="running"><span>Fola Adeleke × Soho House Amsterdam</span><span class="num">10 — Guest list, invitations and communications</span></div>
+  <div class="label">10</div>
+  <h2>Guest list, invitations and communications</h2>
+
+  <div class="two">
+    <div>
+      <h3>The room</h3>
+      <p class="small">100 confirmed guests, invitation only, with a waitlist. Over-invite by roughly 30% to land at 100 on the night. Proposed split, to be agreed:</p>
+      <table class="small">
+        <tr><td class="k" style="width:40mm">Soho House members</td><td>40 — curated by the events / membership team: fashion, design, music, film, food</td></tr>
+        <tr><td class="k">Fola's list</td><td>35 — collectors, collaborators, Daily Paper colleagues, Nigerian and diaspora creative community in Amsterdam and London</td></tr>
+        <tr><td class="k">Industry &amp; partners</td><td>15 — galleries, brands, cultural institutions, potential future collaborators</td></tr>
+        <tr><td class="k">Press &amp; talent</td><td>10 — Dutch and UK culture press, photographers, a small number of talent</td></tr>
+      </table>
+      <p class="small muted" style="margin-top:2mm">Balance matters. A room that is one-third Nigerian, one-third wider Black diaspora and one-third everyone else will feel like the brief. A room that is any one of those alone will not.</p>
+
+      <h3>Invitation</h3>
+      <ul class="small">
+        <li>Digital invitation designed by the studio in the Fola Adeleke® style: black on white, typewritten, one image. Sent by Soho House to its members through its channels; by the studio to its list.</li>
+        <li>Wording: title, one-liner, the short blurb, date, time, venue, dress code, RSVP link, "Invitation only. Non-transferable."</li>
+        <li>RSVP via Soho House's system if it can take non-member registrations; otherwise a shared form owned by the studio <span class="tbc">TBC</span>.</li>
+        <li>Reminder 48 hours before with practical details and the 20:00 talk time made prominent.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Communications timeline</h3>
+      <table class="small">
+        <tr><td class="t">T-4 weeks</td><td>Save-the-date to Fola's list and priority members. Listing live in the Soho House app.</td></tr>
+        <tr><td class="t">T-3 weeks</td><td>Full invitations out. Soho House social: one post, one story series.</td></tr>
+        <tr><td class="t">T-2 weeks</td><td>Waitlist opens. Studio newsletter feature. Press invitations.</td></tr>
+        <tr><td class="t">T-1 week</td><td>Final guest list locked. Moderator questions agreed. Menu and playlist signed off.</td></tr>
+        <tr><td class="t">T-48 h</td><td>Reminder email. Final numbers to kitchen.</td></tr>
+        <tr><td class="t">T+1 day</td><td>Thank-you note with three or four stills.</td></tr>
+        <tr><td class="t">T+3 days</td><td>Full stills gallery. Soho House and studio recap posts.</td></tr>
+        <tr><td class="t">T+10 days</td><td>Short film released across all channels.</td></tr>
+      </table>
+
+      <h3>Channels and credits</h3>
+      <ul class="small">
+        <li>Soho House: app listing, member email, @sohohouseamsterdam.</li>
+        <li>Studio: folaadeleke.com, newsletter, @folaadeleke.</li>
+        <li>Daily Paper: amplification subject to confirmation <span class="tbc">TBC</span>.</li>
+        <li>All posts credit the artist, the photographer and Soho House Amsterdam. Hashtag: #MadeOfManyPlaces.</li>
+        <li>Press: no exclusive. Short press note and three images available on request from T-2 weeks.</li>
+      </ul>
+
+      <h3>Accessibility and welcome</h3>
+      <ul class="small">
+        <li>Step-free access and an accessible toilet confirmed and stated on the invitation.</li>
+        <li>Reserved seats at the front for guests who need them, unlabelled but held by the floor team.</li>
+        <li>Some guests will be visiting a members' club for the first time. The door should feel like a welcome, not a check.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer"><span>Event brief · v1.0 · 19 September 2026</span><span>Page 10</span></div>
+</section>
+
+<!-- ============ 11. ROLES & NEXT STEPS ============ -->
+<section class="page">
+  <div class="running"><span>Fola Adeleke × Soho House Amsterdam</span><span class="num">11 — Roles and responsibilities</span></div>
+  <div class="label">11</div>
+  <h2>Roles and responsibilities</h2>
+  <p>Who owns what, and who is in the room on the night. Everything here is a proposal for the Soho House team to adjust to how the House normally runs.</p>
+
+  <table>
+    <tr><th style="width:44mm">Workstream</th><th>Soho House Amsterdam</th><th>Studio Fola Adeleke</th></tr>
+    <tr><td class="k">Venue &amp; date</td><td>Confirm space, date, hire terms and minimum spend</td><td>Confirm Fola's and moderator's availability</td></tr>
+    <tr><td class="k">Programme</td><td>House host for the welcome; input on moderator</td><td>Moderator, questions, run-through, Fola</td></tr>
+    <tr><td class="k">Food &amp; drink</td><td>Menu proposal, bar, service, allergens</td><td>Direction, sign-off, tasting if offered</td></tr>
+    <tr><td class="k">Music</td><td>DJ technical setup, PA, engineer</td><td>DJ booking, brief, fee</td></tr>
+    <tr><td class="k">Artwork</td><td>Fixings, lighting, insurance position, load-in</td><td>Selection, framing, transport, install, derig</td></tr>
+    <tr><td class="k">Design &amp; print</td><td>Approve use of Soho House name and any marks</td><td>Invitation, programme, board, labels</td></tr>
+    <tr><td class="k">Guest list</td><td>Member invitations, RSVP system, door</td><td>Studio, industry and press lists</td></tr>
+    <tr><td class="k">Content</td><td>Filming policy, member consent, House channels</td><td>Photographer, videographer, edit, delivery</td></tr>
+    <tr><td class="k">Budget</td><td>Venue, F&amp;B, AV, staffing quote</td><td>Talent, DJ, content, print, artwork logistics</td></tr>
+  </table>
+
+  <h3>Staffing on the night</h3>
+  <div class="three small">
+    <div class="box soft">
+      <div class="label black">Soho House</div>
+      <ul style="margin:2mm 0 0 3mm"><li>Event manager (lead)</li><li>Sound engineer</li><li>Bar and floor team for 100</li><li>Door / guest list × 2</li><li>House host for the welcome</li></ul>
+    </div>
+    <div class="box soft">
+      <div class="label black">Studio</div>
+      <ul style="margin:2mm 0 0 3mm"><li>Producer (studio lead on the night)</li><li>Fola Adeleke</li><li>Moderator</li><li>DJ</li><li>Photographer, videographer</li><li>Install assistant</li></ul>
+    </div>
+    <div class="box dark">
+      <div class="label">On-the-night contacts</div>
+      <p style="margin-top:2mm;font-size:9pt">Studio producer: <span class="tbc" style="border-color:rgba(255,255,255,.5)">Name / mobile</span></p>
+      <p style="font-size:9pt">Soho House event manager: <span class="tbc" style="border-color:rgba(255,255,255,.5)">Name / mobile</span></p>
+      <p style="font-size:9pt;margin-bottom:0">To be exchanged at the site visit.</p>
+    </div>
+  </div>
+
+  <div class="footer"><span>Event brief · v1.0 · 19 September 2026</span><span>Page 11</span></div>
+</section>
+
+<!-- ============ 12. COMMERCIAL & NEXT STEPS ============ -->
+<section class="page">
+  <div class="running"><span>Fola Adeleke × Soho House Amsterdam</span><span class="num">12 — Commercial model and next steps</span></div>
+  <div class="label">12</div>
+  <h2>Commercial model and next steps</h2>
+
+  <h3 style="margin-top:0">Commercial model · for discussion</h3>
+  <div class="two small">
+    <div>
+      <p><strong>Option A — Member programming.</strong> Soho House hosts the evening as part of its cultural programme. Venue and core F&amp;B covered against a minimum spend or programming budget; the studio covers talent, content and artwork logistics.</p>
+      <ul><li>Simple to run, strongest fit with a members' event.</li><li>Guest list weighted towards members.</li></ul>
+    </div>
+    <div>
+      <p><strong>Option B — Private hire with partner.</strong> The studio (with Daily Paper or another partner) hires the space. Full control of the guest list and content; Soho House provides venue, F&amp;B and AV at agreed rates.</p>
+      <ul><li>More control, more cost.</li><li>Opens the door to a brand partner and print edition on the night.</li></ul>
+    </div>
+  </div>
+  <p class="small muted">The studio's preference is Option A with a small number of protected non-member invitations. Open to Soho House's view.</p>
+
+  <h3>Decisions needed from Soho House · by Friday 25 September</h3>
+  <ul class="check small">
+    <li>Date and space confirmed for Thursday 1 October (or alternative) and the commercial model above.</li>
+    <li>Filming and photography policy for the space, and member consent approach.</li>
+    <li>Artwork fixings, lighting and insurance position.</li>
+    <li>RSVP mechanism for non-member guests.</li>
+    <li>Site visit slot in the week of 21 September, with the event manager and, ideally, the sound engineer.</li>
+  </ul>
+
+  <h3>What the studio will deliver next</h3>
+  <ul class="check small">
+    <li>Two moderator proposals and a draft question set, within five working days of date confirmation.</li>
+    <li>DJ proposal and reference playlist.</li>
+    <li>Final artwork list and framed dimensions, two weeks out.</li>
+    <li>Invitation and programme designs for approval, three weeks out.</li>
+    <li>Full run-of-show with names and mobiles, one week out.</li>
+  </ul>
+
+  <div class="box dark" style="position:absolute;left:18mm;right:18mm;bottom:18mm;display:flex;justify-content:space-between;align-items:flex-end">
+    <div>
+      <div class="label">Prepared by</div>
+      <p style="margin:1.5mm 0 0;font-size:10pt">Studio Fola Adeleke · hello@folaadeleke.com · folaadeleke.com</p>
+      <p class="small" style="margin:0;color:rgba(255,255,255,.7)">For the Soho House Amsterdam events team · v1.0 · 19 September 2026</p>
+    </div>
+    <div style="font-family:var(--serif);font-size:22pt;line-height:1;white-space:nowrap;margin-left:8mm">Fola Adeleke<span style="font-size:9pt;vertical-align:top">®</span></div>
+  </div>
+
+  <div class="footer"><span>Event brief · v1.0 · 19 September 2026</span><span>Page 12</span></div>
+</section>
+
+</body>
+</html>
