@@ -46,7 +46,7 @@ const SITE_HOST = 'folaadeleke.com';
 // should be readable at folaadeleke.com/<dir>/.
 const PUBLIC_DIRS = new Set([
   '.github', '.githooks',
-  'artist', 'claim', 'concepts', 'contact', 'enquiry', 'find', 'guess',
+  'artist', 'claim', 'concepts', 'contact', 'enquiry', 'events', 'find', 'guess',
   'images', 'internship', 'interview', 'js', 'mockups', 'press', 'prints',
   'privacy', 'products', 'rearrange', 'scripts', 'shopify-theme', 'terms',
   'trade', 'verify', 'worker',

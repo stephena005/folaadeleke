@@ -11,5 +11,6 @@ Allow: /
 # No noindex tag possible on these (non-HTML / private working files)
 Disallow: /html%20files/
 Disallow: /portfolio.pdf
+Disallow: /events/soho-house-amsterdam-2026/Fola-Adeleke-x-Soho-House-Amsterdam-Event-Brief-v1.0.pdf
 
 Sitemap: https://folaadeleke.com/sitemap.xml
