@@ -340,7 +340,7 @@ flagged). The floor plan, counts and the detail view pick it up.
 
 **Rooms** (order on the wall): Entrance · I Her · II Love · III Family ·
 IV The Function · V Heritage. The Entrance holds one work, the newest
-drop (No. 30, Papa’s Girl, at the time of writing). When the
+drop (No. 31, I Do, at the time of writing). When the
 next print arrives it takes the Entrance and the previous one moves
 into the room its subject belongs to, not to the end of the wall. Keep
 `data-new="1"` on the three latest drops only.
