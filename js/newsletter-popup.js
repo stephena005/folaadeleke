@@ -46,7 +46,7 @@
   // consent banner today, so it is listed to keep it exempt if a future edit
   // copies another page's head into it.
   var BLOCKED = [
-    /^\/claim/, /^\/verify/, /^\/guess/, /^\/rearrange/, /^\/find/, /^\/studio/,
+    /^\/claim/, /^\/verify/, /^\/guess/, /^\/rearrange/, /^\/find/, /^\/match/, /^\/studio/,
     /unsubscribe/, /newsletter/, /feedback/, /404/
   ];
 

@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+  ════════════════════════════════════════════════════════════════
+  FOLA ADELEKE® — "MATCH THE EIGHT"
+  Unlisted campaign page, built 2026-09-24 on the house design
+  (see newsletter-template.html for the spec). Fourth drop in the
+  series after Rearrange The Print, Guess The Print and Find the
+  Five.
+  ════════════════════════════════════════════════════════════════
+
+  HOW IT PLAYS
+  ────────────
+  Memory. Sixteen cards face down in a 4x4 grid: a close crop from
+  eight prints, two of each. Turn two over; a pair stays face up
+  and its print is named in the list below, a mismatch turns back.
+  Moves are counted but there is no way to lose and no move limit.
+  Eight pairs unlocks the code.
+
+  The deal (card order) and the pairs found are kept in
+  localStorage, so a reload keeps the board. A half-turned pair is
+  not saved. "Start Again" clears it and deals a fresh board.
+
+  LIVE CAMPAIGN — GO-LIVE 15:00 BST FRI 25 SEP 2026
+  ─────────────────────────────────────────────────
+  The homepage banner (.puzzle-banner in ../index.html) reveals and
+  links here on its own timer at 2026-09-25T14:00:00Z. No further
+  deploy needed at that moment.
+
+  STILL OUTSTANDING BEFORE FRIDAY
+  ───────────────────────────────
+  1. DISCOUNT_CODE is MATCH0925 and DOES NOT EXIST IN SHOPIFY YET.
+     Create it: 25% off, Prints collection only, no minimum spend,
+     active window matching CAMPAIGN_END, one shared code. This
+     page has no backend so it cannot issue per-subscriber codes —
+     the code is visible to anyone who solves it, and to anyone who
+     reads the source.
+  2. If go-live slips, update CAMPAIGN_END here AND BANNER_START /
+     BANNER_END in ../index.html together. They are separate
+     constants.
+  3. Play it through once on a real phone after deploying.
+
+  DO NOT REGRESS
+  ──────────────
+  · The card faces are /images/match/<slug>.jpg, 480x480 square
+    crops (~30–65 kB) cut from the gallery web exports in
+    images/prints/web/. Never point this at a print master.
+  · Loud Celebration is not for sale — keep it out of the deck.
+  · Type and contrast follow the house spec: body copy is
+    Helvetica/Arial, never Courier; nothing below WCAG AA 4.5:1.
+
+  SWAPPING THE DECK
+  ─────────────────
+  Change PAIRS. Each entry is a print name, its /prints anchor
+  (the id on its .hang in ../prints/index.html) and a square crop.
+  Bump STORAGE_KEY's version if the deck changes after go-live, or
+  a saved board will point at cards that no longer exist.
+  ════════════════════════════════════════════════════════════════
+-->
+<head>
+  <!-- Google tag (gtag.js) — consent mode: analytics denied until accepted -->
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      analytics_storage: 'denied',
+      wait_for_update: 500
+    });
+    try {
+      if (localStorage.getItem('fa_consent') === 'granted') {
+        gtag('consent', 'update', { analytics_storage: 'granted' });
+      }
+    } catch (e) {}
+    gtag('js', new Date());
+    gtag('config', 'G-K7ZCQ4YEN6');
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7ZCQ4YEN6"></script>
+  <script defer src="/js/consent.js"></script>
+  <script defer src="/js/newsletter-popup.js"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <title>Match the Eight — Fola Adeleke&#174;</title>
+  <meta name="description" content="Sixteen cards, eight prints. Match every pair and a 25% off code unlocks." />
+
+  <style>
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+
+    :root {
+      --paper:#faf9f7;
+      --card:#ffffff;
+      --ink:#111111;
+      --ink-soft:#4f4f4f;
+      --label:#6f6f6f;
+      --rule:#dcdcdc;
+      --black:#000000;
+      --white:#ffffff;
+      --footer-bg:#f2f0ed;
+      --footer-ink:#666666;
+      --mono:'Courier New', Courier, monospace;
+      --sans:Helvetica, Arial, sans-serif;
+    }
+
+    html { scroll-behavior:smooth; }
+    body {
+      font-family:var(--sans); background:var(--paper); color:var(--ink);
+      min-height:100vh; display:flex; flex-direction:column;
+      -webkit-font-smoothing:antialiased;
+    }
+    :focus-visible { outline:2px solid var(--ink); outline-offset:2px; }
+    a { color:var(--ink); }
+
+    /* ── NAV ── */
+    nav {
+      height:56px; background:var(--card); border-bottom:1px solid var(--ink);
+      display:grid; grid-template-columns:1fr auto 1fr; align-items:center; padding:0 24px;
+    }
+    .nav-brand {
+      text-align:center; font-family:var(--mono); font-size:13px; letter-spacing:0.26em;
+      text-transform:uppercase; text-decoration:none; color:var(--ink);
+    }
+    .nav-link {
+      font-family:var(--mono); font-size:11px; letter-spacing:0.2em; text-transform:uppercase;
+      text-decoration:none; color:var(--label);
+    }
+    .nav-link:hover { color:var(--ink); text-decoration:underline; }
+    .nav-left { justify-self:start; } .nav-right { justify-self:end; }
+
+    /* ── CARD ── */
+    .shell { flex:1; padding:32px 16px 56px; }
+    main {
+      max-width:760px; margin:0 auto; background:var(--card);
+      padding:44px 32px 48px; text-align:center;
+    }
+
+    .eyebrow {
+      font-family:var(--mono); font-size:11px; letter-spacing:0.3em;
+      text-transform:uppercase; color:var(--label); margin-bottom:20px;
+    }
+    h1 {
+      font-family:var(--mono); font-size:34px; font-weight:normal; letter-spacing:0.16em;
+      text-transform:uppercase; line-height:1.2; margin-bottom:22px;
+    }
+    .subcopy {
+      font-size:16px; line-height:1.65; color:var(--ink-soft);
+      margin:0 auto 32px; max-width:46ch;
+    }
+
+    /* ── STATUS ROW ── */
+    .status-row {
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      max-width:560px; margin:0 auto 14px;
+      font-family:var(--mono); font-size:11px; letter-spacing:0.18em;
+      text-transform:uppercase; color:var(--label);
+    }
+    .status-row b { font-weight:normal; color:var(--ink); font-variant-numeric:tabular-nums; }
+    .reset-link {
+      background:none; border:none; font-family:var(--mono); font-size:11px;
+      letter-spacing:0.18em; text-transform:uppercase; color:var(--label);
+      text-decoration:underline; cursor:pointer; padding:8px 4px; min-height:44px;
+    }
+    .reset-link:hover { color:var(--ink); }
+
+    /* ── THE BOARD ── */
+    .board {
+      display:grid; grid-template-columns:repeat(4, 1fr); gap:10px;
+      max-width:560px; margin:0 auto 18px;
+    }
+    .tile {
+      position:relative; aspect-ratio:1 / 1; padding:0; border:none; background:none;
+      cursor:pointer; perspective:800px; -webkit-tap-highlight-color:transparent;
+    }
+    .tile:disabled { cursor:default; }
+    .tile .inner {
+      position:absolute; inset:0; transform-style:preserve-3d;
+      transition:transform 0.45s ease;
+    }
+    .tile.up .inner { transform:rotateY(180deg); }
+    .tile .face {
+      position:absolute; inset:0; backface-visibility:hidden; -webkit-backface-visibility:hidden;
+      border:1px solid var(--ink);
+    }
+    .tile .back {
+      background:var(--black); color:var(--white);
+      display:flex; align-items:center; justify-content:center;
+      font-family:var(--mono); font-size:14px; letter-spacing:0.1em;
+    }
+    .tile .back::before {
+      content:''; position:absolute; inset:6px; border:1px solid rgba(255,255,255,0.3);
+    }
+    .tile:hover:not(:disabled) .back { background:#1c1c1c; }
+    .tile .front { transform:rotateY(180deg); background:var(--black); overflow:hidden; }
+    .tile .front img { display:block; width:100%; height:100%; object-fit:cover; -webkit-user-drag:none; }
+    .tile.matched .front { border-color:var(--black); box-shadow:0 0 0 2px var(--black); }
+    .tile.wrong .inner { animation:shake 0.35s ease 0.45s; }
+    @keyframes shake {
+      0%,100% { transform:rotateY(180deg) translateX(0); }
+      25% { transform:rotateY(180deg) translateX(-4px); }
+      75% { transform:rotateY(180deg) translateX(4px); }
+    }
+
+    #message {
+      min-height:20px; font-family:var(--mono); font-size:11px; letter-spacing:0.18em;
+      text-transform:uppercase; color:var(--ink); margin-bottom:22px;
+    }
+
+    /* ── THE EIGHT ── */
+    .pairs-label {
+      font-family:var(--mono); font-size:11px; letter-spacing:0.3em; text-transform:uppercase;
+      color:var(--label); border-bottom:1px solid var(--ink); padding-bottom:12px;
+      margin:0 auto 4px; max-width:480px; text-align:left;
+    }
+    #pairs { list-style:none; max-width:480px; margin:0 auto 32px; text-align:left; }
+    .pair {
+      display:flex; align-items:center; gap:16px; padding:12px 0;
+      border-bottom:1px solid var(--rule);
+      font-family:var(--mono); font-size:13px; letter-spacing:0.14em; text-transform:uppercase;
+      color:var(--label); line-height:1.4; min-height:57px;
+    }
+    .pair .n {
+      flex:0 0 32px; width:32px; height:32px; border:1px solid var(--rule); overflow:hidden;
+      font-size:12px; line-height:30px; text-align:center;
+    }
+    .pair .n img { display:block; width:100%; height:100%; object-fit:cover; }
+    .pair .txt { flex:1; }
+    .pair .txt a { color:var(--ink); text-decoration:none; }
+    .pair .txt a:hover { text-decoration:underline; }
+    .pair.found .n { border-color:var(--ink); }
+
+    /* ── REVEAL ── */
+    #reveal { display:none; margin-top:16px; padding-top:36px; border-top:1px solid var(--rule); }
+    #reveal.show { display:block; }
+    .reveal-eyebrow {
+      font-family:var(--mono); font-size:11px; letter-spacing:0.3em;
+      text-transform:uppercase; color:var(--label); margin-bottom:16px;
+    }
+    .reveal-title {
+      font-family:var(--mono); font-size:24px; font-weight:normal; letter-spacing:0.12em;
+      text-transform:uppercase; margin-bottom:16px; line-height:1.3;
+    }
+    .reveal-copy { font-size:16px; line-height:1.65; color:var(--ink-soft); margin:0 auto 26px; max-width:40ch; }
+
+    .code-box {
+      display:flex; align-items:center; justify-content:center; gap:14px; flex-wrap:wrap;
+      border:2px solid var(--ink); padding:20px; margin:0 auto 14px; max-width:480px; cursor:pointer;
+      user-select:none; min-height:44px; background:var(--white);
+    }
+    .code-box .code { font-family:var(--mono); font-size:22px; letter-spacing:0.28em; color:var(--ink); }
+    .code-box .copy-hint {
+      font-family:var(--mono); font-size:11px; letter-spacing:0.14em;
+      text-transform:uppercase; color:var(--label);
+    }
+    .code-box.copied { background:var(--black); border-color:var(--black); }
+    .code-box.copied .code, .code-box.copied .copy-hint { color:var(--white); }
+    .code-box.expired { border-color:var(--rule); cursor:default; background:var(--paper); }
+    .code-box.expired .code { color:var(--label); letter-spacing:0.14em; }
+
+    #countdown {
+      font-family:var(--mono); font-size:12px; letter-spacing:0.18em;
+      text-transform:uppercase; color:var(--ink); margin-bottom:30px;
+    }
+    #countdown .t { font-variant-numeric:tabular-nums; }
+
+    .cta {
+      display:inline-block; background:var(--black); color:var(--white); text-decoration:none;
+      font-family:var(--mono); font-size:13px; letter-spacing:0.18em; text-transform:uppercase;
+      padding:17px 40px; border:1px solid var(--black);
+    }
+    .cta:hover { background:var(--white); color:var(--black); }
+    .fineprint { font-size:14px; line-height:1.7; color:var(--ink-soft); margin:24px auto 0; max-width:44ch; }
+
+    footer {
+      text-align:center; padding:26px 24px; background:var(--footer-bg);
+      border-top:1px solid var(--rule); font-family:var(--mono); font-size:11px;
+      letter-spacing:0.14em; text-transform:uppercase; color:var(--footer-ink);
+    }
+    footer a { color:var(--ink); }
+
+    @media (max-width:620px) {
+      .shell { padding:16px 8px 48px; }
+      main { padding:36px 12px 40px; }
+      .eyebrow { letter-spacing:0.2em; }
+      h1 { font-size:26px; letter-spacing:0.14em; }
+      .subcopy { margin-bottom:24px; }
+      .board { gap:6px; }
+      .tile .back { font-size:11px; }
+      .tile .back::before { inset:4px; }
+      .status-row { letter-spacing:0.12em; }
+      .reveal-title { font-size:20px; }
+      .code-box .code { font-size:19px; letter-spacing:0.2em; }
+      .pair { gap:12px; font-size:12px; }
+    }
+    @media (prefers-reduced-motion:reduce) {
+      .tile .inner { transition:none; }
+      .tile.wrong .inner { animation:none; }
+      html { scroll-behavior:auto; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-left"><a class="nav-link" href="/">Home</a></div>
+    <a class="nav-brand" href="/">Fola&nbsp;Adeleke&#174;</a>
+    <div class="nav-right"><a class="nav-link" href="/prints">Prints</a></div>
+  </nav>
+
+  <div class="shell">
+    <main>
+      <p class="eyebrow">Print&nbsp;Drop &middot; 25%&nbsp;Off &middot; 24&nbsp;Hours&nbsp;Only</p>
+      <h1>Match the<br />Eight</h1>
+      <p class="subcopy">Sixteen cards, eight prints. Turn two over at a time and find every pair. Match all eight and a 25% off code unlocks below.</p>
+
+      <div class="status-row">
+        <span>Pairs&nbsp;&nbsp;<b id="pairCount">0</b>&nbsp;/&nbsp;8</span>
+        <span>Moves&nbsp;&nbsp;<b id="moveCount">0</b></span>
+        <button class="reset-link" id="resetBtn">Start Again</button>
+      </div>
+
+      <div class="board" id="board" role="group" aria-label="Memory cards"></div>
+      <p id="message" role="status" aria-live="polite">Turn over any two cards.</p>
+
+      <p class="pairs-label">The Eight</p>
+      <ol id="pairs"></ol>
+
+      <div id="reveal">
+        <p class="reveal-eyebrow">Eight of Eight</p>
+        <h2 class="reveal-title" id="revealTitle">Every Pair Matched</h2>
+        <p class="reveal-copy" id="revealCopy">Here's your 25% off code.</p>
+        <div class="code-box" id="codeBox" onclick="copyCode()">
+          <span class="code" id="codeText">&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;</span>
+          <span class="copy-hint" id="copyHint">Tap to copy</span>
+        </div>
+        <p id="countdown">Expires in <span class="t" id="countdownT">--:--:--</span></p>
+        <a class="cta" href="/prints">Shop the Prints &rarr;</a>
+        <p class="fineprint">25% off, one code, one use per order, while the window lasts. No minimum spend. Can't be combined with other offers.</p>
+      </div>
+    </main>
+  </div>
+
+  <footer>
+    Fola Adeleke&#174; &nbsp;&middot;&nbsp; <a href="/">folaadeleke.com</a>
+  </footer>
+
+  <script>
+    // ═══════════════════════════ CONFIG ═══════════════════════════
+    // One entry per pair. slug is the anchor on /prints and the crop's
+    // file name in /images/match/.
+    var PAIRS = [
+      { slug: 'mother-of-a-nation',    name: 'Mother of a Nation',        image: '/images/match/mother-of-a-nation.jpg' },
+      { slug: 'uncles-stay-lit',       name: 'Uncles Stay Lit',           image: '/images/match/uncles-stay-lit.jpg' },
+      { slug: 'drowned-taiwo',         name: 'Drowned in Native Cloth — Taiwo', image: '/images/match/drowned-taiwo.jpg' },
+      { slug: 'the-crown-she-carries', name: 'The Crown She Carries',     image: '/images/match/the-crown-she-carries.jpg' },
+      { slug: 'girl-dad',              name: 'Girl Dad',                  image: '/images/match/girl-dad.jpg' },
+      { slug: 'unapologetic',          name: 'Unapologetic',              image: '/images/match/unapologetic.jpg' },
+      { slug: 'yemaya',                name: 'Yemaya',                    image: '/images/match/yemaya.jpg' },
+      { slug: 'papas-girl',            name: 'Papa’s Girl',               image: '/images/match/papas-girl.jpg' }
+    ];
+    var MISMATCH_MS = 1100; // how long a wrong pair stays up before turning back
+
+    var DISCOUNT_CODE = 'MATCH0925';                  // TODO: create this in Shopify before Fri 25 Sep
+    var CAMPAIGN_END = '2026-09-26T14:00:00Z';        // 24h after the 15:00 BST Fri 25 Sep go-live
+    var STORAGE_KEY = 'fa_match_v1';
+    // ════════════════════════════════════════════════════════════
+
+    var boardEl = document.getElementById('board');
+    var pairsEl = document.getElementById('pairs');
+    var pairCountEl = document.getElementById('pairCount');
+    var moveCountEl = document.getElementById('moveCount');
+    var messageEl = document.getElementById('message');
+
+    var state = loadState();
+    var deck = state.deck;         // 16 pair indices in board order
+    var matched = state.matched;   // pair indices, in the order they were found
+    var moves = state.moves;
+    var solved = matched.length === PAIRS.length;
+
+    var up = [];                   // board positions currently turned but not matched (0–2)
+    var flipBackTimer = null;
+    var tiles = [];
+
+    function shuffledDeck() {
+      var d = [];
+      for (var i = 0; i < PAIRS.length; i++) d.push(i, i);
+      for (var j = d.length - 1; j > 0; j--) {
+        var k = Math.floor(Math.random() * (j + 1));
+        var t = d[j]; d[j] = d[k]; d[k] = t;
+      }
+      return d;
+    }
+
+    function loadState() {
+      try {
+        var raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          var p = JSON.parse(raw);
+          if (p && p.deck instanceof Array && p.deck.length === PAIRS.length * 2 &&
+              p.matched instanceof Array && typeof p.moves === 'number') return p;
+        }
+      } catch (e) {}
+      return { deck: shuffledDeck(), matched: [], moves: 0 };
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ deck: deck, matched: matched, moves: moves }));
+      } catch (e) {}
+    }
+
+    function isMatched(pairIndex) { return matched.indexOf(pairIndex) !== -1; }
+
+    // ── RENDER ──
+    function buildBoard() {
+      boardEl.innerHTML = '';
+      tiles = deck.map(function (pairIndex, pos) {
+        var p = PAIRS[pairIndex];
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'tile';
+        b.innerHTML =
+          '<span class="inner">' +
+            '<span class="face back" aria-hidden="true">FA&#174;</span>' +
+            '<span class="face front"><img alt="" draggable="false" /></span>' +
+          '</span>';
+        b.querySelector('img').src = p.image;
+        b.addEventListener('click', function () { turn(pos); });
+        boardEl.appendChild(b);
+        return b;
+      });
+      syncTiles();
+    }
+
+    function syncTiles() {
+      tiles.forEach(function (b, pos) {
+        var pairIndex = deck[pos];
+        var done = isMatched(pairIndex);
+        var isUp = done || up.indexOf(pos) !== -1;
+        b.classList.toggle('up', isUp);
+        b.classList.toggle('matched', done);
+        b.disabled = done || solved;
+        b.setAttribute('aria-label', 'Card ' + (pos + 1) + ', ' +
+          (isUp ? PAIRS[pairIndex].name + (done ? ', matched' : '') : 'face down'));
+      });
+    }
+
+    function renderPairs() {
+      pairsEl.innerHTML = '';
+      for (var i = 0; i < PAIRS.length; i++) {
+        var li = document.createElement('li');
+        var pairIndex = matched[i];
+        if (pairIndex === undefined) {
+          li.className = 'pair';
+          li.innerHTML = '<span class="n">' + (i + 1) + '</span><span class="txt">Not yet matched</span>';
+        } else {
+          var p = PAIRS[pairIndex];
+          li.className = 'pair found';
+          li.innerHTML = '<span class="n"><img alt="" /></span><span class="txt"><a></a></span>';
+          li.querySelector('img').src = p.image;
+          var a = li.querySelector('a');
+          a.href = '/prints#' + p.slug;
+          a.textContent = p.name;
+        }
+        pairsEl.appendChild(li);
+      }
+      pairCountEl.textContent = matched.length;
+      moveCountEl.textContent = moves;
+    }
+
+    // ── PLAY ──
+    function turnBack() {
+      if (flipBackTimer) { clearTimeout(flipBackTimer); flipBackTimer = null; }
+      up.forEach(function (pos) { tiles[pos].classList.remove('wrong'); });
+      up = [];
+      syncTiles();
+    }
+
+    function turn(pos) {
+      if (solved || isMatched(deck[pos]) || up.indexOf(pos) !== -1) return;
+      // A third tap while a wrong pair is still showing turns it back at once.
+      if (up.length === 2) turnBack();
+
+      if (moves === 0 && up.length === 0 && matched.length === 0 && window.gtag) {
+        gtag('event', 'puzzle_attempt', { puzzle_name: 'match_the_eight' });
+      }
+
+      up.push(pos);
+      syncTiles();
+      if (up.length < 2) { messageEl.textContent = 'And one more.'; return; }
+
+      moves++;
+      var a = deck[up[0]], b = deck[up[1]];
+      if (a === b) {
+        matched.push(a);
+        up = [];
+        saveState();
+        syncTiles();
+        renderPairs();
+        if (window.gtag) gtag('event', 'puzzle_found', { puzzle_name: 'match_the_eight', detail: matched.length });
+        if (matched.length === PAIRS.length) {
+          solved = true;
+          syncTiles();
+          messageEl.textContent = 'All eight in ' + moves + ' moves.';
+          if (window.gtag) gtag('event', 'puzzle_solved', { puzzle_name: 'match_the_eight', moves: moves });
+          setTimeout(showReveal, 700);
+        } else {
+          messageEl.textContent = PAIRS[a].name + '. ' + (PAIRS.length - matched.length) + ' to go.';
+        }
+      } else {
+        saveState();
+        renderPairs();
+        messageEl.textContent = 'Not a pair.';
+        up.forEach(function (p) { tiles[p].classList.add('wrong'); });
+        flipBackTimer = setTimeout(turnBack, MISMATCH_MS);
+      }
+    }
+
+    document.getElementById('resetBtn').addEventListener('click', function () {
+      if (flipBackTimer) clearTimeout(flipBackTimer);
+      flipBackTimer = null;
+      up = [];
+      deck = shuffledDeck();
+      matched = [];
+      moves = 0;
+      solved = false;
+      messageEl.textContent = 'Turn over any two cards.';
+      document.getElementById('reveal').classList.remove('show');
+      if (countdownTimer) clearInterval(countdownTimer);
+      saveState();
+      buildBoard();
+      renderPairs();
+    });
+
+    // ── REVEAL / CODE / COUNTDOWN ──
+    // The window is a FIXED end instant, not 24h from when you happen to
+    // open the page. Say the actual deadline rather than "24 hours", or a
+    // Saturday-morning opener is told they have longer than they do.
+    function endLabel() {
+      try {
+        return new Date(CAMPAIGN_END).toLocaleString('en-GB', {
+          weekday: 'long', hour: 'numeric', minute: '2-digit', timeZoneName: 'short'
+        });
+      } catch (e) { return 'the deadline'; }
+    }
+
+    function isExpired() {
+      return Date.now() >= new Date(CAMPAIGN_END).getTime();
+    }
+
+    function updateCodeDisplay() {
+      var box = document.getElementById('codeBox');
+      var text = document.getElementById('codeText');
+      var hint = document.getElementById('copyHint');
+      var copy = document.getElementById('revealCopy');
+      if (isExpired()) {
+        box.classList.add('expired');
+        box.classList.remove('copied');
+        text.textContent = 'EXPIRED';
+        hint.textContent = 'Offer ended';
+        copy.textContent = 'This window has closed — keep an eye out for the next drop.';
+      } else {
+        box.classList.remove('expired');
+        text.textContent = DISCOUNT_CODE;
+        hint.textContent = 'Tap to copy';
+        copy.textContent = "Here's your 25% off code, good on any print until " + endLabel() + ".";
+      }
+    }
+
+    function showReveal() {
+      document.getElementById('reveal').classList.add('show');
+      updateCodeDisplay();
+      startCountdown();
+    }
+
+    function copyCode() {
+      if (isExpired()) return;
+      var box = document.getElementById('codeBox');
+      var hint = document.getElementById('copyHint');
+      var finish = function (ok) {
+        box.classList.add('copied');
+        hint.textContent = ok ? 'Copied' : 'Select & copy: ' + DISCOUNT_CODE;
+        setTimeout(function () { box.classList.remove('copied'); hint.textContent = 'Tap to copy'; }, 1600);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(DISCOUNT_CODE).then(function () { finish(true); }, function () { finish(false); });
+      } else {
+        finish(false);
+      }
+    }
+
+    var countdownTimer = null;
+    function startCountdown() {
+      var end = new Date(CAMPAIGN_END).getTime();
+      var el = document.getElementById('countdownT');
+      if (countdownTimer) clearInterval(countdownTimer);
+      function tick() {
+        var diff = end - Date.now();
+        if (diff <= 0) {
+          document.getElementById('countdown').textContent = 'This code has expired';
+          updateCodeDisplay();
+          clearInterval(countdownTimer);
+          return;
+        }
+        var h = Math.floor(diff / 3600000);
+        var m = Math.floor((diff % 3600000) / 60000);
+        var s = Math.floor((diff % 60000) / 1000);
+        el.textContent = String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+      }
+      tick();
+      countdownTimer = setInterval(tick, 1000);
+    }
+
+    // ── INIT ──
+    if (window.gtag) gtag('event', 'puzzle_view', { puzzle_name: 'match_the_eight' });
+    // Warm the cache so the first turn of each card doesn't show a black face.
+    PAIRS.forEach(function (p) { var i = new Image(); i.src = p.image; });
+    saveState();
+    buildBoard();
+    renderPairs();
+    if (solved) { messageEl.textContent = 'All eight in ' + moves + ' moves.'; showReveal(); }
+  </script>
+</body>
+</html>
