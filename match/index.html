@@ -27,18 +27,18 @@
   links here on its own timer at 2026-09-25T14:00:00Z. No further
   deploy needed at that moment.
 
-  STILL OUTSTANDING BEFORE FRIDAY
-  ───────────────────────────────
-  1. DISCOUNT_CODE is MATCH0925 and DOES NOT EXIST IN SHOPIFY YET.
-     Create it: 25% off, Prints collection only, no minimum spend,
-     active window matching CAMPAIGN_END, one shared code. This
-     page has no backend so it cannot issue per-subscriber codes —
-     the code is visible to anyone who solves it, and to anyone who
-     reads the source.
-  2. If go-live slips, update CAMPAIGN_END here AND BANNER_START /
-     BANNER_END in ../index.html together. They are separate
-     constants.
-  3. Play it through once on a real phone after deploying.
+  STATUS AS OF 2026-09-24
+  ───────────────────────
+  · MATCH0925 exists in Shopify: 25% off, Prints collection only,
+    no minimum spend, active window matching CAMPAIGN_END, one
+    shared code. This page has no backend so it cannot issue
+    per-subscriber codes — the code is visible to anyone who
+    solves it, and to anyone who reads the source.
+  · Deployed and played through on a real phone.
+  · The email is scheduled in Beehiiv for 15:00 BST Fri 25 Sep.
+  · If go-live slips, update CAMPAIGN_END here AND BANNER_START /
+    BANNER_END in ../index.html together. They are separate
+    constants.
 
   DO NOT REGRESS
   ──────────────
@@ -362,7 +362,7 @@
     ];
     var MISMATCH_MS = 1100; // how long a wrong pair stays up before turning back
 
-    var DISCOUNT_CODE = 'MATCH0925';                  // TODO: create this in Shopify before Fri 25 Sep
+    var DISCOUNT_CODE = 'MATCH0925';                  // created in Shopify 2026-09-24
     var CAMPAIGN_END = '2026-09-26T14:00:00Z';        // 24h after the 15:00 BST Fri 25 Sep go-live
     var STORAGE_KEY = 'fa_match_v1';
     // ════════════════════════════════════════════════════════════
