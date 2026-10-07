@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Home A · Mosaic Shuffle — Fola Adeleke®</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="stylesheet" href="shared.css" />
+<style>
+  /* A · MOSAIC SHUFFLE — v2 (conversion)
+     The wall is the shop. Every tile is a product: title + "From £200" on
+     hover (always on touch), New flags on new work, click = quick view with
+     size picker and Buy. Tiles still wipe to new prints, but slower, never
+     the one you are looking at, and the wall freezes while a product is open.
+     The centre plaque now leads with the offer and two clear CTAs. */
+  .wall {
+    position: fixed; top: var(--nav-height); left: 0; right: 0; bottom: 0;
+    display: grid; gap: 2px; background: #000;
+    grid-template-columns: repeat(var(--cols), 1fr);
+    grid-template-rows: repeat(var(--rows), 1fr);
+  }
+  .tile { position: relative; overflow: hidden; background: #111; display: block; color: #fff; text-decoration: none; cursor: pointer; transition: filter .5s; }
+  .tile .layer {
+    position: absolute; inset: 0; background-size: cover; background-position: center;
+    animation: drift var(--dur, 14s) ease-in-out infinite alternate;
+  }
+  @keyframes drift { from { transform: scale(1.04) translate(0,0); } to { transform: scale(1.12) translate(var(--dx,-2%), var(--dy,-2%)); } }
+  .layer.incoming { clip-path: inset(var(--from)); transition: clip-path 1.1s var(--ease); z-index: 2; }
+  .layer.incoming.in { clip-path: inset(0 0 0 0); }
+
+  .tile .flag { position: absolute; top: 8px; left: 8px; z-index: 4; }
+  .tile .cap {
+    position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; padding: 26px 12px 10px;
+    display: flex; justify-content: space-between; align-items: flex-end; gap: 8px;
+    font-size: 9px; letter-spacing: .2em; text-transform: uppercase;
+    background: linear-gradient(0deg, rgba(0,0,0,.8), rgba(0,0,0,0));
+    opacity: 0; transform: translateY(6px); transition: opacity .35s, transform .35s var(--ease);
+  }
+  .tile .cap .t { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .tile .cap .p { flex-shrink: 0; }
+  .tile .cap .go { display: block; margin-top: 6px; color: rgba(255,255,255,.7); }
+  .wall:hover .tile { filter: grayscale(.85) brightness(.5); }
+  .wall .tile:hover { filter: none; }
+  .wall .tile:hover .cap { opacity: 1; transform: none; }
+  .tile.flash::after {
+    content: ""; position: absolute; inset: 0; z-index: 4; border: 1px solid rgba(255,255,255,.9);
+    animation: flash 1.4s ease-out forwards; pointer-events: none;
+  }
+  @keyframes flash { from { opacity: 1; } to { opacity: 0; } }
+
+  .plaque {
+    grid-column: var(--pc) / span 2; grid-row: var(--pr) / span 2;
+    background: #fff; color: #000; z-index: 5;
+    display: flex; flex-direction: column; justify-content: space-between; gap: 14px; padding: clamp(18px, 2.2vw, 34px);
+    opacity: 0; transform: scale(.96); transition: opacity 1s var(--ease), transform 1s var(--ease);
+  }
+  .plaque.in { opacity: 1; transform: none; }
+  .plaque .eyebrow { font-size: 9px; letter-spacing: .3em; text-transform: uppercase; color: var(--grey-mid); }
+  .plaque h1 { font-weight: normal; white-space: nowrap; font-size: clamp(20px, 2.1vw, 36px); line-height: 1.08; margin-top: 12px; }
+  .plaque h1 span { display: block; }
+  .plaque .lede { font-size: 11px; letter-spacing: .04em; line-height: 1.7; margin-top: 12px; }
+  .plaque .ctas { display: flex; gap: 8px; flex-wrap: wrap; }
+  .plaque .ctas .btn { flex: 1 1 auto; padding: 13px 14px; }
+  .now {
+    display: flex; justify-content: space-between; gap: 10px; align-items: baseline;
+    font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: var(--grey-mid);
+    border-top: 1px solid var(--grey-light); padding-top: 10px; background: none; border-left: 0; border-right: 0; border-bottom: 0;
+    font-family: var(--font); text-align: left; cursor: pointer; width: 100%;
+  }
+  .now b { font-weight: normal; color: #000; display: inline-block; animation: tick .6s var(--ease); }
+  .now .p { color: #000; flex-shrink: 0; }
+  @keyframes tick { from { transform: translateY(100%); opacity: 0; } to { transform: none; opacity: 1; } }
+
+  @media (hover: none) {                   /* touch: price is always visible */
+    .tile .cap { opacity: 1; transform: none; padding-top: 20px; }
+    .tile .cap .t, .tile .cap .go { display: none; }
+    .wall:hover .tile { filter: none; }
+  }
+  @media (max-width: 700px) {
+    .plaque { grid-column: 1 / -1; grid-row: var(--pr) / span 2; }
+    .plaque .lede { display: none; }
+    .plaque h1 { font-size: 22px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tile .layer { animation: none; }
+    .layer.incoming { transition: opacity .6s; clip-path: none; opacity: 0; }
+    .layer.incoming.in { opacity: 1; }
+  }
+</style>
+</head>
+<body>
+<main class="wall" id="wall" aria-label="Every print — click one to buy"></main>
+
+<script src="shared.js"></script>
+<script>
+(function () {
+  var wall = document.getElementById('wall');
+  var deck = FA.Deck(FA.prints);
+  var tiles = [], plaque, nowEl, paused = false;
+  var EDGES = ['0 100% 0 0', '0 0 0 100%', '100% 0 0 0', '0 0 100% 0', '50% 50% 50% 50%'];
+  FA.on(function (k, v) { paused = v; });     // freeze while a product or the card is open
+
+  function layout() {
+    var w = innerWidth, h = innerHeight - 56;
+    var cols = w < 700 ? 3 : w < 1100 ? 5 : 7;
+    var rows = Math.max(3, Math.round(h / (w / cols)));
+    wall.style.setProperty('--cols', cols);
+    wall.style.setProperty('--rows', rows);
+    return { cols: cols, rows: rows };
+  }
+
+  function layer(p) {
+    var d = document.createElement('div');
+    d.className = 'layer';
+    d.style.backgroundImage = 'url("' + p.src + '")';
+    d.style.setProperty('--dur', (12 + Math.random() * 10).toFixed(1) + 's');
+    d.style.setProperty('--dx', (Math.random() * 4 - 2).toFixed(1) + '%');
+    d.style.setProperty('--dy', (Math.random() * 4 - 2).toFixed(1) + '%');
+    d.style.animationDelay = (-Math.random() * 10).toFixed(1) + 's';
+    return d;
+  }
+
+  function label(t, p) {
+    t.el.setAttribute('data-quick', p.slug);
+    t.el.href = p.href;
+    t.el.setAttribute('aria-label', p.title + ', ' + FA.priceTag(p));
+    t.cap.innerHTML = '<span class="t">' + FA.esc(p.title) + '<span class="go">Quick view &rarr;</span></span><span class="p">' + FA.priceTag(p) + '</span>';
+    var f = t.el.querySelector('.flag');
+    if (f) f.remove();
+    if (p.isNew || p.sold) t.el.insertAdjacentHTML('beforeend', p.sold ? '<span class="flag sold">Sold out</span>' : '<span class="flag inv">New</span>');
+  }
+
+  function build() {
+    tiles.forEach(function (t) { deck.release(t.print); });
+    wall.innerHTML = ''; tiles = [];
+    var g = layout();
+    var pc = g.cols < 5 ? 1 : Math.floor(g.cols / 2), pr = Math.floor(g.rows / 2);
+    wall.style.setProperty('--pc', pc); wall.style.setProperty('--pr', pr);
+
+    var newOnes = FA.prints.filter(function (p) { return p.isNew; });
+    plaque = document.createElement('section');
+    plaque.className = 'plaque';
+    plaque.innerHTML =
+      '<div><p class="eyebrow">Limited-edition prints · Edition of 15</p>' +
+      '<h1><span>LAYERED MEMORY.</span><span>LIVING COLOUR.</span></h1>' +
+      '<p class="lede">Signed, numbered, certificate of authenticity. A3 £200 · A2 £250 · A1 £300.</p></div>' +
+      '<div style="display:flex;flex-direction:column;gap:12px">' +
+        '<div class="ctas"><a class="btn" href="/prints">Shop all prints &rarr;</a>' +
+        '<a class="btn ghost" href="/prints" data-quick="' + newOnes[0].slug + '">New: ' + FA.esc(newOnes[0].title) + '</a></div>' +
+        '<button class="now" id="now" type="button"><span>Just hung — <b>…</b></span><span class="p"></span></button>' +
+      '</div>';
+
+    var plaqueCells = g.cols < 5 ? g.cols * 2 : 4, total = g.cols * g.rows - plaqueCells;
+    wall.appendChild(plaque);
+    for (var i = 0; i < total; i++) {
+      var p = deck.next();
+      var a = document.createElement('a');
+      a.className = 'tile';
+      a.appendChild(layer(p));
+      var cap = document.createElement('span'); cap.className = 'cap';
+      a.appendChild(cap);
+      a.style.opacity = 0;
+      wall.appendChild(a);
+      var t = { el: a, cap: cap, print: p };
+      label(t, p);
+      tiles.push(t);
+    }
+    nowEl = document.getElementById('now');
+    setNow(newOnes[0]);
+  }
+
+  function setNow(p) {
+    nowEl.setAttribute('data-quick', p.slug);
+    nowEl.innerHTML = '<span>Just hung — <b>' + FA.esc(p.title) + '</b></span><span class="p">' + FA.priceTag(p) + ' &rarr;</span>';
+  }
+
+  function intro() {
+    var cols = +wall.style.getPropertyValue('--cols');
+    tiles.forEach(function (t, i) {
+      var r = Math.floor(i / cols), c = i % cols;
+      t.el.style.transition = 'opacity .9s ease ' + ((r + c) * 70) + 'ms, filter .5s';
+      requestAnimationFrame(function () { t.el.style.opacity = 1; });
+    });
+    setTimeout(function () { plaque.classList.add('in'); }, 400);
+  }
+
+  function swap() {
+    if (paused) return;
+    var hovered = wall.querySelector('.tile:hover');
+    if (hovered && !FA.touch) return;               // someone is looking: hold the whole wall still
+    var t = tiles[Math.floor(Math.random() * tiles.length)];
+    var p = deck.next();
+    var img = new Image();
+    img.onload = function () {
+      var inc = layer(p);
+      inc.classList.add('incoming');
+      inc.style.setProperty('--from', FA.reduced ? '0' : EDGES[Math.floor(Math.random() * EDGES.length)]);
+      t.el.insertBefore(inc, t.cap);
+      void inc.offsetWidth;
+      inc.classList.add('in');
+      t.el.classList.remove('flash'); void t.el.offsetWidth; t.el.classList.add('flash');
+      setTimeout(function () {
+        var old = t.el.querySelectorAll('.layer');
+        for (var i = 0; i < old.length - 1; i++) old[i].remove();
+        inc.classList.remove('incoming', 'in');
+      }, 1200);
+      deck.release(t.print);
+      t.print = p; label(t, p);
+      setNow(p);
+    };
+    img.src = p.src;
+  }
+
+  build();
+  FA.boot({}, function () {
+    intro();
+    setTimeout(function loop() { swap(); setTimeout(loop, FA.reduced ? 3000 : 1400 + Math.random() * 800); }, 1800);
+  });
+
+  var rt;
+  addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(function () { build(); intro(); }, 250); });
+})();
+</script>
+</body>
+</html>

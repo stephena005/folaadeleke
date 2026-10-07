@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Homepage Takeover — three options</title>
+<style>
+  :root { --mono: 'Courier New', Courier, monospace; --soft: #6f6f6f; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #fff; color: #000; font-family: var(--mono); }
+  header { padding: 28px 32px 20px; border-bottom: 1px solid #000; }
+  h1 { margin: 0 0 8px; font-size: 14px; font-weight: normal; letter-spacing: .28em; text-transform: uppercase; }
+  .sub { margin: 0; font-size: 12px; letter-spacing: .04em; color: var(--soft); line-height: 1.7; max-width: 80ch; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 28px; padding: 28px 32px 60px; }
+  .cap { margin: 0 0 4px; font-size: 11px; letter-spacing: .24em; text-transform: uppercase; }
+  .note { margin: 0 0 12px; font-size: 11px; color: var(--soft); line-height: 1.7; min-height: 5.1em; }
+  .frame { position: relative; aspect-ratio: 16 / 10; border: 1px solid #000; overflow: hidden; background: #000; }
+  .frame iframe { position: absolute; top: 0; left: 0; width: 1440px; height: 900px; border: 0; transform-origin: 0 0; }
+  .open { display: inline-block; margin-top: 10px; font-size: 10px; letter-spacing: .22em; text-transform: uppercase; color: #000; }
+  @media (max-width: 600px) { header, .grid { padding-left: 16px; padding-right: 16px; } .grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>Homepage takeover — three options · v2 conversion</h1>
+  <p class="sub">Every print is now a product: price on every tile, New / Sold out flags, and one click to a quick view
+    with size picker and a Buy button straight to the Shopify product. "Shop Prints" and "Basket" in the nav. The 25%-off card
+    waits 8s (or exit intent), never covers an open product, and folds into a side tab when closed.
+    Real data from /prints: A3 £200 · A2 £250 · A1 £300, editions of 15. <code>?popup=0</code> hides the card; <code>?popup=now</code> shows it immediately.</p>
+</header>
+<div class="grid">
+  <div>
+    <p class="cap">A · Mosaic Shuffle</p>
+    <p class="note">Wall-to-wall shop. Hover a tile for title + price (always on touch); click for quick view. Swaps slowed to ~1.8s and the wall freezes while you hover or a product is open. Plaque leads with edition, prices, Shop All and the newest print.</p>
+    <div class="frame"><iframe src="a-mosaic.html?popup=0" loading="lazy" title="Option A"></iframe></div>
+    <a class="open" href="a-mosaic.html">Open full screen &rarr;</a>
+  </div>
+  <div>
+    <p class="cap">B · Spotlight</p>
+    <p class="note">The stage is a mini product page: print, edition, size picker, Buy. Opens on the 3 new prints. Hover pauses; choosing a size, arrows or a queue tile stops autoplay so the product never changes mid-purchase. Foot ticker carries trust + 25% offer. Strongest for conversion.</p>
+    <div class="frame"><iframe src="b-spotlight.html?popup=0" loading="lazy" title="Option B"></iframe></div>
+    <a class="open" href="b-spotlight.html">Open full screen &rarr;</a>
+  </div>
+  <div>
+    <p class="cap">C · Drift Wall</p>
+    <p class="note">Slower drift, price under every print, New work seeded at the top of the centre columns. Statement plays the intro then clears off the art. Dock is the till: what you're looking at + price + Buy, 25% offer, Shop All. Most immersive.</p>
+    <div class="frame"><iframe src="c-drift.html?popup=0" loading="lazy" title="Option C"></iframe></div>
+    <a class="open" href="c-drift.html">Open full screen &rarr;</a>
+  </div>
+</div>
+<script>
+  function fit() {
+    document.querySelectorAll('.frame').forEach(function (f) {
+      f.querySelector('iframe').style.transform = 'scale(' + (f.clientWidth / 1440) + ')';
+    });
+  }
+  fit(); addEventListener('resize', fit);
+</script>
+</body>
+</html>

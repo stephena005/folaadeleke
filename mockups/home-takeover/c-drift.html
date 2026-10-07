@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Home C · Drift Wall — Fola Adeleke®</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="stylesheet" href="shared.css" />
+<style>
+  /* C · DRIFT WALL — v2 (conversion)
+     Every card is a product: title and "From £200" under each, New flags,
+     click = quick view with size picker and Buy. The drift is slower and a
+     hovered column eases to a stop. The big statement plays the intro, then
+     steps back so it never sits over the art. The dock is the till: shop
+     button, the print you are looking at with its price, and the 25% offer.
+
+     Original notes:
+     Every print, in columns that never stop moving — alternate columns
+     run up and down at different speeds, like a hang being walked past.
+     The cursor steers it: move left/right to lean the wall, scroll or
+     swipe to push it. Hover a print to stop its column and read the
+     label. The statement sits over the art in difference blend so it
+     reads on anything. */
+  .drift {
+    position: fixed; inset: 0 0 64px; display: flex; gap: 14px; padding: 0 14px; overflow: hidden;
+    background: #000;
+  }
+  .col { flex: 1; position: relative; min-width: 0; }
+  .track { position: absolute; left: 0; right: 0; top: 0; will-change: transform; }
+  .card {
+    display: block; margin-bottom: 14px; position: relative; text-decoration: none; color: #fff;
+    opacity: 0; transform: translateY(40px); transition: opacity 1s ease, transform 1.2s var(--ease);
+  }
+  .drift.in .card { opacity: 1; transform: none; }
+  .card img { display: block; width: 100%; height: auto; transition: filter .5s, transform .6s var(--ease); }
+  .card .cap {
+    display: flex; justify-content: space-between; gap: 8px; padding: 8px 0 0;
+    font-size: 9px; letter-spacing: .18em; text-transform: uppercase; color: rgba(255,255,255,.7);
+    transition: color .3s;
+  }
+  .card .cap span:first-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .card .cap .p { color: #fff; flex-shrink: 0; }
+  .card .flag { position: absolute; top: 8px; left: 8px; z-index: 2; }
+  .card .qv-hint {
+    position: absolute; left: 50%; top: 42%; transform: translate(-50%, -50%); z-index: 2;
+    background: #fff; color: #000; font-size: 9px; letter-spacing: .25em; text-transform: uppercase; padding: 9px 12px; white-space: nowrap;
+    opacity: 0; transition: opacity .3s;
+  }
+  .drift .card:hover .qv-hint { opacity: 1; }
+  .drift:hover .card img { filter: grayscale(1) brightness(.45); }
+  .drift .card:hover img { filter: none; transform: scale(1.02); }
+  .drift .card:hover .cap { color: #fff; }
+
+  .statement {
+    transition: opacity 1.2s ease, transform 1.2s var(--ease);
+    position: fixed; left: 0; right: 0; top: 50%; transform: translateY(-50%); z-index: 20;
+    text-align: center; pointer-events: none; color: #fff; mix-blend-mode: difference; padding: 0 16px;
+  }
+  .statement h1 { font-weight: normal; font-size: clamp(38px, 8.4vw, 150px); line-height: .98; letter-spacing: -.01em; }
+  .statement h1 span { display: block; overflow: hidden; }
+  .statement h1 span i { display: block; font-style: normal; transform: translateY(105%); transition: transform 1.3s var(--ease); }
+  .statement.in h1 span i { transform: none; }
+  .statement.in h1 span:nth-child(2) i { transition-delay: .15s; }
+  .statement .label { margin-bottom: 22px; opacity: 0; transition: opacity 1s .3s; }
+  .statement.in .label { opacity: 1; }
+  .statement.away { opacity: 0; transform: translateY(-60%) scale(.96); }
+
+  .dock {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; padding: 0 0 0 28px; height: 64px;
+    display: flex; justify-content: space-between; align-items: center; gap: 16px;
+    background: #fff; color: #000; border-top: 1px solid #000;
+    transform: translateY(100%); transition: transform 1s var(--ease) .5s;
+  }
+  .dock.in { transform: none; }
+  .dock .cta { font-size: 11px; letter-spacing: .25em; text-transform: uppercase; }
+  .dock .left { display: flex; align-items: center; gap: 22px; min-width: 0; }
+  .dock .trust { white-space: nowrap; }
+  .dock .looking { font-family: var(--font); background: none; border: none; cursor: pointer; text-align: left; font-size: 10px; letter-spacing: .22em; text-transform: uppercase; color: var(--grey-mid); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .dock .looking b { font-weight: normal; color: #000; }
+  .dock .right { display: flex; align-items: stretch; height: 100%; }
+  .dock .right .btn { height: 100%; padding: 0 26px; }
+  .mock-replay { bottom: 76px; }
+  .dock .right .btn.offer { background: #fff; color: #000; border: 0; border-left: 1px solid #000; }
+  .speed { display: flex; gap: 3px; align-items: flex-end; height: 14px; }
+  .speed i { width: 2px; background: #000; height: 30%; transition: height .2s; }
+
+  @media (max-width: 700px) {
+    .drift { gap: 8px; padding: 0 8px; }
+    .card { margin-bottom: 8px; }
+    .card .cap { display: none; }
+    .drift { bottom: 56px; top: var(--nav-height); }
+    nav.nav-ghost { background: #fff; color: #000; mix-blend-mode: normal; border-bottom-color: var(--grey-light); }
+    .mock-replay { bottom: 66px; }
+    .dock { padding: 0; height: 56px; }
+    .dock .left, .dock .trust, .speed { display: none; }
+    .dock .right { flex: 1; }
+    .dock .right .btn { flex: 1; padding: 0 10px; font-size: 9px; letter-spacing: .14em; }
+    .card .cap span:first-child { display: none; }
+    .card .cap { position: absolute; left: 0; right: 0; bottom: 0; padding: 18px 6px 5px; justify-content: flex-end; font-size: 8px; letter-spacing: .12em; background: linear-gradient(0deg, rgba(0,0,0,.8), transparent); }
+  }
+</style>
+</head>
+<body>
+<main class="drift" id="drift" aria-label="Every print, drifting"></main>
+<div class="statement" id="statement">
+  <p class="label">Fola Adeleke — Mixed Media Artist</p>
+  <h1><span><i>LAYERED MEMORY.</i></span><span><i>LIVING COLOUR.</i></span></h1>
+</div>
+<div class="dock" id="dock">
+  <div class="left">
+    <div class="speed" id="speed" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+    <button class="looking" id="looking" type="button">34 limited editions — <b>hover one to stop it</b></button>
+    <span class="trust">Edition of 15 · Signed &amp; numbered · Certificate of authenticity</span>
+  </div>
+  <div class="right">
+    <button class="btn offer" type="button" id="offerBtn">25% off first order</button>
+    <a class="btn" href="/prints">Shop all prints &rarr;</a>
+  </div>
+</div>
+
+<script src="shared.js"></script>
+<script>
+(function () {
+  var drift = document.getElementById('drift');
+  var cols = [], rafId, last = 0, boost = 0, lean = 0;
+
+  function build() {
+    cancelAnimationFrame(rafId);
+    drift.innerHTML = ''; cols = [];
+    var n = innerWidth < 700 ? 3 : innerWidth < 1100 ? 4 : 6;
+    var prints = FA.shuffle(FA.prints);
+    // new work goes to the top of the middle columns, where eyes land first
+    var fresh = prints.filter(function (p) { return p.isNew; });
+    prints = prints.filter(function (p) { return !p.isNew; });
+    var mid = Math.floor(n / 2);
+    fresh.forEach(function (p, i) { prints.splice((mid - 1 + i + n) % n, 0, p); });
+    var buckets = []; for (var i = 0; i < n; i++) buckets.push([]);
+    prints.forEach(function (p, i) { buckets[i % n].push(p); });
+
+    buckets.forEach(function (list, c) {
+      var col = document.createElement('div'); col.className = 'col';
+      var track = document.createElement('div'); track.className = 'track';
+      // two copies so the loop is seamless
+      var html = '';
+      for (var r = 0; r < 2; r++) list.forEach(function (p, k) {
+        html += '<a class="card" href="' + p.href + '" data-quick="' + p.slug + '" style="transition-delay:' + ((c * 90) + k * 60) + 'ms">' +
+          (p.isNew ? '<span class="flag inv">New</span>' : p.sold ? '<span class="flag sold">Sold out</span>' : '') +
+          '<img src="' + p.src + '" alt="' + FA.esc(p.title) + ' — fine art print by Fola Adeleke" loading="eager" decoding="async">' +
+          '<span class="qv-hint">Quick view</span>' +
+          '<span class="cap"><span>' + FA.esc(p.title) + '</span><span class="p">' + FA.priceTag(p) + '</span></span></a>';
+      });
+      track.innerHTML = html;
+      col.appendChild(track); drift.appendChild(col);
+      var dir = c % 2 ? 1 : -1;
+      cols.push({ el: col, track: track, dir: dir, speed: 22 + (c * 7) % 15, y: 0, half: 0, k: 1, paused: false });
+      col.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') cols[c].paused = true; });
+      col.addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse') cols[c].paused = false; });
+      track.querySelectorAll('.card').forEach(function (a, k) {
+        a.addEventListener('mouseenter', function () {
+          var p = list[k % list.length], l = document.getElementById('looking');
+          l.setAttribute('data-quick', p.slug);
+          l.innerHTML = FA.esc(p.title) + ' — <b>' + FA.priceTag(p) + ' · Buy &rarr;</b>';
+        });
+      });
+    });
+  }
+
+  function measure() {
+    cols.forEach(function (c) {
+      c.half = c.track.scrollHeight / 2;
+      if (!c.init) { c.init = 1; c.y = c.dir > 0 ? -c.half : 0; }
+    });
+  }
+
+  function frame(t) {
+    var dt = Math.min(64, t - (last || t)) / 1000; last = t;
+    boost *= 0.94;                                  // scroll push decays back to cruise
+    var bars = document.querySelectorAll('#speed i'), mag = Math.min(1, Math.abs(boost) / 600);
+    bars.forEach(function (b, i) { b.style.height = (30 + 70 * Math.max(0, Math.min(1, mag * 5 - i + .6 + Math.sin(t / 300 + i) * .15))) + '%'; });
+
+    cols.forEach(function (c, i) {
+      c.half = c.track.offsetHeight / 2 || c.half;
+      var target = (c.paused || modal) ? 0 : 1;
+      c.k += (target - c.k) * 0.08;                          // ease to a stop, ease back
+      var v = (c.speed * (FA.reduced ? .35 : 1) * c.dir + boost * (c.dir > 0 ? 1 : -1) * .5) * c.k;
+      if (isFinite(v)) c.y += v * dt;
+      if (c.half && c.y <= -c.half) c.y += c.half;
+      if (c.half && c.y > 0) c.y -= c.half;
+      var skew = lean * (i - (cols.length - 1) / 2) * 6;      // cursor leans the wall
+      c.track.style.transform = 'translate3d(0,' + (c.y + skew).toFixed(1) + 'px,0)';
+    });
+    rafId = requestAnimationFrame(frame);
+  }
+
+  addEventListener('wheel', function (e) { if (FA.reduced) return; boost += e.deltaY * 1.2; boost = Math.max(-1600, Math.min(1600, boost)); }, { passive: true });
+  var ty = null;
+  addEventListener('touchstart', function (e) { ty = e.touches[0].clientY; }, { passive: true });
+  addEventListener('touchmove', function (e) { if (ty == null) return; boost += (ty - e.touches[0].clientY) * 6; ty = e.touches[0].clientY; }, { passive: true });
+  addEventListener('mousemove', function (e) { lean += ((e.clientX / innerWidth - .5) - lean) * .2; });
+
+  document.getElementById('offerBtn').onclick = function () { FA.openCard(true); };
+  var modal = false;
+  FA.on(function (k, v) { modal = v; });                     // the wall stops while a product or the card is open
+
+  build();
+  FA.boot({ ghostNav: true, preload: FA.prints.slice(0, 18) }, function () {
+    measure();
+    drift.classList.add('in');
+    document.getElementById('statement').classList.add('in');
+    document.getElementById('dock').classList.add('in');
+    rafId = requestAnimationFrame(frame);
+    setTimeout(function () { document.getElementById('statement').classList.add('away'); }, 4500);
+  });
+  addEventListener('load', measure);
+  var rt;
+  function colCount() { return innerWidth < 700 ? 3 : innerWidth < 1100 ? 4 : 6; }
+  addEventListener('resize', function () {
+    // mobile Safari fires resize as the address bar collapses: only rebuild when the column count changes
+    if (colCount() === cols.length) return;
+    clearTimeout(rt);
+    rt = setTimeout(function () { build(); drift.classList.add('in'); requestAnimationFrame(function () { measure(); rafId = requestAnimationFrame(frame); }); }, 250);
+  });
+})();
+</script>
+</body>
+</html>

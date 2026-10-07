@@ -2,7 +2,11 @@
    Newsletter pop-up — "Drift"
 
    Homepage:    a centred card rises 120px from below the fold
-                behind a dim overlay. Blocking, dismissable.
+                behind a dim overlay. Blocking, dismissable. It waits
+                until the visitor has had a proper look at the wall
+                (HOME_DELAY) or moves to leave the page, whichever is
+                first, and never opens over a print they have open
+                (the page sets html.fa-hold-popup while it is).
    Every other: a full-width strip descends from under the nav.
                 Blocks nothing, locks no scroll, retracts itself.
 
@@ -32,7 +36,8 @@
   var CARD_COOLDOWN  = 0;
   var STRIP_COOLDOWN = 0;
   var MIN_VIEWS      = 1;
-  var HOME_DELAY   = 700;    // measured from when the loading curtain clears
+  var HOME_DELAY   = 8000;   // measured from when the loading curtain clears — the
+                            // home page is a shop wall; let them look before asking
   var STRIP_DELAY  = 600;
   var CURTAIN_MAX  = 6000;   // safety net if the curtain never lifts
   var STRIP_LIFE   = 12000;  // then it retracts on its own
@@ -341,6 +346,30 @@
     okWrap.hidden = false;
   }
 
+  // The home card can be asked for twice (timer, exit intent): run it once,
+  // and hold it while the page has something open on top of the wall.
+  var opened = false;
+  function openOnce() {
+    if (opened) return;
+    if (document.documentElement.classList.contains('fa-hold-popup')) { setTimeout(openOnce, 1000); return; }
+    opened = true;
+    openCard();
+  }
+
+  // Pages can open the card on request — the home page's "25% off" buttons.
+  // A visitor asking for it skips every display rule; subscribed() lets the
+  // page tell someone who has already joined instead.
+  var keysBound = false;
+  window.faNewsletter = {
+    open: function () {
+      opened = true;
+      injectStyles();
+      if (!keysBound) { keysBound = true; document.addEventListener('keydown', onKeydown); }
+      openCard();
+    },
+    subscribed: function () { return get(SUBBED) === '1'; }
+  };
+
   // ── run ─────────────────────────────────────────────────────
   // Most pages open behind a loading curtain that holds for at least 1.8s and
   // then fades. Opening into that means the pop-up rises over a loading screen,
@@ -363,11 +392,20 @@
     var views = bumpViews();
     if (!shouldRun(views)) return;
     injectStyles();
+    keysBound = true;
     document.addEventListener('keydown', onKeydown);
 
-    var open  = isHome() ? openCard : openStrip;
+    var open  = isHome() ? openOnce : openStrip;
     var delay = isHome() ? HOME_DELAY : STRIP_DELAY;
-    function begin() { afterCurtain(function () { setTimeout(open, delay); }); }
+    function begin() {
+      afterCurtain(function () {
+        setTimeout(open, delay);
+        // Exit intent (desktop): the pointer leaves through the top of the window.
+        if (isHome()) document.addEventListener('mouseout', function (e) {
+          if (!e.relatedTarget && e.clientY <= 0) openOnce();
+        });
+      });
+    }
     if (document.readyState === 'complete') begin();
     else window.addEventListener('load', begin);
   }

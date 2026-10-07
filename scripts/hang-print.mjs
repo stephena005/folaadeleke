@@ -32,8 +32,10 @@
 //      Entrance work moves to the end of its room with the next salon
 //      nudge and lazy loading; room counts, "No. N", the floor-plan total
 //      and the three data-new flags are all updated.
-//   3. index.html — the featured strip leads with the new print, keeps
-//      four, and the fade-up delays are re-sequenced.
+//   3. index.html — exports the 640px wall thumbnail to
+//      images/prints/thumbs/<slug>.jpg and regenerates the home page wall
+//      from the updated prints page (scripts/build-home-wall.mjs), so the
+//      new print and the moved New flags show there too.
 //   4. design.md — the "at the time of writing" line.
 //   5. Stages everything it wrote, runs scripts/check-site.mjs, and HEAD-
 //      checks the shop URL (a warning, not a failure — the product may not
@@ -45,6 +47,7 @@ import { existsSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { THUMB_DIR, jpegSize, renderWall, replaceWall } from './build-home-wall.mjs';
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(scriptDir, '..');
@@ -175,23 +178,20 @@ prints = prints.replace(HANG_RE, (block) => {
 const total = plateNumbers.length + 1;
 prints = prints.replace(/(<span id="whereCount">01 \/ )\d+(<\/span>)/, `$1${total}$2`);
 
-// ── 3. index.html featured strip ─────────────────────────────────────────
-let home = readFileSync(HOME, 'utf8');
-const gridStart = home.indexOf('<div class="featured-grid">');
-if (gridStart === -1) die('no .featured-grid in index.html');
-const gridEnd = home.indexOf('\n      </div>', gridStart) + 1;
-const grid = home.slice(gridStart, gridEnd);
-const items = grid.match(/^ {8}<a class="featured-item[\s\S]*?^ {8}<\/a>\n/gm) ?? [];
-const newItem =
-`        <a class="featured-item fade-up" href="/prints#${slug}" style="animation-delay: 0.05s;">
-          <div class="featured-item-frame"><img src="/${webRel}" alt="${alt}" loading="lazy" decoding="async"/></div>
-          <p class="featured-item-name">${escText(title)}</p>
-        </a>
-`;
-const delays = ['0.05s', '0.18s', '0.3s', '0.42s'];
-const strip = [newItem, ...items].slice(0, 4).map((it, i) => it.replace(/animation-delay: [\d.]+s;/, `animation-delay: ${delays[i]};`));
-home = home.slice(0, gridStart) + '<div class="featured-grid">\n' + strip.join('') + home.slice(gridEnd);
-if (items.length >= 4) console.log(`home    featured strip drops ${/featured-item-name">([^<]+)</.exec(items[items.length - 1])[1]}`);
+// ── 3. index.html wall ───────────────────────────────────────────────────
+// The home page wall is generated from the prints page: export the new
+// print's thumbnail, then rebuild every card from the wall as it now stands.
+const thumbRel = `${THUMB_DIR}/${slug}.jpg`;
+const thumbTo = dryRun ? join(dirname(exportTo), `${slug}-thumb.jpg`) : resolve(repoRoot, thumbRel);
+const th = spawnSync('python3', [resolve(scriptDir, 'export-print-thumb.py'), exportTo, thumbTo], { encoding: 'utf8' });
+if (th.status !== 0) die(`thumbnail export failed:\n${th.stderr}`);
+console.log(`thumb   ${thumbRel}  ${th.stdout.trim()}`);
+const thumbDims = (rel) => {
+  const f = rel === thumbRel ? thumbTo : resolve(repoRoot, rel);
+  return existsSync(f) ? jpegSize(readFileSync(f)) : null;
+};
+let home = replaceWall(readFileSync(HOME, 'utf8'), renderWall(prints, thumbDims));
+console.log(`home    wall rebuilt, led by ${title}`);
 
 // ── 4. design.md ─────────────────────────────────────────────────────────
 let design = readFileSync(DESIGN, 'utf8');
@@ -201,14 +201,14 @@ design = design.replace(designRe, `drop (No. ${number}, ${title}, at the time of
 
 // ── write, stage, check ──────────────────────────────────────────────────
 if (dryRun) {
-  console.log(`\n[dry run] would write prints/index.html, index.html, design.md and ${webRel}; nothing written.`);
+  console.log(`\n[dry run] would write prints/index.html, index.html, design.md, ${webRel} and ${thumbRel}; nothing written.`);
   console.log(`[dry run] export left at ${exportTo} for inspection.`);
   process.exit(0);
 }
 writeFileSync(PRINTS, prints);
 writeFileSync(HOME, home);
 writeFileSync(DESIGN, design);
-const touched = ['prints/index.html', 'index.html', 'design.md', webRel]; // sitemap dates follow at commit, via the hook
+const touched = ['prints/index.html', 'index.html', 'design.md', webRel, thumbRel]; // sitemap dates follow at commit, via the hook
 execFileSync('git', ['add', '--', ...touched], { cwd: repoRoot });
 console.log(`staged  ${touched.join(', ')}`);
 
