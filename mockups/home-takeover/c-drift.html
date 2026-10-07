@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Home C · Drift Wall — Fola Adeleke®</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="stylesheet" href="shared.css" />
+<style>
+  /* C · DRIFT WALL
+     Every print, in columns that never stop moving — alternate columns
+     run up and down at different speeds, like a hang being walked past.
+     The cursor steers it: move left/right to lean the wall, scroll or
+     swipe to push it. Hover a print to stop its column and read the
+     label. The statement sits over the art in difference blend so it
+     reads on anything. */
+  .drift {
+    position: fixed; inset: 0; display: flex; gap: 14px; padding: 0 14px; overflow: hidden;
+    background: #000;
+  }
+  .col { flex: 1; position: relative; min-width: 0; }
+  .track { position: absolute; left: 0; right: 0; top: 0; will-change: transform; }
+  .card {
+    display: block; margin-bottom: 14px; position: relative; text-decoration: none; color: #fff;
+    opacity: 0; transform: translateY(40px); transition: opacity 1s ease, transform 1.2s var(--ease);
+  }
+  .drift.in .card { opacity: 1; transform: none; }
+  .card img { display: block; width: 100%; height: auto; transition: filter .5s, transform .6s var(--ease); }
+  .card .cap {
+    display: flex; justify-content: space-between; padding: 8px 0 0;
+    font-size: 9px; letter-spacing: .22em; text-transform: uppercase; color: rgba(255,255,255,.55);
+    transition: color .3s;
+  }
+  .drift:hover .card img { filter: grayscale(1) brightness(.45); }
+  .drift .card:hover img { filter: none; transform: scale(1.02); }
+  .drift .card:hover .cap { color: #fff; }
+
+  .statement {
+    position: fixed; left: 0; right: 0; top: 50%; transform: translateY(-50%); z-index: 20;
+    text-align: center; pointer-events: none; color: #fff; mix-blend-mode: difference; padding: 0 16px;
+  }
+  .statement h1 { font-weight: normal; font-size: clamp(38px, 8.4vw, 150px); line-height: .98; letter-spacing: -.01em; }
+  .statement h1 span { display: block; overflow: hidden; }
+  .statement h1 span i { display: block; font-style: normal; transform: translateY(105%); transition: transform 1.3s var(--ease); }
+  .statement.in h1 span i { transform: none; }
+  .statement.in h1 span:nth-child(2) i { transition-delay: .15s; }
+  .statement .label { margin-bottom: 22px; opacity: 0; transition: opacity 1s .3s; }
+  .statement.in .label { opacity: 1; }
+
+  .dock {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; padding: 16px 28px;
+    display: flex; justify-content: space-between; align-items: center; gap: 16px;
+    background: #fff; color: #000; border-top: 1px solid #000;
+    transform: translateY(100%); transition: transform 1s var(--ease) .5s;
+  }
+  .dock.in { transform: none; }
+  .dock .cta { font-size: 11px; letter-spacing: .25em; text-transform: uppercase; }
+  .dock .looking { font-size: 10px; letter-spacing: .22em; text-transform: uppercase; color: var(--grey-mid); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .dock .looking b { font-weight: normal; color: #000; }
+  .speed { display: flex; gap: 3px; align-items: flex-end; height: 14px; }
+  .speed i { width: 2px; background: #000; height: 30%; transition: height .2s; }
+
+  @media (max-width: 700px) {
+    .drift { gap: 8px; padding: 0 8px; }
+    .card { margin-bottom: 8px; }
+    .card .cap { display: none; }
+    .dock { padding: 14px 16px; }
+    .dock .looking { display: none; }
+  }
+</style>
+</head>
+<body>
+<main class="drift" id="drift" aria-label="Every print, drifting"></main>
+<div class="statement" id="statement">
+  <p class="label">Fola Adeleke — Mixed Media Artist</p>
+  <h1><span><i>LAYERED MEMORY.</i></span><span><i>LIVING COLOUR.</i></span></h1>
+</div>
+<div class="dock" id="dock">
+  <a class="cta underline-link" href="/prints">View The Prints &rarr;</a>
+  <p class="looking" id="looking">34 prints on the wall — <b>hover to stop one</b></p>
+  <div class="speed" id="speed" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+</div>
+
+<script src="shared.js"></script>
+<script>
+(function () {
+  var drift = document.getElementById('drift');
+  var cols = [], rafId, last = 0, boost = 0, lean = 0;
+
+  function build() {
+    cancelAnimationFrame(rafId);
+    drift.innerHTML = ''; cols = [];
+    var n = innerWidth < 700 ? 3 : innerWidth < 1100 ? 4 : 6;
+    var prints = FA.shuffle(FA.prints).concat([FA.hero]);
+    var buckets = []; for (var i = 0; i < n; i++) buckets.push([]);
+    prints.forEach(function (p, i) { buckets[i % n].push(p); });
+
+    buckets.forEach(function (list, c) {
+      var col = document.createElement('div'); col.className = 'col';
+      var track = document.createElement('div'); track.className = 'track';
+      // two copies so the loop is seamless
+      var html = '';
+      for (var r = 0; r < 2; r++) list.forEach(function (p, k) {
+        html += '<a class="card" href="' + p.href + '" style="transition-delay:' + ((c * 90) + k * 60) + 'ms">' +
+          '<img src="' + p.src + '" alt="' + p.title + ' — fine art print by Fola Adeleke" loading="eager" decoding="async">' +
+          '<span class="cap"><span>' + p.title + '</span><span>&rarr;</span></span></a>';
+      });
+      track.innerHTML = html;
+      col.appendChild(track); drift.appendChild(col);
+      var dir = c % 2 ? 1 : -1;
+      cols.push({ el: col, track: track, dir: dir, speed: 18 + (c * 7) % 17, y: 0, half: 0, paused: false });
+      col.addEventListener('mouseenter', function () { cols[c].paused = true; });
+      col.addEventListener('mouseleave', function () { cols[c].paused = false; });
+      track.querySelectorAll('.card').forEach(function (a, k) {
+        a.addEventListener('mouseenter', function () {
+          document.getElementById('looking').innerHTML = 'Looking at — <b>' + list[k % list.length].title + '</b>';
+        });
+      });
+    });
+  }
+
+  function measure() {
+    cols.forEach(function (c) {
+      c.half = c.track.scrollHeight / 2;
+      if (!c.init) { c.init = 1; c.y = c.dir > 0 ? -c.half : 0; }
+    });
+  }
+
+  function frame(t) {
+    var dt = Math.min(64, t - (last || t)) / 1000; last = t;
+    boost *= 0.94;                                  // scroll push decays back to cruise
+    var bars = document.querySelectorAll('#speed i'), mag = Math.min(1, Math.abs(boost) / 600);
+    bars.forEach(function (b, i) { b.style.height = (30 + 70 * Math.max(0, Math.min(1, mag * 5 - i + .6 + Math.sin(t / 300 + i) * .15))) + '%'; });
+
+    cols.forEach(function (c, i) {
+      c.half = c.track.offsetHeight / 2 || c.half;
+      var target = c.paused ? 0 : 1;
+      c.k = (c.k == null ? 1 : c.k) + (target - c.k) * 0.08;   // ease to a stop, ease back
+      var v = (c.speed * c.dir + boost * (c.dir > 0 ? 1 : -1) * .5) * c.k;
+      c.y += v * dt;
+      if (c.half && c.y <= -c.half) c.y += c.half;
+      if (c.half && c.y > 0) c.y -= c.half;
+      var skew = lean * (i - (cols.length - 1) / 2) * 6;      // cursor leans the wall
+      c.track.style.transform = 'translate3d(0,' + (c.y + skew).toFixed(1) + 'px,0)';
+    });
+    rafId = requestAnimationFrame(frame);
+  }
+
+  addEventListener('wheel', function (e) { boost += e.deltaY * 1.2; boost = Math.max(-1600, Math.min(1600, boost)); }, { passive: true });
+  var ty = null;
+  addEventListener('touchstart', function (e) { ty = e.touches[0].clientY; }, { passive: true });
+  addEventListener('touchmove', function (e) { if (ty == null) return; boost += (ty - e.touches[0].clientY) * 6; ty = e.touches[0].clientY; }, { passive: true });
+  addEventListener('mousemove', function (e) { lean += ((e.clientX / innerWidth - .5) - lean) * .2; });
+
+  build();
+  FA.boot({ ghostNav: true, preload: FA.prints.slice(0, 18) }, function () {
+    measure();
+    drift.classList.add('in');
+    document.getElementById('statement').classList.add('in');
+    document.getElementById('dock').classList.add('in');
+    if (!FA.reduced) rafId = requestAnimationFrame(frame);
+  });
+  addEventListener('load', measure);
+  var rt;
+  addEventListener('resize', function () {
+    clearTimeout(rt);
+    rt = setTimeout(function () { build(); drift.classList.add('in'); requestAnimationFrame(function () { measure(); if (!FA.reduced) rafId = requestAnimationFrame(frame); }); }, 250);
+  });
+})();
+</script>
+</body>
+</html>

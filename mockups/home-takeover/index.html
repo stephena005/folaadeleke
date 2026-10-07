@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Homepage Takeover — three options</title>
+<style>
+  :root { --mono: 'Courier New', Courier, monospace; --soft: #6f6f6f; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #fff; color: #000; font-family: var(--mono); }
+  header { padding: 28px 32px 20px; border-bottom: 1px solid #000; }
+  h1 { margin: 0 0 8px; font-size: 14px; font-weight: normal; letter-spacing: .28em; text-transform: uppercase; }
+  .sub { margin: 0; font-size: 12px; letter-spacing: .04em; color: var(--soft); line-height: 1.7; max-width: 80ch; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 28px; padding: 28px 32px 60px; }
+  .cap { margin: 0 0 4px; font-size: 11px; letter-spacing: .24em; text-transform: uppercase; }
+  .note { margin: 0 0 12px; font-size: 11px; color: var(--soft); line-height: 1.7; min-height: 5.1em; }
+  .frame { position: relative; aspect-ratio: 16 / 10; border: 1px solid #000; overflow: hidden; background: #000; }
+  .frame iframe { position: absolute; top: 0; left: 0; width: 1440px; height: 900px; border: 0; transform-origin: 0 0; }
+  .open { display: inline-block; margin-top: 10px; font-size: 10px; letter-spacing: .22em; text-transform: uppercase; color: #000; }
+  @media (max-width: 600px) { header, .grid { padding-left: 16px; padding-right: 16px; } .grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>Homepage takeover — three options</h1>
+  <p class="sub">Full-screen grid replaces the hero + sections. Every print on the site cycles through it.
+    Same nav, propeller curtain and 25%-off newsletter card as live. Open each full-screen to feel the motion;
+    add <code>?popup=0</code> to review without the card.</p>
+</header>
+<div class="grid">
+  <div>
+    <p class="cap">A · Mosaic Shuffle</p>
+    <p class="note">Wall-to-wall tiles. One tile at a time wipes to a new print from a random edge, with a hairline flash; every tile slowly drifts. White plaque in the centre carries the statement and a live "now changing" ticker. Hover dims the rest.</p>
+    <div class="frame"><iframe src="a-mosaic.html?popup=0" loading="lazy" title="Option A"></iframe></div>
+    <a class="open" href="a-mosaic.html">Open full screen &rarr;</a>
+  </div>
+  <div>
+    <p class="cap">B · Spotlight</p>
+    <p class="note">Bento: one print on stage, a queue beside it. Every 5s "up next" flies onto the stage and the queue ripples forward. Progress hairline, 01/35 counter, title ticker along the foot. Click any tile to put it on stage. Most editorial; best for selling.</p>
+    <div class="frame"><iframe src="b-spotlight.html?popup=0" loading="lazy" title="Option B"></iframe></div>
+    <a class="open" href="b-spotlight.html">Open full screen &rarr;</a>
+  </div>
+  <div>
+    <p class="cap">C · Drift Wall</p>
+    <p class="note">Columns of prints flowing up and down at different speeds. Scroll/swipe pushes the wall, cursor leans it, hover stops a column. Huge statement in difference blend over the top. Most immersive; least "shop".</p>
+    <div class="frame"><iframe src="c-drift.html?popup=0" loading="lazy" title="Option C"></iframe></div>
+    <a class="open" href="c-drift.html">Open full screen &rarr;</a>
+  </div>
+</div>
+<script>
+  function fit() {
+    document.querySelectorAll('.frame').forEach(function (f) {
+      f.querySelector('iframe').style.transform = 'scale(' + (f.clientWidth / 1440) + ')';
+    });
+  }
+  fit(); addEventListener('resize', fit);
+</script>
+</body>
+</html>

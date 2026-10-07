@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Home A · Mosaic Shuffle — Fola Adeleke®</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="stylesheet" href="shared.css" />
+<style>
+  /* A · MOSAIC SHUFFLE
+     A wall-to-wall grid of every print. One tile at a time wipes to the
+     next print from a random edge, so the wall is never still but never
+     busy. A black plaque holds the statement in the centre. */
+  .wall {
+    position: fixed; top: var(--nav-height); left: 0; right: 0; bottom: 0;
+    display: grid; gap: 2px; background: #000;
+    grid-template-columns: repeat(var(--cols), 1fr);
+    grid-template-rows: repeat(var(--rows), 1fr);
+  }
+  .tile { position: relative; overflow: hidden; background: #111; display: block; }
+  .tile .layer {
+    position: absolute; inset: 0; background-size: cover; background-position: center;
+    animation: drift var(--dur, 14s) ease-in-out infinite alternate;
+  }
+  @keyframes drift { from { transform: scale(1.04) translate(0,0); } to { transform: scale(1.14) translate(var(--dx,-2%), var(--dy,-2%)); } }
+
+  /* incoming print wipes over the outgoing one */
+  .layer.incoming { clip-path: inset(var(--from)); transition: clip-path 1.1s var(--ease); z-index: 2; }
+  .layer.incoming.in { clip-path: inset(0 0 0 0); }
+
+  .tile .cap {
+    position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; padding: 10px 12px;
+    font-size: 9px; letter-spacing: .25em; text-transform: uppercase; color: #fff;
+    background: linear-gradient(0deg, rgba(0,0,0,.7), rgba(0,0,0,0));
+    opacity: 0; transform: translateY(6px); transition: opacity .4s, transform .4s var(--ease);
+  }
+  .wall:hover .tile { filter: grayscale(.85) brightness(.55); transition: filter .5s; }
+  .wall .tile:hover { filter: none; }
+  .wall .tile:hover .cap { opacity: 1; transform: none; }
+  .tile { transition: filter .5s; }
+  .tile.flash::after {                 /* hairline frame pulses on the tile that just changed */
+    content: ""; position: absolute; inset: 0; z-index: 4; border: 1px solid rgba(255,255,255,.9);
+    animation: flash 1.4s ease-out forwards; pointer-events: none;
+  }
+  @keyframes flash { from { opacity: 1; } to { opacity: 0; } }
+
+  .plaque {
+    grid-column: var(--pc) / span 2; grid-row: var(--pr) / span 2;
+    background: #fff; color: #000; z-index: 5;
+    display: flex; flex-direction: column; justify-content: space-between; padding: clamp(18px, 2.4vw, 36px);
+    opacity: 0; transform: scale(.96); transition: opacity 1s var(--ease), transform 1s var(--ease);
+  }
+  .plaque.in { opacity: 1; transform: none; }
+  .plaque h1 { font-weight: normal; white-space: nowrap; font-size: clamp(20px, 2.3vw, 40px); line-height: 1.08; letter-spacing: .005em; }
+  .plaque h1 span { display: block; }
+  .plaque .meta { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; }
+  .plaque .cta { font-size: 11px; letter-spacing: .25em; text-transform: uppercase; }
+  .counter { font-size: 10px; letter-spacing: .2em; color: var(--grey-mid); font-variant-numeric: tabular-nums; }
+  .now { font-size: 9px; letter-spacing: .25em; text-transform: uppercase; color: var(--grey-mid); min-height: 1.3em; overflow: hidden; }
+  .now b { font-weight: normal; color: #000; display: inline-block; animation: tick .6s var(--ease); }
+  @keyframes tick { from { transform: translateY(100%); } to { transform: none; } }
+
+  @media (max-width: 700px) {
+    .plaque { grid-column: 1 / -1; grid-row: var(--pr) / span 2; }
+    .wall:hover .tile { filter: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tile .layer { animation: none; }
+    .layer.incoming { transition: opacity .6s; clip-path: none; opacity: 0; }
+    .layer.incoming.in { opacity: 1; }
+  }
+</style>
+</head>
+<body>
+<main class="wall" id="wall" aria-label="Every print, shuffling"></main>
+
+<script src="shared.js"></script>
+<script>
+(function () {
+  var wall = document.getElementById('wall');
+  var deck = FA.Deck(FA.prints);
+  var tiles = [], plaque, nowEl, countEl, swaps = 0;
+  var EDGES = ['0 100% 0 0', '0 0 0 100%', '100% 0 0 0', '0 0 100% 0', '50% 50% 50% 50%'];
+
+  function layout() {
+    var w = innerWidth, h = innerHeight - 56;
+    var cols = w < 700 ? 3 : w < 1100 ? 5 : 7;
+    var rows = Math.max(3, Math.round(h / (w / cols) * 1.0));
+    wall.style.setProperty('--cols', cols);
+    wall.style.setProperty('--rows', rows);
+    return { cols: cols, rows: rows };
+  }
+
+  function layer(p) {
+    var d = document.createElement('div');
+    d.className = 'layer';
+    d.style.backgroundImage = 'url("' + p.src + '")';
+    d.style.setProperty('--dur', (10 + Math.random() * 10).toFixed(1) + 's');
+    d.style.setProperty('--dx', (Math.random() * 4 - 2).toFixed(1) + '%');
+    d.style.setProperty('--dy', (Math.random() * 4 - 2).toFixed(1) + '%');
+    d.style.animationDelay = (-Math.random() * 10).toFixed(1) + 's';
+    return d;
+  }
+
+  function build() {
+    tiles.forEach(function (t) { deck.release(t.print); });
+    wall.innerHTML = ''; tiles = [];
+    var g = layout();
+    var pc = g.cols < 5 ? 1 : Math.floor(g.cols / 2), pr = Math.floor(g.rows / 2);
+    wall.style.setProperty('--pc', pc); wall.style.setProperty('--pr', pr);
+
+    plaque = document.createElement('section');
+    plaque.className = 'plaque';
+    plaque.innerHTML =
+      '<div><p class="label" style="color:var(--grey-mid);margin-bottom:14px">Fola Adeleke — Mixed Media Artist</p>' +
+      '<h1><span>LAYERED MEMORY.</span><span>LIVING COLOUR.</span></h1></div>' +
+      '<div><p class="now" id="now">Now changing — <b>…</b></p>' +
+      '<div class="meta" style="margin-top:10px"><a class="cta underline-link" href="/prints">View The Prints &rarr;</a>' +
+      '<span class="counter" id="count">000</span></div></div>';
+
+    var plaqueCells = 4, total = g.cols * g.rows - plaqueCells;
+    if (g.cols < 5) plaqueCells = g.cols * 2, total = g.cols * g.rows - plaqueCells;
+    wall.appendChild(plaque);
+    for (var i = 0; i < total; i++) {
+      var p = deck.next();
+      var a = document.createElement('a');
+      a.className = 'tile'; a.href = p.href;
+      a.appendChild(layer(p));
+      var cap = document.createElement('span'); cap.className = 'cap'; cap.textContent = p.title;
+      a.appendChild(cap);
+      a.style.opacity = 0;
+      wall.appendChild(a);
+      tiles.push({ el: a, cap: cap, print: p });
+    }
+    nowEl = document.getElementById('now'); countEl = document.getElementById('count');
+  }
+
+  // Tiles arrive in a diagonal sweep as the curtain lifts.
+  function intro() {
+    var cols = +wall.style.getPropertyValue('--cols');
+    tiles.forEach(function (t, i) {
+      var r = Math.floor(i / cols), c = i % cols;
+      t.el.style.transition = 'opacity .9s ease ' + ((r + c) * 70) + 'ms';
+      requestAnimationFrame(function () { t.el.style.opacity = 1; });
+    });
+    setTimeout(function () { plaque.classList.add('in'); }, 400);
+  }
+
+  function swap() {
+    var hovered = wall.querySelector('.tile:hover');
+    var pool = tiles.filter(function (t) { return t.el !== hovered; });
+    var t = pool[Math.floor(Math.random() * pool.length)];
+    var p = deck.next();
+    var img = new Image();
+    img.onload = function () {
+      var inc = layer(p);
+      inc.classList.add('incoming');
+      inc.style.setProperty('--from', FA.reduced ? '0' : EDGES[Math.floor(Math.random() * EDGES.length)]);
+      t.el.insertBefore(inc, t.cap);
+      void inc.offsetWidth;
+      inc.classList.add('in');
+      t.el.classList.remove('flash'); void t.el.offsetWidth; t.el.classList.add('flash');
+      setTimeout(function () {
+        var old = t.el.querySelectorAll('.layer');
+        for (var i = 0; i < old.length - 1; i++) old[i].remove();
+        inc.classList.remove('incoming', 'in');
+      }, 1200);
+      deck.release(t.print);
+      t.print = p; t.el.href = p.href; t.cap.textContent = p.title;
+      swaps++;
+      countEl.textContent = String(swaps).padStart(3, '0');
+      nowEl.innerHTML = 'Now changing — <b>' + p.title + '</b>';
+    };
+    img.src = p.src;
+  }
+
+  build();
+  FA.boot({}, function () {
+    intro();
+    setTimeout(function loop() { swap(); setTimeout(loop, FA.reduced ? 2400 : 650 + Math.random() * 500); }, 1600);
+  });
+
+  var rt;
+  addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(function () { build(); intro(); }, 250); });
+})();
+</script>
+</body>
+</html>
