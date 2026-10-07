@@ -152,9 +152,9 @@
       track.innerHTML = html;
       col.appendChild(track); drift.appendChild(col);
       var dir = c % 2 ? 1 : -1;
-      cols.push({ el: col, track: track, dir: dir, speed: 12 + (c * 5) % 11, y: 0, half: 0, paused: false });
-      col.addEventListener('mouseenter', function () { cols[c].paused = true; });
-      col.addEventListener('mouseleave', function () { cols[c].paused = false; });
+      cols.push({ el: col, track: track, dir: dir, speed: 22 + (c * 7) % 15, y: 0, half: 0, k: 1, paused: false });
+      col.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') cols[c].paused = true; });
+      col.addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse') cols[c].paused = false; });
       track.querySelectorAll('.card').forEach(function (a, k) {
         a.addEventListener('mouseenter', function () {
           var p = list[k % list.length], l = document.getElementById('looking');
@@ -180,10 +180,10 @@
 
     cols.forEach(function (c, i) {
       c.half = c.track.offsetHeight / 2 || c.half;
-      var target = c.paused ? 0 : 1;
-      c.k = (c.k == null ? 1 : c.k) + (target - c.k) * 0.08;   // ease to a stop, ease back
-      var v = (c.speed * c.dir + boost * (c.dir > 0 ? 1 : -1) * .5) * c.k;
-      c.y += v * dt;
+      var target = (c.paused || modal) ? 0 : 1;
+      c.k += (target - c.k) * 0.08;                          // ease to a stop, ease back
+      var v = (c.speed * (FA.reduced ? .35 : 1) * c.dir + boost * (c.dir > 0 ? 1 : -1) * .5) * c.k;
+      if (isFinite(v)) c.y += v * dt;
       if (c.half && c.y <= -c.half) c.y += c.half;
       if (c.half && c.y > 0) c.y -= c.half;
       var skew = lean * (i - (cols.length - 1) / 2) * 6;      // cursor leans the wall
@@ -192,14 +192,15 @@
     rafId = requestAnimationFrame(frame);
   }
 
-  addEventListener('wheel', function (e) { boost += e.deltaY * 1.2; boost = Math.max(-1600, Math.min(1600, boost)); }, { passive: true });
+  addEventListener('wheel', function (e) { if (FA.reduced) return; boost += e.deltaY * 1.2; boost = Math.max(-1600, Math.min(1600, boost)); }, { passive: true });
   var ty = null;
   addEventListener('touchstart', function (e) { ty = e.touches[0].clientY; }, { passive: true });
   addEventListener('touchmove', function (e) { if (ty == null) return; boost += (ty - e.touches[0].clientY) * 6; ty = e.touches[0].clientY; }, { passive: true });
   addEventListener('mousemove', function (e) { lean += ((e.clientX / innerWidth - .5) - lean) * .2; });
 
   document.getElementById('offerBtn').onclick = function () { FA.openCard(true); };
-  FA.on(function (k, v) { cols.forEach(function (c) { c.paused = v; }); });   // the wall stops while a product is open
+  var modal = false;
+  FA.on(function (k, v) { modal = v; });                     // the wall stops while a product or the card is open
 
   build();
   FA.boot({ ghostNav: true, preload: FA.prints.slice(0, 18) }, function () {
@@ -207,14 +208,17 @@
     drift.classList.add('in');
     document.getElementById('statement').classList.add('in');
     document.getElementById('dock').classList.add('in');
-    if (!FA.reduced) rafId = requestAnimationFrame(frame);
+    rafId = requestAnimationFrame(frame);
     setTimeout(function () { document.getElementById('statement').classList.add('away'); }, 4500);
   });
   addEventListener('load', measure);
   var rt;
+  function colCount() { return innerWidth < 700 ? 3 : innerWidth < 1100 ? 4 : 6; }
   addEventListener('resize', function () {
+    // mobile Safari fires resize as the address bar collapses: only rebuild when the column count changes
+    if (colCount() === cols.length) return;
     clearTimeout(rt);
-    rt = setTimeout(function () { build(); drift.classList.add('in'); requestAnimationFrame(function () { measure(); if (!FA.reduced) rafId = requestAnimationFrame(frame); }); }, 250);
+    rt = setTimeout(function () { build(); drift.classList.add('in'); requestAnimationFrame(function () { measure(); rafId = requestAnimationFrame(frame); }); }, 250);
   });
 })();
 </script>
