@@ -332,8 +332,8 @@ are shown in the detail view as `No. 11`.
 JPEG to `images/prints/web/<slug>.jpg` (1400px long edge, quality 74;
 never the master), writes the `.hang` block at the Entrance, moves the
 previous Entrance work into the room you name, renumbers, re-flags the
-three newest, leads the home page featured strip with it, and updates
-this line and the sitemap. `--dry-run` first. By hand, the same steps:
+three newest, exports its home page thumbnail and rebuilds the home
+wall (§11), and updates this line and the sitemap. `--dry-run` first. By hand, the same steps:
 copy a `.hang` block into the right room, set `data-n` to the next
 number and add `data-new="1"` (remove it from the oldest of the three
 flagged). The floor plan, counts and the detail view pick it up.
@@ -360,7 +360,51 @@ sheet size to `WALL.SHEETS` rather than faking it.
 **Reference objects are hairline grey (`#8f8f8f`), the print is black.**
 That is the only hierarchy in the elevation; do not add colour or tone.
 
-## 11. Applying This System
+## 11. The home page — "The Drift Wall"
+
+`index.html` was rebuilt in October 2026 as a full-screen takeover that
+sells: every print on the wall, in columns that never stop moving,
+alternate columns running up and down. It replaced the hero, statement,
+featured strip and email band. The brief was conversion, so the wall is
+the shop, not a backdrop.
+
+**Every card is a product.** Title and "From £200" under each print, the
+New / Sold out flag on it, and a click opens a quick view — size picker
+with prices, a Buy button straight to the Shopify product, "See it on the
+wall" to `/prints#slug`. Cmd/Ctrl-click still opens the print page. The
+dock along the foot is the till: the print under the cursor with its
+price, the 25% offer (opens the newsletter card), Shop all prints, the
+trust line, and a pause button (motion over five seconds must be
+pausable).
+
+**Motion rules.** Columns cruise at 22–36px/s; a scroll or swipe pushes
+them and decays back. Hovering or focusing a print eases its column to a
+stop and dims the rest; an open quick view or newsletter card stops the
+whole wall. Never let a print move away from someone reading it — that
+is the conversion rule the motion serves. Under `prefers-reduced-motion`
+the wall drifts at a third of the speed and ignores scroll pushes. The
+statement plays for ~4.5s after the curtain, then steps off the art.
+
+**The cards are generated.** They sit between `WALL:START` / `WALL:END`
+as static HTML (crawlable, and the page degrades to a scrolling grid
+without script), built from `prints/index.html` by
+`scripts/build-home-wall.mjs`: New works first, then newest first. Do
+not edit them by hand — edit the prints page and run the script;
+`scripts/check-site.mjs` fails the commit if the two disagree.
+Thumbnails are `images/prints/thumbs/<slug>.jpg`, 640px long edge
+(`scripts/export-print-thumb.py`), because the wall shows ~20 prints at
+once.
+
+**The newsletter card** waits 8s after the curtain (or exit intent) on
+the home page, holds while a print is open (`html.fa-hold-popup`), and
+can be opened on request via `window.faNewsletter.open()` — see
+`js/newsletter-popup.js`.
+
+**Still house rules:** white nav, hairlines, no radius, no shadows, no
+gradients. The quick view mounts the print on a white mat on black, as
+the prints page does. The music widget sits above the dock.
+
+## 12. Applying This System
 
 When designing something new for Fola Adeleke (a page, email, product
 graphic, or social asset), check it against this list:

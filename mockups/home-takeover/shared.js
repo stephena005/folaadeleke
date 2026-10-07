@@ -14,7 +14,7 @@
 (function () {
   'use strict';
 
-  var BASE = 'thumbs/';
+  var BASE = '/images/prints/thumbs/';
   var SHOP = 'https://shop.folaadeleke.com/products/';
   var SIZES = [{ id: 'A3', price: 200 }, { id: 'A2', price: 250 }, { id: 'A1', price: 300 }];
   var SPEC = 'Archival pigment print · Signed & numbered · Certificate of authenticity';
