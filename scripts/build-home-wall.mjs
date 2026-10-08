@@ -46,11 +46,6 @@ export function readPrints(printsHtml) {
   return out;
 }
 
-function fromPrice(sizes) {
-  const prices = [...sizes.matchAll(/£(\d+)/g)].map((x) => Number(x[1]));
-  return prices.length ? `From £${Math.min(...prices)}` : '';
-}
-
 // dims(thumbPath) → { w, h } or null; check-site passes null to compare without them.
 export function renderWall(printsHtml, dims) {
   const prints = readPrints(printsHtml);
@@ -69,7 +64,7 @@ export function renderWall(printsHtml, dims) {
         (sold ? ' data-sold="1"' : ` data-shop="${p.shop}"`) + (p.isNew ? ' data-new="1"' : '') + '>',
       (p.isNew ? '        <span class="flag">New</span>\n' : sold ? '        <span class="flag sold">Sold out</span>\n' : '') +
       `        <img src="/${p.thumb}"${size} alt="${p.title} — fine art print by Fola Adeleke" loading="${loading}" decoding="async" />`,
-      `        <span class="cap"><span class="t">${p.title}</span><span class="p">${sold ? 'Sold out' : fromPrice(p.sizes)}</span></span>`,
+      `        <span class="cap"><span class="t">${p.title}</span>${sold ? '<span class="p">Sold out</span>' : ''}</span>`,
       '      </a>',
     ].join('\n');
   });
