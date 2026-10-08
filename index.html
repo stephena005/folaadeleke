@@ -592,7 +592,7 @@
           el: a, slug: d.slug, title: d.title, edition: d.edition, shop: d.shop || '',
           sold: d.sold === '1' || !d.shop, isNew: d.new === '1', sizes: sizes,
           img: a.querySelector('img').getAttribute('src'), href: a.getAttribute('href'),
-          price: a.querySelector('.cap .p').textContent
+          price: a.dataset.sold ? 'Sold out' : ''
         };
       });
       var bySlug = {};
@@ -681,7 +681,7 @@
         var a = e.target.closest('.card'); if (!a) return;
         var p = bySlug[a.dataset.slug];
         looking.setAttribute('data-slug', p.slug);
-        looking.innerHTML = esc(p.title) + ' — <b>' + esc(p.price) + (p.sold ? '' : ' · Buy &rarr;') + '</b>';
+        looking.innerHTML = esc(p.title) + ' — <b>' + (p.sold ? esc(p.price) : 'Buy &rarr;') + '</b>';
       });
       looking.addEventListener('click', function () { if (looking.dataset.slug) openQuick(bySlug[looking.dataset.slug], looking); });
       var pauseBtn = document.getElementById('pause');
