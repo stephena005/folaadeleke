@@ -34,6 +34,9 @@ def parse_args():
     p.add_argument("--height", type=float, default=280.0)
     p.add_argument("--label", default="", help="PNG printed on the box front (white on transparent)")
     p.add_argument("--box", default="300x150x135", help="box H x W x D, mm")
+    p.add_argument("--box-colour", default="#111111")
+    p.add_argument("--box-yaw", type=float, default=-14.0, help="box rotation, degrees (negative shows its right side)")
+    p.add_argument("--side-label", default="", help="PNG printed on the box's right side")
     p.add_argument("--samples", type=int, default=160)
     p.add_argument("--size", type=int, default=2000, help="square edge in px; trio is 1.6:1")
     return p.parse_args(argv)
@@ -218,17 +221,23 @@ def shot_box(a):
     box.scale = (bw, bd, bh)
     bpy.ops.object.transform_apply(scale=True)  # bevel works in object space
     box.location = (95, 25, bh / 2)
-    box.rotation_euler.z = math.radians(-14)
+    box.rotation_euler.z = math.radians(a.box_yaw)
     bev = box.modifiers.new("bevel", "BEVEL")
     bev.width, bev.segments = 1.2, 3
-    box.data.materials.append(mat("box", (0.012, 0.012, 0.012), 0.55, 0.3))
+    box.data.materials.append(mat("box", rf.srgb_to_linear(a.box_colour)[:3], 0.55, 0.3))
+    # Decals sit just proud of the faces and follow the box's yaw.
+    yaw = box.rotation_euler.z
     if a.label:
-        # Decal sits just proud of the front face, following the box's yaw.
-        yaw = box.rotation_euler.z
         n = Vector((math.sin(yaw), -math.cos(yaw), 0))
         c = Vector(box.location) + n * (bd / 2 + 0.15)
-        label_plane(a.label, bw * 0.86, bh * 0.86, c, (math.pi / 2, 0, yaw))
+        label_plane(a.label, bw * 0.9, bh * 0.9, c, (math.pi / 2, 0, yaw))
+    if a.side_label:
+        n = Vector((math.cos(yaw), math.sin(yaw), 0))
+        c = Vector(box.location) + n * (bw / 2 + 0.15)
+        label_plane(a.side_label, bd * 0.9, bh * 0.9, c, (math.pi / 2, 0, yaw + math.pi / 2))
     white_set()
+    # Soft frontal fill so a light-coloured box face doesn't read grey.
+    light("box_fill", (-150, -820, 260), (95, 25, bh / 2), 1.1e6, 520)
     t = (15, 0, a.height * 0.5)
     camera(from_dir(t, (-0.2, -1, 0.14), 1120), t, 85)
     render(s, os.path.join(a.out, "shot-box-c02.png"), a.size, a.size, a.samples)
