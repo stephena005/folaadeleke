@@ -5,10 +5,11 @@
         --title "MOTHER & CHILD" --res 2000x2800 --samples 192
 
 Scales the mesh so its overall height equals --height (mm), stands it on
-Z=0, and renders orthographic FRONT / SIDE (right) / BACK views on white with
-a soft contact shadow. The camera and lights stay fixed and the figure turns,
-so all views share identical lighting. Each PNG gets dimension lines (H, W
-or D, measured from the scaled mesh) and a title block. Also writes the
+Z=0, and renders orthographic FRONT / SIDE (left) / BACK views on white with
+a soft contact shadow, plus a perspective 3/4 HERO. The cameras and lights
+stay fixed and the figure turns, so all views share identical lighting. The
+orthographic PNGs get dimension lines (H, W or D, measured from the scaled
+mesh); every PNG gets a title block. Unannotated renders are kept as raw-*.png. Also writes the
 scaled mesh as STL/OBJ (mm) and dims.json.
 """
 import argparse
@@ -21,7 +22,9 @@ from datetime import date
 import bpy
 from mathutils import Vector
 
-VIEWS = [("FRONT", 0), ("SIDE (RIGHT)", 90), ("BACK", 180)]
+# (label, file slug, figure yaw in degrees). The figure turns clockwise seen
+# from above, so +90 brings its left side to the camera.
+VIEWS = [("FRONT", "front", 0), ("SIDE (LEFT)", "side", 90), ("BACK", "back", 180), ("3/4 HERO", "hero", 35)]
 
 
 def parse_args():
@@ -38,7 +41,7 @@ def parse_args():
     p.add_argument("--yaw", type=float, default=0.0, help="extra Z rotation (deg) so the mesh faces -Y")
     p.add_argument("--res", default="2000x2800")
     p.add_argument("--samples", type=int, default=192)
-    p.add_argument("--views", default="FRONT,SIDE (RIGHT),BACK")
+    p.add_argument("--views", default="front,side,back,hero", help="comma-separated slugs")
     return p.parse_args(argv)
 
 
@@ -154,24 +157,25 @@ def ortho_camera(frame_w, frame_h, centre_z, aspect):
     return d.ortho_scale
 
 
-def annotate(png, view, dims, px_per_mm, img_w, img_h, cam_z, a):
-    from PIL import Image, ImageDraw, ImageFont  # Blender's bundled Python may lack PIL
+def hero_camera(dims, aspect, lens=85, elevation=9):
+    """Perspective 3/4 camera, slightly above, framing the full figure."""
+    d = bpy.data.cameras.new("hero")
+    d.lens = lens
+    d.clip_end = 20000
+    sensor_h = 36 if aspect < 1 else 36 / aspect
+    target_z = dims["H"] * 0.40  # sits low so the title block clears the feet
+    dist = lens * dims["H"] * 1.55 / sensor_h
+    el = math.radians(elevation)
+    o = bpy.data.objects.new("hero", d)
+    bpy.context.collection.objects.link(o)
+    o.location = (0, -dist * math.cos(el), target_z + dist * math.sin(el))
+    o.rotation_euler = (Vector((0, 0, target_z)) - o.location).to_track_quat("-Z", "Y").to_euler()
+    return o
 
-    im = Image.open(png).convert("RGBA")
-    bg = Image.new("RGBA", im.size, (255, 255, 255, 255))
-    im = Image.alpha_composite(bg, im).convert("RGB")
-    dr = ImageDraw.Draw(im)
-    ink = (40, 52, 48)
-    f_big = ImageFont.truetype("DejaVuSans-Bold.ttf", int(img_h * 0.018))
-    f_small = ImageFont.truetype("DejaVuSans.ttf", int(img_h * 0.012))
-    f_tag = ImageFont.truetype("DejaVuSans-Bold.ttf", int(img_h * 0.011))
 
-    def to_px(x_mm, z_mm):
-        return img_w / 2 + x_mm * px_per_mm, img_h / 2 - (z_mm - cam_z) * px_per_mm
-
+def dimension_lines(dr, to_px, dims, view, ink, lw, f_big):
     width_mm = dims["W"] if view.startswith(("FRONT", "BACK")) else dims["D"]
     label_w = "W" if view.startswith(("FRONT", "BACK")) else "D"
-    lw = max(2, img_w // 900)
     # Height: vertical line to the left of the figure.
     x0 = -width_mm / 2 - 18
     (hx, hy0), (_, hy1) = to_px(x0, 0), to_px(x0, dims["H"])
@@ -191,6 +195,27 @@ def annotate(png, view, dims, px_per_mm, img_w, img_h, cam_z, a):
     tw = dr.textlength(t, font=f_big)
     dr.text(((wx0 + wx1) / 2 - tw / 2, wy + 22), t, font=f_big, fill=ink)
 
+
+def annotate(src, png, view, dims, px_per_mm, img_w, img_h, cam_z, a):
+    from PIL import Image, ImageDraw, ImageFont  # Blender's bundled Python may lack PIL
+
+    im = Image.open(src).convert("RGBA")
+    bg = Image.new("RGBA", im.size, (255, 255, 255, 255))
+    im = Image.alpha_composite(bg, im).convert("RGB")
+    dr = ImageDraw.Draw(im)
+    ink = (40, 52, 48)
+    f_big = ImageFont.truetype("DejaVuSans-Bold.ttf", int(img_h * 0.018))
+    f_small = ImageFont.truetype("DejaVuSans.ttf", int(img_h * 0.012))
+    f_tag = ImageFont.truetype("DejaVuSans-Bold.ttf", int(img_h * 0.011))
+
+    def to_px(x_mm, z_mm):
+        return img_w / 2 + x_mm * px_per_mm, img_h / 2 - (z_mm - cam_z) * px_per_mm
+
+    lw = max(2, img_w // 900)
+    ortho = not view.startswith("3/4")
+    if ortho:
+        dimension_lines(dr, to_px, dims, view, ink, lw, f_big)
+
     # Title block, bottom band.
     m = int(img_w * 0.04)
     top = img_h - int(img_h * 0.085)
@@ -198,11 +223,10 @@ def annotate(png, view, dims, px_per_mm, img_w, img_h, cam_z, a):
     left = " / ".join(x for x in (a.title, view) if x)
     dr.text((m, top + 14), left, font=f_big, fill=ink)
     meta = [f"{dims['H']:.0f} x {dims['W']:.0f} x {dims['D']:.0f} mm (H x W x D)", a.colour_name,
-            "ORTHOGRAPHIC, 1:1 PROPORTION", a.rev or date.today().isoformat()]
+            "ORTHOGRAPHIC, 1:1 PROPORTION" if ortho else "PERSPECTIVE, NOT TO SCALE", a.rev or date.today().isoformat()]
     dr.text((m, top + 22 + f_big.size), "   |   ".join(x for x in meta if x), font=f_small, fill=ink)
     if a.note:
-        tw = dr.textlength(a.note, font=f_tag)
-        dr.text((img_w - m - tw, top + 18), a.note, font=f_tag, fill=(150, 80, 50))
+        dr.text((m, top + 30 + f_big.size + f_small.size), a.note, font=f_tag, fill=(150, 80, 50))
     im.save(png, optimize=True)
 
 
@@ -233,6 +257,8 @@ def main():
     frame_w, frame_h = widest * 1.9 + 80, dims["H"] * 1.24
     cam_z = dims["H"] * 0.45
     ortho = ortho_camera(frame_w, frame_h, cam_z, aspect)
+    ortho_cam = scene.camera
+    hero_cam = hero_camera(dims, aspect)
     px_per_mm = (w if aspect >= 1 else w) / (ortho if aspect >= 1 else ortho * aspect)
 
     scene.render.engine = "CYCLES"
@@ -251,18 +277,19 @@ def main():
 
     wanted = [v.strip() for v in a.views.split(",")]
     out = {}
-    for name, yaw in VIEWS:
-        if name not in wanted:
+    for name, slug, yaw in VIEWS:
+        if slug not in wanted:
             continue
-        # Turn the figure, not the camera: side view shows its right side.
+        # Turn the figure, not the camera, so every view shares the lighting.
         ob.rotation_euler = (0, 0, math.radians(-yaw))
-        slug = name.split()[0].lower()
+        scene.camera = hero_cam if slug == "hero" else ortho_cam
+        raw = os.path.join(a.out, f"raw-{slug}.png")
         png = os.path.join(a.out, f"render-{slug}.png")
-        scene.render.filepath = png
+        scene.render.filepath = raw
         bpy.ops.render.render(write_still=True)
         out[name] = png
         try:
-            annotate(png, name, dims, px_per_mm, w, h, cam_z, a)
+            annotate(raw, png, name, dims, px_per_mm, w, h, cam_z, a)
         except ImportError:
             print("PIL not available in Blender's Python; skipped annotation")
 
