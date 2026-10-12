@@ -25,8 +25,6 @@
   <script defer src="/js/newsletter-popup.js"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- noindex until the pre-order is live. Remove this line and add the page to sitemap.xml at launch. -->
-  <meta name="robots" content="noindex, follow" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <title>Mama Comfort — Pre-order — Fola Adeleke®</title>
@@ -320,7 +318,7 @@
     <span class="trust-bar-divider" aria-hidden="true"></span>
     <span class="trust-bar-item">280 mm Soft Vinyl</span>
     <span class="trust-bar-divider" aria-hidden="true"></span>
-    <span class="trust-bar-item">Est. Dispatch <span data-preorder="dispatch">TBC</span></span>
+    <span class="trust-bar-item">Est. Dispatch <span data-preorder="dispatch">January 2027</span></span>
   </div>
 
   <!-- ── PRODUCT ── -->
@@ -367,7 +365,7 @@
         <h2 id="termsTitle">How the pre-order works</h2>
         <ol>
           <li>You pay in full today and your edition number is reserved at checkout.</li>
-          <li>Estimated dispatch: <span data-preorder="dispatch">TBC</span>. We email you at sample sign-off and again when your figure ships.</li>
+          <li>Estimated dispatch: <span data-preorder="dispatch">January 2027</span>. We email you at sample sign-off and again when your figure ships.</li>
           <li>Cancel any time before dispatch for a full refund. Your 14-day right to cancel after delivery still applies.</li>
           <li>If dispatch slips more than 30 days past the estimate, we tell you and you can cancel for a full refund.</li>
         </ol>
@@ -375,7 +373,7 @@
 
       <dl class="product-details">
         <dt>Edition</dt>
-        <dd><span data-preorder="edition">TBC</span> per colourway, individually numbered</dd>
+        <dd><span data-preorder="edition">Edition of 20</span> per colourway, individually numbered</dd>
         <dt>Dimensions</dt>
         <dd>280 &times; 127 &times; 76 mm (H &times; W &times; D)</dd>
         <dt>Material</dt>
@@ -395,7 +393,7 @@
       <h2 class="faq-title" id="faqTitle">Questions</h2>
       <details>
         <summary>When will my figure arrive?</summary>
-        <p>The current estimate is <span data-preorder="dispatch">TBC</span>. Production runs through sampling, colour sign-off and a full production run before anything ships, and we&#8217;ll email you at each milestone. If the date moves by more than 30 days you can cancel for a full refund.</p>
+        <p>The current estimate is <span data-preorder="dispatch">January 2027</span>. Production runs through sampling, colour sign-off and a full production run before anything ships, and we&#8217;ll email you at each milestone. If the date moves by more than 30 days you can cancel for a full refund.</p>
       </details>
       <details>
         <summary>Can I cancel my pre-order?</summary>
@@ -403,7 +401,7 @@
       </details>
       <details>
         <summary>How does the numbering work?</summary>
-        <p>Each colourway is a separate edition of <span data-preorder="edition">TBC</span>. Numbers are assigned in order of purchase and recorded on your certificate of authenticity. When a colourway sells out it is closed for good.</p>
+        <p>Each colourway is a separate edition of <span data-preorder="edition-count">20</span>. Numbers are assigned in order of purchase and recorded on your certificate of authenticity. When a colourway sells out it is closed for good.</p>
       </details>
       <details>
         <summary>Do you ship outside the UK?</summary>
@@ -457,11 +455,11 @@
     // check-site.mjs fails on any src that is not tracked.
     var PREORDER = {
       price: 150,                      // £, pre-order price
-      editionPerColourway: null,       // e.g. 100 — TODO
-      dispatch: 'TBC',                 // e.g. 'May 2027' — TODO
-      opens: null,                     // ISO, e.g. '2026-11-14T10:00:00Z' — TODO
-      closes: null,                    // ISO, or null for open until sold out
-      shopUrl: 'https://shop.folaadeleke.com/products/mama-comfort',  // TODO confirm handle
+      editionPerColourway: 20,
+      dispatch: 'January 2027',
+      opens: '2026-10-12T21:18:00Z',   // pre-orders open
+      closes: null,                    // open until each colourway sells out
+      shopUrl: 'https://shop.folaadeleke.com/products/mama-comfort',  // Shopify product handle: mama-comfort
       colourways: [
         // variant: Shopify variant ID for ?variant= deep links. remaining: null hides the count.
         { code: 'C01', name: 'Terracotta', hex: '#CD6F5E', variant: null, remaining: null, soldOut: false },  // TODO confirm name
@@ -493,7 +491,10 @@
         document.querySelectorAll('[data-preorder="' + field + '"]').forEach(function (el) { el.textContent = text; });
       }
       if (cfg.price != null) fill('price', '£' + cfg.price.toFixed(2).replace(/\.00$/, ''));
-      if (cfg.editionPerColourway != null) fill('edition', 'Edition of ' + cfg.editionPerColourway);
+      if (cfg.editionPerColourway != null) {
+        fill('edition', 'Edition of ' + cfg.editionPerColourway);
+        fill('edition-count', String(cfg.editionPerColourway));
+      }
       fill('dispatch', cfg.dispatch);
 
       // ── Gallery ──
