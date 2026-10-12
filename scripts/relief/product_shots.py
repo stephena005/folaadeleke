@@ -44,6 +44,7 @@ def parse_args():
     p.add_argument("--side-label", default="", help="PNG printed on the box's right side")
     p.add_argument("--samples", type=int, default=160)
     p.add_argument("--size", type=int, default=2000, help="square edge in px; trio is 1.6:1")
+    p.add_argument("--detail-bg", choices=["black", "white"], default="black", help="background for the detail shot")
     p.add_argument("--square", action="store_true", help="render the trio shots square (for square galleries)")
     return p.parse_args(argv)
 
@@ -303,10 +304,14 @@ def shot_detail(a):
     s = reset()
     ob = figure(a.mesh, a.height, COLOURS[a.colourway])
     ob.rotation_euler.z = math.radians(-22)  # turn the bear into view
-    black_set()
+    if a.detail_bg == "white":
+        white_set()
+    else:
+        black_set()
     face = (-4, -34, a.height * 0.72)
     camera(from_dir(face, (-0.3, -1, 0.06), 600), (12, -10, a.height * 0.73), 135, fstop=3.2, focus=face)
-    render(s, os.path.join(a.out, f"shot-detail-{a.colourway.lower()}.png"), a.size, a.size, a.samples)
+    suffix = "" if a.detail_bg == "black" else "-white"
+    render(s, os.path.join(a.out, f"shot-detail-{a.colourway.lower()}{suffix}.png"), a.size, a.size, a.samples)
 
 
 def shot_signed(a):
