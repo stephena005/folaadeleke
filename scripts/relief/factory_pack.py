@@ -2,7 +2,7 @@
 """Assemble a factory reference pack PDF from render_figure.py output.
 
     python3 scripts/relief/factory_pack.py out/ pack.pdf \
-        --title "MOTHER & CHILD" --colour-name "C02 SAGE GREEN" --colour "#8A9E8A" \
+        --title "MAMA COMFORT" --colour-name "C02 SAGE GREEN" --colour "#8A9E8A" \
         --target 280x127x76 --spec-ref "Soft Vinyl PVC Manufacturing Spec Rev 02" \
         --source "Meshy 7 Ultra image-to-3D from the C02 front concept render"
 

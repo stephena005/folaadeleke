@@ -2,7 +2,7 @@
 """Pencil-drawing box artwork from a figure render (transparent PNG).
 
     python3 scripts/relief/box_label.py raw-front.png out/ --ink "#8A9E8A" \
-        --logo favicon.svg --name "FOLA ADELEKE" --title "MOTHER & CHILD" --sub "C02 · SAGE"
+        --logo favicon.svg --name "FOLA ADELEKE" --title "MAMA COMFORT" --sub "C02 · SAGE"
 
 Turns the render into a graphite-style sketch (colour-dodge line extraction,
 silhouette contour, paper grain) and prints it in --ink on a transparent
@@ -28,7 +28,7 @@ def parse_args():
     p.add_argument("--text-ink", default="#111111")
     p.add_argument("--logo", default="")
     p.add_argument("--name", default="FOLA ADELEKE")
-    p.add_argument("--title", default="MOTHER & CHILD")
+    p.add_argument("--title", default="", help="product name under the wordmark")
     p.add_argument("--sub", default="")
     p.add_argument("--small", default="")
     p.add_argument("--seed", type=int, default=7)
