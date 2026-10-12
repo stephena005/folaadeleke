@@ -250,7 +250,20 @@ def annotate(src, png, view, dims, px_per_mm, img_w, img_h, cam_z, a):
         dr.text((m, top + 30 + f_big.size + f_small.size), a.note, font=f_tag, fill=(150, 80, 50))
     if a.mark_note and view.startswith("UNDERSIDE"):
         f_mark = ImageFont.truetype("DejaVuSans-Bold.ttf", int(img_h * 0.014))
-        dr.text((m, m), a.mark_note, font=f_mark, fill=ink)
+        lines, line = [], ""
+        for word in a.mark_note.split():
+            trial = f"{line} {word}".strip()
+            if dr.textlength(trial, font=f_mark) > img_w - 2 * m and line:
+                lines.append(line)
+                line = word
+            else:
+                line = trial
+        lines.append(line)
+        pad = int(f_mark.size * 0.6)
+        box_h = len(lines) * int(f_mark.size * 1.35) + 2 * pad
+        dr.rectangle([m - pad, m - pad, img_w - m + pad, m - pad + box_h], fill=(255, 255, 255))
+        for i, ln in enumerate(lines):
+            dr.text((m, m + i * int(f_mark.size * 1.35)), ln, font=f_mark, fill=ink)
     im.save(png, optimize=True)
 
 
@@ -348,4 +361,5 @@ def main():
     print("DIMS", json.dumps(dims))
 
 
-main()
+if __name__ == "__main__":
+    main()
