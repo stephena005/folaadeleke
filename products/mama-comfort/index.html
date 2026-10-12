@@ -459,12 +459,11 @@
       dispatch: 'January 2027',
       opens: '2026-10-12T21:18:00Z',   // pre-orders open
       closes: null,                    // open until each colourway sells out
-      shopUrl: 'https://shop.folaadeleke.com/products/mama-comfort',  // Shopify product handle: mama-comfort
       colourways: [
-        // variant: Shopify variant ID for ?variant= deep links. remaining: null hides the count.
-        { code: 'C01', name: 'Terracotta', hex: '#CD6F5E', variant: null, remaining: null, soldOut: false },  // TODO confirm name
-        { code: 'C02', name: 'Sage Green', hex: '#8A9E8A', variant: null, remaining: null, soldOut: false },
-        { code: 'C03', name: 'Sand',       hex: '#C9A064', variant: null, remaining: null, soldOut: false }
+        // Each colourway is its own Shopify product. remaining: null hides the count.
+        { code: 'C01', name: 'Terracotta', hex: '#CD6F5E', url: 'https://shop.folaadeleke.com/products/mama-comfort-terracota',  remaining: null, soldOut: false },
+        { code: 'C02', name: 'Sage Green', hex: '#8A9E8A', url: 'https://shop.folaadeleke.com/products/mama-comfort-sage-green', remaining: null, soldOut: false },
+        { code: 'C03', name: 'Sand',       hex: '#C9A064', url: 'https://shop.folaadeleke.com/products/mama-comfort-sand',       remaining: null, soldOut: false }
       ],
       defaultColourway: 'C02',
       // One slide per product_shots.py set. `src` is a path, or a map of
@@ -600,7 +599,7 @@
         btn.classList.toggle('is-disabled', !live);
         btn.setAttribute('aria-disabled', String(!live));
         if (live) {
-          btn.href = cfg.shopUrl + (selected.variant ? '?variant=' + selected.variant : '');
+          btn.href = selected.url;
           btn.target = '_blank'; btn.rel = 'noopener';
         } else {
           btn.removeAttribute('href'); btn.removeAttribute('target');
@@ -674,7 +673,7 @@
               price: cfg.price.toFixed(2),
               priceCurrency: 'GBP',
               availability: c.soldOut ? 'https://schema.org/SoldOut' : 'https://schema.org/PreOrder',
-              url: cfg.shopUrl + (c.variant ? '?variant=' + c.variant : '')
+              url: c.url
             };
             if (cfg.opens) o.availabilityStarts = cfg.opens;
             if (cfg.closes) o.availabilityEnds = cfg.closes;
