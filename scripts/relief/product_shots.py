@@ -33,6 +33,7 @@ def parse_args():
     p.add_argument("--shots", default="catalogue,trio,box,detail,signed")
     p.add_argument("--height", type=float, default=280.0)
     p.add_argument("--label", default="", help="PNG printed on the box front (white on transparent)")
+    p.add_argument("--colourway", default="C02", choices=sorted(COLOURS), help="figure colour for single-figure shots")
     p.add_argument("--box", default="300x150x135", help="box H x W x D, mm")
     p.add_argument("--box-colour", default="#111111")
     p.add_argument("--box-yaw", type=float, default=-14.0, help="box rotation, degrees (negative shows its right side)")
@@ -212,7 +213,7 @@ def shot_trio(a):
 
 def shot_box(a):
     s = reset()
-    ob = figure(a.mesh, a.height, COLOURS["C02"])
+    ob = figure(a.mesh, a.height, COLOURS[a.colourway])
     ob.location.x = -70
     ob.rotation_euler.z = math.radians(20)
     bh, bw, bd = (float(v) for v in a.box.split("x"))
@@ -240,7 +241,7 @@ def shot_box(a):
     light("box_fill", (-150, -820, 260), (95, 25, bh / 2), 1.1e6, 520)
     t = (15, 0, a.height * 0.5)
     camera(from_dir(t, (-0.2, -1, 0.14), 1120), t, 85)
-    render(s, os.path.join(a.out, "shot-box-c02.png"), a.size, a.size, a.samples)
+    render(s, os.path.join(a.out, f"shot-box-{a.colourway.lower()}.png"), a.size, a.size, a.samples)
 
 
 def shot_detail(a):
