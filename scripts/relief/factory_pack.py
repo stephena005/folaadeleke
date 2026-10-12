@@ -56,6 +56,7 @@ def parse_args():
     p.add_argument("--wall", type=float, default=3.0, help="nominal wall for the hollow estimate, mm")
     p.add_argument("--density", type=float, default=1.25, help="material density for estimates, g/cm3")
     p.add_argument("--no-attach", action="store_true")
+    p.add_argument("--jpeg-quality", type=int, default=92, help="render image quality inside the PDF")
     return p.parse_args()
 
 
@@ -120,6 +121,9 @@ def wrap(text, font, size, width):
     return lines
 
 
+JPEG_QUALITY = 92
+
+
 def fit_image(c, path, x, y, w, h):
     from PIL import Image
 
@@ -128,9 +132,9 @@ def fit_image(c, path, x, y, w, h):
         bg = Image.new("RGB", im.size, "white")
         bg.paste(im, mask=im.split()[-1])
         im = bg
-    # JPEG q92 passes straight through ReportLab and keeps the pack small.
+    # JPEG passes straight through ReportLab and keeps the pack small.
     buf = io.BytesIO()
-    im.convert("RGB").save(buf, "JPEG", quality=92, subsampling=0)
+    im.convert("RGB").save(buf, "JPEG", quality=JPEG_QUALITY, subsampling=0)
     buf.seek(0)
     img = ImageReader(buf)
     iw, ih = img.getSize()
@@ -259,7 +263,9 @@ def data_page(c, a, stats, target, attached):
 
 
 def main():
+    global JPEG_QUALITY
     a = parse_args()
+    JPEG_QUALITY = a.jpeg_quality
     stl = os.path.join(a.renders, "figure.stl")
     stats = mesh_stats(stl)
     target = [float(x) for x in a.target.split("x")] if a.target else [0, 0, 0]
@@ -292,7 +298,7 @@ def main():
             ef = spec.get_object()["/EF"]
             for key in ("/F", "/UF"):
                 if key in ef:
-                    ef[NameObject(key)] = w._add_object(ef[key].get_object().flate_encode())
+                    ef[NameObject(key)] = w._add_object(ef[key].get_object().flate_encode(level=9))
     w.compress_identical_objects()
     for page in w.pages:
         page.compress_content_streams()
