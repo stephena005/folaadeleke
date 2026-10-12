@@ -41,7 +41,9 @@ def parse_args():
     p.add_argument("--yaw", type=float, default=0.0, help="extra Z rotation (deg) so the mesh faces -Y")
     p.add_argument("--res", default="2000x2800")
     p.add_argument("--samples", type=int, default=192)
-    p.add_argument("--views", default="front,side,back,hero", help="comma-separated slugs")
+    p.add_argument("--views", default="front,side,back,hero", help="comma-separated slugs; '' to skip rendering")
+    p.add_argument("--save-blend", default="", help="also save the lit, camera-ready scene to this .blend")
+    p.add_argument("--no-export", action="store_true", help="skip writing figure.stl/.obj")
     return p.parse_args(argv)
 
 
@@ -245,8 +247,9 @@ def main():
     stem = os.path.join(a.out, "figure")
     bpy.ops.object.select_all(action="DESELECT")
     ob.select_set(True)
-    bpy.ops.export_mesh.stl(filepath=stem + ".stl", use_selection=True, global_scale=1.0)
-    bpy.ops.wm.obj_export(filepath=stem + ".obj", export_selected_objects=True, export_materials=False)
+    if not a.no_export:
+        bpy.ops.export_mesh.stl(filepath=stem + ".stl", use_selection=True, global_scale=1.0)
+        bpy.ops.wm.obj_export(filepath=stem + ".obj", export_selected_objects=True, export_materials=False)
     finish(ob, a.colour)
     studio(a.height)
 
@@ -275,7 +278,13 @@ def main():
     scene.render.image_settings.file_format = "PNG"
     scene.render.image_settings.color_mode = "RGBA"
 
-    wanted = [v.strip() for v in a.views.split(",")]
+    if a.save_blend:
+        ob.name = ob.data.name = "figure"
+        ortho_cam.name, hero_cam.name = "cam_ortho", "cam_hero"
+        scene.render.filepath = "//render-"
+        bpy.ops.wm.save_as_mainfile(filepath=os.path.abspath(a.save_blend), compress=True)
+
+    wanted = [v.strip() for v in a.views.split(",") if v.strip()]
     out = {}
     for name, slug, yaw in VIEWS:
         if slug not in wanted:
