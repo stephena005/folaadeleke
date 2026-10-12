@@ -28,3 +28,6 @@ trade/lookbook-src/
 # Relief/3D outputs and the renders they come from — unreleased product
 # geometry. Public repo served by GitHub Pages; keep these local.
 scripts/relief/out/
+
+# Python bytecode (Blender scripts in scripts/relief import each other)
+__pycache__/
