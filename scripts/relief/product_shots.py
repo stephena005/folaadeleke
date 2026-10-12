@@ -4,7 +4,10 @@
         --shots catalogue,trio,box,detail,signed --label label.png --samples 160
 
 Sets follow the site's monochrome rule: the figure carries the only colour.
-  catalogue  C02 on white, soft 3/4, contact shadow (square)
+  catalogue  front 3/4 on white, contact shadow (square); --colourway
+  back       back 3/4 on white (square); --colourway
+  side       left side on white (square); --colourway
+  under      on its back, soles and base mark, white (square); --colourway
   trio       C01 / C02 / C03 on black gloss, rim-lit (wide banner)
   box        figure beside a black rigid box printed with --label (square)
   detail     face and bear close-up, shallow depth of field, black (square)
@@ -188,13 +191,50 @@ def render(scene, path, w, h, samples):
     print("SHOT", path)
 
 
-def shot_catalogue(a):
+def gallery(a, name, yaw):
+    """White-set gallery shot: same camera and lights, the figure turned."""
     s = reset()
-    figure(a.mesh, a.height, COLOURS["C02"])
+    ob = figure(a.mesh, a.height, COLOURS[a.colourway])
+    ob.rotation_euler.z = math.radians(yaw)
+    bpy.context.view_layer.update()
+    # Aim at the turned figure's footprint centre so every angle sits centred.
+    pts = [ob.matrix_world @ Vector(c) for c in ob.bound_box]
+    cx = (min(p.x for p in pts) + max(p.x for p in pts)) / 2
+    cy = (min(p.y for p in pts) + max(p.y for p in pts)) / 2
     white_set()
-    t = (0, 0, a.height * 0.47)
+    t = (cx, cy, a.height * 0.47)
     camera(from_dir(t, (-0.42, -1, 0.16), 1000), t, 100)
-    render(s, os.path.join(a.out, "shot-catalogue-c02-white.png"), a.size, a.size, a.samples)
+    render(s, os.path.join(a.out, f"shot-{name}-{a.colourway.lower()}.png"), a.size, a.size, a.samples)
+
+
+def shot_catalogue(a):
+    gallery(a, "front", 0)
+
+
+def shot_back(a):
+    # Back three-quarter: sling, infant and the bear over the shoulder.
+    gallery(a, "back", 200)
+
+
+def shot_side(a):
+    # Figure's left side (the sling and bear side) towards the camera.
+    gallery(a, "side", -70)
+
+
+def shot_under(a):
+    """Underfoot on the white set: figure on its back, soles to camera."""
+    s = reset()
+    ob = figure(a.mesh, a.height, COLOURS[a.colourway])
+    ob.rotation_euler = (math.radians(-90), 0, math.radians(8))
+    bpy.context.view_layer.update()
+    zmin = min((ob.matrix_world @ v.co).z for v in ob.data.vertices)
+    ob.location.z -= zmin
+    ob.location.y = 60
+    white_set()
+    sole = (31, 64, 39)
+    light("rake", (-330, -40, 90), sole, 0.7e6, 120)
+    camera(from_dir(sole, (0.2, -1, 0.38), 720), (0, 120, 50), 100, fstop=6.3, focus=sole)
+    render(s, os.path.join(a.out, f"shot-under-{a.colourway.lower()}.png"), a.size, a.size, a.samples)
 
 
 def shot_trio(a):
@@ -274,8 +314,8 @@ def shot_signed(a):
 def main():
     a = parse_args()
     os.makedirs(a.out, exist_ok=True)
-    shots = {"catalogue": shot_catalogue, "trio": shot_trio, "box": shot_box,
-             "detail": shot_detail, "signed": shot_signed}
+    shots = {"catalogue": shot_catalogue, "back": shot_back, "side": shot_side, "under": shot_under,
+             "trio": shot_trio, "box": shot_box, "detail": shot_detail, "signed": shot_signed}
     for name in (x.strip() for x in a.shots.split(",") if x.strip()):
         shots[name](a)
 
