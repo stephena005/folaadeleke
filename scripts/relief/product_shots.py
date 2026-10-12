@@ -9,6 +9,7 @@ Sets follow the site's monochrome rule: the figure carries the only colour.
   side       left side on white (square); --colourway
   under      on its back, soles and base mark, white (square); --colourway
   trio       C01 / C02 / C03 on black gloss, rim-lit (wide banner)
+  trio-white C01 / C02 / C03 front-on, side by side on white (wide)
   box        figure beside a black rigid box printed with --label (square)
   detail     face and bear close-up, shallow depth of field, black (square)
   signed     figure lying on its back, soles to camera, base mark (square)
@@ -251,6 +252,18 @@ def shot_trio(a):
     render(s, os.path.join(a.out, "shot-trio-black.png"), w, a.size, a.samples)
 
 
+def shot_trio_white(a):
+    """All three colourways front-on, side by side, on the white set (wide)."""
+    s = reset()
+    for code, x in (("C01", -155), ("C02", 0), ("C03", 155)):
+        ob = figure(a.mesh, a.height, COLOURS[code], code)
+        ob.location.x = x
+    white_set()
+    t = (0, 0, a.height * 0.47)
+    camera(from_dir(t, (0, -1, 0.12), 1180), t, 70)
+    render(s, os.path.join(a.out, "shot-trio-white-front.png"), int(a.size * 1.6), a.size, a.samples)
+
+
 def shot_box(a):
     s = reset()
     ob = figure(a.mesh, a.height, COLOURS[a.colourway])
@@ -315,7 +328,7 @@ def main():
     a = parse_args()
     os.makedirs(a.out, exist_ok=True)
     shots = {"catalogue": shot_catalogue, "back": shot_back, "side": shot_side, "under": shot_under,
-             "trio": shot_trio, "box": shot_box, "detail": shot_detail, "signed": shot_signed}
+             "trio": shot_trio, "trio-white": shot_trio_white, "box": shot_box, "detail": shot_detail, "signed": shot_signed}
     for name in (x.strip() for x in a.shots.split(",") if x.strip()):
         shots[name](a)
 
