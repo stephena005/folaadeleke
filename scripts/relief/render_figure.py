@@ -2,7 +2,7 @@
 
     blender -b -P scripts/relief/render_figure.py -- mesh.glb out/ \
         --height 280 --colour "#8A9E8A" --colour-name "C02 SAGE GREEN" \
-        --title "MOTHER & CHILD" --res 2000x2800 --samples 192
+        --title "MAMA COMFORT" --res 2000x2800 --samples 192
 
 Scales the mesh so its overall height equals --height (mm), stands it on
 Z=0, and renders orthographic FRONT / SIDE (left) / BACK views on white with
