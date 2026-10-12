@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) — consent mode: analytics denied until accepted -->
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      analytics_storage: 'denied',
+      wait_for_update: 500
+    });
+    try {
+      if (localStorage.getItem('fa_consent') === 'granted') {
+        gtag('consent', 'update', { analytics_storage: 'granted' });
+      }
+    } catch (e) {}
+    gtag('js', new Date());
+    gtag('config', 'G-K7ZCQ4YEN6');
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7ZCQ4YEN6"></script>
+  <script defer src="/js/consent.js"></script>
+  <script defer src="/js/newsletter-popup.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <title>Mama Comfort — Pre-order — Fola Adeleke®</title>
+  <meta name="description" content="Mama Comfort by Fola Adeleke — a 280 mm soft vinyl collectible figure in three colourways. Numbered limited edition, available to pre-order." />
+  <link rel="canonical" href="https://folaadeleke.com/products/mama-comfort" />
+
+  <!-- Open Graph / social preview -->
+  <meta property="og:type" content="product" />
+  <meta property="og:site_name" content="Fola Adeleke®" />
+  <meta property="og:title" content="Mama Comfort — Pre-order — Fola Adeleke®" />
+  <meta property="og:description" content="A 280 mm soft vinyl collectible figure in three colourways. Numbered limited edition, available to pre-order." />
+  <meta property="og:url" content="https://folaadeleke.com/products/mama-comfort" />
+  <meta property="og:image" content="https://folaadeleke.com/images/mama-comfort/og-mama-comfort.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Mama Comfort soft vinyl figures by Fola Adeleke in terracotta, sage green and sand" />
+  <meta property="og:locale" content="en_GB" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Mama Comfort — Pre-order — Fola Adeleke®" />
+  <meta name="twitter:description" content="A 280 mm soft vinyl collectible figure in three colourways. Numbered limited edition, available to pre-order." />
+  <meta name="twitter:image" content="https://folaadeleke.com/images/mama-comfort/og-mama-comfort.jpg" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #fff;
+      --black: #000;
+      --white: #fff;
+      --muted: #6f6f6f;
+      --divider: #eee;
+      --nav-height: 56px;
+      --font: 'Courier New', Courier, monospace;
+      --spacing: 0.2em;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font); background: var(--bg); color: var(--black); min-height: 100vh; overflow-x: hidden; }
+    :focus-visible { outline: 1px solid var(--black); outline-offset: 2px; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      height: var(--nav-height);
+      background: var(--white);
+      border-bottom: 1px solid var(--divider);
+      display: grid; grid-template-columns: 1fr auto 1fr;
+      align-items: center; padding: 0 32px; z-index: 100;
+    }
+    .nav-left { display: flex; align-items: center; }
+    .hamburger { display: block; background: none; border: none; cursor: pointer; color: var(--black); padding: 4px 8px 4px 0; line-height: 1; font-size: 20px; }
+    .nav-brand { text-align: center; font-family: var(--font); font-size: 13px; font-weight: normal; letter-spacing: var(--spacing); color: var(--black); text-decoration: none; }
+    .nav-right { display: flex; justify-content: flex-end; }
+    .nav-contact { font-family: var(--font); font-size: 11px; letter-spacing: var(--spacing); text-transform: uppercase; text-decoration: none; color: var(--black); }
+    .nav-contact:hover { text-decoration: underline; }
+
+    /* ── DRAWER ── */
+    .drawer-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 200; }
+    .drawer-overlay.open { display: block; }
+    .drawer { position: fixed; top: 0; left: -280px; width: 260px; height: 100%; background: var(--white); border-right: 1px solid var(--divider); z-index: 201; transition: left 0.3s ease; display: flex; flex-direction: column; padding: 80px 32px 40px; }
+    .drawer.open { left: 0; }
+    .drawer a, .drawer button { font-family: var(--font); font-size: 12px; letter-spacing: var(--spacing); text-transform: uppercase; text-decoration: none; color: var(--black); background: none; border: none; cursor: pointer; padding: 14px 0; border-bottom: 1px solid var(--divider); text-align: left; width: 100%; }
+    .drawer a:last-child, .drawer button:last-child { border-bottom: none; }
+    .drawer-group { border-bottom: 1px solid var(--divider); }
+    .drawer-group-toggle { display: flex; align-items: center; justify-content: space-between; border-bottom: none; }
+    .drawer-caret { font-size: 9px; transition: transform 0.2s ease; }
+    .drawer-group.open .drawer-caret { transform: rotate(180deg); }
+    .drawer-submenu { max-height: 0; overflow: hidden; transition: max-height 0.25s ease; }
+    .drawer-group.open .drawer-submenu { max-height: 160px; }
+    .drawer-submenu a { display: block; border-bottom: none; padding: 10px 0 10px 16px; font-size: 11px; color: var(--muted); }
+    .drawer-submenu a:last-child { padding-bottom: 14px; }
+    .drawer-close { position: absolute; top: 18px; right: 18px; font-size: 20px; background: none; border: none; cursor: pointer; color: var(--black); line-height: 1; }
+
+    /* ── TRUST BAR ── */
+    .trust-bar {
+      position: fixed; top: var(--nav-height); left: 0; right: 0;
+      display: flex; align-items: center; justify-content: center;
+      border-bottom: 1px solid var(--divider);
+      padding: 10px 64px;
+      background: var(--white);
+      z-index: 90;
+    }
+    .trust-bar-item { font-family: var(--font); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--black); flex: 1; text-align: center; }
+    .trust-bar-divider { width: 1px; height: 20px; background: var(--divider); flex-shrink: 0; margin: 0 24px; }
+
+    /* ── PRODUCT LAYOUT ── */
+    .product-page {
+      padding: calc(var(--nav-height) + 40px + 48px) 64px 60px;
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+      gap: 64px;
+      align-items: start;
+    }
+
+    .product-breadcrumb {
+      grid-column: 1 / -1;
+      font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 4px;
+    }
+    .product-breadcrumb a { color: var(--muted); text-decoration: none; }
+    .product-breadcrumb a:hover { color: var(--black); text-decoration: underline; }
+
+    /* Image stage — black media ground (design.md --grey-bg). A slide with
+       no <img> shows its placeholder label until the shot is exported. */
+    .image-stage { position: relative; overflow: hidden; }
+    .slides-track { display: flex; transition: transform 0.9s ease; will-change: transform; }
+    .slide-image {
+      min-width: 100%;
+      aspect-ratio: 1 / 1;
+      background: var(--black);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .slide-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .slide-placeholder { text-align: center; color: #9a9a9a; padding: 24px; }
+    .slide-placeholder-mark { display: block; font-size: 10px; letter-spacing: 0.4em; text-transform: uppercase; color: var(--white); margin-bottom: 12px; }
+    .slide-placeholder-note { display: block; font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; }
+
+    .slide-caption { display: flex; justify-content: space-between; align-items: baseline; margin-top: 14px; }
+    .slide-caption-name { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; }
+    .slide-counter { font-size: 9px; letter-spacing: 0.2em; color: var(--muted); }
+
+    .slide-prev, .slide-next {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      width: 40px; height: 40px;
+      background: var(--white); border: 1px solid var(--black);
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      color: var(--black); transition: background 0.15s, color 0.15s; z-index: 10;
+    }
+    .slide-prev { left: 12px; }
+    .slide-next { right: 12px; }
+    .slide-prev:hover, .slide-next:hover { background: var(--black); color: var(--white); }
+    .slide-prev:disabled, .slide-next:disabled { border-color: #8f8f8f; color: #8f8f8f; cursor: default; background: var(--white); }
+
+    .thumb-strip { display: flex; gap: 6px; margin-top: 16px; }
+    .thumb {
+      flex-shrink: 0; width: 48px; height: 48px; padding: 0;
+      border: 2px solid transparent; background: var(--black); cursor: pointer; overflow: hidden;
+      font-family: var(--font); font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; color: #9a9a9a;
+      transition: border-color 0.15s;
+    }
+    .thumb.active { border-color: var(--black); outline: 1px solid var(--white); outline-offset: -3px; }
+    .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    /* Info panel */
+    .product-info { position: sticky; top: calc(var(--nav-height) + 40px + 48px); }
+    .product-kicker { font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+    .product-title { font-size: 20px; font-weight: normal; letter-spacing: 0.04em; margin-bottom: 10px; }
+    .product-price { font-size: 13px; letter-spacing: 0.08em; margin-bottom: 6px; }
+    .product-price-note { font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-bottom: 24px; }
+
+    /* Colourway picker — the swatch is the figure's own colour, the only
+       colour on the page besides the product imagery. */
+    .colourway-picker { border: none; margin-bottom: 18px; }
+    .colourway-picker legend { font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+    .colourway-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+    .colourway-option { position: relative; }
+    .colourway-option input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+    .colourway-option label {
+      display: block; border: 1px solid var(--divider); padding: 10px 10px 9px; cursor: pointer;
+      transition: border-color 0.15s;
+    }
+    .colourway-option input:checked + label { border-color: var(--black); }
+    .colourway-option input:focus-visible + label { outline: 1px solid var(--black); outline-offset: 2px; }
+    .colourway-option input:disabled + label { cursor: default; color: var(--muted); }
+    .colourway-swatch { display: block; height: 18px; margin-bottom: 8px; }
+    .colourway-option input:disabled + label .colourway-swatch { opacity: 0.35; }
+    .colourway-code { display: block; font-size: 9px; letter-spacing: 0.2em; color: var(--muted); }
+    .colourway-name { display: block; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; margin-top: 2px; }
+    .colourway-stock { display: block; font-size: 8px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-top: 6px; }
+
+    .btn-acquire {
+      display: block; width: 100%;
+      background: var(--black); color: var(--white);
+      border: 1px solid var(--black);
+      padding: 13px; font-family: var(--font); font-size: 10px;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      cursor: pointer; text-align: center; text-decoration: none;
+      transition: opacity 0.15s; margin-bottom: 12px;
+    }
+    .btn-acquire:hover { opacity: 0.75; }
+    .btn-acquire.is-disabled { background: var(--white); color: var(--muted); border-color: #dcdcdc; cursor: default; pointer-events: none; }
+    .btn-secondary { background: var(--white); color: var(--black); }
+
+    .preorder-clock { display: flex; justify-content: space-between; align-items: baseline; font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-bottom: 24px; }
+    .preorder-clock[hidden] { display: none; }
+    .preorder-clock strong { font-weight: normal; color: var(--black); letter-spacing: 0.08em; font-size: 11px; }
+
+    .product-caption { font-size: 12px; line-height: 1.9; color: #444; margin-bottom: 24px; }
+    .product-caption em { font-style: italic; color: var(--muted); }
+
+    /* Pre-order terms — the commitments a buyer is agreeing to, above the fold */
+    .preorder-terms { border: 1px solid var(--black); padding: 16px 18px; margin-bottom: 24px; }
+    .preorder-terms h2 { font-size: 9px; font-weight: normal; letter-spacing: 0.3em; text-transform: uppercase; margin-bottom: 10px; }
+    .preorder-terms ol { list-style: none; counter-reset: term; }
+    .preorder-terms li { counter-increment: term; font-size: 11px; line-height: 1.7; color: #4f4f4f; padding-left: 26px; position: relative; margin-top: 6px; }
+    .preorder-terms li::before { content: counter(term, decimal-leading-zero); position: absolute; left: 0; font-size: 9px; letter-spacing: 0.1em; color: var(--black); top: 2px; }
+
+    .product-details { border-top: 1px solid var(--divider); padding-top: 18px; }
+    .product-details dt { font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-top: 12px; }
+    .product-details dt:first-child { margin-top: 0; }
+    .product-details dd { font-size: 11px; line-height: 1.7; margin-top: 4px; }
+
+    /* ── FAQ ── */
+    .faq { grid-column: 1 / -1; border-top: 1px solid var(--black); padding-top: 28px; }
+    .faq-title { font-size: 9px; font-weight: normal; letter-spacing: 0.4em; text-transform: uppercase; margin-bottom: 8px; }
+    .faq details { border-bottom: 1px solid var(--divider); }
+    .faq summary { list-style: none; cursor: pointer; padding: 16px 0; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; display: flex; justify-content: space-between; gap: 16px; }
+    .faq summary::-webkit-details-marker { display: none; }
+    .faq summary::after { content: '+'; color: var(--muted); }
+    .faq details[open] summary::after { content: '\2212'; }
+    .faq details p { font-size: 12px; line-height: 1.9; color: #4f4f4f; padding: 0 0 18px; max-width: 68ch; }
+    .faq a { color: var(--black); }
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--divider);
+      padding: 32px 64px;
+      display: grid; grid-template-columns: 1fr auto 1fr;
+      align-items: center; gap: 20px;
+    }
+    .footer-brand { font-family: var(--font); font-size: 11px; font-weight: normal; letter-spacing: var(--spacing); color: var(--black); text-decoration: none; }
+    .footer-social { display: flex; justify-content: center; gap: 24px; }
+    .footer-social a { font-family: var(--font); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); text-decoration: none; }
+    .footer-social a:hover { color: var(--black); }
+    .footer-legal { display: flex; justify-content: center; gap: 20px; margin-bottom: 12px; flex-wrap: wrap; }
+    .footer-legal a { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); text-decoration: none; }
+    .footer-legal a:hover { color: var(--black); }
+    .footer-copy { font-family: var(--font); font-size: 10px; letter-spacing: 0.08em; color: var(--muted); text-align: right; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 860px) {
+      .product-page { grid-template-columns: minmax(0, 1fr); gap: 32px; padding-left: 24px; padding-right: 24px; }
+      .product-info { position: static; }
+    }
+    @media (max-width: 768px) {
+      nav { padding: 0 20px; }
+      .trust-bar { padding: 8px 16px; overflow-x: auto; white-space: nowrap; scrollbar-width: none; justify-content: flex-start; }
+      .trust-bar::-webkit-scrollbar { display: none; }
+      .trust-bar-item { font-size: 8px; letter-spacing: 0.1em; flex: none; }
+      .trust-bar-divider { margin: 0 10px; }
+      .product-page { padding-top: calc(var(--nav-height) + 34px + 48px); padding-left: 16px; padding-right: 16px; }
+      footer { grid-template-columns: 1fr; text-align: center; padding: 28px 24px; gap: 16px; }
+      .footer-copy { text-align: center; }
+    }
+    /* ─── PAGE TRANSITION LOADER ─── */
+    #page-loader { position: fixed; inset: 0; z-index: 9999; background: rgba(255,255,255,0.7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; }
+    #page-loader.fade-out { opacity: 0; pointer-events: none; }
+    #page-loader.hidden { display: none; }
+    .propeller-icon { width: 56px; height: 50px; background-color: #000; clip-path: polygon(42.9% 62.9%, 44.9% 57.6%, 44.2% 52.3%, 42.9% 45.5%, 42.2% 40.2%, 42.2% 37.9%, 40.8% 30.3%, 40.1% 25.0%, 40.1% 21.2%, 39.5% 15.2%, 40.1% 9.8%, 43.5% 4.5%, 48.3% 0.8%, 53.1% 6.1%, 55.1% 11.4%, 55.8% 16.7%, 55.8% 22.0%, 55.8% 25.0%, 55.1% 31.8%, 53.7% 40.9%, 53.7% 43.2%, 53.1% 48.5%, 52.4% 53.8%, 53.1% 59.1%, 56.5% 63.6%, 62.6% 65.9%, 66.0% 67.4%, 72.8% 69.7%, 76.2% 71.2%, 81.6% 73.5%, 86.4% 75.8%, 90.5% 78.0%, 93.9% 81.1%, 97.3% 86.4%, 98.6% 91.7%, 95.9% 94.7%, 91.2% 96.2%, 85.7% 95.5%, 82.3% 93.9%, 76.9% 90.2%, 73.5% 87.9%, 69.4% 84.8%, 62.6% 78.8%, 57.8% 75.0%, 53.1% 71.2%, 48.3% 69.7%, 43.5% 72.0%, 38.8% 76.5%, 34.0% 81.1%, 29.3% 85.6%, 25.2% 89.4%, 21.1% 92.4%, 15.6% 96.2%, 10.2% 98.5%, 5.4% 98.5%, 0.7% 97.0%, 1.4% 91.7%, 2.7% 86.4%, 8.2% 81.1%, 12.9% 78.0%, 15.0% 76.5%, 20.4% 73.5%, 23.1% 72.0%, 32.7% 68.2%, 35.4% 66.7%, 40.1% 64.4%); transform-origin: 49% 63%; animation: propeller-spin 0.9s ease-in-out infinite; }
+    @keyframes propeller-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+  <div id="page-loader"><div class="propeller-icon"></div></div>
+
+  <!-- ── NAV ── -->
+  <nav>
+    <div class="nav-left">
+      <button class="hamburger" aria-label="Open menu" onclick="openDrawer()">&#9776;</button>
+    </div>
+    <a class="nav-brand" href="/">Fola Adeleke®</a>
+    <div class="nav-right">
+      <a class="nav-contact" href="/contact">Contact</a>
+    </div>
+  </nav>
+
+  <!-- ── DRAWER ── -->
+  <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+  <div class="drawer" id="drawer" aria-label="Navigation drawer">
+    <button class="drawer-close" onclick="closeDrawer()" aria-label="Close menu">&#x2715;</button>
+    <a href="/">Home</a>
+    <div class="drawer-group open" id="productsDrawerGroup">
+      <button class="drawer-group-toggle" onclick="toggleDrawerGroup()" aria-expanded="true">Products <span class="drawer-caret">▼</span></button>
+      <div class="drawer-submenu">
+        <a href="/prints">Prints</a>
+        <a href="/products" aria-current="page">World</a>
+      </div>
+    </div>
+    <a href="/artist">Artist</a>
+    <a href="/press">Press</a>
+    <a href="/contact">Contact</a>
+  </div>
+
+  <!-- ── TRUST BAR ── -->
+  <div class="trust-bar" aria-label="Product details">
+    <span class="trust-bar-item">Pre-order</span>
+    <span class="trust-bar-divider" aria-hidden="true"></span>
+    <span class="trust-bar-item">Numbered Limited Edition</span>
+    <span class="trust-bar-divider" aria-hidden="true"></span>
+    <span class="trust-bar-item">280 mm Soft Vinyl</span>
+    <span class="trust-bar-divider" aria-hidden="true"></span>
+    <span class="trust-bar-item">Est. Dispatch <span data-preorder="dispatch">January 2027</span></span>
+  </div>
+
+  <!-- ── PRODUCT ── -->
+  <main class="product-page" aria-label="Mama Comfort pre-order">
+
+    <p class="product-breadcrumb"><a href="/products">Products</a> <span>/</span> <span>Mama Comfort</span></p>
+
+    <div>
+      <div class="image-stage" id="imageStage">
+        <button class="slide-prev" id="slidePrev" aria-label="Previous image">&#8592;</button>
+        <button class="slide-next" id="slideNext" aria-label="Next image">&#8594;</button>
+        <!-- Slides are filled from PREORDER.shots in the script below. -->
+        <div class="slides-track" id="slidesTrack"></div>
+      </div>
+
+      <div class="slide-caption">
+        <span class="slide-caption-name" id="slideCaptionName"></span>
+        <span class="slide-counter" id="slideCounter"></span>
+      </div>
+
+      <div class="thumb-strip" id="thumbStrip" aria-label="Jump to image"></div>
+    </div>
+
+    <div class="product-info">
+      <p class="product-kicker">Pre-order &middot; Collectible Figure</p>
+      <h1 class="product-title">Mama Comfort</h1>
+      <p class="product-price" data-preorder="price">£150</p>
+      <p class="product-price-note">Paid in full at checkout</p>
+
+      <fieldset class="colourway-picker">
+        <legend>Colourway &mdash; <span id="colourwayLegend"></span></legend>
+        <div class="colourway-options" id="colourwayOptions"></div>
+      </fieldset>
+
+      <a class="btn-acquire is-disabled" id="preorderBtn" href="/contact" aria-disabled="true">Pre-orders open soon</a>
+      <div class="preorder-clock" id="preorderClock" hidden>
+        <span id="preorderClockLabel">Pre-orders close in</span>
+        <strong id="preorderClockValue"></strong>
+      </div>
+
+      <p class="product-caption">A mother carries her child &mdash; Fola&#8217;s figurative language lifted off the canvas and into the round. Cast in soft vinyl at 280 mm, signed with a debossed mark on the sole, and released as a numbered edition in three colourways. <em>Once an edition is gone, that colourway is not remade.</em></p>
+
+      <section class="preorder-terms" aria-labelledby="termsTitle">
+        <h2 id="termsTitle">How the pre-order works</h2>
+        <ol>
+          <li>You pay in full today and your edition number is reserved at checkout.</li>
+          <li>Estimated dispatch: <span data-preorder="dispatch">January 2027</span>. We email you at sample sign-off and again when your figure ships.</li>
+          <li>Cancel any time before dispatch for a full refund. Your 14-day right to cancel after delivery still applies.</li>
+          <li>If dispatch slips more than 30 days past the estimate, we tell you and you can cancel for a full refund.</li>
+        </ol>
+      </section>
+
+      <dl class="product-details">
+        <dt>Edition</dt>
+        <dd><span data-preorder="edition">Edition of 20</span> per colourway, individually numbered</dd>
+        <dt>Dimensions</dt>
+        <dd>280 &times; 127 &times; 76 mm (H &times; W &times; D)</dd>
+        <dt>Material</dt>
+        <dd>Soft vinyl (PVC)</dd>
+        <dt>Signature</dt>
+        <dd>Fola Adeleke&reg; mark debossed into the sole</dd>
+        <dt>Packaging</dt>
+        <dd>White rigid box with a pencil drawing of the figure in its colourway, 300 &times; 150 &times; 135 mm</dd>
+        <dt>Images</dt>
+        <dd>Pre-production renders. The finished figure may differ slightly.</dd>
+        <dt>Certificate</dt>
+        <dd>Numbered certificate of authenticity, verifiable at folaadeleke.com/verify</dd>
+      </dl>
+    </div>
+
+    <section class="faq" aria-labelledby="faqTitle">
+      <h2 class="faq-title" id="faqTitle">Questions</h2>
+      <details>
+        <summary>When will my figure arrive?</summary>
+        <p>The current estimate is <span data-preorder="dispatch">January 2027</span>. Production runs through sampling, colour sign-off and a full production run before anything ships, and we&#8217;ll email you at each milestone. If the date moves by more than 30 days you can cancel for a full refund.</p>
+      </details>
+      <details>
+        <summary>Can I cancel my pre-order?</summary>
+        <p>Yes &mdash; at any point before dispatch, for a full refund, by replying to your order confirmation or via <a href="/contact">Contact</a>. After delivery you have 14 days to cancel under the Consumer Contracts Regulations.</p>
+      </details>
+      <details>
+        <summary>How does the numbering work?</summary>
+        <p>Each colourway is a separate edition of <span data-preorder="edition-count">20</span>. Numbers are assigned in order of purchase and recorded on your certificate of authenticity. When a colourway sells out it is closed for good.</p>
+      </details>
+      <details>
+        <summary>Do you ship outside the UK?</summary>
+        <p>Shipping options and costs are shown at checkout. Orders outside the UK may be subject to import duties and taxes on delivery, which are the buyer&#8217;s responsibility.</p>
+      </details>
+      <details>
+        <summary>Is it suitable for children?</summary>
+        <p>No. This is a collectible for adults (14+), not a toy.</p>
+      </details>
+    </section>
+
+  </main>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <a class="footer-brand" href="/">Fola Adeleke®</a>
+    <div class="footer-social">
+      <a href="https://www.instagram.com/fola_adeleke" target="_blank" rel="noopener" aria-label="Instagram">Instagram</a>
+      <a href="https://www.tiktok.com/@folaadeleke" target="_blank" rel="noopener" aria-label="TikTok">TikTok</a>
+    </div>
+    <div class="footer-legal">
+      <a href="/privacy">Privacy</a>
+      <a href="/terms">Terms</a>
+    </div>
+    <p class="footer-copy">&#169; 2026 Fola Adeleke&#174;. All rights reserved.</p>
+  </footer>
+
+  <script>
+    function openDrawer() {
+      document.getElementById('drawer').classList.add('open');
+      document.getElementById('drawerOverlay').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeDrawer() {
+      document.getElementById('drawer').classList.remove('open');
+      document.getElementById('drawerOverlay').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    function toggleDrawerGroup() {
+      var group = document.getElementById('productsDrawerGroup');
+      var isOpen = group.classList.toggle('open');
+      group.querySelector('.drawer-group-toggle').setAttribute('aria-expanded', isOpen);
+    }
+  </script>
+
+  <script>
+    // ── PRE-ORDER CONFIG ──────────────────────────────────────────
+    // Everything that changes between now and launch lives here.
+    // Until `price` and `opens` are set the page shows "Pre-orders open
+    // soon" and the button is inert. Image paths must be committed files —
+    // check-site.mjs fails on any src that is not tracked.
+    var PREORDER = {
+      price: 150,                      // £, pre-order price
+      editionPerColourway: 20,
+      dispatch: 'January 2027',
+      opens: '2026-10-12T21:18:00Z',   // pre-orders open
+      closes: null,                    // open until each colourway sells out
+      colourways: [
+        // Each colourway is its own Shopify product. remaining: null hides the count.
+        { code: 'C01', name: 'Terracotta', hex: '#CD6F5E', url: 'https://shop.folaadeleke.com/products/mama-comfort-terracotta', remaining: null, soldOut: false },
+        { code: 'C02', name: 'Sage Green', hex: '#8A9E8A', url: 'https://shop.folaadeleke.com/products/mama-comfort-sage-green', remaining: null, soldOut: false },
+        { code: 'C03', name: 'Sand',       hex: '#C9A064', url: 'https://shop.folaadeleke.com/products/mama-comfort-sand',       remaining: null, soldOut: false }
+      ],
+      defaultColourway: 'C02',
+      // One slide per product_shots.py set. `src` is a path, or a map of
+      // colourway code -> path for single-figure shots; '' = placeholder.
+      // Pre-production renders, exported by scripts/relief/export_web_shots.py.
+      // Paths are written out in full so check-site.mjs can verify each one.
+      shots: [
+        { name: 'Front',            src: { C01: '/images/mama-comfort/front-c01.jpg', C02: '/images/mama-comfort/front-c02.jpg', C03: '/images/mama-comfort/front-c03.jpg' } },
+        { name: 'Boxed',            src: { C01: '/images/mama-comfort/boxed-c01.jpg', C02: '/images/mama-comfort/boxed-c02.jpg', C03: '/images/mama-comfort/boxed-c03.jpg' } },
+        { name: 'Back',             src: { C01: '/images/mama-comfort/back-c01.jpg', C02: '/images/mama-comfort/back-c02.jpg', C03: '/images/mama-comfort/back-c03.jpg' } },
+        { name: 'Side',             src: { C01: '/images/mama-comfort/side-c01.jpg', C02: '/images/mama-comfort/side-c02.jpg', C03: '/images/mama-comfort/side-c03.jpg' } },
+        { name: 'Signed Sole',      src: { C01: '/images/mama-comfort/sole-c01.jpg', C02: '/images/mama-comfort/sole-c02.jpg', C03: '/images/mama-comfort/sole-c03.jpg' } },
+        { name: 'Detail',           src: { C01: '/images/mama-comfort/detail-c01.jpg', C02: '/images/mama-comfort/detail-c02.jpg', C03: '/images/mama-comfort/detail-c03.jpg' } },
+        { name: 'Three Colourways', src: '/images/mama-comfort/colourways.jpg' }
+      ]
+    };
+
+    (function () {
+      var cfg = PREORDER;
+      var selected = cfg.colourways.filter(function (c) { return c.code === cfg.defaultColourway; })[0] || cfg.colourways[0];
+
+      // ── Static facts ──
+      function fill(field, text) {
+        document.querySelectorAll('[data-preorder="' + field + '"]').forEach(function (el) { el.textContent = text; });
+      }
+      if (cfg.price != null) fill('price', '£' + cfg.price.toFixed(2).replace(/\.00$/, ''));
+      if (cfg.editionPerColourway != null) {
+        fill('edition', 'Edition of ' + cfg.editionPerColourway);
+        fill('edition-count', String(cfg.editionPerColourway));
+      }
+      fill('dispatch', cfg.dispatch);
+
+      // ── Gallery ──
+      var track   = document.getElementById('slidesTrack');
+      var strip   = document.getElementById('thumbStrip');
+      var prev    = document.getElementById('slidePrev');
+      var next    = document.getElementById('slideNext');
+      var counter = document.getElementById('slideCounter');
+      var caption = document.getElementById('slideCaptionName');
+      var total   = cfg.shots.length;
+      var current = 0;
+
+      function shotSrc(shot) {
+        return typeof shot.src === 'string' ? shot.src : (shot.src[selected.code] || '');
+      }
+      function shotAlt(shot) {
+        var who = typeof shot.src === 'string' ? 'all three colourways' : selected.code + ' ' + selected.name;
+        return 'Mama Comfort figure — ' + shot.name + ', ' + who;
+      }
+
+      function renderSlides() {
+        track.innerHTML = '';
+        strip.innerHTML = '';
+        cfg.shots.forEach(function (shot, i) {
+          var src = shotSrc(shot);
+          var slide = document.createElement('div');
+          slide.className = 'slide-image';
+          var thumb = document.createElement('button');
+          thumb.className = 'thumb';
+          thumb.setAttribute('aria-label', shot.name);
+          if (src) {
+            var img = document.createElement('img');
+            img.src = src; img.alt = shotAlt(shot); img.decoding = 'async';
+            if (i > 0) img.loading = 'lazy';
+            slide.appendChild(img);
+            var timg = img.cloneNode(); timg.alt = ''; timg.loading = 'lazy';
+            thumb.appendChild(timg);
+          } else {
+            slide.innerHTML = '<div class="slide-placeholder"><span class="slide-placeholder-mark"></span><span class="slide-placeholder-note">Image to follow</span></div>';
+            slide.querySelector('.slide-placeholder-mark').textContent = shot.name;
+            thumb.textContent = String(i + 1).padStart(2, '0');
+          }
+          thumb.addEventListener('click', function () { goTo(i); });
+          track.appendChild(slide);
+          strip.appendChild(thumb);
+        });
+        goTo(current);
+      }
+
+      function goTo(n) {
+        current = n;
+        track.style.transform = 'translateX(-' + (current * 100) + '%)';
+        counter.textContent = String(current + 1).padStart(2, '0') + ' / ' + String(total).padStart(2, '0');
+        caption.textContent = cfg.shots[current].name;
+        prev.disabled = current === 0;
+        next.disabled = current === total - 1;
+        strip.querySelectorAll('.thumb').forEach(function (t, i) { t.classList.toggle('active', i === current); });
+      }
+
+      prev.addEventListener('click', function () { if (current > 0) goTo(current - 1); this.blur(); });
+      next.addEventListener('click', function () { if (current < total - 1) goTo(current + 1); this.blur(); });
+      document.addEventListener('keydown', function (e) {
+        if (e.target.closest && e.target.closest('input, textarea, select')) return;
+        if (e.key === 'ArrowLeft'  && current > 0)         goTo(current - 1);
+        if (e.key === 'ArrowRight' && current < total - 1) goTo(current + 1);
+      });
+      var startX = null;
+      track.addEventListener('touchstart', function (e) { startX = e.touches[0].clientX; }, { passive: true });
+      track.addEventListener('touchend', function (e) {
+        if (startX === null) return;
+        var dx = e.changedTouches[0].clientX - startX;
+        if (Math.abs(dx) > 40) {
+          if (dx < 0 && current < total - 1) goTo(current + 1);
+          else if (dx > 0 && current > 0)    goTo(current - 1);
+        }
+        startX = null;
+      }, { passive: true });
+
+      // ── Pre-order state ──
+      // soon: price/open date not set, or open date in the future
+      // open: taking orders for the selected colourway
+      // soldout: selected colourway's edition is gone
+      // closed: past `closes`
+      function phase() {
+        var now = Date.now();
+        if (cfg.price == null || !cfg.opens || now < Date.parse(cfg.opens)) return 'soon';
+        if (cfg.closes && now >= Date.parse(cfg.closes)) return 'closed';
+        return 'open';
+      }
+
+      var btn = document.getElementById('preorderBtn');
+      function renderButton() {
+        var p = phase();
+        var state = p === 'open' && selected.soldOut ? 'soldout' : p;
+        var label = {
+          soon: 'Pre-orders open soon',
+          open: 'Pre-order ' + selected.code + ' ' + selected.name,
+          soldout: selected.code + ' ' + selected.name + ' — Edition sold out',
+          closed: 'Pre-orders closed'
+        }[state];
+        btn.textContent = label;
+        var live = state === 'open';
+        btn.classList.toggle('is-disabled', !live);
+        btn.setAttribute('aria-disabled', String(!live));
+        if (live) {
+          btn.href = selected.url;
+          btn.target = '_blank'; btn.rel = 'noopener';
+        } else {
+          btn.removeAttribute('href'); btn.removeAttribute('target');
+        }
+        renderClock();
+      }
+
+      // ── Colourway picker ──
+      var options = document.getElementById('colourwayOptions');
+      var legend  = document.getElementById('colourwayLegend');
+      cfg.colourways.forEach(function (c) {
+        var id = 'cw-' + c.code;
+        var wrap = document.createElement('div');
+        wrap.className = 'colourway-option';
+        var input = document.createElement('input');
+        input.type = 'radio'; input.name = 'colourway'; input.id = id; input.value = c.code;
+        input.checked = c === selected;
+        var label = document.createElement('label');
+        label.htmlFor = id;
+        var stock = c.soldOut ? 'Sold out' : (c.remaining != null ? c.remaining + ' left' : '');
+        label.innerHTML = '<span class="colourway-swatch"></span><span class="colourway-code"></span><span class="colourway-name"></span>' + (stock ? '<span class="colourway-stock"></span>' : '');
+        label.querySelector('.colourway-swatch').style.background = c.hex;
+        label.querySelector('.colourway-code').textContent = c.code;
+        label.querySelector('.colourway-name').textContent = c.name;
+        if (stock) label.querySelector('.colourway-stock').textContent = stock;
+        input.addEventListener('change', function () {
+          selected = c;
+          legend.textContent = c.name;
+          renderSlides();
+          renderButton();
+        });
+        wrap.appendChild(input); wrap.appendChild(label);
+        options.appendChild(wrap);
+      });
+      legend.textContent = selected.name;
+
+      // ── Countdown to open / close ──
+      var clock = document.getElementById('preorderClock');
+      var clockLabel = document.getElementById('preorderClockLabel');
+      var clockValue = document.getElementById('preorderClockValue');
+      function renderClock() {
+        var p = phase(), target = null;
+        if (p === 'soon' && cfg.price != null && cfg.opens) { target = Date.parse(cfg.opens); clockLabel.textContent = 'Pre-orders open in'; }
+        else if (p === 'open' && cfg.closes) { target = Date.parse(cfg.closes); clockLabel.textContent = 'Pre-orders close in'; }
+        clock.hidden = target == null;
+        if (target == null) return;
+        var s = Math.max(0, Math.floor((target - Date.now()) / 1000));
+        var d = Math.floor(s / 86400), h = Math.floor(s % 86400 / 3600), m = Math.floor(s % 3600 / 60), sec = s % 60;
+        function pad(n) { return String(n).padStart(2, '0'); }
+        clockValue.textContent = (d ? d + 'd ' : '') + pad(h) + ':' + pad(m) + ':' + pad(sec);
+      }
+      var lastPhase = phase();
+      setInterval(function () {
+        var p = phase();
+        if (p !== lastPhase) { lastPhase = p; renderButton(); } else { renderClock(); }
+      }, 1000);
+
+      // ── Structured data (only once there is a price to state) ──
+      if (cfg.price != null) {
+        var ld = {
+          '@context': 'https://schema.org',
+          '@type': 'Product',
+          name: 'Mama Comfort',
+          brand: { '@type': 'Brand', name: 'Fola Adeleke' },
+          description: document.querySelector('meta[name="description"]').content,
+          url: 'https://folaadeleke.com/products/mama-comfort',
+          offers: cfg.colourways.map(function (c) {
+            var o = {
+              '@type': 'Offer',
+              name: c.code + ' ' + c.name,
+              price: cfg.price.toFixed(2),
+              priceCurrency: 'GBP',
+              availability: c.soldOut ? 'https://schema.org/SoldOut' : 'https://schema.org/PreOrder',
+              url: c.url
+            };
+            if (cfg.opens) o.availabilityStarts = cfg.opens;
+            if (cfg.closes) o.availabilityEnds = cfg.closes;
+            return o;
+          })
+        };
+        var tag = document.createElement('script');
+        tag.type = 'application/ld+json';
+        tag.textContent = JSON.stringify(ld);
+        document.head.appendChild(tag);
+      }
+
+      renderSlides();
+      renderButton();
+    })();
+  </script>
+
+  <script>
+    (function() {
+      var loader = document.getElementById('page-loader');
+      var FADE = 608;
+      var MIN_SHOW = 1800;
+      var start = Date.now();
+      function fadeOut() {
+        loader.style.transition = 'opacity ' + FADE + 'ms ease';
+        loader.style.opacity = '0';
+        setTimeout(function() { loader.classList.add('hidden'); }, FADE);
+      }
+      window.addEventListener('load', function() {
+        var elapsed = Date.now() - start;
+        var remaining = Math.max(0, MIN_SHOW - elapsed);
+        setTimeout(fadeOut, remaining);
+      });
+      document.addEventListener('click', function(e) {
+        var link = e.target.closest('a[href]');
+        if (!link) return;
+        var href = link.getAttribute('href');
+        if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:') || link.target === '_blank' || link.hostname !== location.hostname) return;
+        e.preventDefault();
+        loader.classList.remove('hidden');
+        loader.style.opacity = '0';
+        loader.offsetHeight;
+        loader.style.transition = 'opacity ' + FADE + 'ms ease';
+        loader.style.opacity = '1';
+        setTimeout(function() { window.location.href = href; }, FADE);
+      });
+    })();
+  </script>
+
+</body>
+</html>
