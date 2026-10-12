@@ -1,0 +1,6 @@
+{%- comment -%} Colourway name for a product: custom.colourway, else the part of the title after " — " / " - ". {%- endcomment -%}
+{%- if product.metafields.custom.colourway != blank -%}
+  {{- product.metafields.custom.colourway.value -}}
+{%- else -%}
+  {{- product.title | split: ' — ' | last | split: ' – ' | last | split: ' - ' | last | strip -}}
+{%- endif -%}

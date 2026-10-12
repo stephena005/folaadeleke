@@ -48,17 +48,32 @@ Also fixes two things broken in the prints theme: `collection.css` and
    `figure_weight`, `signature`, `packaging`, `certificate`, `in_the_box`
    (multi-line), `dispatch_estimate`, `image_note`, `care` (multi-line).
 
-## Deploy
+## Deploy — live setup (prints and figure on one store)
 
-```sh
-shopify theme push --path shopify-theme-figure --unpublished
-shopify theme check --path shopify-theme-figure
-```
+`shop.folaadeleke.com` sells prints and Mama Comfort, and a store has one
+live theme, so the figure page ships **inside the prints theme** as an
+alternate product template. Don't publish this standalone theme over it.
 
-Or zip the folder's contents and upload via *Online Store → Themes → Add
-theme*. If the figure is sold on the same store as the prints, don't
-publish this over the prints theme — see the note in the PR / chat about
-using it as an alternate product template instead.
+Files in `../shopify-theme/`:
+
+- `templates/product.figure.json` → `sections/main-product-figure.liquid`
+  (this folder's product section, with swatch colours as a section setting)
+- `assets/figure-product.css`
+- `snippets/figure-swatch-colour.liquid`, `figure-colourway-label.liquid`,
+  `figure-colour-option-check.liquid`
+- The prints cart no longer labels figures "A1 — 594 × 841 mm" and shows the
+  pre-order line property; grid buttons read "View" for figures.
+
+Steps:
+
+1. Push the theme: `shopify theme push --path shopify-theme --theme <live theme id> --only templates/product.figure.json --only sections/main-product-figure.liquid --only assets/figure-product.css --only "snippets/figure-*" --only sections/main-cart.liquid --only sections/main-collection.liquid --only sections/main-index.liquid`
+   (or paste the files into *Edit code*).
+2. On each Mama Comfort product, set *Theme template* to `product.figure`.
+3. In the theme editor, open a Mama Comfort product and pick the colourway
+   collection; check the limit (3 per order) and dispatch estimate.
+
+This standalone folder stays as the full theme in case the figure moves to
+its own store; keep both copies of the product section in step.
 
 ## Defaults to check
 
@@ -66,6 +81,6 @@ Spec and terms copy is lifted from `products/mama-comfort/index.html`
 (Oct 2026): edition of 20 per colourway, 280 × 127 × 76 mm, soft vinyl
 (PVC), dispatch January 2027. If any of that changes, update the section
 settings in the theme editor (or the metafields) as well as the page.
-Theme-only assumptions to confirm: limit 2 per order, "Only N of 20 left"
+Theme-only assumptions to confirm: limit 3 per order, "Only N of 20 left"
 from 10 remaining, and the returns/shipping wording against your courier
 terms.

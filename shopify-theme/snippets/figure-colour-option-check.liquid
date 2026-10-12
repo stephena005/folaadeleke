@@ -1,0 +1,3 @@
+{%- comment -%} Outputs "true" when an option name is a colour option. {%- endcomment -%}
+{%- assign n = name | downcase -%}
+{%- if n == 'colourway' or n == 'colorway' or n == 'colour' or n == 'color' -%}true{%- endif -%}

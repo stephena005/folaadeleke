@@ -13,7 +13,7 @@
       <!-- ── LINE ITEMS ── -->
       <div class="cart-items">
         <div class="cart-items-head">
-          <span>Print</span>
+          <span>Item</span>
           <span class="cart-col-price">Price</span>
           <span class="cart-col-qty">Qty</span>
           <span class="cart-col-total">Total</span>
@@ -42,7 +42,11 @@
             <div class="cart-item-details">
               <a href="{{ item.url }}" class="cart-item-title">{{ item.product.title }}</a>
               {%- assign size_val = item.variant.title -%}
-              {%- if size_val == 'A1' -%}
+              {%- if item.product.template_suffix == 'figure' -%}
+                {%- unless item.product.has_only_default_variant -%}
+                  <span class="cart-item-spec">{{ size_val }}</span>
+                {%- endunless -%}
+              {%- elsif size_val == 'A1' -%}
                 <span class="cart-item-spec">A1 — 594 × 841 mm</span>
               {%- elsif size_val == 'A2' -%}
                 <span class="cart-item-spec">A2 — 420 × 594 mm</span>
@@ -51,6 +55,12 @@
               {%- else -%}
                 <span class="cart-item-spec">A1 — 594 × 841 mm</span>
               {%- endif -%}
+              {%- for property in item.properties -%}
+                {%- assign first_char = property.first | slice: 0 -%}
+                {%- if property.last != blank and first_char != '_' -%}
+                  <span class="cart-item-spec">{{ property.first }}: {{ property.last }}</span>
+                {%- endif -%}
+              {%- endfor -%}
               {%- if item.selling_plan_allocation -%}
                 <span class="cart-item-spec">{{ item.selling_plan_allocation.selling_plan.name }}</span>
               {%- endif -%}
