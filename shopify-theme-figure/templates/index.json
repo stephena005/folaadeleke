@@ -1,0 +1,20 @@
+{
+  "sections": {
+    "hero": {
+      "type": "featured-figure",
+      "settings": {
+        "dark": true,
+        "kicker": "New — Collectible figure",
+        "cta": "Shop now"
+      }
+    },
+    "grid": {
+      "type": "featured-collection",
+      "settings": {
+        "heading": "Shop",
+        "limit": 6
+      }
+    }
+  },
+  "order": ["hero", "grid"]
+}

@@ -1,0 +1,30 @@
+{{ 'collection.css' | asset_url | stylesheet_tag }}
+
+<section class="collection-page">
+  <div class="collection-header">
+    <h1 class="collection-title">Search</h1>
+    <form action="{{ routes.search_url }}" method="get" class="search-form" role="search">
+      <input type="search" name="q" value="{{ search.terms | escape }}" placeholder="Search" aria-label="Search" class="search-input" />
+      <input type="hidden" name="type" value="product" />
+    </form>
+  </div>
+  {%- if search.performed -%}
+    {%- paginate search.results by 24 -%}
+      <div class="collection-meta"><span>{{ search.results_count }} {{ search.results_count | pluralize: 'result', 'results' }}</span></div>
+      <div class="collection-grid">
+        {%- for item in search.results -%}
+          {%- if item.object_type == 'product' -%}
+            {%- render 'product-card', product: item -%}
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+      {%- if paginate.pages > 1 -%}
+        <nav class="pagination" aria-label="Pagination">{{ paginate | default_pagination }}</nav>
+      {%- endif -%}
+    {%- endpaginate -%}
+  {%- endif -%}
+</section>
+
+{% schema %}
+{ "name": "Search", "tag": "div", "settings": [] }
+{% endschema %}

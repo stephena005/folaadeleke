@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="{{ request.locale.iso_code }}">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#ffffff" />
+  <link rel="icon" type="image/svg+xml" href="{{ 'favicon.svg' | asset_url }}" />
+  <link rel="canonical" href="{{ canonical_url }}" />
+
+  <title>
+    {%- if page_title == blank -%}
+      {{ shop.name }}
+    {%- else -%}
+      {{ page_title }} — {{ shop.name }}
+    {%- endif -%}
+  </title>
+
+  {%- if page_description -%}
+    <meta name="description" content="{{ page_description | escape }}" />
+  {%- endif -%}
+
+  {%- render 'social-meta' -%}
+
+  {{ content_for_header }}
+
+  {{ 'base.css' | asset_url | stylesheet_tag }}
+
+  {%- if settings.klarna_client_id != blank -%}
+    <script async src="https://js.klarna.com/web-sdk/v1/klarna.js"
+      data-client-id="{{ settings.klarna_client_id | escape }}"></script>
+  {%- endif -%}
+</head>
+
+<body{% if settings.announcement != blank %} class="has-announcement"{% endif %}>
+
+  <a class="skip-link" href="#MainContent">Skip to content</a>
+
+  {%- if settings.announcement != blank -%}
+    <div class="announcement">{{ settings.announcement | escape }}</div>
+  {%- endif -%}
+
+  <!-- ── NAVIGATION ── -->
+  <header>
+    <nav class="site-nav">
+      <div class="nav-left">
+        <button class="hamburger" id="hamburger-btn" aria-label="Menu" aria-expanded="false" aria-controls="drawer">&#9776;</button>
+      </div>
+
+      <div class="nav-brand">
+        {%- if settings.logo != blank -%}
+          <a href="{{ settings.brand_url | default: routes.root_url }}" class="nav-brand-logo-link">
+            {{ settings.logo | image_url: width: 200 | image_tag: class: 'nav-brand-logo', alt: shop.name }}
+          </a>
+        {%- else -%}
+          <a href="{{ settings.brand_url | default: routes.root_url }}" class="nav-brand-text">Fola Adeleke®</a>
+        {%- endif -%}
+      </div>
+
+      <div class="nav-right">
+        <a href="{{ settings.contact_url }}" class="nav-contact">Contact</a>
+        <a href="{{ routes.cart_url }}" class="cart-icon-wrap" aria-label="Cart, {{ cart.item_count }} {{ cart.item_count | pluralize: 'item', 'items' }}">
+          Cart
+          <span class="cart-count" data-count="{{ cart.item_count }}">
+            {%- if cart.item_count > 0 -%}{{ cart.item_count }}{%- endif -%}
+          </span>
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ── DRAWER ── -->
+  <div class="drawer-overlay" id="drawer-overlay"></div>
+  <div class="drawer" id="drawer" aria-hidden="true">
+    <button class="drawer-close" id="drawer-close" aria-label="Close menu">&times;</button>
+    {%- assign menu = linklists[settings.menu] -%}
+    {%- if menu.links.size > 0 -%}
+      {%- for link in menu.links -%}
+        <a href="{{ link.url }}">{{ link.title | escape }}</a>
+      {%- endfor -%}
+    {%- else -%}
+      <a href="{{ routes.root_url }}">Home</a>
+      <a href="{{ routes.all_products_collection_url }}">Shop</a>
+      <a href="{{ settings.contact_url }}">Contact</a>
+    {%- endif -%}
+  </div>
+
+  <script>
+    (function() {
+      var hamburger = document.getElementById('hamburger-btn');
+      var overlay   = document.getElementById('drawer-overlay');
+      var drawer    = document.getElementById('drawer');
+      var closeBtn  = document.getElementById('drawer-close');
+
+      function setDrawer(open) {
+        drawer.classList.toggle('open', open);
+        overlay.classList.toggle('open', open);
+        hamburger.setAttribute('aria-expanded', open ? 'true' : 'false');
+        drawer.setAttribute('aria-hidden', open ? 'false' : 'true');
+      }
+
+      hamburger.addEventListener('click', function() { setDrawer(true); });
+      closeBtn.addEventListener('click', function() { setDrawer(false); });
+      overlay.addEventListener('click', function() { setDrawer(false); });
+      document.addEventListener('keydown', function(e) { if (e.key === 'Escape') setDrawer(false); });
+    })();
+  </script>
+
+  <!-- ── PAGE CONTENT ── -->
+  <main class="main-content" id="MainContent" role="main" tabindex="-1">
+    {{ content_for_layout }}
+  </main>
+
+  <!-- ── FOOTER ── -->
+  <footer class="site-footer">
+    {%- if settings.instagram_url != blank -%}
+      <a href="{{ settings.instagram_url }}" target="_blank" rel="noopener" class="footer-instagram">Instagram</a>
+    {%- endif -%}
+    <p>© {{ 'now' | date: '%Y' }} Fola Adeleke®. All rights reserved.</p>
+    {%- if settings.brand_url != blank -%}
+      <a href="{{ settings.brand_url }}" class="footer-main-site">← {{ settings.brand_url | remove: 'https://' | remove: 'www.' }}</a>
+    {%- endif -%}
+  </footer>
+
+</body>
+</html>

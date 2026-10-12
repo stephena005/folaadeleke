@@ -1,0 +1,19 @@
+{%- comment -%}
+  Outputs a CSS colour for a colourway option value, or nothing.
+  Usage: {%- capture hex -%}{% render 'swatch-colour', value: value %}{%- endcapture -%}
+  Order: Shopify's native option swatch → theme setting "CODE:#HEX" matched
+  on the value's first word (e.g. "C02 Sage Green" → C02).
+{%- endcomment -%}
+{%- if value.swatch.color -%}
+  {{- value.swatch.color -}}
+{%- else -%}
+  {%- assign code = value | append: '' | split: ' ' | first | upcase -%}
+  {%- assign lines = settings.swatch_map | newline_to_br | split: '<br />' -%}
+  {%- for line in lines -%}
+    {%- assign pair = line | strip | split: ':' -%}
+    {%- if pair.size == 2 -%}
+      {%- assign key = pair[0] | strip | upcase -%}
+      {%- if key == code -%}{{- pair[1] | strip -}}{%- break -%}{%- endif -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
