@@ -33,21 +33,21 @@
   <meta name="description" content="Mama Comfort by Fola Adeleke — a 280 mm soft vinyl collectible figure in three colourways. Numbered limited edition, available to pre-order." />
   <link rel="canonical" href="https://folaadeleke.com/products/mama-comfort" />
 
-  <!-- Open Graph / social preview — swap og:image for a product shot at launch -->
+  <!-- Open Graph / social preview -->
   <meta property="og:type" content="product" />
   <meta property="og:site_name" content="Fola Adeleke®" />
   <meta property="og:title" content="Mama Comfort — Pre-order — Fola Adeleke®" />
   <meta property="og:description" content="A 280 mm soft vinyl collectible figure in three colourways. Numbered limited edition, available to pre-order." />
   <meta property="og:url" content="https://folaadeleke.com/products/mama-comfort" />
-  <meta property="og:image" content="https://folaadeleke.com/images/social/og-image.jpg" />
+  <meta property="og:image" content="https://folaadeleke.com/images/mama-comfort/og-mama-comfort.jpg" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="Framed prints by Fola Adeleke hung in a white gallery space" />
+  <meta property="og:image:alt" content="Mama Comfort soft vinyl figures by Fola Adeleke in terracotta, sage green and ochre" />
   <meta property="og:locale" content="en_GB" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Mama Comfort — Pre-order — Fola Adeleke®" />
   <meta name="twitter:description" content="A 280 mm soft vinyl collectible figure in three colourways. Numbered limited edition, available to pre-order." />
-  <meta name="twitter:image" content="https://folaadeleke.com/images/social/og-image.jpg" />
+  <meta name="twitter:image" content="https://folaadeleke.com/images/mama-comfort/og-mama-comfort.jpg" />
 
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -383,7 +383,9 @@
         <dt>Signature</dt>
         <dd>Fola Adeleke&reg; mark debossed into the sole</dd>
         <dt>Packaging</dt>
-        <dd>Black rigid box with pencil-drawn artwork, 300 &times; 150 &times; 135 mm</dd>
+        <dd>White rigid box with a pencil drawing of the figure in its colourway, 300 &times; 150 &times; 135 mm</dd>
+        <dt>Images</dt>
+        <dd>Pre-production renders. The finished figure may differ slightly.</dd>
         <dt>Certificate</dt>
         <dd>Numbered certificate of authenticity, verifiable at folaadeleke.com/verify</dd>
       </dl>
@@ -469,12 +471,16 @@
       defaultColourway: 'C02',
       // One slide per product_shots.py set. `src` is a path, or a map of
       // colourway code -> path for single-figure shots; '' = placeholder.
+      // Pre-production renders, exported by scripts/relief/export_web_shots.py.
+      // Paths are written out in full so check-site.mjs can verify each one.
       shots: [
-        { name: 'Catalogue',  src: { C01: '', C02: '', C03: '' } },
-        { name: 'Three Colourways', src: '' },
-        { name: 'Boxed',      src: { C01: '', C02: '', C03: '' } },
-        { name: 'Detail',     src: { C01: '', C02: '', C03: '' } },
-        { name: 'Signed Sole', src: { C01: '', C02: '', C03: '' } }
+        { name: 'Front',            src: { C01: '/images/mama-comfort/front-c01.jpg', C02: '/images/mama-comfort/front-c02.jpg', C03: '/images/mama-comfort/front-c03.jpg' } },
+        { name: 'Back',             src: { C01: '/images/mama-comfort/back-c01.jpg', C02: '/images/mama-comfort/back-c02.jpg', C03: '/images/mama-comfort/back-c03.jpg' } },
+        { name: 'Side',             src: { C01: '/images/mama-comfort/side-c01.jpg', C02: '/images/mama-comfort/side-c02.jpg', C03: '/images/mama-comfort/side-c03.jpg' } },
+        { name: 'Signed Sole',      src: { C01: '/images/mama-comfort/sole-c01.jpg', C02: '/images/mama-comfort/sole-c02.jpg', C03: '/images/mama-comfort/sole-c03.jpg' } },
+        { name: 'Detail',           src: { C01: '', C02: '/images/mama-comfort/detail-c02.jpg', C03: '' } },
+        { name: 'Boxed',            src: { C01: '/images/mama-comfort/boxed-c01.jpg', C02: '/images/mama-comfort/boxed-c02.jpg', C03: '/images/mama-comfort/boxed-c03.jpg' } },
+        { name: 'Three Colourways', src: '/images/mama-comfort/colourways.jpg' }
       ]
     };
 

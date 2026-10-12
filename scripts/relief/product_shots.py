@@ -44,6 +44,7 @@ def parse_args():
     p.add_argument("--side-label", default="", help="PNG printed on the box's right side")
     p.add_argument("--samples", type=int, default=160)
     p.add_argument("--size", type=int, default=2000, help="square edge in px; trio is 1.6:1")
+    p.add_argument("--square", action="store_true", help="render the trio shots square (for square galleries)")
     return p.parse_args(argv)
 
 
@@ -261,7 +262,8 @@ def shot_trio_white(a):
     white_set()
     t = (0, 0, a.height * 0.47)
     camera(from_dir(t, (0, -1, 0.12), 1180), t, 70)
-    render(s, os.path.join(a.out, "shot-trio-white-front.png"), int(a.size * 1.6), a.size, a.samples)
+    name = "shot-trio-white-front-square.png" if a.square else "shot-trio-white-front.png"
+    render(s, os.path.join(a.out, name), a.size if a.square else int(a.size * 1.6), a.size, a.samples)
 
 
 def shot_box(a):
@@ -299,12 +301,12 @@ def shot_box(a):
 
 def shot_detail(a):
     s = reset()
-    ob = figure(a.mesh, a.height, COLOURS["C02"])
+    ob = figure(a.mesh, a.height, COLOURS[a.colourway])
     ob.rotation_euler.z = math.radians(-22)  # turn the bear into view
     black_set()
     face = (-4, -34, a.height * 0.72)
     camera(from_dir(face, (-0.3, -1, 0.06), 600), (12, -10, a.height * 0.73), 135, fstop=3.2, focus=face)
-    render(s, os.path.join(a.out, "shot-detail-c02.png"), a.size, a.size, a.samples)
+    render(s, os.path.join(a.out, f"shot-detail-{a.colourway.lower()}.png"), a.size, a.size, a.samples)
 
 
 def shot_signed(a):
