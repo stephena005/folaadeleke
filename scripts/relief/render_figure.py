@@ -24,7 +24,9 @@ from mathutils import Vector
 
 # (label, file slug, figure yaw in degrees). The figure turns clockwise seen
 # from above, so +90 brings its left side to the camera.
-VIEWS = [("FRONT", "front", 0), ("SIDE (LEFT)", "side", 90), ("BACK", "back", 180), ("3/4 HERO", "hero", 35)]
+VIEWS = [("FRONT", "front", 0), ("SIDE (LEFT)", "side", 90), ("BACK", "back", 180), ("3/4 HERO", "hero", 35),
+         ("UNDERSIDE", "underside", None), ("UNDERSIDE / BASE MARK", "mark", None)]
+ELEVATIONS = ("FRONT", "SIDE", "BACK")
 
 
 def parse_args():
@@ -42,6 +44,9 @@ def parse_args():
     p.add_argument("--res", default="2000x2800")
     p.add_argument("--samples", type=int, default=192)
     p.add_argument("--views", default="front,side,back,hero", help="comma-separated slugs; '' to skip rendering")
+    p.add_argument("--mark-centre", default="", help="x,y of the base mark in figure mm (for the 'mark' view)")
+    p.add_argument("--mark-span", type=float, default=62.0, help="width shown in the 'mark' close-up, mm")
+    p.add_argument("--mark-note", default="", help="extra title-block line for underside views")
     p.add_argument("--save-blend", default="", help="also save the lit, camera-ready scene to this .blend")
     p.add_argument("--no-export", action="store_true", help="skip writing figure.stl/.obj")
     return p.parse_args(argv)
@@ -133,6 +138,7 @@ def studio(height):
     bpy.ops.mesh.primitive_plane_add(size=height * 6)
     floor = bpy.context.active_object
     floor.is_shadow_catcher = True
+    floor.name = "floor_shadow_catcher"
     h = height
     add_light("key", (-1.1 * h, -1.6 * h, 1.9 * h), 1.6e6 * (h / 280) ** 2, 0.8 * h)
     add_light("fill", (1.6 * h, -1.2 * h, 0.9 * h), 0.55e6 * (h / 280) ** 2, 1.4 * h, (0.96, 0.98, 1.0))
@@ -144,6 +150,19 @@ def studio(height):
     bg.inputs["Color"].default_value = (1, 1, 1, 1)
     bg.inputs["Strength"].default_value = 0.5
     bpy.context.scene.world = world
+    return floor
+
+
+def underside_camera(scale, x=0.0, y=0.0):
+    """Ortho camera looking straight down at a figure turned upside down."""
+    d = bpy.data.cameras.new("under")
+    d.type = "ORTHO"
+    d.ortho_scale = scale
+    d.clip_end = 10000
+    o = bpy.data.objects.new("under", d)
+    bpy.context.collection.objects.link(o)
+    o.location = (x, y, 1000)
+    return o
 
 
 def ortho_camera(frame_w, frame_h, centre_z, aspect):
@@ -215,7 +234,7 @@ def annotate(src, png, view, dims, px_per_mm, img_w, img_h, cam_z, a):
 
     lw = max(2, img_w // 900)
     ortho = not view.startswith("3/4")
-    if ortho:
+    if view.startswith(ELEVATIONS):
         dimension_lines(dr, to_px, dims, view, ink, lw, f_big)
 
     # Title block, bottom band.
@@ -229,6 +248,9 @@ def annotate(src, png, view, dims, px_per_mm, img_w, img_h, cam_z, a):
     dr.text((m, top + 22 + f_big.size), "   |   ".join(x for x in meta if x), font=f_small, fill=ink)
     if a.note:
         dr.text((m, top + 30 + f_big.size + f_small.size), a.note, font=f_tag, fill=(150, 80, 50))
+    if a.mark_note and view.startswith("UNDERSIDE"):
+        f_mark = ImageFont.truetype("DejaVuSans-Bold.ttf", int(img_h * 0.014))
+        dr.text((m, m), a.mark_note, font=f_mark, fill=ink)
     im.save(png, optimize=True)
 
 
@@ -251,7 +273,7 @@ def main():
         bpy.ops.export_mesh.stl(filepath=stem + ".stl", use_selection=True, global_scale=1.0)
         bpy.ops.wm.obj_export(filepath=stem + ".obj", export_selected_objects=True, export_materials=False)
     finish(ob, a.colour)
-    studio(a.height)
+    floor = studio(a.height)
 
     w, h = (int(v) for v in a.res.split("x"))
     aspect = w / h
@@ -262,6 +284,13 @@ def main():
     ortho = ortho_camera(frame_w, frame_h, cam_z, aspect)
     ortho_cam = scene.camera
     hero_cam = hero_camera(dims, aspect)
+    widest_base = max(dims["W"], dims["D"]) * 1.35
+    under_cam = underside_camera(widest_base / min(1.0, aspect) if aspect < 1 else widest_base)
+    mark_cam = None
+    if a.mark_centre:
+        mx, my = (float(v) for v in a.mark_centre.split(","))
+        # Turning the figure over (180 deg about X) maps y -> -y.
+        mark_cam = underside_camera(a.mark_span, mx, -my)
     px_per_mm = (w if aspect >= 1 else w) / (ortho if aspect >= 1 else ortho * aspect)
 
     scene.render.engine = "CYCLES"
@@ -289,9 +318,20 @@ def main():
     for name, slug, yaw in VIEWS:
         if slug not in wanted:
             continue
-        # Turn the figure, not the camera, so every view shares the lighting.
-        ob.rotation_euler = (0, 0, math.radians(-yaw))
-        scene.camera = hero_cam if slug == "hero" else ortho_cam
+        if slug == "mark" and not mark_cam:
+            print("skipping mark view: pass --mark-centre")
+            continue
+        if yaw is None:
+            # Underside: turn the figure over so the soles face the camera,
+            # toes towards the top of the frame; hide the floor.
+            ob.rotation_euler = (math.pi, 0, 0)
+            floor.hide_render = True
+            scene.camera = mark_cam if slug == "mark" else under_cam
+        else:
+            # Turn the figure, not the camera, so every view shares the lighting.
+            ob.rotation_euler = (0, 0, math.radians(-yaw))
+            floor.hide_render = False
+            scene.camera = hero_cam if slug == "hero" else ortho_cam
         raw = os.path.join(a.out, f"raw-{slug}.png")
         png = os.path.join(a.out, f"render-{slug}.png")
         scene.render.filepath = raw

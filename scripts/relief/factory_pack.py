@@ -40,7 +40,8 @@ WARN = HexColor("#9A5A35")
 PAGE_W, PAGE_H = A4
 M = 42  # page margin, pt
 
-VIEWS = [("front", "Front elevation"), ("side", "Side elevation (left)"), ("back", "Back elevation")]
+VIEWS = [("front", "Front elevation"), ("side", "Side elevation (left)"), ("back", "Back elevation"),
+         ("underside", "Underside"), ("mark", "Base mark (underside, left sandal)")]
 
 
 def parse_args():
@@ -53,6 +54,7 @@ def parse_args():
     p.add_argument("--target", default="", help="HxWxD target envelope in mm, e.g. 280x127x76")
     p.add_argument("--spec-ref", default="")
     p.add_argument("--source", default="", help="how the mesh was produced")
+    p.add_argument("--mark", default="", help="base mark description for the mesh data page")
     p.add_argument("--wall", type=float, default=3.0, help="nominal wall for the hollow estimate, mm")
     p.add_argument("--density", type=float, default=1.25, help="material density for estimates, g/cm3")
     p.add_argument("--no-attach", action="store_true")
@@ -220,6 +222,7 @@ def data_page(c, a, stats, target, attached):
         ("Est. hollow shell", f"~{shell:,.0f} cm3 / ~{shell * a.density:,.0f} g at {a.wall:g} mm wall, "
                               f"{a.density:g} g/cm3 (rough estimate; factory to confirm)"),
         ("Source", a.source or "-"),
+    ] + ([("Base mark", a.mark)] if a.mark else []) + [
     ]
     y = PAGE_H - 100
     for k, v in rows:
@@ -278,7 +281,9 @@ def main():
     c.setTitle(f"{a.title} - Factory Reference Pack".strip(" -"))
     c.setAuthor("Fola Adeleke")
     for i, (slug, cap) in enumerate(pages, 1):
-        header(c, {"cover": "Overview", "data": "Mesh data & factory response"}.get(slug, "Orthographic views"), i, len(pages), a)
+        section = {"cover": "Overview", "data": "Mesh data & factory response",
+                   "underside": "Underside & base mark", "mark": "Underside & base mark"}.get(slug, "Orthographic views")
+        header(c, section, i, len(pages), a)
         if slug == "cover":
             cover(c, a, stats, target, a.renders)
         elif slug == "data":
