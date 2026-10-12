@@ -45,6 +45,11 @@
           <li class="card-swatch" title="{{ value | escape }}"{% if hex != blank %} style="background: {{ hex | strip }}"{% endif %}></li>
         {%- endfor -%}
       </ul>
+    {%- else -%}
+      {%- capture own_hex -%}{%- if product.metafields.custom.swatch != blank -%}{{ product.metafields.custom.swatch.value }}{%- else -%}{%- render 'swatch-colour', value: product.title, handle: product.handle -%}{%- endif -%}{%- endcapture -%}
+      {%- if own_hex != blank -%}
+        <ul class="card-swatches"><li class="card-swatch" style="background: {{ own_hex | strip }}"></li></ul>
+      {%- endif -%}
     {%- endif -%}
     <span class="product-card-price">
       {%- if product.price_varies -%}From {% endif -%}{{ product.price_min | money }}

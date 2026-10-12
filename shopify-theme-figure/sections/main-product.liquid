@@ -12,7 +12,32 @@
   assign edition = mf.edition.value | default: section.settings.edition
   assign packaging = mf.packaging.value | default: section.settings.packaging
   assign in_the_box = mf.in_the_box.value | default: section.settings.in_the_box
-  assign preorder_note = mf.preorder_ships.value | default: section.settings.preorder_note
+  assign signature = mf.signature.value | default: section.settings.signature
+  assign certificate = mf.certificate.value | default: section.settings.certificate
+  assign edition_size = mf.edition_size.value | default: section.settings.edition_size
+  assign dispatch = mf.dispatch_estimate.value | default: section.settings.dispatch_estimate
+  assign image_note = mf.image_note.value | default: section.settings.image_note
+
+  # Pre-order: tag the product "pre-order" (edition stock stays tracked), or let
+  # a variant sell past zero with "Continue selling when out of stock".
+  assign tagged_preorder = false
+  for tag in product.tags
+    assign t = tag | downcase | remove: '-' | remove: ' '
+    if t == 'preorder'
+      assign tagged_preorder = true
+    endif
+  endfor
+  assign preorder_property = 'Pre-order'
+  if dispatch != blank
+    assign preorder_property = 'Pre-order, est. dispatch ' | append: dispatch
+  endif
+
+  # Colourways sold as separate products: list them in the custom.colourways
+  # metafield (list of products) or in the section's colourway collection.
+  assign siblings = mf.colourways.value
+  if siblings == blank and section.settings.colourway_collection != blank
+    assign siblings = collections[section.settings.colourway_collection].products
+  endif
 
   assign has_models = false
   for media in product.media
@@ -94,6 +119,9 @@
         <span>{{ product.title }}</span>
       </div>
     {%- endif -%}
+    {%- if image_note != blank -%}
+      <p class="gallery-note">{{ image_note | escape }}</p>
+    {%- endif -%}
   </div>
 
   <!-- ── DETAILS ── -->
@@ -120,6 +148,32 @@
       {%- endif -%}
     </p>
     <p class="product-currency-note">Prices in GBP, VAT included where applicable. Shipping calculated at checkout.</p>
+
+    <!-- Colourways as separate products -->
+    {%- if colour_option_index == nil and siblings.size > 1 -%}
+      {%- capture current_label -%}{%- render 'colourway-label', product: product -%}{%- endcapture -%}
+      <div class="product-option">
+        <p class="option-legend">
+          <span class="spec-label">Colourway</span>
+          <span class="option-current">{{ current_label }}</span>
+        </p>
+        <div class="swatch-picker">
+          {%- for p in siblings -%}
+            {%- capture label -%}{%- render 'colourway-label', product: p -%}{%- endcapture -%}
+            {%- capture hex -%}{%- if p.metafields.custom.swatch != blank -%}{{ p.metafields.custom.swatch.value }}{%- else -%}{%- render 'swatch-colour', value: p.title, handle: p.handle -%}{%- endif -%}{%- endcapture -%}
+            <a
+              href="{{ p.url }}"
+              class="swatch-btn{% if p.id == product.id %} selected{% endif %}{% unless p.available %} unavailable{% endunless %}"
+              {% if p.id == product.id %}aria-current="page"{% endif %}
+              aria-label="{{ label | escape }}{% unless p.available %} (sold out){% endunless %}"
+              title="{{ label | escape }}"
+            >
+              <span class="swatch-chip"{% if hex != blank %} style="background: {{ hex | strip }}"{% endif %}></span>
+            </a>
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- endif -%}
 
     <!-- Options -->
     {%- unless product.has_only_default_variant -%}
@@ -163,16 +217,22 @@
 
     <!-- Specs -->
     <dl class="product-specs">
-      {%- if height_mm != blank -%}
+      {%- if edition != blank -%}
         <div class="product-spec-row">
-          <dt class="spec-label">Height</dt>
-          <dd class="spec-value">{{ height_mm }} mm / {{ height_mm | times: 1.0 | divided_by: 25.4 | round: 1 }} in</dd>
+          <dt class="spec-label">Edition</dt>
+          <dd class="spec-value">{{ edition | escape }}</dd>
         </div>
       {%- endif -%}
-      {%- if width_mm != blank and depth_mm != blank -%}
+      {%- if height_mm != blank -%}
         <div class="product-spec-row">
-          <dt class="spec-label">Footprint</dt>
-          <dd class="spec-value">{{ width_mm }} × {{ depth_mm }} mm</dd>
+          <dt class="spec-label">Dimensions</dt>
+          <dd class="spec-value">
+            {%- if width_mm != blank and depth_mm != blank -%}
+              {{ height_mm }} × {{ width_mm }} × {{ depth_mm }} mm (H × W × D)
+            {%- else -%}
+              {{ height_mm }} mm tall
+            {%- endif -%}
+          </dd>
         </div>
       {%- endif -%}
       {%- if material != blank -%}
@@ -187,16 +247,22 @@
           <dd class="spec-value">{{ weight | escape }}</dd>
         </div>
       {%- endif -%}
-      {%- if edition != blank -%}
+      {%- if signature != blank -%}
         <div class="product-spec-row">
-          <dt class="spec-label">Edition</dt>
-          <dd class="spec-value">{{ edition | escape }}</dd>
+          <dt class="spec-label">Signature</dt>
+          <dd class="spec-value">{{ signature | escape }}</dd>
         </div>
       {%- endif -%}
       {%- if packaging != blank -%}
         <div class="product-spec-row">
           <dt class="spec-label">Packaging</dt>
           <dd class="spec-value">{{ packaging | escape }}</dd>
+        </div>
+      {%- endif -%}
+      {%- if certificate != blank -%}
+        <div class="product-spec-row">
+          <dt class="spec-label">Certificate</dt>
+          <dd class="spec-value">{{ certificate | escape }}</dd>
         </div>
       {%- endif -%}
     </dl>
@@ -214,9 +280,16 @@
     <!-- Buy -->
     {%- form 'product', product, id: 'product-form', class: 'product-form', novalidate: 'novalidate' -%}
       <input type="hidden" name="id" value="{{ current_variant.id }}" data-variant-input />
-      <input type="hidden" name="properties[Pre-order]" value="{{ preorder_note | escape }}" data-preorder-input disabled />
+      <input type="hidden" name="properties[Pre-order]" value="{{ preorder_property | escape }}" data-preorder-input disabled />
 
       <p class="stock-note" data-stock-note aria-live="polite"></p>
+
+      {%- if section.settings.preorder_terms != blank -%}
+        <div class="preorder-terms" data-preorder-note hidden>
+          <p class="preorder-terms-title">How the pre-order works</p>
+          {{ section.settings.preorder_terms | replace: '[dispatch]', dispatch }}
+        </div>
+      {%- endif -%}
 
       <div class="buy-row">
         {%- assign max_qty = section.settings.max_per_order -%}
@@ -248,7 +321,6 @@
       {%- if max_qty > 0 -%}
         <p class="buy-note">Limit {{ max_qty }} per order.</p>
       {%- endif -%}
-      <p class="buy-note" data-preorder-note hidden>{{ preorder_note | escape }}</p>
       {%- if section.settings.age_warning != blank -%}
         <p class="buy-note buy-note--warning">{{ section.settings.age_warning | escape }}</p>
       {%- endif -%}
@@ -312,6 +384,9 @@
         if v.available and managed and v.inventory_quantity <= 0
           assign preorder = true
         endif
+        if v.available and tagged_preorder
+          assign preorder = true
+        endif
       -%}
       {
         "id": {{ v.id }},
@@ -354,6 +429,7 @@
   var root = document.getElementById('product-{{ section.id }}');
   var variants = JSON.parse(document.querySelector('[data-variants="{{ section.id }}"]').textContent);
   var lowStock = {{ section.settings.low_stock_threshold | default: 0 }};
+  var editionSize = {{ edition_size | default: 0 | json }};
   var moneyFormat = {{ shop.money_format | json }};
 
   function formatMoney(cents) {
@@ -449,11 +525,11 @@
 
     addBtn.disabled = !v.available;
     addBtn.textContent = !v.available ? 'Sold Out' : (v.preorder ? 'Pre-order' : 'Add to Cart');
-    preorderInput.disabled = !v.preorder || !preorderInput.value;
-    preorderNote.hidden = !v.preorder || !preorderNote.textContent.trim();
+    preorderInput.disabled = !v.preorder;
+    if (preorderNote) preorderNote.hidden = !v.preorder;
 
-    if (v.available && !v.preorder && v.qty !== null && lowStock > 0 && v.qty <= lowStock) {
-      stockNote.textContent = 'Only ' + v.qty + ' left';
+    if (v.available && v.qty !== null && v.qty > 0 && lowStock > 0 && v.qty <= lowStock) {
+      stockNote.textContent = 'Only ' + v.qty + (editionSize ? ' of ' + editionSize : '') + ' left';
     } else {
       stockNote.textContent = '';
     }
@@ -526,17 +602,25 @@
     {
       "type": "header",
       "content": "Specs",
-      "info": "Product metafields in the custom namespace override these per product: subtitle, height_mm, width_mm, depth_mm, material, figure_weight, edition, packaging, in_the_box, preorder_ships, care."
+      "info": "Product metafields in the custom namespace override these per product: subtitle, height_mm, width_mm, depth_mm, material, figure_weight, edition, edition_size, signature, packaging, certificate, in_the_box, dispatch_estimate, image_note, care."
     },
     { "type": "text", "id": "subtitle", "label": "Subtitle", "default": "Soft vinyl collectible figure" },
     { "type": "number", "id": "height_mm", "label": "Height (mm)", "default": 280 },
     { "type": "number", "id": "width_mm", "label": "Width (mm)", "default": 127 },
     { "type": "number", "id": "depth_mm", "label": "Depth (mm)", "default": 76 },
-    { "type": "text", "id": "material", "label": "Material", "default": "Soft vinyl (PVC), hand-finished" },
+    { "type": "text", "id": "material", "label": "Material", "default": "Soft vinyl (PVC)" },
     { "type": "text", "id": "figure_weight", "label": "Weight", "info": "e.g. 650 g. Leave blank to hide." },
-    { "type": "text", "id": "edition", "label": "Edition", "info": "e.g. Limited run of 300 per colourway. Leave blank to hide." },
-    { "type": "text", "id": "packaging", "label": "Packaging", "default": "Rigid presentation box, 300 × 150 × 135 mm" },
+    { "type": "text", "id": "edition", "label": "Edition", "default": "Edition of 20 per colourway, individually numbered" },
+    { "type": "number", "id": "edition_size", "label": "Edition size", "default": 20, "info": "Used in \"Only N of 20 left\". Leave blank for \"Only N left\"." },
+    { "type": "text", "id": "signature", "label": "Signature", "default": "Fola Adeleke® mark debossed into the sole" },
+    { "type": "text", "id": "packaging", "label": "Packaging", "default": "White rigid box with a pencil drawing of the figure in its colourway, 300 × 150 × 135 mm" },
+    { "type": "text", "id": "certificate", "label": "Certificate", "default": "Numbered certificate of authenticity, verifiable at folaadeleke.com/verify" },
+    { "type": "text", "id": "image_note", "label": "Note under the images", "default": "Pre-production renders. The finished figure may differ slightly." },
     { "type": "textarea", "id": "in_the_box", "label": "In the box", "info": "One item per line. Leave blank to hide the section." },
+    {
+      "type": "collection", "id": "colourway_collection", "label": "Colourway collection",
+      "info": "When each colourway is its own product, put them in one collection and pick it here; they show as linked swatches. A custom.colourways product-list metafield takes priority."
+    },
     {
       "type": "header",
       "content": "Buying"
@@ -551,13 +635,17 @@
       "info": "Needs inventory tracking on the variant."
     },
     {
-      "type": "text", "id": "preorder_note", "label": "Pre-order note",
-      "default": "Pre-order — ships when the production run lands. We'll email you a dispatch date.",
-      "info": "Shown, and added to the order line, when a variant is sold past zero stock (\"Continue selling when out of stock\")."
+      "type": "text", "id": "dispatch_estimate", "label": "Estimated dispatch", "default": "January 2027",
+      "info": "Added to the order line for pre-orders. A product is a pre-order when tagged \"pre-order\", or when a variant sells past zero stock."
+    },
+    {
+      "type": "richtext", "id": "preorder_terms", "label": "Pre-order terms",
+      "info": "Shown above the fold on pre-orders. [dispatch] is replaced with the estimated dispatch.",
+      "default": "<ul><li>You pay in full today and your edition number is reserved at checkout.</li><li>Estimated dispatch: [dispatch]. We email you at sample sign-off and again when your figure ships.</li><li>Cancel any time before dispatch for a full refund. Your 14-day right to cancel after delivery still applies.</li><li>If dispatch slips more than 30 days past the estimate, we tell you and you can cancel for a full refund.</li></ul>"
     },
     {
       "type": "text", "id": "age_warning", "label": "Age / safety warning",
-      "default": "Collectible for adults. Not a toy — not suitable for children under 14."
+      "default": "A collectible for adults (14+), not a toy."
     },
     {
       "type": "header",
@@ -565,15 +653,15 @@
     },
     {
       "type": "richtext", "id": "care", "label": "Details & care",
-      "default": "<p>Each figure carries a debossed signature mark on the underside. Display away from direct sunlight and heat to protect the colour. Dust with a soft, dry brush — no water or solvents.</p>"
+      "default": "<p>Display away from direct sunlight and heat to protect the colour. Dust with a soft, dry brush — no water or solvents. Keep the box and certificate together; the edition number on the certificate is what makes it verifiable.</p>"
     },
     {
       "type": "richtext", "id": "shipping", "label": "Shipping & delivery",
-      "default": "<p>Shipped in its presentation box inside a padded outer carton. Dispatched from the UK within 3–5 working days of release, tracked worldwide. Orders delivered outside the UK may be charged import duty and local taxes on arrival.</p>"
+      "default": "<p>Shipped from the UK in its presentation box inside a padded outer carton, tracked. Shipping options and costs are shown at checkout. Orders outside the UK may be subject to import duties and taxes on delivery, which are the buyer's responsibility.</p>"
     },
     {
       "type": "richtext", "id": "returns", "label": "Returns",
-      "default": "<p>Changed your mind? Tell us within 14 days of delivery and return the figure in its original box within 14 days of telling us; we refund the item and standard delivery. Return postage is at your cost, and we may reduce the refund if it has been handled more than needed to inspect it. If it arrives damaged or faulty, contact us as soon as you can (ideally within 7 days) with photos and we'll replace or refund it at our cost. None of this affects your statutory rights.</p>"
+      "default": "<p>Pre-orders can be cancelled any time before dispatch for a full refund. After delivery, tell us within 14 days and return the figure in its original box within 14 days of telling us; we refund the item and standard delivery. Return postage is at your cost, and we may reduce the refund if it has been handled more than needed to inspect it. If it arrives damaged or faulty, contact us as soon as you can (ideally within 7 days) with photos and we'll replace or refund it at our cost. None of this affects your statutory rights.</p>"
     }
   ]
 }

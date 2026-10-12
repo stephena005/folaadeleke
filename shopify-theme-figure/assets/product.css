@@ -428,3 +428,59 @@
     letter-spacing: 0.08em;
   }
 }
+
+/* ── COLOURWAY LINKS / PRE-ORDER / IMAGE NOTE ── */
+a.swatch-btn {
+  display: block;
+}
+
+.gallery-note {
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: var(--grey-mid);
+  line-height: 1.6;
+}
+
+.preorder-terms {
+  border: 1px solid var(--black);
+  padding: 16px 18px;
+  margin-bottom: 14px;
+}
+
+.preorder-terms[hidden] {
+  display: none;
+}
+
+.preorder-terms-title {
+  font-size: 10px;
+  letter-spacing: var(--spacing);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.preorder-terms ul {
+  list-style: none;
+}
+
+.preorder-terms li,
+.preorder-terms p {
+  font-size: 11px;
+  line-height: 1.7;
+  letter-spacing: 0.03em;
+  padding-left: 14px;
+  position: relative;
+  margin-bottom: 6px;
+}
+
+.preorder-terms li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: var(--grey-mid);
+}
+
+.preorder-terms .preorder-terms-title {
+  padding-left: 0;
+  font-size: 10px;
+  letter-spacing: var(--spacing);
+}
