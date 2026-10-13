@@ -1,0 +1,26 @@
+{{ 'collection.css' | asset_url | stylesheet_tag }}
+
+<section class="collection-page">
+  <div class="collection-header"><h1 class="collection-title">Collections</h1></div>
+  <div class="collection-grid">
+    {%- for c in collections -%}
+      <div class="product-card">
+        <a href="{{ c.url }}" class="product-card-image-link">
+          <div class="product-card-image">
+            {%- assign img = c.image | default: c.featured_image -%}
+            {%- if img -%}
+              {{ img | image_url: width: 800 | image_tag: loading: 'lazy', alt: '' }}
+            {%- endif -%}
+          </div>
+        </a>
+        <div class="product-card-info">
+          <a href="{{ c.url }}" class="product-card-name">{{ c.title }}</a>
+        </div>
+      </div>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Collections list", "tag": "div", "settings": [] }
+{% endschema %}

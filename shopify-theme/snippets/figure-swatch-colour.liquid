@@ -1,0 +1,36 @@
+{%- comment -%}
+  Outputs a CSS colour for a colourway, or nothing.
+    value  - option value or product title, e.g. "C02 Sage Green"
+    handle - optional product handle, e.g. "mama-comfort-sage-green"
+    map    - lines "C02 Sage Green:#8A9E8A" (the figure section's swatch setting)
+  Order: Shopify's native option swatch → map lines "C02 Sage Green:#8A9E8A",
+  matched on the code (value's first word), the name inside value, or the name in handle.
+{%- endcomment -%}
+{%- if value.swatch.color -%}
+  {{- value.swatch.color -}}
+{%- else -%}
+  {%- assign v = value | append: '' | downcase -%}
+  {%- assign code = v | split: ' ' | first -%}
+  {%- assign h = handle | append: '' -%}
+  {%- assign lines = map | newline_to_br | split: '<br />' -%}
+  {%- for line in lines -%}
+    {%- assign pair = line | strip | split: ':' -%}
+    {%- if pair.size == 2 -%}
+      {%- assign key = pair[0] | strip | downcase -%}
+      {%- assign key_code = key | split: ' ' | first -%}
+      {%- assign key_name = key | remove_first: key_code | strip -%}
+      {%- assign key_handle = key_name | handleize -%}
+      {%- liquid
+        assign hit = false
+        if key_code == code
+          assign hit = true
+        elsif key_name != blank and v contains key_name
+          assign hit = true
+        elsif key_handle != blank and h != blank and h contains key_handle
+          assign hit = true
+        endif
+      -%}
+      {%- if hit -%}{{- pair[1] | strip -}}{%- break -%}{%- endif -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}

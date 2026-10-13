@@ -1,0 +1,74 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Fola Adeleke — Objects",
+    "theme_version": "1.0.0",
+    "theme_author": "Fola Adeleke",
+    "theme_documentation_url": "https://www.folaadeleke.com",
+    "theme_support_url": "https://www.folaadeleke.com/contact"
+  },
+  {
+    "name": "Brand",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "logo",
+        "label": "Logo"
+      },
+      {
+        "type": "url",
+        "id": "brand_url",
+        "label": "Main site URL",
+        "default": "https://www.folaadeleke.com"
+      },
+      {
+        "type": "text",
+        "id": "contact_url",
+        "label": "Contact link",
+        "default": "https://www.folaadeleke.com/contact"
+      },
+      {
+        "type": "url",
+        "id": "instagram_url",
+        "label": "Instagram URL",
+        "default": "https://www.instagram.com/fola_adeleke"
+      },
+      {
+        "type": "link_list",
+        "id": "menu",
+        "label": "Drawer menu",
+        "default": "main-menu",
+        "info": "Falls back to Home / Shop / Contact when empty."
+      },
+      {
+        "type": "text",
+        "id": "announcement",
+        "label": "Announcement bar",
+        "info": "e.g. \"Pre-orders ship December 2026\". Leave blank to hide."
+      }
+    ]
+  },
+  {
+    "name": "Colourways",
+    "settings": [
+      {
+        "type": "textarea",
+        "id": "swatch_map",
+        "label": "Swatch colours",
+        "default": "C01 Terracotta:#CD6F5E\nC02 Sage Green:#8A9E8A\nC03 Sand:#C9A064",
+        "info": "One per line, CODE Name:#HEX. Matched on the code at the start of a colourway value, the name in a product title, or the name in a product handle (e.g. mama-comfort-sand). Shopify's own option swatches, when set, take priority."
+      }
+    ]
+  },
+  {
+    "name": "Payments",
+    "settings": [
+      {
+        "type": "text",
+        "id": "klarna_client_id",
+        "label": "Klarna client ID",
+        "info": "Klarna on-site messaging loads only when this is set."
+      }
+    ]
+  }
+]

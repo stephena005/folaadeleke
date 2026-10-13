@@ -1,0 +1,668 @@
+{{ 'product.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign mf = product.metafields.custom
+
+  assign material = mf.material.value | default: section.settings.material
+  assign height_mm = mf.height_mm.value | default: section.settings.height_mm
+  assign width_mm = mf.width_mm.value | default: section.settings.width_mm
+  assign depth_mm = mf.depth_mm.value | default: section.settings.depth_mm
+  assign weight = mf.figure_weight.value | default: section.settings.figure_weight
+  assign edition = mf.edition.value | default: section.settings.edition
+  assign packaging = mf.packaging.value | default: section.settings.packaging
+  assign in_the_box = mf.in_the_box.value | default: section.settings.in_the_box
+  assign signature = mf.signature.value | default: section.settings.signature
+  assign certificate = mf.certificate.value | default: section.settings.certificate
+  assign edition_size = mf.edition_size.value | default: section.settings.edition_size
+  assign dispatch = mf.dispatch_estimate.value | default: section.settings.dispatch_estimate
+  assign image_note = mf.image_note.value | default: section.settings.image_note
+
+  # Pre-order: tag the product "pre-order" (edition stock stays tracked), or let
+  # a variant sell past zero with "Continue selling when out of stock".
+  assign tagged_preorder = false
+  for tag in product.tags
+    assign t = tag | downcase | remove: '-' | remove: ' '
+    if t == 'preorder'
+      assign tagged_preorder = true
+    endif
+  endfor
+  assign preorder_property = 'Pre-order'
+  if dispatch != blank
+    assign preorder_property = 'Pre-order, est. dispatch ' | append: dispatch
+  endif
+
+  # Colourways sold as separate products: list them in the custom.colourways
+  # metafield (list of products) or in the section's colourway collection.
+  assign siblings = mf.colourways.value
+  if siblings == blank and section.settings.colourway_collection != blank
+    assign siblings = collections[section.settings.colourway_collection].products
+  endif
+
+  assign has_models = false
+  for media in product.media
+    if media.media_type == 'model'
+      assign has_models = true
+    endif
+  endfor
+
+  assign colour_option_index = nil
+  for option in product.options_with_values
+    capture is_colour
+      render 'colour-option-check', name: option.name
+    endcapture
+    if is_colour == 'true'
+      assign colour_option_index = forloop.index0
+    endif
+  endfor
+-%}
+
+<section class="product-page" id="product-{{ section.id }}" data-section="{{ section.id }}">
+
+  <!-- ── GALLERY ── -->
+  <div class="product-gallery">
+    {%- if product.media.size > 0 -%}
+      {%- assign active_media = current_variant.featured_media | default: product.featured_media -%}
+      <div class="gallery-stage" id="gallery-stage-{{ section.id }}">
+        {%- for media in product.media -%}
+          <div
+            class="gallery-item gallery-item--{{ media.media_type }}{% if media.id == active_media.id %} is-active{% endif %}"
+            data-media-id="{{ media.id }}"
+            {% unless media.id == active_media.id %}hidden{% endunless %}
+          >
+            {%- case media.media_type -%}
+              {%- when 'image' -%}
+                {%- liquid
+                  assign img_loading = 'lazy'
+                  if media.id == active_media.id
+                    assign img_loading = 'eager'
+                  endif
+                  assign img_alt = media.alt | default: product.title
+                -%}
+                {{ media | image_url: width: 1600 | image_tag:
+                  widths: '600, 900, 1200, 1600',
+                  sizes: '(max-width: 768px) 100vw, 50vw',
+                  loading: img_loading,
+                  alt: img_alt
+                }}
+              {%- when 'model' -%}
+                {{ media | model_viewer_tag: image_size: '1600x' }}
+              {%- when 'video' -%}
+                {{ media | video_tag: controls: true, playsinline: true, preload: 'metadata', image_size: '1600x' }}
+              {%- when 'external_video' -%}
+                {{ media | external_video_tag }}
+            {%- endcase -%}
+          </div>
+        {%- endfor -%}
+      </div>
+
+      {%- if product.media.size > 1 -%}
+        <div class="gallery-thumbs" role="list">
+          {%- for media in product.media -%}
+            <button
+              type="button"
+              class="thumb-btn{% if media.id == active_media.id %} active{% endif %}"
+              data-media-id="{{ media.id }}"
+              aria-label="{% if media.media_type == 'model' %}View in 3D{% else %}View image {{ forloop.index }}{% endif %}"
+              aria-current="{% if media.id == active_media.id %}true{% else %}false{% endif %}"
+              role="listitem"
+            >
+              {{ media.preview_image | image_url: width: 200 | image_tag: loading: 'lazy', alt: '' }}
+              {%- if media.media_type == 'model' -%}<span class="thumb-badge">3D</span>{%- endif -%}
+              {%- if media.media_type == 'video' or media.media_type == 'external_video' -%}<span class="thumb-badge">&#9654;</span>{%- endif -%}
+            </button>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    {%- else -%}
+      <div class="gallery-stage gallery-placeholder">
+        <span>{{ product.title }}</span>
+      </div>
+    {%- endif -%}
+    {%- if image_note != blank -%}
+      <p class="gallery-note">{{ image_note | escape }}</p>
+    {%- endif -%}
+  </div>
+
+  <!-- ── DETAILS ── -->
+  <div class="product-details">
+
+    <p class="product-breadcrumb">
+      <a href="{{ routes.all_products_collection_url }}">Shop</a>
+      <span aria-hidden="true">/</span>
+      <span>{{ product.title }}</span>
+    </p>
+
+    <h1 class="product-title">{{ product.title }}</h1>
+    {%- assign subtitle = mf.subtitle.value | default: section.settings.subtitle -%}
+    {%- if subtitle != blank -%}
+      <p class="product-subtitle">{{ subtitle | escape }}</p>
+    {%- endif -%}
+
+    <p class="product-price" data-price>
+      {%- if current_variant.compare_at_price > current_variant.price -%}
+        <span class="price-original">{{ current_variant.compare_at_price | money }}</span>
+        <span class="price-sale">{{ current_variant.price | money }}</span>
+      {%- else -%}
+        {{ current_variant.price | money }}
+      {%- endif -%}
+    </p>
+    <p class="product-currency-note">Prices in GBP, VAT included where applicable. Shipping calculated at checkout.</p>
+
+    <!-- Colourways as separate products -->
+    {%- if colour_option_index == nil and siblings.size > 1 -%}
+      {%- capture current_label -%}{%- render 'colourway-label', product: product -%}{%- endcapture -%}
+      <div class="product-option">
+        <p class="option-legend">
+          <span class="spec-label">Colourway</span>
+          <span class="option-current">{{ current_label }}</span>
+        </p>
+        <div class="swatch-picker">
+          {%- for p in siblings -%}
+            {%- capture label -%}{%- render 'colourway-label', product: p -%}{%- endcapture -%}
+            {%- capture hex -%}{%- if p.metafields.custom.swatch != blank -%}{{ p.metafields.custom.swatch.value }}{%- else -%}{%- render 'swatch-colour', value: p.title, handle: p.handle -%}{%- endif -%}{%- endcapture -%}
+            <a
+              href="{{ p.url }}"
+              class="swatch-btn{% if p.id == product.id %} selected{% endif %}{% unless p.available %} unavailable{% endunless %}"
+              {% if p.id == product.id %}aria-current="page"{% endif %}
+              aria-label="{{ label | escape }}{% unless p.available %} (sold out){% endunless %}"
+              title="{{ label | escape }}"
+            >
+              <span class="swatch-chip"{% if hex != blank %} style="background: {{ hex | strip }}"{% endif %}></span>
+            </a>
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- endif -%}
+
+    <!-- Options -->
+    {%- unless product.has_only_default_variant -%}
+      {%- for option in product.options_with_values -%}
+        <fieldset class="product-option" data-option-index="{{ forloop.index0 }}">
+          <legend class="option-legend">
+            <span class="spec-label">{{ option.name }}</span>
+            <span class="option-current" data-option-current>{{ option.selected_value }}</span>
+          </legend>
+          {%- if forloop.index0 == colour_option_index -%}
+            <div class="swatch-picker">
+              {%- for value in option.values -%}
+                {%- capture hex -%}{%- render 'swatch-colour', value: value -%}{%- endcapture -%}
+                <button
+                  type="button"
+                  class="swatch-btn{% if value == option.selected_value %} selected{% endif %}"
+                  data-value="{{ value | escape }}"
+                  aria-pressed="{% if value == option.selected_value %}true{% else %}false{% endif %}"
+                  aria-label="{{ value | escape }}"
+                  title="{{ value | escape }}"
+                >
+                  <span class="swatch-chip"{% if hex != blank %} style="background: {{ hex | strip }}"{% endif %}></span>
+                </button>
+              {%- endfor -%}
+            </div>
+          {%- else -%}
+            <div class="text-picker">
+              {%- for value in option.values -%}
+                <button
+                  type="button"
+                  class="text-btn{% if value == option.selected_value %} selected{% endif %}"
+                  data-value="{{ value | escape }}"
+                  aria-pressed="{% if value == option.selected_value %}true{% else %}false{% endif %}"
+                >{{ value }}</button>
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+        </fieldset>
+      {%- endfor -%}
+    {%- endunless -%}
+
+    <!-- Specs -->
+    <dl class="product-specs">
+      {%- if edition != blank -%}
+        <div class="product-spec-row">
+          <dt class="spec-label">Edition</dt>
+          <dd class="spec-value">{{ edition | escape }}</dd>
+        </div>
+      {%- endif -%}
+      {%- if height_mm != blank -%}
+        <div class="product-spec-row">
+          <dt class="spec-label">Dimensions</dt>
+          <dd class="spec-value">
+            {%- if width_mm != blank and depth_mm != blank -%}
+              {{ height_mm }} × {{ width_mm }} × {{ depth_mm }} mm (H × W × D)
+            {%- else -%}
+              {{ height_mm }} mm tall
+            {%- endif -%}
+          </dd>
+        </div>
+      {%- endif -%}
+      {%- if material != blank -%}
+        <div class="product-spec-row">
+          <dt class="spec-label">Material</dt>
+          <dd class="spec-value">{{ material | escape }}</dd>
+        </div>
+      {%- endif -%}
+      {%- if weight != blank -%}
+        <div class="product-spec-row">
+          <dt class="spec-label">Weight</dt>
+          <dd class="spec-value">{{ weight | escape }}</dd>
+        </div>
+      {%- endif -%}
+      {%- if signature != blank -%}
+        <div class="product-spec-row">
+          <dt class="spec-label">Signature</dt>
+          <dd class="spec-value">{{ signature | escape }}</dd>
+        </div>
+      {%- endif -%}
+      {%- if packaging != blank -%}
+        <div class="product-spec-row">
+          <dt class="spec-label">Packaging</dt>
+          <dd class="spec-value">{{ packaging | escape }}</dd>
+        </div>
+      {%- endif -%}
+      {%- if certificate != blank -%}
+        <div class="product-spec-row">
+          <dt class="spec-label">Certificate</dt>
+          <dd class="spec-value">{{ certificate | escape }}</dd>
+        </div>
+      {%- endif -%}
+    </dl>
+
+    <hr class="product-rule" />
+
+    {%- if settings.klarna_client_id != blank -%}
+      <klarna-placement
+        data-key="credit-promotion-auto-size"
+        data-locale="en-GB"
+        data-purchase-amount="{{ current_variant.price }}"
+      ></klarna-placement>
+    {%- endif -%}
+
+    <!-- Buy -->
+    {%- form 'product', product, id: 'product-form', class: 'product-form', novalidate: 'novalidate' -%}
+      <input type="hidden" name="id" value="{{ current_variant.id }}" data-variant-input />
+      <input type="hidden" name="properties[Pre-order]" value="{{ preorder_property | escape }}" data-preorder-input disabled />
+
+      <p class="stock-note" data-stock-note aria-live="polite"></p>
+
+      {%- if section.settings.preorder_terms != blank -%}
+        <div class="preorder-terms" data-preorder-note hidden>
+          <p class="preorder-terms-title">How the pre-order works</p>
+          {{ section.settings.preorder_terms | replace: '[dispatch]', dispatch }}
+        </div>
+      {%- endif -%}
+
+      <div class="buy-row">
+        {%- assign max_qty = section.settings.max_per_order -%}
+        <div class="qty-control">
+          <button type="button" class="qty-btn" data-qty="-1" aria-label="Decrease quantity">−</button>
+          <input
+            type="number"
+            name="quantity"
+            value="1"
+            min="1"
+            {% if max_qty > 0 %}max="{{ max_qty }}"{% endif %}
+            class="qty-input"
+            aria-label="Quantity"
+            data-qty-input
+          />
+          <button type="button" class="qty-btn" data-qty="1" aria-label="Increase quantity">+</button>
+        </div>
+
+        <button
+          type="submit"
+          class="btn-primary"
+          data-add-btn
+          {% unless current_variant.available %}disabled{% endunless %}
+        >
+          {%- if current_variant.available -%}Add to Cart{%- else -%}Sold Out{%- endif -%}
+        </button>
+      </div>
+
+      {%- if max_qty > 0 -%}
+        <p class="buy-note">Limit {{ max_qty }} per order.</p>
+      {%- endif -%}
+      {%- if section.settings.age_warning != blank -%}
+        <p class="buy-note buy-note--warning">{{ section.settings.age_warning | escape }}</p>
+      {%- endif -%}
+    {%- endform -%}
+
+    {%- if product.description != blank -%}
+      <div class="product-description">
+        {{ product.description }}
+      </div>
+    {%- endif -%}
+
+    <!-- Accordion -->
+    <div class="product-accordion">
+      {%- if in_the_box != blank -%}
+        <button class="accordion-trigger" type="button" aria-expanded="false" aria-controls="acc-box-{{ section.id }}">
+          <span>In the Box</span><span class="accordion-icon" aria-hidden="true">+</span>
+        </button>
+        <div class="accordion-body" id="acc-box-{{ section.id }}" hidden>
+          <p>{{ in_the_box | escape | newline_to_br }}</p>
+        </div>
+      {%- endif -%}
+
+      <button class="accordion-trigger" type="button" aria-expanded="false" aria-controls="acc-care-{{ section.id }}">
+        <span>Details &amp; Care</span><span class="accordion-icon" aria-hidden="true">+</span>
+      </button>
+      <div class="accordion-body" id="acc-care-{{ section.id }}" hidden>
+        {%- if mf.care != blank -%}
+          <p>{{ mf.care.value | escape | newline_to_br }}</p>
+        {%- else -%}
+          {{ section.settings.care }}
+        {%- endif -%}
+      </div>
+
+      <button class="accordion-trigger" type="button" aria-expanded="false" aria-controls="acc-ship-{{ section.id }}">
+        <span>Shipping &amp; Delivery</span><span class="accordion-icon" aria-hidden="true">+</span>
+      </button>
+      <div class="accordion-body" id="acc-ship-{{ section.id }}" hidden>
+        {{ section.settings.shipping }}
+      </div>
+
+      <button class="accordion-trigger" type="button" aria-expanded="false" aria-controls="acc-returns-{{ section.id }}">
+        <span>Returns</span><span class="accordion-icon" aria-hidden="true">+</span>
+      </button>
+      <div class="accordion-body" id="acc-returns-{{ section.id }}" hidden>
+        {{ section.settings.returns }}
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script type="application/json" data-variants="{{ section.id }}">
+  [
+    {%- for v in product.variants -%}
+      {%- liquid
+        assign managed = false
+        if v.inventory_management == 'shopify'
+          assign managed = true
+        endif
+        assign preorder = false
+        if v.available and managed and v.inventory_quantity <= 0
+          assign preorder = true
+        endif
+        if v.available and tagged_preorder
+          assign preorder = true
+        endif
+      -%}
+      {
+        "id": {{ v.id }},
+        "options": {{ v.options | json }},
+        "price": {{ v.price }},
+        "compare": {{ v.compare_at_price | default: 0 }},
+        "available": {{ v.available }},
+        "preorder": {{ preorder }},
+        "qty": {% if managed %}{{ v.inventory_quantity }}{% else %}null{% endif %},
+        "media": {% if v.featured_media %}{{ v.featured_media.id }}{% else %}null{% endif %}
+      }{% unless forloop.last %},{% endunless %}
+    {%- endfor -%}
+  ]
+</script>
+
+<script type="application/ld+json">
+  {{ product | structured_data }}
+</script>
+
+{%- if has_models -%}
+  <script>
+    window.addEventListener('load', function() {
+      if (!window.Shopify || !Shopify.loadFeatures) return;
+      Shopify.loadFeatures([{
+        name: 'model-viewer-ui',
+        version: '1.0',
+        onLoad: function(errors) {
+          if (errors) return;
+          document.querySelectorAll('#product-{{ section.id }} model-viewer').forEach(function(el) {
+            new Shopify.ModelViewerUI(el);
+          });
+        }
+      }]);
+    });
+  </script>
+{%- endif -%}
+
+<script>
+(function() {
+  var root = document.getElementById('product-{{ section.id }}');
+  var variants = JSON.parse(document.querySelector('[data-variants="{{ section.id }}"]').textContent);
+  var lowStock = {{ section.settings.low_stock_threshold | default: 0 }};
+  var editionSize = {{ edition_size | default: 0 | json }};
+  var moneyFormat = {{ shop.money_format | json }};
+
+  function formatMoney(cents) {
+    var amount = (cents / 100).toFixed(2);
+    var noDecimals = (cents / 100).toFixed(0);
+    var withCommas = amount.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return moneyFormat
+      .replace(/\{\{\s*amount_no_decimals\s*\}\}/, noDecimals)
+      .replace(/\{\{\s*amount_with_comma_separator\s*\}\}/, amount.replace('.', ','))
+      .replace(/\{\{\s*amount\s*\}\}/, withCommas);
+  }
+
+  // ── Gallery ──
+  var items = root.querySelectorAll('.gallery-item');
+  var thumbs = root.querySelectorAll('.thumb-btn');
+
+  function showMedia(id) {
+    if (!id) return;
+    id = String(id);
+    var found = false;
+    items.forEach(function(el) { if (el.dataset.mediaId === id) found = true; });
+    if (!found) return;
+    items.forEach(function(el) {
+      var on = el.dataset.mediaId === id;
+      el.hidden = !on;
+      el.classList.toggle('is-active', on);
+      if (!on) {
+        var v = el.querySelector('video');
+        if (v) v.pause();
+      }
+    });
+    thumbs.forEach(function(b) {
+      var on = b.dataset.mediaId === id;
+      b.classList.toggle('active', on);
+      b.setAttribute('aria-current', on ? 'true' : 'false');
+    });
+  }
+
+  thumbs.forEach(function(b) {
+    b.addEventListener('click', function() { showMedia(b.dataset.mediaId); });
+  });
+
+  // ── Variant selection ──
+  var fieldsets = root.querySelectorAll('.product-option');
+  var variantInput = root.querySelector('[data-variant-input]');
+  var preorderInput = root.querySelector('[data-preorder-input]');
+  var preorderNote = root.querySelector('[data-preorder-note]');
+  var priceEl = root.querySelector('[data-price]');
+  var addBtn = root.querySelector('[data-add-btn]');
+  var stockNote = root.querySelector('[data-stock-note]');
+  var klarna = root.querySelector('klarna-placement');
+
+  function selectedOptions() {
+    return Array.prototype.map.call(fieldsets, function(fs) {
+      var sel = fs.querySelector('button.selected');
+      return sel ? sel.dataset.value : null;
+    });
+  }
+
+  function findVariant(opts) {
+    return variants.find(function(v) {
+      return v.options.every(function(o, i) { return opts[i] === o; });
+    });
+  }
+
+  // Grey out values that have no available variant given the other selections.
+  function markAvailability(opts) {
+    fieldsets.forEach(function(fs, i) {
+      fs.querySelectorAll('button[data-value]').forEach(function(btn) {
+        var trial = opts.slice();
+        trial[i] = btn.dataset.value;
+        var v = findVariant(trial);
+        btn.classList.toggle('unavailable', !v || !v.available);
+      });
+    });
+  }
+
+  function render(v, updateUrl) {
+    if (!v) {
+      addBtn.disabled = true;
+      addBtn.textContent = 'Unavailable';
+      stockNote.textContent = '';
+      return;
+    }
+    variantInput.value = v.id;
+
+    if (v.compare > v.price) {
+      priceEl.innerHTML = '<span class="price-original">' + formatMoney(v.compare) + '</span>' +
+                          '<span class="price-sale">' + formatMoney(v.price) + '</span>';
+    } else {
+      priceEl.textContent = formatMoney(v.price);
+    }
+
+    addBtn.disabled = !v.available;
+    addBtn.textContent = !v.available ? 'Sold Out' : (v.preorder ? 'Pre-order' : 'Add to Cart');
+    preorderInput.disabled = !v.preorder;
+    if (preorderNote) preorderNote.hidden = !v.preorder;
+
+    if (v.available && v.qty !== null && v.qty > 0 && lowStock > 0 && v.qty <= lowStock) {
+      stockNote.textContent = 'Only ' + v.qty + (editionSize ? ' of ' + editionSize : '') + ' left';
+    } else {
+      stockNote.textContent = '';
+    }
+
+    if (klarna) {
+      klarna.setAttribute('data-purchase-amount', v.price);
+      if (window.Klarna && Klarna.OnsiteMessaging) Klarna.OnsiteMessaging.refresh();
+    }
+
+    if (v.media) showMedia(v.media);
+
+    if (updateUrl) {
+      var url = new URL(window.location.href);
+      url.searchParams.set('variant', v.id);
+      window.history.replaceState({}, '', url.toString());
+    }
+  }
+
+  fieldsets.forEach(function(fs) {
+    var current = fs.querySelector('[data-option-current]');
+    fs.querySelectorAll('button[data-value]').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        fs.querySelectorAll('button[data-value]').forEach(function(b) {
+          b.classList.remove('selected');
+          b.setAttribute('aria-pressed', 'false');
+        });
+        btn.classList.add('selected');
+        btn.setAttribute('aria-pressed', 'true');
+        if (current) current.textContent = btn.dataset.value;
+        var opts = selectedOptions();
+        markAvailability(opts);
+        render(findVariant(opts), true);
+      });
+    });
+  });
+
+  var initial = variants.find(function(v) { return String(v.id) === variantInput.value; });
+  if (fieldsets.length) markAvailability(selectedOptions());
+  if (initial) render(initial, false);
+
+  // ── Quantity ──
+  var qtyInput = root.querySelector('[data-qty-input]');
+  root.querySelectorAll('[data-qty]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var max = parseInt(qtyInput.max, 10) || Infinity;
+      var val = (parseInt(qtyInput.value, 10) || 1) + parseInt(btn.dataset.qty, 10);
+      qtyInput.value = Math.min(max, Math.max(1, val));
+    });
+  });
+
+  // ── Accordion ──
+  root.querySelectorAll('.accordion-trigger').forEach(function(trigger) {
+    trigger.addEventListener('click', function() {
+      var body = document.getElementById(trigger.getAttribute('aria-controls'));
+      var expanded = trigger.getAttribute('aria-expanded') === 'true';
+      trigger.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+      body.hidden = expanded;
+      trigger.querySelector('.accordion-icon').textContent = expanded ? '+' : '−';
+    });
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Figure product",
+  "tag": "div",
+  "class": "section-product",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Specs",
+      "info": "Product metafields in the custom namespace override these per product: subtitle, height_mm, width_mm, depth_mm, material, figure_weight, edition, edition_size, signature, packaging, certificate, in_the_box, dispatch_estimate, image_note, care."
+    },
+    { "type": "text", "id": "subtitle", "label": "Subtitle", "default": "Soft vinyl collectible figure" },
+    { "type": "number", "id": "height_mm", "label": "Height (mm)", "default": 280 },
+    { "type": "number", "id": "width_mm", "label": "Width (mm)", "default": 127 },
+    { "type": "number", "id": "depth_mm", "label": "Depth (mm)", "default": 76 },
+    { "type": "text", "id": "material", "label": "Material", "default": "Soft vinyl (PVC)" },
+    { "type": "text", "id": "figure_weight", "label": "Weight", "info": "e.g. 650 g. Leave blank to hide." },
+    { "type": "text", "id": "edition", "label": "Edition", "default": "Edition of 20 per colourway, individually numbered" },
+    { "type": "number", "id": "edition_size", "label": "Edition size", "default": 20, "info": "Used in \"Only N of 20 left\". Leave blank for \"Only N left\"." },
+    { "type": "text", "id": "signature", "label": "Signature", "default": "Fola Adeleke® mark debossed into the sole" },
+    { "type": "text", "id": "packaging", "label": "Packaging", "default": "White rigid box with a pencil drawing of the figure in its colourway, 300 × 150 × 135 mm" },
+    { "type": "text", "id": "certificate", "label": "Certificate", "default": "Numbered certificate of authenticity, verifiable at folaadeleke.com/verify" },
+    { "type": "text", "id": "image_note", "label": "Note under the images", "default": "Pre-production renders. The finished figure may differ slightly." },
+    { "type": "textarea", "id": "in_the_box", "label": "In the box", "info": "One item per line. Leave blank to hide the section." },
+    {
+      "type": "collection", "id": "colourway_collection", "label": "Colourway collection",
+      "info": "When each colourway is its own product, put them in one collection and pick it here; they show as linked swatches. A custom.colourways product-list metafield takes priority."
+    },
+    {
+      "type": "header",
+      "content": "Buying"
+    },
+    {
+      "type": "range", "id": "max_per_order", "label": "Limit per order (0 = no limit)",
+      "min": 0, "max": 10, "step": 1, "default": 3
+    },
+    {
+      "type": "range", "id": "low_stock_threshold", "label": "Show \"Only N left\" at or below (0 = never)",
+      "min": 0, "max": 50, "step": 1, "default": 10,
+      "info": "Needs inventory tracking on the variant."
+    },
+    {
+      "type": "text", "id": "dispatch_estimate", "label": "Estimated dispatch", "default": "January 2027",
+      "info": "Added to the order line for pre-orders. A product is a pre-order when tagged \"pre-order\", or when a variant sells past zero stock."
+    },
+    {
+      "type": "richtext", "id": "preorder_terms", "label": "Pre-order terms",
+      "info": "Shown above the fold on pre-orders. [dispatch] is replaced with the estimated dispatch.",
+      "default": "<ul><li>You pay in full today and your edition number is reserved at checkout.</li><li>Estimated dispatch: [dispatch]. We email you at sample sign-off and again when your figure ships.</li><li>Cancel any time before dispatch for a full refund. Your 14-day right to cancel after delivery still applies.</li><li>If dispatch slips more than 30 days past the estimate, we tell you and you can cancel for a full refund.</li></ul>"
+    },
+    {
+      "type": "text", "id": "age_warning", "label": "Age / safety warning",
+      "default": "A collectible for adults (14+), not a toy."
+    },
+    {
+      "type": "header",
+      "content": "Information"
+    },
+    {
+      "type": "richtext", "id": "care", "label": "Details & care",
+      "default": "<p>Display away from direct sunlight and heat to protect the colour. Dust with a soft, dry brush — no water or solvents. Keep the box and certificate together; the edition number on the certificate is what makes it verifiable.</p>"
+    },
+    {
+      "type": "richtext", "id": "shipping", "label": "Shipping & delivery",
+      "default": "<p>Shipped from the UK in its presentation box inside a padded outer carton, tracked. Shipping options and costs are shown at checkout. Orders outside the UK may be subject to import duties and taxes on delivery, which are the buyer's responsibility.</p>"
+    },
+    {
+      "type": "richtext", "id": "returns", "label": "Returns",
+      "default": "<p>Pre-orders can be cancelled any time before dispatch for a full refund. After delivery, tell us within 14 days and return the figure in its original box within 14 days of telling us; we refund the item and standard delivery. Return postage is at your cost, and we may reduce the refund if it has been handled more than needed to inspect it. If it arrives damaged or faulty, contact us as soon as you can (ideally within 7 days) with photos and we'll replace or refund it at our cost. None of this affects your statutory rights.</p>"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,486 @@
+/* ── FIGURE PRODUCT PAGE ── */
+
+.product-page {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  min-height: calc(100vh - var(--nav-height));
+  align-items: start;
+}
+
+/* ── GALLERY ── */
+.product-gallery {
+  position: sticky;
+  top: var(--nav-height);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 40px 32px 40px 40px;
+}
+
+/* Square stage: product shots are square, and a standing figure reads best
+   with air on both sides rather than cropped to a portrait frame. */
+.gallery-stage {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: var(--white);
+  border: 1px solid var(--grey-light);
+  overflow: hidden;
+  position: relative;
+}
+
+.gallery-item {
+  position: absolute;
+  inset: 0;
+}
+
+.gallery-item[hidden] {
+  display: none;
+}
+
+.gallery-item img,
+.gallery-item video,
+.gallery-item iframe,
+.gallery-item model-viewer {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border: 0;
+}
+
+.gallery-item img,
+.gallery-item video {
+  object-fit: contain;
+  object-position: center;
+}
+
+.gallery-item--model {
+  background: var(--white);
+}
+
+.gallery-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  letter-spacing: var(--spacing);
+  color: var(--grey-mid);
+  text-transform: uppercase;
+}
+
+.gallery-thumbs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.thumb-btn {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  background: var(--white);
+  border: 1px solid var(--grey-light);
+  padding: 0;
+  cursor: pointer;
+  overflow: hidden;
+  flex-shrink: 0;
+  transition: border-color 0.15s;
+}
+
+.thumb-btn img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.thumb-btn.active,
+.thumb-btn:hover {
+  border-color: var(--black);
+}
+
+.thumb-badge {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  background: var(--black);
+  color: var(--white);
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  padding: 2px 4px;
+}
+
+/* ── DETAILS ── */
+.product-details {
+  padding: 40px 40px 80px 32px;
+  display: flex;
+  flex-direction: column;
+  max-width: 560px;
+}
+
+.product-breadcrumb {
+  font-size: 10px;
+  letter-spacing: var(--spacing);
+  text-transform: uppercase;
+  color: var(--grey-mid);
+  margin-bottom: 24px;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.product-breadcrumb a {
+  color: var(--grey-mid);
+  text-decoration: none;
+}
+
+.product-breadcrumb a:hover {
+  color: var(--black);
+}
+
+.product-title {
+  font-size: clamp(16px, 2vw, 20px);
+  font-weight: normal;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  line-height: 1.4;
+  margin-bottom: 8px;
+}
+
+.product-subtitle {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--grey-mid);
+  margin-bottom: 20px;
+}
+
+.product-price {
+  font-size: 14px;
+  letter-spacing: var(--spacing);
+  margin: 8px 0 8px;
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+}
+
+.price-original {
+  text-decoration: line-through;
+  color: var(--grey-mid);
+}
+
+.product-currency-note {
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: var(--grey-mid);
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+
+/* ── OPTIONS ── */
+.product-option {
+  border: none;
+  border-top: 1px solid var(--grey-light);
+  padding: 14px 0 16px;
+}
+
+.option-legend {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  font-size: 11px;
+  letter-spacing: var(--spacing);
+  margin-bottom: 12px;
+  float: left; /* lets the legend span the fieldset */
+}
+
+.option-legend + * {
+  clear: both;
+}
+
+.swatch-picker,
+.text-picker {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* Swatches are the one place colour appears in the UI: they *are* the
+   product's colour, so they follow the "the work carries the colour" rule. */
+.swatch-btn {
+  width: 36px;
+  height: 36px;
+  padding: 3px;
+  background: var(--white);
+  border: 1px solid var(--grey-light);
+  cursor: pointer;
+  transition: border-color 0.15s;
+  position: relative;
+}
+
+.swatch-chip {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--grey-light);
+}
+
+.swatch-btn:hover,
+.swatch-btn.selected {
+  border-color: var(--black);
+}
+
+.text-btn {
+  font-family: var(--font);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border: 1px solid var(--grey-light);
+  background: transparent;
+  color: var(--black);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.text-btn:hover {
+  border-color: var(--black);
+}
+
+.text-btn.selected {
+  border-color: var(--black);
+  background: var(--black);
+  color: var(--white);
+}
+
+/* Sold-out values stay clickable (to show "Sold Out") but are struck through. */
+.swatch-btn.unavailable::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: -3px;
+  bottom: -3px;
+  border-left: 1px solid var(--black);
+  transform: rotate(45deg);
+}
+
+.text-btn.unavailable {
+  text-decoration: line-through;
+  color: var(--grey-mid);
+}
+
+.text-btn.unavailable.selected {
+  color: var(--white);
+}
+
+/* ── SPECS ── */
+.product-specs {
+  border-top: 1px solid var(--grey-light);
+}
+
+.product-spec-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 11px;
+  letter-spacing: var(--spacing);
+  padding: 10px 0;
+  border-bottom: 1px solid var(--grey-light);
+}
+
+.spec-label {
+  text-transform: uppercase;
+  color: var(--grey-mid);
+  white-space: nowrap;
+  margin-right: 16px;
+}
+
+.spec-value {
+  text-align: right;
+}
+
+.product-rule {
+  border: none;
+  margin: 12px 0;
+}
+
+/* ── BUY ── */
+.product-form {
+  margin: 12px 0 32px;
+}
+
+.stock-note {
+  font-size: 11px;
+  letter-spacing: var(--spacing);
+  text-transform: uppercase;
+  min-height: 1em;
+  margin-bottom: 10px;
+}
+
+.stock-note:empty {
+  display: none;
+}
+
+.buy-row {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+}
+
+.buy-row .btn-primary {
+  flex: 1;
+  letter-spacing: 0.25em;
+}
+
+.buy-note {
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  line-height: 1.6;
+  color: var(--grey-mid);
+  margin-top: 10px;
+}
+
+.buy-note[hidden] {
+  display: none;
+}
+
+.buy-note--warning {
+  color: var(--black);
+}
+
+/* ── DESCRIPTION ── */
+.product-description {
+  font-size: 12px;
+  line-height: 1.9;
+  letter-spacing: 0.04em;
+  margin-bottom: 32px;
+}
+
+.product-description p {
+  margin-bottom: 12px;
+}
+
+/* ── ACCORDION ── */
+.product-accordion {
+  border-top: 1px solid var(--grey-light);
+}
+
+.accordion-trigger {
+  width: 100%;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--grey-light);
+  padding: 16px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  font-family: var(--font);
+  font-size: 11px;
+  letter-spacing: var(--spacing);
+  text-transform: uppercase;
+  color: var(--black);
+  text-align: left;
+}
+
+.accordion-trigger:hover {
+  opacity: 0.7;
+}
+
+.accordion-icon {
+  font-size: 16px;
+  line-height: 1;
+  color: var(--grey-mid);
+}
+
+.accordion-body {
+  padding: 16px 0 20px;
+  border-bottom: 1px solid var(--grey-light);
+}
+
+.accordion-body p {
+  font-size: 11px;
+  line-height: 1.9;
+  color: var(--grey-mid);
+  letter-spacing: 0.04em;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .product-page {
+    grid-template-columns: 1fr;
+  }
+
+  .product-gallery {
+    position: static;
+    padding: 16px 16px 8px;
+  }
+
+  .product-details {
+    padding: 20px 16px 60px;
+    max-width: none;
+  }
+
+  .thumb-btn {
+    width: 56px;
+    height: 56px;
+  }
+
+  .product-spec-row {
+    letter-spacing: 0.08em;
+  }
+}
+
+/* ── COLOURWAY LINKS / PRE-ORDER / IMAGE NOTE ── */
+a.swatch-btn {
+  display: block;
+}
+
+.gallery-note {
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: var(--grey-mid);
+  line-height: 1.6;
+}
+
+.preorder-terms {
+  border: 1px solid var(--black);
+  padding: 16px 18px;
+  margin-bottom: 14px;
+}
+
+.preorder-terms[hidden] {
+  display: none;
+}
+
+.preorder-terms-title {
+  font-size: 10px;
+  letter-spacing: var(--spacing);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.preorder-terms ul {
+  list-style: none;
+}
+
+.preorder-terms li,
+.preorder-terms p {
+  font-size: 11px;
+  line-height: 1.7;
+  letter-spacing: 0.03em;
+  padding-left: 14px;
+  position: relative;
+  margin-bottom: 6px;
+}
+
+.preorder-terms li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: var(--grey-mid);
+}
+
+.preorder-terms .preorder-terms-title {
+  padding-left: 0;
+  font-size: 10px;
+  letter-spacing: var(--spacing);
+}

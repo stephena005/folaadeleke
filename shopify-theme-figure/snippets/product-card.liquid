@@ -1,0 +1,62 @@
+{%- comment -%} Grid card for a figure: image (second image on hover), colourway chips, price. {%- endcomment -%}
+{%- liquid
+  assign colour_option = nil
+  for option in product.options_with_values
+    capture is_colour
+      render 'colour-option-check', name: option.name
+    endcapture
+    if is_colour == 'true'
+      assign colour_option = option
+    endif
+  endfor
+-%}
+<div class="product-card">
+  <a href="{{ product.url }}" class="product-card-image-link" tabindex="-1" aria-hidden="true">
+    <div class="product-card-image">
+      {%- if product.featured_media -%}
+        {{ product.featured_media.preview_image | image_url: width: 800 | image_tag: loading: 'lazy', sizes: '(max-width: 768px) 50vw, 33vw', widths: '400, 600, 800', class: 'card-img card-img--primary', alt: '' }}
+        {%- if product.media.size > 1 -%}
+          {{ product.media[1].preview_image | image_url: width: 800 | image_tag: loading: 'lazy', sizes: '(max-width: 768px) 50vw, 33vw', widths: '400, 600, 800', class: 'card-img card-img--hover', alt: '' }}
+        {%- endif -%}
+      {%- else -%}
+        <span class="placeholder-label">[ Image ]</span>
+      {%- endif -%}
+
+      {%- unless product.available -%}
+        <div class="card-badge">Sold Out</div>
+      {%- else -%}
+        {%- assign v = product.selected_or_first_available_variant -%}
+        {%- if v.inventory_management == 'shopify' and v.inventory_quantity <= 0 -%}
+          <div class="card-badge">Pre-order</div>
+        {%- endif -%}
+      {%- endunless -%}
+    </div>
+  </a>
+
+  <div class="product-card-info">
+    <a href="{{ product.url }}" class="product-card-name">{{ product.title }}</a>
+    {%- if product.metafields.custom.subtitle != blank -%}
+      <p class="product-card-caption">{{ product.metafields.custom.subtitle.value | escape }}</p>
+    {%- endif -%}
+    {%- if colour_option -%}
+      <ul class="card-swatches" aria-label="{{ colour_option.values.size }} {{ colour_option.name | downcase }}s">
+        {%- for value in colour_option.values -%}
+          {%- capture hex -%}{%- render 'swatch-colour', value: value -%}{%- endcapture -%}
+          <li class="card-swatch" title="{{ value | escape }}"{% if hex != blank %} style="background: {{ hex | strip }}"{% endif %}></li>
+        {%- endfor -%}
+      </ul>
+    {%- else -%}
+      {%- capture own_hex -%}{%- if product.metafields.custom.swatch != blank -%}{{ product.metafields.custom.swatch.value }}{%- else -%}{%- render 'swatch-colour', value: product.title, handle: product.handle -%}{%- endif -%}{%- endcapture -%}
+      {%- if own_hex != blank -%}
+        <ul class="card-swatches"><li class="card-swatch" style="background: {{ own_hex | strip }}"></li></ul>
+      {%- endif -%}
+    {%- endif -%}
+    <span class="product-card-price">
+      {%- if product.price_varies -%}From {% endif -%}{{ product.price_min | money }}
+    </span>
+  </div>
+
+  <a href="{{ product.url }}" class="btn-cart{% unless product.available %} btn-cart--sold-out{% endunless %}">
+    {%- if product.available -%}View{%- else -%}Sold Out{%- endif -%}
+  </a>
+</div>

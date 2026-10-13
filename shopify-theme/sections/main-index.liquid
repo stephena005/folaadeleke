@@ -52,7 +52,7 @@
 
           <!-- Button -->
           {%- if product.available -%}
-            <a class="btn-cart" href="{{ product.url }}">View Print</a>
+            <a class="btn-cart" href="{{ product.url }}">{% if product.template_suffix == 'figure' %}View{% else %}View Print{% endif %}</a>
           {%- else -%}
             <span class="btn-cart btn-cart--sold-out">Sold Out</span>
           {%- endif -%}

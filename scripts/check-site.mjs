@@ -52,7 +52,7 @@ const PUBLIC_DIRS = new Set([
   '.github', '.githooks',
   'artist', 'claim', 'concepts', 'contact', 'enquiry', 'events', 'find', 'guess',
   'images', 'internship', 'interview', 'js', 'match', 'mockups', 'press', 'prints',
-  'privacy', 'products', 'rearrange', 'scripts', 'shopify-theme', 'terms',
+  'privacy', 'products', 'rearrange', 'scripts', 'shopify-theme', 'shopify-theme-figure', 'terms',
   'trade', 'verify', 'worker',
 ]);
 
@@ -209,7 +209,7 @@ function checkLinks(path) {
 
 for (const path of tracked) {
   if (!/\.(html|js)$/i.test(path)) continue;
-  if (/^(shopify-theme|worker|scripts|\.github)\//.test(path)) continue; // other hosts / not pages
+  if (/^(shopify-theme(-figure)?|worker|scripts|\.github)\//.test(path)) continue; // other hosts / not pages
   if (/^mockups\//.test(path)) continue; // design comparisons, not navigable pages
   checkLinks(path);
 }
