@@ -51,7 +51,7 @@
     capture is_colour
       render 'colour-option-check', name: option.name
     endcapture
-    if is_colour == 'true'
+    if is_colour == 'true' and option.values.size > 1
       assign colour_option_index = forloop.index0
     endif
   endfor
@@ -178,6 +178,7 @@
     <!-- Options -->
     {%- unless product.has_only_default_variant -%}
       {%- for option in product.options_with_values -%}
+        {%- if option.values.size < 2 -%}{%- continue -%}{%- endif -%}
         <fieldset class="product-option" data-option-index="{{ forloop.index0 }}">
           <legend class="option-legend">
             <span class="spec-label">{{ option.name }}</span>
@@ -483,10 +484,13 @@
   var klarna = root.querySelector('klarna-placement');
 
   function selectedOptions() {
-    return Array.prototype.map.call(fieldsets, function(fs) {
+    var current = variants.find(function(v) { return String(v.id) === variantInput.value; }) || variants[0];
+    var opts = current.options.slice();
+    fieldsets.forEach(function(fs) {
       var sel = fs.querySelector('button.selected');
-      return sel ? sel.dataset.value : null;
+      opts[parseInt(fs.dataset.optionIndex, 10)] = sel ? sel.dataset.value : null;
     });
+    return opts;
   }
 
   function findVariant(opts) {
@@ -497,7 +501,8 @@
 
   // Grey out values that have no available variant given the other selections.
   function markAvailability(opts) {
-    fieldsets.forEach(function(fs, i) {
+    fieldsets.forEach(function(fs) {
+      var i = parseInt(fs.dataset.optionIndex, 10);
       fs.querySelectorAll('button[data-value]').forEach(function(btn) {
         var trial = opts.slice();
         trial[i] = btn.dataset.value;
