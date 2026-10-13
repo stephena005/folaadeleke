@@ -5,7 +5,11 @@
   Runs scripts/backup-certificates.sh every Sunday at 20:00 local time;
   if the Mac was asleep, launchd runs it at the next wake.
 
-  Install (once per Mac):
+  The script path below is absolute (launchd does not expand ~). It
+  assumes the checkout at ~/Developer/folaadeleke; edit it if that moves.
+
+  Install (once per Mac, or again after editing this file):
+    launchctl bootout gui/$(id -u)/com.folaadeleke.certificate-backup 2>/dev/null
     cp scripts/launchd/com.folaadeleke.certificate-backup.plist ~/Library/LaunchAgents/
     launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.folaadeleke.certificate-backup.plist
   Run now:
@@ -18,17 +22,17 @@
   <key>Label</key>
   <string>com.folaadeleke.certificate-backup</string>
   <!--
-    macOS keeps background processes out of ~/Documents until the shell
-    has been granted Full Disk Access (System Settings → Privacy &
-    Security → Full Disk Access → add /bin/sh). Until then the script
-    cannot even be read, so this wrapper raises a notification instead
-    of failing silently every Sunday.
+    If the script cannot run at all (moved checkout, or macOS privacy
+    blocking /bin/sh from Google Drive's CloudStorage folder), this
+    wrapper raises a notification instead of failing silently every
+    Sunday. The fix for the latter is System Settings → Privacy &
+    Security → Full Disk Access → add /bin/sh.
   -->
   <key>ProgramArguments</key>
   <array>
     <string>/bin/sh</string>
     <string>-c</string>
-    <string>/bin/sh "/Users/jide/Documents/Business/AI-projects/folaadeleke/scripts/backup-certificates.sh" || /usr/bin/osascript -e 'display notification "The weekly run could not read the repo. Grant /bin/sh Full Disk Access in System Settings → Privacy &amp; Security." with title "Certificate backup FAILED" subtitle "folaadeleke"'</string>
+    <string>/bin/sh "/Users/jide/Developer/folaadeleke/scripts/backup-certificates.sh" || /usr/bin/osascript -e 'display notification "The weekly run failed. See ~/Library/Logs/folaadeleke-certificate-backup.launchd.log." with title "Certificate backup FAILED" subtitle "folaadeleke"'</string>
   </array>
   <key>StartCalendarInterval</key>
   <dict>

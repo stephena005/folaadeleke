@@ -4,12 +4,13 @@
 #   sh scripts/backup-certificates.sh            # run now
 #   tail ~/Library/Logs/folaadeleke-certificate-backup.log
 #
-# Why Google Drive: ~/Documents on this Mac syncs to iCloud, and so does
-# the iCloud "backup" taken on 2026-09-09 — both copies live in the same
-# Apple account. This copy lives in a Google account, so losing either
-# account still leaves one copy. The certificates exist nowhere else: they
-# are gitignored (buyer names against editions) and the PDFs were printed
-# from these files.
+# Why Google Drive: the working copy lives in ~/Developer/folaadeleke,
+# which is NOT synced anywhere (the repo moved out of iCloud in Oct 2026
+# because git could not read its own files there). That makes this
+# Google Drive copy the only off-machine one; the old iCloud folder
+# ("Fola Adeleke archive") is a frozen snapshot, not a backup. The
+# certificates exist nowhere else: they are gitignored (buyer names
+# against editions) and the PDFs were printed from these files.
 #
 # What it does:
 #   1. rsync the tree into <Drive>/folaadeleke-certificates-backup/certificates/
@@ -26,7 +27,10 @@
 
 set -eu
 
-SRC="/Users/jide/Documents/Business/AI-projects/folaadeleke/back-office/certificates"
+# Resolve the repo from this script's own location, so moving the checkout
+# (as in Oct 2026, out of iCloud to ~/Developer) doesn't break the job.
+REPO="$(cd "$(dirname "$0")/.." && pwd)"
+SRC="${FA_CERT_SRC:-$REPO/back-office/certificates}"
 DEST_ROOT="${FA_BACKUP_DEST:-$HOME/Library/CloudStorage/GoogleDrive-stephena005@me.com/My Drive/folaadeleke-certificates-backup}"
 LOG="$HOME/Library/Logs/folaadeleke-certificate-backup.log"
 PRUNE=""
