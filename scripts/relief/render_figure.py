@@ -245,7 +245,11 @@ def annotate(src, png, view, dims, px_per_mm, img_w, img_h, cam_z, a):
     dr.text((m, top + 14), left, font=f_big, fill=ink)
     meta = [f"{dims['H']:.0f} x {dims['W']:.0f} x {dims['D']:.0f} mm (H x W x D)", a.colour_name,
             "ORTHOGRAPHIC, 1:1 PROPORTION" if ortho else "PERSPECTIVE, NOT TO SCALE", a.rev or date.today().isoformat()]
-    dr.text((m, top + 22 + f_big.size), "   |   ".join(x for x in meta if x), font=f_small, fill=ink)
+    meta_line = "   |   ".join(x for x in meta if x)
+    f_meta = f_small
+    while dr.textlength(meta_line, font=f_meta) > img_w - 2 * m and f_meta.size > 10:
+        f_meta = ImageFont.truetype("DejaVuSans.ttf", f_meta.size - 1)  # shrink to fit long colour names
+    dr.text((m, top + 22 + f_big.size), meta_line, font=f_meta, fill=ink)
     if a.note:
         dr.text((m, top + 30 + f_big.size + f_small.size), a.note, font=f_tag, fill=(150, 80, 50))
     if a.mark_note and view.startswith("UNDERSIDE"):
