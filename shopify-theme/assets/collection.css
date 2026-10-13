@@ -1,0 +1,243 @@
+/* ── COLLECTION PAGE ── */
+
+.collection-page {
+  padding-bottom: 80px;
+}
+
+/* ── HEADER ── */
+.collection-header {
+  text-align: center;
+  padding: 60px 20px 40px;
+  border-bottom: 1px solid var(--grey-light);
+  margin-bottom: 0;
+}
+
+.collection-title {
+  font-family: var(--font);
+  font-size: 18px;
+  font-weight: normal;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.collection-description {
+  font-family: var(--font);
+  font-size: 12px;
+  color: var(--grey-mid);
+  font-style: italic;
+  letter-spacing: 0.05em;
+}
+
+/* ── META ROW ── */
+.collection-meta {
+  padding: 16px 40px;
+  border-bottom: 1px solid var(--grey-light);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.collection-meta span {
+  font-family: var(--font);
+  font-size: 10px;
+  letter-spacing: var(--spacing);
+  text-transform: uppercase;
+  color: var(--grey-mid);
+}
+
+/* ── GRID ── */
+.collection-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  padding: 0 40px;
+}
+
+/* ── PRODUCT CARD ── */
+.product-card {
+  display: flex;
+  flex-direction: column;
+  padding: 32px 20px 40px;
+  border-right: 1px solid var(--grey-light);
+  border-bottom: 1px solid var(--grey-light);
+}
+
+/* Remove right border on last column */
+.product-card:nth-child(3n) {
+  border-right: none;
+}
+
+/* Remove bottom border on last row — handled via JS fallback or just let it be */
+
+/* ── IMAGE ── */
+.product-card-image-link {
+  display: block;
+  margin-bottom: 16px;
+}
+
+.product-card-image {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background: var(--grey-bg);
+  position: relative;
+  overflow: hidden;
+}
+
+.product-card-image img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.product-card-image-link:hover .product-card-image img {
+  transform: scale(1.03);
+}
+
+.placeholder-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font);
+  font-size: 10px;
+  letter-spacing: var(--spacing);
+  color: rgba(0,0,0,0.3);
+  text-transform: uppercase;
+}
+
+.sold-out-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: var(--white);
+  border: 1px solid var(--black);
+  font-family: var(--font);
+  font-size: 9px;
+  letter-spacing: var(--spacing);
+  text-transform: uppercase;
+  padding: 4px 8px;
+}
+
+/* ── INFO ── */
+.product-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+  flex: 1;
+}
+
+.product-card-name {
+  font-family: var(--font);
+  font-size: 11px;
+  font-weight: normal;
+  letter-spacing: var(--spacing);
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--black);
+}
+
+.product-card-name:hover {
+  text-decoration: underline;
+}
+
+.product-card-caption {
+  font-family: var(--font);
+  font-size: 11px;
+  line-height: 1.8;
+  color: var(--grey-mid);
+  letter-spacing: 0.03em;
+}
+
+.product-card-price {
+  font-family: var(--font);
+  font-size: 12px;
+  color: var(--black);
+  letter-spacing: var(--spacing);
+  margin-top: 4px;
+}
+
+/* ── CARD BUTTON ── */
+.btn-cart {
+  display: block;
+  width: 100%;
+  background: var(--black);
+  color: var(--white);
+  border: none;
+  padding: 13px;
+  font-family: var(--font);
+  font-size: 10px;
+  letter-spacing: var(--spacing);
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: opacity 0.15s;
+  text-align: center;
+  text-decoration: none;
+  margin-top: auto;
+}
+
+.btn-cart:hover {
+  opacity: 0.75;
+}
+
+.btn-cart--sold-out {
+  background: var(--white);
+  color: var(--black);
+  border: 1px solid var(--black);
+}
+
+.btn-cart--sold-out:hover {
+  background: var(--black);
+  color: var(--white);
+  opacity: 1;
+}
+
+/* ── EMPTY STATE ── */
+.collection-empty {
+  text-align: center;
+  padding: 80px 20px;
+  font-family: var(--font);
+  font-size: 12px;
+  letter-spacing: var(--spacing);
+  color: var(--grey-mid);
+  text-transform: uppercase;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .collection-grid {
+    grid-template-columns: 1fr;
+    padding: 0 20px;
+    gap: 0;
+  }
+
+  .product-card {
+    border-right: none;
+    padding: 28px 0 36px;
+  }
+
+  .collection-meta {
+    padding: 14px 20px;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .collection-grid {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 0 30px;
+  }
+
+  .product-card:nth-child(3n) {
+    border-right: 1px solid var(--grey-light);
+  }
+
+  .product-card:nth-child(2n) {
+    border-right: none;
+  }
+}
