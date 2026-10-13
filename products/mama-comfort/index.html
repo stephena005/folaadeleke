@@ -477,9 +477,10 @@
       closes: null,                    // open until each colourway sells out
       colourways: [
         // Each colourway is its own Shopify product. remaining: null hides the count.
-        { code: 'C01', name: 'Terracotta', hex: '#CD6F5E', url: 'https://shop.folaadeleke.com/products/mama-comfort-terracotta', remaining: null, soldOut: false },
-        { code: 'C02', name: 'Sage Green', hex: '#8A9E8A', url: 'https://shop.folaadeleke.com/products/mama-comfort-sage-green', remaining: null, soldOut: false },
-        { code: 'C03', name: 'Sand',       hex: '#C9A064', url: 'https://shop.folaadeleke.com/products/mama-comfort-sand',       remaining: null, soldOut: false }
+        // available: false keeps a colourway viewable but not orderable.
+        { code: 'C01', name: 'Terracotta', hex: '#CD6F5E', url: 'https://shop.folaadeleke.com/products/mama-comfort-terracotta', remaining: null, soldOut: false, available: false },
+        { code: 'C02', name: 'Sage Green', hex: '#8A9E8A', url: 'https://shop.folaadeleke.com/products/mama-comfort-sage-green', remaining: null, soldOut: false, available: true },
+        { code: 'C03', name: 'Sand',       hex: '#C9A064', url: 'https://shop.folaadeleke.com/products/mama-comfort-sand',       remaining: null, soldOut: false, available: false }
       ],
       defaultColourway: 'C02',
       // One slide per product_shots.py set. `src` is a path, or a map of
@@ -592,6 +593,7 @@
       // soon: price/open date not set, or open date in the future
       // open: taking orders for the selected colourway
       // soldout: selected colourway's edition is gone
+      // unavailable: selected colourway is not on sale
       // closed: past `closes`
       function phase() {
         var now = Date.now();
@@ -603,11 +605,12 @@
       var btn = document.getElementById('preorderBtn');
       function renderButton() {
         var p = phase();
-        var state = p === 'open' && selected.soldOut ? 'soldout' : p;
+        var state = p !== 'open' ? p : selected.available === false ? 'unavailable' : selected.soldOut ? 'soldout' : p;
         var label = {
           soon: 'Pre-orders open soon',
           open: 'Pre-order ' + selected.code + ' ' + selected.name,
           soldout: selected.code + ' ' + selected.name + ' — Edition sold out',
+          unavailable: selected.code + ' ' + selected.name + ' — Not available',
           closed: 'Pre-orders closed'
         }[state];
         btn.textContent = label;
@@ -635,7 +638,7 @@
         input.checked = c === selected;
         var label = document.createElement('label');
         label.htmlFor = id;
-        var stock = c.soldOut ? 'Sold out' : (c.remaining != null ? c.remaining + ' left' : '');
+        var stock = c.available === false ? 'Not available' : c.soldOut ? 'Sold out' : (c.remaining != null ? c.remaining + ' left' : '');
         label.innerHTML = '<span class="colourway-swatch"></span><span class="colourway-code"></span><span class="colourway-name"></span>' + (stock ? '<span class="colourway-stock"></span>' : '');
         label.querySelector('.colourway-swatch').style.background = c.hex;
         label.querySelector('.colourway-code').textContent = c.code;
@@ -682,7 +685,7 @@
           brand: { '@type': 'Brand', name: 'Fola Adeleke' },
           description: document.querySelector('meta[name="description"]').content,
           url: 'https://folaadeleke.com/products/mama-comfort',
-          offers: cfg.colourways.map(function (c) {
+          offers: cfg.colourways.filter(function (c) { return c.available !== false; }).map(function (c) {
             var o = {
               '@type': 'Offer',
               name: c.code + ' ' + c.name,
