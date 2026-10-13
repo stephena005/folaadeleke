@@ -1,0 +1,30 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Fola Adeleke",
+    "theme_version": "1.0.0",
+    "theme_author": "Fola Adeleke",
+    "theme_documentation_url": "https://folaadeleke.com",
+    "theme_support_url": "https://folaadeleke.com/contact"
+  },
+  {
+    "name": "Logo",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "logo",
+        "label": "Logo image"
+      },
+      {
+        "type": "range",
+        "id": "logo_width",
+        "min": 50,
+        "max": 250,
+        "step": 10,
+        "default": 120,
+        "unit": "px",
+        "label": "Logo width"
+      }
+    ]
+  }
+]

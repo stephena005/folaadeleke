@@ -1,6 +1,44 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
-    "main": { "type": "main-product-figure", "settings": {} }
+    "main": {
+      "type": "main-product-figure",
+      "settings": {
+        "subtitle": "Soft vinyl collectible figure",
+        "height_mm": 280,
+        "width_mm": 127,
+        "depth_mm": 76,
+        "material": "Soft vinyl (PVC)",
+        "figure_weight": "",
+        "edition": "Edition of 20 per colourway, individually numbered",
+        "edition_size": 20,
+        "signature": "Fola Adeleke® mark debossed into the sole",
+        "packaging": "White rigid box with a pencil drawing of the figure in its colourway, 300 × 150 × 135 mm",
+        "certificate": "Numbered certificate of authenticity, verifiable at folaadeleke.com/verify",
+        "image_note": "Pre-production renders. The finished figure may differ slightly.",
+        "in_the_box": "",
+        "swatch_map": "C01 Terracotta:#CD6F5E\nC02 Sage Green:#8A9E8A\nC03 Sand:#C9A064",
+        "colourway_collection": "mama-comfort",
+        "max_per_order": 3,
+        "low_stock_threshold": 10,
+        "dispatch_estimate": "January 2027",
+        "preorder_terms": "<ul><li>You pay in full today and your edition number is reserved at checkout.</li><li>Estimated dispatch: [dispatch]. We email you at sample sign-off and again when your figure ships.</li><li>Cancel any time before dispatch for a full refund. Your 14-day right to cancel after delivery still applies.</li><li>If dispatch slips more than 30 days past the estimate, we tell you and you can cancel for a full refund.</li></ul>",
+        "age_warning": "A collectible for adults (14+), not a toy.",
+        "care": "<p>Display away from direct sunlight and heat to protect the colour. Dust with a soft, dry brush — no water or solvents. Keep the box and certificate together; the edition number on the certificate is what makes it verifiable.</p>",
+        "shipping": "<p>Shipped from the UK in its presentation box inside a padded outer carton, tracked. Shipping options and costs are shown at checkout. Orders outside the UK may be subject to import duties and taxes on delivery, which are the buyer's responsibility.</p>",
+        "returns": "<p>Pre-orders can be cancelled any time before dispatch for a full refund. After delivery, tell us within 14 days and return the figure in its original box within 14 days of telling us; we refund the item and standard delivery. Return postage is at your cost, and we may reduce the refund if it has been handled more than needed to inspect it. If it arrives damaged or faulty, contact us as soon as you can (ideally within 7 days) with photos and we'll replace or refund it at our cost. None of this affects your statutory rights.</p>"
+      }
+    }
   },
-  "order": ["main"]
+  "order": [
+    "main"
+  ]
 }
