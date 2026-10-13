@@ -58,6 +58,8 @@ def parse_args():
     p.add_argument("--wall", type=float, default=3.0, help="nominal wall for the hollow estimate, mm")
     p.add_argument("--density", type=float, default=1.25, help="material density for estimates, g/cm3")
     p.add_argument("--no-attach", action="store_true")
+    p.add_argument("--colourways", default="", help="all colourways as CODE:Name:#hex,... for the colour standard page")
+    p.add_argument("--code", default="", help="this pack's colourway code, e.g. C01")
     p.add_argument("--jpeg-quality", type=int, default=92, help="render image quality inside the PDF")
     return p.parse_args()
 
@@ -152,6 +154,10 @@ def cover(c, a, stats, target, renders):
     c.setFillColor(INK)
     c.setFont("Sans-Bold", 26)
     c.drawString(M, PAGE_H - 92, a.title or "Figure")
+    if a.colour:
+        tx = M + pdfmetrics.stringWidth(a.title or "Figure", "Sans-Bold", 26) + 16
+        c.setFillColor(HexColor(a.colour))
+        c.roundRect(tx, PAGE_H - 94, 22, 22, 4, stroke=0, fill=1)
     c.setFillColor(MUTED)
     c.setFont("Sans", 9)
     sub = "  |  ".join(x for x in (a.colour_name, "Renders + 3D reference mesh", a.spec_ref and f"Read with: {a.spec_ref}") if x)
@@ -191,6 +197,99 @@ def cover(c, a, stats, target, renders):
            "fine details (eyes, beads, earrings, sling folds) are approximate, and it has not been sculpted or DFM-reviewed. "
            "Use it to quote, plan part breakdown and assess depth. Do not cut moulds from it. Gate G1 still requires the "
            "native sculpt and production mesh.")
+
+
+def srgb_to_lab(hex_colour):
+    """sRGB hex -> CIELAB (D65, 2 deg observer)."""
+    h = hex_colour.lstrip("#")
+    rgb = [int(h[i:i + 2], 16) / 255 for i in (0, 2, 4)]
+    lin = [c / 12.92 if c <= 0.04045 else ((c + 0.055) / 1.055) ** 2.4 for c in rgb]
+    x = 0.4124564 * lin[0] + 0.3575761 * lin[1] + 0.1804375 * lin[2]
+    y = 0.2126729 * lin[0] + 0.7151522 * lin[1] + 0.0721750 * lin[2]
+    z = 0.0193339 * lin[0] + 0.1191920 * lin[1] + 0.9503041 * lin[2]
+
+    def f(t):
+        return t ** (1 / 3) if t > (6 / 29) ** 3 else t / (3 * (6 / 29) ** 2) + 4 / 29
+
+    fx, fy, fz = f(x / 0.95047), f(y / 1.0), f(z / 1.08883)
+    return 116 * fy - 16, 500 * (fx - fy), 200 * (fy - fz)
+
+
+def parse_colourways(spec):
+    out = []
+    for item in filter(None, (x.strip() for x in spec.split(","))):
+        code, name, hx = item.split(":")
+        out.append((code, name, hx))
+    return out
+
+
+def colour_page(c, a):
+    ways = parse_colourways(a.colourways)
+    me = next((w for w in ways if w[0] == a.code), ways[0])
+    code, name, hx = me
+    c.setFillColor(INK)
+    c.setFont("Sans-Bold", 16)
+    c.drawString(M, PAGE_H - 66, f"Colour standard  -  {code} {name}")
+
+    # Large swatch.
+    top = PAGE_H - 96
+    c.setFillColor(HexColor(hx))
+    c.roundRect(M, top - 250, PAGE_W - 2 * M, 250, 8, stroke=0, fill=1)
+    c.setFillColor(HexColor("#FFFFFF"))
+    c.setFont("Sans-Bold", 30)
+    c.drawString(M + 24, top - 60, hx.upper())
+    c.setFont("Sans-Bold", 11)
+    c.drawString(M + 24, top - 84, f"{code}  {name.upper()}")
+
+    r, g, b = (int(hx.lstrip("#")[i:i + 2], 16) for i in (0, 2, 4))
+    L, A, B = srgb_to_lab(hx)
+    rows = [
+        ("Colourway", f"{code} {name}"),
+        ("Hex (sRGB)", hx.upper()),
+        ("RGB", f"{r}, {g}, {b}"),
+        ("CIELAB (D65/2°)", f"L* {L:.1f}   a* {A:.1f}   b* {B:.1f}"),
+        ("Finish", "Matte, opaque, through-coloured PVC across figure, infant and bear. No paint, gloss or gradients."),
+        ("Pantone / factory ref.", "TBC - factory to propose the nearest PVC masterbatch and supply a physical swatch"),
+    ]
+    y = top - 290
+    for k, v in rows:
+        c.setFillColor(MUTED)
+        c.setFont("Sans-Bold", 8)
+        c.drawString(M, y, k.upper())
+        c.setFillColor(INK)
+        c.setFont("Sans", 9.5)
+        for i, line in enumerate(wrap(v, "Sans", 9.5, PAGE_W - 2 * M - 150)):
+            c.drawString(M + 150, y - i * 13, line)
+        y -= 13 * max(1, len(wrap(v, "Sans", 9.5, PAGE_W - 2 * M - 150))) + 11
+        c.setStrokeColor(HexColor("#E2E7E4"))
+        c.line(M, y + 5, PAGE_W - M, y + 5)
+
+    # All colourways, this one outlined: same tooling, colour is the only change.
+    y -= 18
+    c.setFillColor(BRAND)
+    c.setFont("Sans-Bold", 8.5)
+    c.drawString(M, y, "ALL COLOURWAYS  -  SAME TOOLING, SAME SIZE")
+    y -= 14
+    gap = 12
+    cw = (PAGE_W - 2 * M - gap * (len(ways) - 1)) / len(ways)
+    for i, (wc, wn, wh) in enumerate(ways):
+        x = M + i * (cw + gap)
+        c.setFillColor(HexColor(wh))
+        c.roundRect(x, y - 60, cw, 60, 6, stroke=0, fill=1)
+        if wc == code:
+            c.setStrokeColor(INK)
+            c.setLineWidth(2)
+            c.roundRect(x - 3, y - 63, cw + 6, 66, 8, stroke=1, fill=0)
+        c.setFillColor(INK)
+        c.setFont("Sans-Bold", 8.5)
+        c.drawString(x, y - 76, f"{wc}  {wn.upper()}")
+        c.setFont("Sans", 8.5)
+        c.drawString(x, y - 89, wh.upper())
+
+    banner(c, 66, 92, "Screen colour is not a colour standard",
+           "The values on this page are the design intent. Production must match the signed physical PVC swatch "
+           f"for {code} under neutral D65 lighting, recorded with its sample ID - not this page, a screen or a "
+           "guessed Pantone. Report measured CIELAB of the approved swatch back with the golden sample.")
 
 
 def view_page(c, path, caption):
@@ -272,7 +371,7 @@ def main():
     stl = os.path.join(a.renders, "figure.stl")
     stats = mesh_stats(stl)
     target = [float(x) for x in a.target.split("x")] if a.target else [0, 0, 0]
-    pages = [("cover", None)] + [(slug, cap) for slug, cap in VIEWS
+    pages = [("cover", None)] + ([("colour", None)] if a.colourways else []) + [(slug, cap) for slug, cap in VIEWS
                                  if os.path.exists(os.path.join(a.renders, f"render-{slug}.png"))] + [("data", None)]
     attach = not a.no_attach
 
@@ -281,11 +380,13 @@ def main():
     c.setTitle(f"{a.title} - Factory Reference Pack".strip(" -"))
     c.setAuthor("Fola Adeleke")
     for i, (slug, cap) in enumerate(pages, 1):
-        section = {"cover": "Overview", "data": "Mesh data & factory response",
+        section = {"cover": "Overview", "data": "Mesh data & factory response", "colour": "Colour standard",
                    "underside": "Underside & base mark", "mark": "Underside & base mark"}.get(slug, "Orthographic views")
         header(c, section, i, len(pages), a)
         if slug == "cover":
             cover(c, a, stats, target, a.renders)
+        elif slug == "colour":
+            colour_page(c, a)
         elif slug == "data":
             data_page(c, a, stats, target, attach)
         else:
