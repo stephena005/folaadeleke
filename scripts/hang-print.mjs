@@ -85,7 +85,7 @@ if (!opts.shop && !opts['sold-out']) die('--shop <handle> is required, or --sold
 const shopUrl = opts['sold-out'] ? null : (/^https?:/.test(opts.shop) ? opts.shop : SHOP + opts.shop.replace(/^\/+|\/+$/g, ''));
 const pair = opts.pair ?? null;
 const edition = opts.edition ?? 'Edition of 15';
-const sizes = opts.sizes ?? 'A1 — £300 / A2 — £250 / A3 — £200';
+const sizes = opts.sizes ?? 'A1 — £200 / A2 — £150 / A3 — £100';
 const slug = opts.slug ?? slugify(title);
 const today = new Date().toISOString().slice(0, 10);
 
