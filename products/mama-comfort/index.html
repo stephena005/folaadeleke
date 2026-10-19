@@ -28,23 +28,23 @@
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <title>Mama Comfort — Pre-order — Fola Adeleke®</title>
-  <meta name="description" content="Mama Comfort by Fola Adeleke — a 280 mm soft vinyl collectible figure in three colourways. Numbered limited edition, available to pre-order." />
+  <meta name="description" content="Mama Comfort by Fola Adeleke — a 280 mm soft vinyl collectible figure in Sage Green. Numbered limited edition, available to pre-order." />
   <link rel="canonical" href="https://folaadeleke.com/products/mama-comfort" />
 
   <!-- Open Graph / social preview -->
   <meta property="og:type" content="product" />
   <meta property="og:site_name" content="Fola Adeleke®" />
   <meta property="og:title" content="Mama Comfort — Pre-order — Fola Adeleke®" />
-  <meta property="og:description" content="A 280 mm soft vinyl collectible figure in three colourways. Numbered limited edition, available to pre-order." />
+  <meta property="og:description" content="A 280 mm soft vinyl collectible figure in Sage Green. Numbered limited edition, available to pre-order." />
   <meta property="og:url" content="https://folaadeleke.com/products/mama-comfort" />
   <meta property="og:image" content="https://folaadeleke.com/images/mama-comfort/og-mama-comfort.jpg" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="Mama Comfort soft vinyl figures by Fola Adeleke in terracotta, sage green and sand" />
+  <meta property="og:image:alt" content="Mama Comfort soft vinyl figure by Fola Adeleke in Sage Green" />
   <meta property="og:locale" content="en_GB" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Mama Comfort — Pre-order — Fola Adeleke®" />
-  <meta name="twitter:description" content="A 280 mm soft vinyl collectible figure in three colourways. Numbered limited edition, available to pre-order." />
+  <meta name="twitter:description" content="A 280 mm soft vinyl collectible figure in Sage Green. Numbered limited edition, available to pre-order." />
   <meta name="twitter:image" content="https://folaadeleke.com/images/mama-comfort/og-mama-comfort.jpg" />
 
   <style>
@@ -373,7 +373,7 @@
         <strong id="preorderClockValue"></strong>
       </div>
 
-      <p class="product-caption">A mother carries her child &mdash; Fola&#8217;s figurative language lifted off the canvas and into the round. Cast in soft vinyl at 280 mm, signed with a debossed mark on the sole, and released as a numbered edition in three colourways. <em>Once an edition is gone, that colourway is not remade.</em></p>
+      <p class="product-caption">A mother carries her child &mdash; Fola&#8217;s figurative language lifted off the canvas and into the round. Cast in soft vinyl at 280 mm, signed with a debossed mark on the sole, and released as a numbered edition in a single colourway, Sage Green. <em>Once the edition is gone, it is not remade.</em></p>
 
       <section class="preorder-terms" aria-labelledby="termsTitle">
         <h2 id="termsTitle">How the pre-order works</h2>
@@ -387,7 +387,7 @@
 
       <dl class="product-details">
         <dt>Edition</dt>
-        <dd><span data-preorder="edition">Edition of 20</span> per colourway, individually numbered</dd>
+        <dd><span data-preorder="edition">Edition of 20</span>, individually numbered</dd>
         <dt>Dimensions</dt>
         <dd>280 &times; 127 &times; 76 mm (H &times; W &times; D)</dd>
         <dt>Material</dt>
@@ -395,7 +395,7 @@
         <dt>Signature</dt>
         <dd>Fola Adeleke&reg; mark debossed into the sole</dd>
         <dt>Packaging</dt>
-        <dd>White rigid box with a pencil drawing of the figure in its colourway, 300 &times; 150 &times; 135 mm</dd>
+        <dd>White rigid box with a pencil drawing of the figure in Sage Green, 300 &times; 150 &times; 135 mm</dd>
         <dt>Images</dt>
         <dd>Pre-production renders. The finished figure may differ slightly.</dd>
         <dt>Certificate</dt>
@@ -417,7 +417,7 @@
       </details>
       <details>
         <summary>How does the numbering work?</summary>
-        <p>Each colourway is a separate edition of <span data-preorder="edition-count">20</span>. Numbers are assigned in order of purchase and recorded on your certificate of authenticity. When a colourway sells out it is closed for good.</p>
+        <p>Mama Comfort is a single edition of <span data-preorder="edition-count">20</span> in Sage Green. Numbers are assigned in order of purchase and recorded on your certificate of authenticity. When the edition sells out it is closed for good.</p>
       </details>
       <details>
         <summary>Do you ship outside the UK?</summary>
@@ -474,12 +474,11 @@
       editionPerColourway: 20,
       dispatch: 'January 2027',
       opens: '2026-10-12T21:18:00Z',   // pre-orders open
-      closes: null,                    // open until each colourway sells out
+      closes: null,                    // open until the edition sells out
       colourways: [
+        // Sage Green only (Terracotta C01 and Sand C03 are not being produced).
         // Each colourway is its own Shopify product. remaining: null hides the count.
-        { code: 'C01', name: 'Terracotta', hex: '#CD6F5E', url: 'https://shop.folaadeleke.com/products/mama-comfort-terracotta', remaining: null, soldOut: false },
-        { code: 'C02', name: 'Sage Green', hex: '#8A9E8A', url: 'https://shop.folaadeleke.com/products/mama-comfort-sage-green', remaining: null, soldOut: false },
-        { code: 'C03', name: 'Sand',       hex: '#C9A064', url: 'https://shop.folaadeleke.com/products/mama-comfort-sand',       remaining: null, soldOut: false }
+        { code: 'C02', name: 'Sage Green', hex: '#8A9E8A', url: 'https://shop.folaadeleke.com/products/mama-comfort-sage-green', remaining: null, soldOut: false }
       ],
       defaultColourway: 'C02',
       // One slide per product_shots.py set. `src` is a path, or a map of
@@ -487,13 +486,12 @@
       // Pre-production renders, exported by scripts/relief/export_web_shots.py.
       // Paths are written out in full so check-site.mjs can verify each one.
       shots: [
-        { name: 'Front',            src: { C01: '/images/mama-comfort/front-c01.jpg', C02: '/images/mama-comfort/front-c02.jpg', C03: '/images/mama-comfort/front-c03.jpg' } },
-        { name: 'Boxed',            src: { C01: '/images/mama-comfort/boxed-c01.jpg', C02: '/images/mama-comfort/boxed-c02.jpg', C03: '/images/mama-comfort/boxed-c03.jpg' } },
-        { name: 'Back',             src: { C01: '/images/mama-comfort/back-c01.jpg', C02: '/images/mama-comfort/back-c02.jpg', C03: '/images/mama-comfort/back-c03.jpg' } },
-        { name: 'Side',             src: { C01: '/images/mama-comfort/side-c01.jpg', C02: '/images/mama-comfort/side-c02.jpg', C03: '/images/mama-comfort/side-c03.jpg' } },
-        { name: 'Signed Sole',      src: { C01: '/images/mama-comfort/sole-c01.jpg', C02: '/images/mama-comfort/sole-c02.jpg', C03: '/images/mama-comfort/sole-c03.jpg' } },
-        { name: 'Detail',           src: { C01: '/images/mama-comfort/detail-c01.jpg', C02: '/images/mama-comfort/detail-c02.jpg', C03: '/images/mama-comfort/detail-c03.jpg' } },
-        { name: 'Three Colourways', src: '/images/mama-comfort/colourways.jpg' }
+        { name: 'Front',            src: { C02: '/images/mama-comfort/front-c02.jpg' } },
+        { name: 'Boxed',            src: { C02: '/images/mama-comfort/boxed-c02.jpg' } },
+        { name: 'Back',             src: { C02: '/images/mama-comfort/back-c02.jpg' } },
+        { name: 'Side',             src: { C02: '/images/mama-comfort/side-c02.jpg' } },
+        { name: 'Signed Sole',      src: { C02: '/images/mama-comfort/sole-c02.jpg' } },
+        { name: 'Detail',           src: { C02: '/images/mama-comfort/detail-c02.jpg' } }
       ]
     };
 
@@ -526,7 +524,7 @@
         return typeof shot.src === 'string' ? shot.src : (shot.src[selected.code] || '');
       }
       function shotAlt(shot) {
-        var who = typeof shot.src === 'string' ? 'all three colourways' : selected.code + ' ' + selected.name;
+        var who = selected.code + ' ' + selected.name;
         return 'Mama Comfort figure — ' + shot.name + ', ' + who;
       }
 
