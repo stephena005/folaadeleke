@@ -5,6 +5,7 @@
 
 Sets follow the site's monochrome rule: the figure carries the only colour.
   catalogue  front 3/4 on white, contact shadow (square); --colourway
+             (two-tone colourways such as C04 also need --deco)
   back       back 3/4 on white (square); --colourway
   side       left side on white (square); --colourway
   under      on its back, soles and base mark, white (square); --colourway
@@ -26,7 +27,8 @@ from mathutils import Vector
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import render_figure as rf  # noqa: E402
 
-COLOURS = {"C01": "#CD6F5E", "C02": "#8A9E8A", "C03": "#C9A064"}
+COLOURS = {"C01": "#CD6F5E", "C02": "#8A9E8A", "C03": "#C9A064", "C04": "#1A1A1A"}
+DECO = {"C04": "#D9AE62"}  # two-tone colourways: painted jewellery colour
 
 
 def parse_args():
@@ -42,6 +44,7 @@ def parse_args():
     p.add_argument("--box-colour", default="#111111")
     p.add_argument("--box-yaw", type=float, default=-14.0, help="box rotation, degrees (negative shows its right side)")
     p.add_argument("--side-label", default="", help="PNG printed on the box's right side")
+    p.add_argument("--deco", default="", help="face centres .npy from deco_mask.py, for two-tone colourways")
     p.add_argument("--samples", type=int, default=160)
     p.add_argument("--size", type=int, default=2000, help="square edge in px; trio is 1.6:1")
     p.add_argument("--detail-bg", choices=["black", "white"], default="black", help="background for the detail shot")
@@ -69,6 +72,16 @@ def figure(mesh, height, colour, name="figure"):
     rf.normalise(ob, height, 0)
     rf.finish(ob, colour)
     ob.name = name
+    return ob
+
+
+def body(a, code, name="figure"):
+    """The figure in a colourway, with its painted deco if it has one."""
+    ob = figure(a.mesh, a.height, COLOURS[code], name)
+    if code in DECO:
+        if not a.deco:
+            raise SystemExit(f"{code} is two-tone: pass --deco")
+        rf.paint_deco(ob, a.deco, DECO[code])
     return ob
 
 
@@ -197,7 +210,7 @@ def render(scene, path, w, h, samples):
 def gallery(a, name, yaw):
     """White-set gallery shot: same camera and lights, the figure turned."""
     s = reset()
-    ob = figure(a.mesh, a.height, COLOURS[a.colourway])
+    ob = body(a, a.colourway)
     ob.rotation_euler.z = math.radians(yaw)
     bpy.context.view_layer.update()
     # Aim at the turned figure's footprint centre so every angle sits centred.
@@ -227,7 +240,7 @@ def shot_side(a):
 def shot_under(a):
     """Underfoot on the white set: figure on its back, soles to camera."""
     s = reset()
-    ob = figure(a.mesh, a.height, COLOURS[a.colourway])
+    ob = body(a, a.colourway)
     ob.rotation_euler = (math.radians(-90), 0, math.radians(8))
     bpy.context.view_layer.update()
     zmin = min((ob.matrix_world @ v.co).z for v in ob.data.vertices)
@@ -269,7 +282,7 @@ def shot_trio_white(a):
 
 def shot_box(a):
     s = reset()
-    ob = figure(a.mesh, a.height, COLOURS[a.colourway])
+    ob = body(a, a.colourway)
     ob.location.x = -70
     ob.rotation_euler.z = math.radians(20)
     bh, bw, bd = (float(v) for v in a.box.split("x"))
@@ -302,7 +315,7 @@ def shot_box(a):
 
 def shot_detail(a):
     s = reset()
-    ob = figure(a.mesh, a.height, COLOURS[a.colourway])
+    ob = body(a, a.colourway)
     ob.rotation_euler.z = math.radians(-22)  # turn the bear into view
     if a.detail_bg == "white":
         white_set()
