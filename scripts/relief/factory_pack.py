@@ -60,6 +60,10 @@ def parse_args():
     p.add_argument("--no-attach", action="store_true")
     p.add_argument("--colourways", default="", help="all colourways as CODE:Name:#hex,... for the colour standard page")
     p.add_argument("--code", default="", help="this pack's colourway code, e.g. C01")
+    p.add_argument("--deco-map", default="", help="dir with deco-front.png, deco-back.png and deco.json")
+    p.add_argument("--body-finish", default="")
+    p.add_argument("--deco-finish", default="")
+    p.add_argument("--pantone", default="", help="Pantone / factory reference line on the colour page")
     p.add_argument("--jpeg-quality", type=int, default=92, help="render image quality inside the PDF")
     return p.parse_args()
 
@@ -156,8 +160,7 @@ def cover(c, a, stats, target, renders):
     c.drawString(M, PAGE_H - 92, a.title or "Figure")
     if a.colour:
         tx = M + pdfmetrics.stringWidth(a.title or "Figure", "Sans-Bold", 26) + 16
-        c.setFillColor(HexColor(a.colour))
-        c.roundRect(tx, PAGE_H - 94, 22, 22, 4, stroke=0, fill=1)
+        swatch(c, tx, PAGE_H - 94, 22 if "+" not in a.colour else 34, 22, a.colour, 4)
     c.setFillColor(MUTED)
     c.setFont("Sans", 9)
     sub = "  |  ".join(x for x in (a.colour_name, "Renders + 3D reference mesh", a.spec_ref and f"Read with: {a.spec_ref}") if x)
@@ -223,44 +226,74 @@ def parse_colourways(spec):
     return out
 
 
+def swatch(c, x, y, w, h, hx, r=6):
+    """Fill a swatch; a two-tone colourway (#body+#deco) is split 70/30."""
+    cols = hx.split("+")
+    c.setFillColor(HexColor(cols[0]))
+    c.roundRect(x, y, w, h, r, stroke=0, fill=1)
+    if len(cols) > 1:
+        c.setFillColor(HexColor(cols[1]))
+        c.roundRect(x + w * 0.7, y, w * 0.3, h, r, stroke=0, fill=1)
+        c.rect(x + w * 0.7, y, min(r, w * 0.3), h, stroke=0, fill=1)
+
+
+def colour_rows(label, hx):
+    r, g, b = (int(hx.lstrip("#")[i:i + 2], 16) for i in (0, 2, 4))
+    L, A, B = srgb_to_lab(hx)
+    return [(f"{label}Hex (sRGB)", hx.upper()), (f"{label}RGB", f"{r}, {g}, {b}"),
+            (f"{label}CIELAB (D65/2°)", f"L* {L:.1f}   a* {A:.1f}   b* {B:.1f}")]
+
+
 def colour_page(c, a):
     ways = parse_colourways(a.colourways)
     me = next((w for w in ways if w[0] == a.code), ways[0])
     code, name, hx = me
+    cols = hx.split("+")
     c.setFillColor(INK)
     c.setFont("Sans-Bold", 16)
     c.drawString(M, PAGE_H - 66, f"Colour standard  -  {code} {name}")
 
-    # Large swatch.
+    # Large swatch; a deco colour takes the right-hand band.
     top = PAGE_H - 96
-    c.setFillColor(HexColor(hx))
-    c.roundRect(M, top - 250, PAGE_W - 2 * M, 250, 8, stroke=0, fill=1)
+    sh = 250 if len(cols) == 1 else 210
+    swatch(c, M, top - sh, PAGE_W - 2 * M, sh, hx, 8)
     c.setFillColor(HexColor("#FFFFFF"))
     c.setFont("Sans-Bold", 30)
-    c.drawString(M + 24, top - 60, hx.upper())
+    c.drawString(M + 24, top - 60, cols[0].upper())
     c.setFont("Sans-Bold", 11)
-    c.drawString(M + 24, top - 84, f"{code}  {name.upper()}")
+    c.drawString(M + 24, top - 84, f"{code}  {name.upper()}" + ("  -  BODY" if len(cols) > 1 else ""))
+    if len(cols) > 1:
+        dx = M + (PAGE_W - 2 * M) * 0.7 + 18
+        c.setFillColor(HexColor("#1F1F1F"))
+        c.setFont("Sans-Bold", 20)
+        c.drawString(dx, top - 52, cols[1].upper())
+        c.setFont("Sans-Bold", 11)
+        c.drawString(dx, top - 72, "DECO")
 
-    r, g, b = (int(hx.lstrip("#")[i:i + 2], 16) for i in (0, 2, 4))
-    L, A, B = srgb_to_lab(hx)
-    rows = [
-        ("Colourway", f"{code} {name}"),
-        ("Hex (sRGB)", hx.upper()),
-        ("RGB", f"{r}, {g}, {b}"),
-        ("CIELAB (D65/2°)", f"L* {L:.1f}   a* {A:.1f}   b* {B:.1f}"),
-        ("Finish", "Matte, opaque, through-coloured PVC across figure, infant and bear. No paint, gloss or gradients."),
-        ("Pantone / factory ref.", "TBC - factory to propose the nearest PVC masterbatch and supply a physical swatch"),
-    ]
-    y = top - 290
+    if len(cols) == 1:
+        rows = [("Colourway", f"{code} {name}")] + colour_rows("", hx) + [
+            ("Finish", "Matte, opaque, through-coloured PVC across figure, infant and bear. No paint, gloss or gradients."),
+            ("Pantone / factory ref.", "TBC - factory to propose the nearest PVC masterbatch and supply a physical swatch"),
+        ]
+    else:
+        rows = [("Colourway", f"{code} {name}  -  two-tone: body + painted deco")] + colour_rows("Body ", cols[0]) + [
+            ("Body finish", a.body_finish or "Matte, opaque, through-coloured PVC across figure, infant and bear."),
+        ] + colour_rows("Deco ", cols[1]) + [
+            ("Deco finish", a.deco_finish or "Metallic gold paint, satin sheen, on the jewellery only - see the deco map."),
+            ("Pantone / factory ref.", a.pantone or "TBC - factory to propose PVC masterbatch (body) and paint ref. (deco) with physical swatches"),
+        ]
+    y = top - sh - 40
+    rh = 11 if len(cols) == 1 else 7
     for k, v in rows:
         c.setFillColor(MUTED)
         c.setFont("Sans-Bold", 8)
         c.drawString(M, y, k.upper())
         c.setFillColor(INK)
         c.setFont("Sans", 9.5)
-        for i, line in enumerate(wrap(v, "Sans", 9.5, PAGE_W - 2 * M - 150)):
+        lines = wrap(v, "Sans", 9.5, PAGE_W - 2 * M - 150)
+        for i, line in enumerate(lines):
             c.drawString(M + 150, y - i * 13, line)
-        y -= 13 * max(1, len(wrap(v, "Sans", 9.5, PAGE_W - 2 * M - 150))) + 11
+        y -= 13 * max(1, len(lines)) + rh
         c.setStrokeColor(HexColor("#E2E7E4"))
         c.line(M, y + 5, PAGE_W - M, y + 5)
 
@@ -274,8 +307,7 @@ def colour_page(c, a):
     cw = (PAGE_W - 2 * M - gap * (len(ways) - 1)) / len(ways)
     for i, (wc, wn, wh) in enumerate(ways):
         x = M + i * (cw + gap)
-        c.setFillColor(HexColor(wh))
-        c.roundRect(x, y - 60, cw, 60, 6, stroke=0, fill=1)
+        swatch(c, x, y - 60, cw, 60, wh)
         if wc == code:
             c.setStrokeColor(INK)
             c.setLineWidth(2)
@@ -283,13 +315,62 @@ def colour_page(c, a):
         c.setFillColor(INK)
         c.setFont("Sans-Bold", 8.5)
         c.drawString(x, y - 76, f"{wc}  {wn.upper()}")
-        c.setFont("Sans", 8.5)
-        c.drawString(x, y - 89, wh.upper())
+        c.setFont("Sans", 8.5 if len(ways) < 4 else 7.5)
+        c.drawString(x, y - 89, " + ".join(h.upper() for h in wh.split("+")))
 
+    what = "PVC swatch" if len(cols) == 1 else "PVC swatch and painted deco swatch"
     banner(c, 66, 92, "Screen colour is not a colour standard",
-           "The values on this page are the design intent. Production must match the signed physical PVC swatch "
-           f"for {code} under neutral D65 lighting, recorded with its sample ID - not this page, a screen or a "
+           "The values on this page are the design intent. Production must match the signed physical "
+           f"{what} for {code} under neutral D65 lighting, recorded with its sample ID - not this page, a screen or a "
            "guessed Pantone. Report measured CIELAB of the approved swatch back with the golden sample.")
+
+
+def deco_page(c, a):
+    """Deco map: annotated views plus the schedule of painted parts."""
+    info = json.load(open(os.path.join(a.deco_map, "deco.json")))
+    c.setFillColor(INK)
+    c.setFont("Sans-Bold", 16)
+    c.drawString(M, PAGE_H - 66, f"Deco / paint map  -  {info.get('colour_name', '')}".rstrip(" -"))
+    img_top, img_bottom = PAGE_H - 84, 352
+    w = (PAGE_W - 2 * M - 12) / 2
+    for i, f in enumerate(("deco-front.png", "deco-back.png")):
+        x = M + i * (w + 12)
+        c.setFillColor(HexColor("#FFFFFF"))
+        c.roundRect(x, img_bottom, w, img_top - img_bottom, 6, stroke=0, fill=1)
+        fit_image(c, os.path.join(a.deco_map, f), x + 4, img_bottom + 4, w - 8, img_top - img_bottom - 8)
+        c.setFillColor(MUTED)
+        c.setFont("Sans-Bold", 7.5)
+        c.drawString(x + 8, img_bottom + 8, ("FRONT", "BACK")[i])
+
+    y = img_bottom - 22
+    cols = [(M, "NO."), (M + 32, "PART"), (M + 200, "APPROX. AREA"), (M + 290, "NOTES")]
+    c.setFillColor(MUTED)
+    c.setFont("Sans-Bold", 7.5)
+    for x, t in cols:
+        c.drawString(x, y, t)
+    y -= 14
+    for p in info["parts"]:
+        c.setFillColor(HexColor(info["deco_colour"]))
+        c.circle(M + 7, y + 3, 7, stroke=0, fill=1)
+        c.setFillColor(INK)
+        c.setFont("Sans-Bold", 7.5)
+        c.drawCentredString(M + 7, y + 0.5, str(p["no"]))
+        c.setFont("Sans-Bold", 8.5)
+        c.drawString(M + 32, y, p["name"])
+        c.setFont("Sans", 8.5)
+        c.drawString(M + 200, y, f"{p['area_mm2']:.0f} mm²")
+        lines = wrap(p.get("note", ""), "Sans", 8, PAGE_W - M - (M + 290))
+        for i, line in enumerate(lines):
+            c.drawString(M + 290, y - i * 10.5, line)
+        y -= max(17, 10.5 * len(lines) + 6.5)
+    c.setFont("Sans-Bold", 8.5)
+    c.drawString(M + 32, y, "Total painted area")
+    c.drawString(M + 200, y, f"{sum(p['area_mm2'] for p in info['parts']):.0f} mm²")
+    banner(c, 66, 92, "Deco boundaries are approximate",
+           "Gold areas were selected automatically from the reference mesh, so their edges are approximate. The rule is "
+           "simple: every piece of jewellery is fully gold and nothing else is painted. Areas are the visible surface "
+           "of each part, for quoting paint time and masks. Factory to propose the process (spray with masks, pad "
+           "print or hand paint) and confirm adhesion and rub resistance on soft PVC.")
 
 
 def view_page(c, path, caption):
@@ -371,7 +452,7 @@ def main():
     stl = os.path.join(a.renders, "figure.stl")
     stats = mesh_stats(stl)
     target = [float(x) for x in a.target.split("x")] if a.target else [0, 0, 0]
-    pages = [("cover", None)] + ([("colour", None)] if a.colourways else []) + [(slug, cap) for slug, cap in VIEWS
+    pages = [("cover", None)] + ([("colour", None)] if a.colourways else []) + ([("deco", None)] if a.deco_map else []) + [(slug, cap) for slug, cap in VIEWS
                                  if os.path.exists(os.path.join(a.renders, f"render-{slug}.png"))] + [("data", None)]
     attach = not a.no_attach
 
@@ -380,13 +461,15 @@ def main():
     c.setTitle(f"{a.title} - Factory Reference Pack".strip(" -"))
     c.setAuthor("Fola Adeleke")
     for i, (slug, cap) in enumerate(pages, 1):
-        section = {"cover": "Overview", "data": "Mesh data & factory response", "colour": "Colour standard",
+        section = {"cover": "Overview", "data": "Mesh data & factory response", "colour": "Colour standard", "deco": "Deco / paint map",
                    "underside": "Underside & base mark", "mark": "Underside & base mark"}.get(slug, "Orthographic views")
         header(c, section, i, len(pages), a)
         if slug == "cover":
             cover(c, a, stats, target, a.renders)
         elif slug == "colour":
             colour_page(c, a)
+        elif slug == "deco":
+            deco_page(c, a)
         elif slug == "data":
             data_page(c, a, stats, target, attach)
         else:

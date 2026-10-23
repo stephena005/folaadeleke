@@ -11,6 +11,9 @@ stay fixed and the figure turns, so all views share identical lighting. The
 orthographic PNGs get dimension lines (H, W or D, measured from the scaled
 mesh); every PNG gets a title block. Unannotated renders are kept as raw-*.png. Also writes the
 scaled mesh as STL/OBJ (mm) and dims.json.
+
+Two-tone colourways: --deco takes a .npy of face centres (from
+deco_mask.py) and paints those faces in --deco-colour as satin metallic.
 """
 import argparse
 import json
@@ -49,6 +52,8 @@ def parse_args():
     p.add_argument("--mark-note", default="", help="extra title-block line for underside views")
     p.add_argument("--save-blend", default="", help="also save the lit, camera-ready scene to this .blend")
     p.add_argument("--no-export", action="store_true", help="skip writing figure.stl/.obj")
+    p.add_argument("--deco", default="", help=".npy of face centres (figure mm, after scaling) painted in --deco-colour")
+    p.add_argument("--deco-colour", default="#D9AE62", help="deco paint colour (metallic)")
     return p.parse_args(argv)
 
 
@@ -122,6 +127,31 @@ def finish(ob, hex_colour):
     bsdf.inputs["Subsurface Radius"].default_value = (1.0, 0.6, 0.4)
     bsdf.inputs["Subsurface Scale"].default_value = 0.8
     ob.data.materials.append(m)
+
+
+def paint_deco(ob, centres_file, hex_colour):
+    """Second material on the faces whose centres are listed (matched to 0.05 mm)."""
+    import numpy as np
+    from mathutils import kdtree
+
+    pts = np.load(centres_file)
+    tree = kdtree.KDTree(len(pts))
+    for i, p in enumerate(pts):
+        tree.insert(p, i)
+    tree.balance()
+    m = bpy.data.materials.new("deco")
+    m.use_nodes = True
+    bsdf = m.node_tree.nodes["Principled BSDF"]
+    bsdf.inputs["Base Color"].default_value = srgb_to_linear(hex_colour)
+    bsdf.inputs["Metallic"].default_value = 1.0
+    bsdf.inputs["Roughness"].default_value = 0.38  # satin metallic paint
+    ob.data.materials.append(m)
+    n = 0
+    for poly in ob.data.polygons:
+        if tree.find(poly.center)[2] < 0.05:
+            poly.material_index = 1
+            n += 1
+    print(f"DECO faces {n} of {len(pts)} listed")
 
 
 def add_light(name, loc, energy, size, colour=(1, 1, 1)):
@@ -290,6 +320,8 @@ def main():
         bpy.ops.export_mesh.stl(filepath=stem + ".stl", use_selection=True, global_scale=1.0)
         bpy.ops.wm.obj_export(filepath=stem + ".obj", export_selected_objects=True, export_materials=False)
     finish(ob, a.colour)
+    if a.deco:
+        paint_deco(ob, a.deco, a.deco_colour)
     floor = studio(a.height)
 
     w, h = (int(v) for v in a.res.split("x"))
