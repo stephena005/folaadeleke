@@ -118,7 +118,7 @@
     .wall-track { position: relative; display: flex; align-items: center; height: 100%; padding: 0 12vw 0 6vw; width: max-content; }
     .floor { position: absolute; left: 0; right: 0; bottom: 0; height: 13%; background: var(--floor); border-top: 1px solid var(--black); }
 
-    .room { display: flex; align-items: center; height: 100%; padding: 0 64px 6vh 0; gap: clamp(48px, 5vw, 88px); }
+    .room { display: flex; align-items: center; height: 100%; padding: 0 64px calc(6vh + 80px) 0; gap: clamp(48px, 5vw, 88px); }   /* +80px lifts the hang so tombstone and Buy clear the floor */
     .room + .room { border-left: 1px solid var(--divider); padding-left: 72px; }
     .wall-text { flex: 0 0 auto; width: 220px; align-self: center; margin-right: 8px; }
     .wall-text .numeral { font-size: 9px; letter-spacing: .3em; color: var(--muted); margin-bottom: 14px; text-transform: uppercase; }
@@ -128,21 +128,26 @@
     .scale-note { display: none; margin-top: 12px; font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); line-height: 1.8; }
     .wall.true .scale-note { display: block; }
 
-    /* A hung print: hairline frame, white mat, tombstone on hover */
+    /* A hung print: hairline frame, white mat, tombstone and Buy beneath */
     .hang { flex: 0 0 auto; position: relative; padding: 0; text-align: left; text-decoration: none; color: inherit; display: block; }
     .hang .frame { border: 1px solid var(--black); padding: 10px; background: var(--white); transition: opacity .15s; }
     .paper { display: flex; align-items: center; justify-content: center; background: var(--white); }
     .hang img { height: var(--h); width: auto; background: var(--floor); }
     .hang:hover .frame, .hang:focus-visible .frame { opacity: .85; }
     .hang.sold-out img { opacity: .5; }
-    .tomb { position: absolute; left: 0; top: calc(100% + 14px); width: max-content; max-width: 240px; opacity: 0; transform: translateY(-4px); transition: opacity .15s, transform .15s; pointer-events: none; }
-    .hang:hover .tomb, .hang:focus-visible .tomb { opacity: 1; transform: none; }
+    .tomb { position: absolute; left: 0; top: calc(100% + 14px); width: max-content; max-width: 240px; pointer-events: none; }
     .tomb b { display: block; font-weight: normal; font-size: 10px; letter-spacing: .2em; text-transform: uppercase; margin-bottom: 4px; }
     .tomb span { font-size: 9px; letter-spacing: .1em; color: var(--muted); }
     .hang .flag { position: absolute; top: -9px; right: -1px; font-size: 8px; letter-spacing: .3em; text-transform: uppercase; padding: 3px 6px; background: var(--black); color: var(--white); z-index: 1; }
     .hang .flag.sold { background: var(--white); color: var(--muted); border: 1px solid var(--hair); }
     .hang.tall { --h: 44vh; } .hang.mid { --h: 34vh; } .hang.wide { --h: 27vh; }
     .hang.up { transform: translateY(-3vh); } .hang.down { transform: translateY(2.5vh); }
+    /* Buy hangs beside its .hang (a link can't nest in the .hang link); the
+       script places it under the tombstone. Absolute, so it takes no room. */
+    .hang-buy { position: absolute; left: 0; top: 0; background: var(--black); color: var(--white); border: 1px solid var(--black); padding: 6px 12px; font-size: 9px; letter-spacing: .2em; text-transform: uppercase; text-decoration: none; white-space: nowrap; transition: opacity .15s; }
+    .hang-buy:hover { opacity: .8; }
+    .hang-buy:focus-visible { outline: 1px solid var(--black); outline-offset: 2px; }
+    .wall.true .hang-buy { display: none; }
 
     /* True scale: every sheet at its real size against a 2040 mm door */
     .door { display: none; flex: 0 0 auto; position: relative; border: 1px solid #8f8f8f; border-bottom: 0; }
@@ -237,15 +242,14 @@
       :root { --plan-height: 64px; }
       nav { padding: 0 20px; }
       .wall-track { padding: 0 8vw 0 16px; }
-      .room { gap: 22px; padding-right: 24px; padding-bottom: 4vh; }
+      .room { gap: 22px; padding-right: 24px; padding-bottom: calc(4vh + 48px); }
       .room + .room { padding-left: 32px; }
       .wall-text { width: 120px; }
       .wall-text h2 { font-size: 11px; }
       .wall-text p { font-size: 10px; }
       .hang.tall { --h: 40vh; } .hang.mid { --h: 31vh; } .hang.wide { --h: 24vh; }
       .hang .frame { padding: 6px; }
-      .tomb { opacity: 1; transform: none; max-width: 160px; }
-      .tomb span { display: none; }
+      .tomb { max-width: 160px; }
       .plan { grid-template-columns: 1fr auto; grid-template-rows: auto auto; gap: 4px 12px; padding: 8px 16px; }
       .plan-where { grid-column: 1; font-size: 8px; line-height: 1.5; }
       .plan-where b { display: inline; margin-right: 8px; }
@@ -263,6 +267,9 @@
       .detail-info { border-left: 0; border-top: 1px solid var(--divider); padding: 28px 24px 40px; }
       #music-node { right: 16px; }
     }
+    /* Short screens: smaller frames so the tombstone and Buy stay above the floor */
+    @media (max-height: 760px) { .hang.tall { --h: 38vh; } .hang.mid { --h: 30vh; } .hang.wide { --h: 24vh; } }
+    @media (max-height: 700px) { .hang.tall { --h: 36vh; } .hang.mid { --h: 28vh; } .hang.wide { --h: 22vh; } }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       .detail { animation: none; }
@@ -857,7 +864,7 @@
         track.querySelectorAll('.door').forEach(function (d) { d.style.width = (900 * k) + 'px'; d.style.height = (2040 * k) + 'px'; });
         PRINTS.forEach(function (p) {
           var h = p.el, fr = h.querySelector('.frame'), pa = h.querySelector('.paper'), im = h.querySelector('img'), tomb = h.querySelector('.tomb span');
-          if (!trueScale) { fr.style.padding = ''; pa.style.width = pa.style.height = ''; im.style.width = im.style.height = ''; h.style.marginBottom = ''; tomb.textContent = p.edition + ' · ' + p.sizes.split('/')[0].trim(); return; }
+          if (!trueScale) { fr.style.padding = ''; pa.style.width = pa.style.height = ''; im.style.width = im.style.height = ''; h.style.marginBottom = ''; tomb.textContent = tombText(p); return; }
           var sizes = WALL.parseSizes(p), have = sizes.filter(function (x) { return x.id === paper; })[0] || sizes[0], sh = WALL.sheetFor(p, have.id), mat = WALL.MAT * k;
           fr.style.padding = mat + 'px';
           pa.style.width = (sh.w * k) + 'px'; pa.style.height = (sh.h * k) + 'px';
@@ -865,10 +872,41 @@
           h.style.marginBottom = (WALL.HANG_CENTRE * k - sh.h * k / 2 - mat - 1) + 'px';
           tomb.textContent = sh.label + (have.price ? ' · ' + have.price : '') + (have.id !== paper ? ' (no ' + paper + ')' : '');
         });
-        sizePlan(); update();
+        sizePlan(); update(); placeBuy();
       }
       document.getElementById('trueBtn').addEventListener('click', function () { trueScale = !trueScale; applyScale(); this.blur(); });
       plan.querySelectorAll('[data-size]').forEach(function (b) { b.addEventListener('click', function () { paper = b.dataset.size; applyScale(); }); });
+
+      // ── Price and Buy on the wall ──
+      // A work for sale reads "From £<lowest size>" on its tombstone and gets a
+      // Buy link straight to its Shopify product. The link is the .hang's next
+      // sibling, absolutely placed under the tombstone, and re-placed whenever
+      // the wall's layout moves. Sold-out works keep their tombstone as written.
+      function fromPrice(p) {
+        var ps = WALL.parseSizes(p).map(function (x) { return +x.price.replace(/\D/g, ''); }).filter(Boolean);
+        return ps.length ? '£' + Math.min.apply(null, ps) : '';
+      }
+      function tombText(p) { return p.sold || !p.from ? p.tomb : p.edition + ' · From ' + p.from; }
+      PRINTS.forEach(function (p) {
+        var span = p.el.querySelector('.tomb span');
+        p.tomb = span.textContent; p.from = fromPrice(p);
+        span.textContent = tombText(p);
+        if (p.sold) return;
+        var b = document.createElement('a');
+        b.className = 'hang-buy'; b.href = p.shop; b.textContent = 'Buy';
+        b.setAttribute('aria-label', 'Buy ' + p.title + (p.from ? ', from ' + p.from : ''));
+        p.el.insertAdjacentElement('afterend', b); p.buy = b;
+      });
+      function placeBuy() {
+        if (trueScale) return;
+        var t = track.getBoundingClientRect();
+        PRINTS.forEach(function (p) {
+          if (!p.buy) return;
+          var r = p.el.getBoundingClientRect();
+          p.buy.style.left = (r.left - t.left) + 'px';
+          p.buy.style.top = (r.bottom - t.top + 14 + p.el.querySelector('.tomb').offsetHeight + 10) + 'px';
+        });
+      }
 
       // ── Detail ──
       var el = document.getElementById('detail'), idx = 0, lastFocus = null, mode = 'print', size = 'A1', framed = false;
@@ -934,12 +972,13 @@
 
       // Deep links: /prints#anniversary opens that print
       function boot() {
-        sizePlan(); update();
+        sizePlan(); update(); placeBuy();
         var slug = location.hash.replace('#', '');
         if (slug && byslug[slug]) { wall.scrollLeft = byslug[slug].el.offsetLeft + byslug[slug].el.offsetWidth / 2 - wall.clientWidth / 2; update(); openDetail(slug); }
       }
-      window.addEventListener('resize', function () { if (trueScale) applyScale(); else { sizePlan(); update(); } });
-      window.addEventListener('load', function () { sizePlan(); update(); });
+      window.addEventListener('resize', function () { if (trueScale) applyScale(); else { sizePlan(); update(); placeBuy(); } });
+      window.addEventListener('load', function () { sizePlan(); update(); placeBuy(); });
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(placeBuy);
       boot();
     })();
   </script>
