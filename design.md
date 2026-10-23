@@ -328,6 +328,15 @@ with" slug) and `data-new`. The caption sits in a hidden `<p>`. The
 opens that print. Plate numbers (`data-n`) run in catalogue order and
 are shown in the detail view as `No. 11`.
 
+**Price and Buy.** Every tombstone is always shown (it used to appear on
+hover only, and not at all on phones). For a work with `data-shop` the
+script rewrites it to "Edition of 15 · From £<lowest size>" and hangs a
+black Buy button under it, linking straight to the Shopify product. The
+button is the `.hang`'s next sibling (a link can't nest inside the
+`.hang` link), absolutely placed and re-placed on resize; True scale
+hides it. The static tombstone still carries the A1 price, which is what
+`scripts/check-shop.mjs` compares, so leave that markup as it is.
+
 **To add a print:** run `scripts/hang-print.mjs` — it exports the web
 JPEG to `images/prints/web/<slug>.jpg` (1400px long edge, quality 74;
 never the master), writes the `.hang` block at the Entrance, moves the
