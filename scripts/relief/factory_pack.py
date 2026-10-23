@@ -162,8 +162,11 @@ def cover(c, a, stats, target, renders):
         tx = M + pdfmetrics.stringWidth(a.title or "Figure", "Sans-Bold", 26) + 16
         swatch(c, tx, PAGE_H - 94, 22 if "+" not in a.colour else 34, 22, a.colour, 4)
     c.setFillColor(MUTED)
-    c.setFont("Sans", 9)
     sub = "  |  ".join(x for x in (a.colour_name, "Renders + 3D reference mesh", a.spec_ref and f"Read with: {a.spec_ref}") if x)
+    size = 9
+    while pdfmetrics.stringWidth(sub, "Sans", size) > PAGE_W - 2 * M and size > 6:
+        size -= 0.25
+    c.setFont("Sans", size)
     c.drawString(M, PAGE_H - 110, sub)
 
     img_top, img_bottom = PAGE_H - 126, 300
@@ -239,7 +242,7 @@ def swatch(c, x, y, w, h, hx, r=6):
 
 def colour_rows(label, hx):
     r, g, b = (int(hx.lstrip("#")[i:i + 2], 16) for i in (0, 2, 4))
-    L, A, B = srgb_to_lab(hx)
+    L, A, B = (0.0 if abs(v) < 0.05 else v for v in srgb_to_lab(hx))  # no "-0.0"
     return [(f"{label}Hex (sRGB)", hx.upper()), (f"{label}RGB", f"{r}, {g}, {b}"),
             (f"{label}CIELAB (D65/2°)", f"L* {L:.1f}   a* {A:.1f}   b* {B:.1f}")]
 
@@ -255,7 +258,7 @@ def colour_page(c, a):
 
     # Large swatch; a deco colour takes the right-hand band.
     top = PAGE_H - 96
-    sh = 250 if len(cols) == 1 else 210
+    sh = 250 if len(cols) == 1 else 140
     swatch(c, M, top - sh, PAGE_W - 2 * M, sh, hx, 8)
     c.setFillColor(HexColor("#FFFFFF"))
     c.setFont("Sans-Bold", 30)
@@ -283,7 +286,7 @@ def colour_page(c, a):
             ("Pantone / factory ref.", a.pantone or "TBC - factory to propose PVC masterbatch (body) and paint ref. (deco) with physical swatches"),
         ]
     y = top - sh - 40
-    rh = 11 if len(cols) == 1 else 7
+    rh = 11 if len(cols) == 1 else 6
     for k, v in rows:
         c.setFillColor(MUTED)
         c.setFont("Sans-Bold", 8)
@@ -365,7 +368,7 @@ def deco_page(c, a):
         y -= max(17, 10.5 * len(lines) + 6.5)
     c.setFont("Sans-Bold", 8.5)
     c.drawString(M + 32, y, "Total painted area")
-    c.drawString(M + 200, y, f"{sum(p['area_mm2'] for p in info['parts']):.0f} mm²")
+    c.drawString(M + 200, y, f"{info.get('total_area_mm2') or sum(p['area_mm2'] for p in info['parts']):.0f} mm²")
     banner(c, 66, 92, "Deco boundaries are approximate",
            "Gold areas were selected automatically from the reference mesh, so their edges are approximate. The rule is "
            "simple: every piece of jewellery is fully gold and nothing else is painted. Areas are the visible surface "

@@ -141,6 +141,7 @@ def main():
             for k, v in parts.items()}
     np.save(os.path.join(a.out, "gold_centres.npy"), C[gold].astype(np.float32))
     np.savez_compressed(os.path.join(a.out, "deco_parts.npz"), **parts)
+    info["total"] = {"faces": int(gold.sum()), "area_mm2": round(float(A[gold].sum()), 1)}
     json.dump(info, open(os.path.join(a.out, "deco_parts.json"), "w"), indent=1)
     print(json.dumps({k: v["area_mm2"] for k, v in info.items()}), "faces", int(gold.sum()),
           "area", round(float(A[gold].sum()), 1))

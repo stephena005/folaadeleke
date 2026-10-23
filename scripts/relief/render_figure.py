@@ -270,6 +270,8 @@ def annotate(src, png, view, dims, px_per_mm, img_w, img_h, cam_z, a):
     # Title block, bottom band.
     m = int(img_w * 0.04)
     top = img_h - int(img_h * 0.085)
+    # White band so the title block stays legible over a full-bleed or dark render.
+    dr.rectangle([0, top - int(img_h * 0.012), img_w, img_h], fill=(255, 255, 255))
     dr.line([(m, top), (img_w - m, top)], fill=ink, width=lw)
     left = " / ".join(x for x in (a.title, view) if x)
     dr.text((m, top + 14), left, font=f_big, fill=ink)

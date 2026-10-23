@@ -27,6 +27,7 @@ def parse_args():
     p.add_argument("--dims", default="280,123,112", help="H,W,D of the figure, mm")
     p.add_argument("--deco-colour", default="#D9AE62")
     p.add_argument("--colour-name", default="")
+    p.add_argument("--total-area", type=float, default=0, help="union area, mm2 (parts can touch)")
     return p.parse_args()
 
 
@@ -82,7 +83,7 @@ def main():
         anchors = [(p["no"], x, z) for p in parts for x, z in p.get(view, [])]
         annotate(os.path.join(a.raw, f"raw-{view}.png"), os.path.join(a.out, f"deco-{view}.png"),
                  anchors, w, h, ppm, cam_z, mirror, colour)
-    info = {"colour_name": a.colour_name, "deco_colour": a.deco_colour,
+    info = {"colour_name": a.colour_name, "deco_colour": a.deco_colour, "total_area_mm2": a.total_area or None,
             "parts": [{k: p[k] for k in ("no", "name", "area_mm2", "note")} for p in parts]}
     json.dump(info, open(os.path.join(a.out, "deco.json"), "w"), indent=1)
     print("deco map", os.path.join(a.out, "deco-front.png"), os.path.join(a.out, "deco-back.png"))
