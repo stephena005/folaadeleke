@@ -17,17 +17,35 @@
   ═══════════════════════════════════════════════════════════════
 -->
 <head>
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7ZCQ4YEN6"></script>
+  <!-- Google tag (gtag.js) — consent mode: analytics denied until accepted -->
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      analytics_storage: 'denied',
+      wait_for_update: 500
+    });
+    try {
+      if (localStorage.getItem('fa_consent') === 'granted') {
+        gtag('consent', 'update', { analytics_storage: 'granted' });
+      }
+    } catch (e) {}
     gtag('js', new Date());
-    gtag('config', 'G-K7ZCQ4YEN6');
+    // The query string carries the subscriber's email and claim secret, so
+    // it never goes to GA: page_location drops it here, and the referrer
+    // meta below stops the next page reporting it as page_referrer.
+    gtag('config', 'G-K7ZCQ4YEN6', { page_location: location.origin + location.pathname });
   </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7ZCQ4YEN6"></script>
+  <script defer src="/js/consent.js"></script>
+  <script defer src="/js/analytics.js"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex, nofollow" />
+  <meta name="referrer" content="strict-origin" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <title>Your Subscriber Code — Fola Adeleke®</title>
   <style>
