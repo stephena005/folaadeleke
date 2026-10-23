@@ -117,6 +117,11 @@
     return !within(get(STRIP_SEEN), STRIP_COOLDOWN);
   }
 
+  // gtag is defined inline in each page's <head>; consent mode applies.
+  function track(name, params) {
+    if (typeof window.gtag === 'function') window.gtag('event', name, params);
+  }
+
   function markCardSeen() { set(CARD_SEEN, new Date().toISOString()); }
 
   function markStripSeen() { set(STRIP_SEEN, new Date().toISOString()); }
@@ -288,6 +293,7 @@
     reveal(card.parentNode);
     document.body.style.overflow = 'hidden';
     markCardSeen();
+    track('newsletter_prompt_view', { format: 'card' });
     setTimeout(function () { emailInput.focus(); }, RISE);
   }
 
@@ -305,6 +311,7 @@
     strip.style.top = navHeight() + 'px';
     reveal(strip);
     markStripSeen();
+    track('newsletter_prompt_view', { format: 'strip' });
     stripTimer = setTimeout(closeStrip, STRIP_LIFE);
   }
 
@@ -342,6 +349,9 @@
     // Beehiiv's hosted form, email pre-filled — the only guaranteed-working path.
     window.open(BEEHIIV + '?email=' + encodeURIComponent(email), '_blank');
     set(SUBBED, '1');
+    // Counts the hand-off to Beehiiv, not the confirmed subscription —
+    // Beehiiv's own dashboard has the confirmed number.
+    track('sign_up', { method: 'newsletter_popup' });
     formWrap.hidden = true;
     okWrap.hidden = false;
   }
