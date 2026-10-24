@@ -10,7 +10,7 @@ no "made to order" copy, no handle-based square-print logic.
 
 | Area | Prints theme | Objects theme |
 |---|---|---|
-| Colourways | `Size` = A1/A2/A3, dimensions hard-coded per handle | Colourways as **separate products** (originally `mama-comfort-terracotta` / `-sage-green` / `-sand`; now Sage Green only, so no swatches show) render as linked swatches; a `Colourway` variant option also works and switches the image |
+| Colourways | `Size` = A1/A2/A3, dimensions hard-coded per handle | Colourways as **separate products** (originally `mama-comfort-terracotta` / `-sage-green` / `-sand`; now Black & Gold only, so no swatches show) render as linked swatches; a `Colourway` variant option also works and switches the image |
 | Gallery | Portrait 3:4, images only | Square stage, images + video + **3D models** (upload a GLB to the product) |
 | Specs | Paper size, edition | Edition, dimensions (H × W × D), material, signature, packaging, certificate — copy taken from `products/mama-comfort/` |
 | Stock | Add to cart / Sold out | **Pre-order** (with the four pre-order terms above the button and an "est. dispatch" line property), "Only N of 20 left", Sold out; per-order limit |
@@ -25,9 +25,9 @@ Also fixes two things broken in the prints theme: `collection.css` and
 
 ## Product setup in Shopify admin
 
-1. **Colourways** (one product per colourway). Mama Comfort is now Sage
-   Green only: `mama-comfort-sage-green` is the one live product, and
-   Terracotta / Sand are archived, so the picker hides itself (it needs two
+1. **Colourways** (one product per colourway). Mama Comfort is now Black
+   & Gold only: `mama-comfort-black-gold` is the one live product, and
+   Terracotta / Sand / Sage Green are archived, so the picker hides itself (it needs two
    or more published products). If colourways return, put the
    products in one collection (e.g. `mama-comfort`) and pick it in
    *Product page → Colourway collection*, or set a `custom.colourways`
@@ -81,7 +81,7 @@ its own store; keep both copies of the product section in step.
 ## Defaults to check
 
 Spec and terms copy is lifted from `products/mama-comfort/index.html`
-(Oct 2026): Sage Green only, edition of 20, 280 × 127 × 76 mm, soft vinyl
+(Oct 2026): Black & Gold (C04) only, edition of 20, 280 × 127 × 76 mm, soft vinyl
 (PVC), dispatch January 2027. If any of that changes, update the section
 settings in the theme editor (or the metafields) as well as the page.
 Theme-only assumptions to confirm: limit 3 per order, "Only N of 20 left"

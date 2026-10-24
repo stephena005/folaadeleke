@@ -29,24 +29,24 @@
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <title>Mama Comfort — Pre-order — Fola Adeleke®</title>
-  <meta name="description" content="Mama Comfort by Fola Adeleke — a 280 mm soft vinyl collectible figure in Sage Green. Numbered limited edition, available to pre-order." />
+  <meta name="description" content="Mama Comfort by Fola Adeleke — a 280 mm soft vinyl collectible figure in matte black with gold jewellery. Numbered limited edition, available to pre-order." />
   <link rel="canonical" href="https://folaadeleke.com/products/mama-comfort" />
 
   <!-- Open Graph / social preview -->
   <meta property="og:type" content="product" />
   <meta property="og:site_name" content="Fola Adeleke®" />
   <meta property="og:title" content="Mama Comfort — Pre-order — Fola Adeleke®" />
-  <meta property="og:description" content="A 280 mm soft vinyl collectible figure in Sage Green. Numbered limited edition, available to pre-order." />
+  <meta property="og:description" content="A 280 mm soft vinyl collectible figure in matte black with gold jewellery. Numbered limited edition, available to pre-order." />
   <meta property="og:url" content="https://folaadeleke.com/products/mama-comfort" />
-  <meta property="og:image" content="https://folaadeleke.com/images/mama-comfort/og-mama-comfort.jpg" />
+  <meta property="og:image" content="https://folaadeleke.com/images/mama-comfort/og-mama-comfort-black-gold.jpg" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="Mama Comfort soft vinyl figure by Fola Adeleke in Sage Green" />
+  <meta property="og:image:alt" content="Mama Comfort soft vinyl figure by Fola Adeleke in black with gold jewellery" />
   <meta property="og:locale" content="en_GB" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Mama Comfort — Pre-order — Fola Adeleke®" />
-  <meta name="twitter:description" content="A 280 mm soft vinyl collectible figure in Sage Green. Numbered limited edition, available to pre-order." />
-  <meta name="twitter:image" content="https://folaadeleke.com/images/mama-comfort/og-mama-comfort.jpg" />
+  <meta name="twitter:description" content="A 280 mm soft vinyl collectible figure in matte black with gold jewellery. Numbered limited edition, available to pre-order." />
+  <meta name="twitter:image" content="https://folaadeleke.com/images/mama-comfort/og-mama-comfort-black-gold.jpg" />
 
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -374,7 +374,7 @@
         <strong id="preorderClockValue"></strong>
       </div>
 
-      <p class="product-caption">A mother carries her child &mdash; Fola&#8217;s figurative language lifted off the canvas and into the round. Cast in soft vinyl at 280 mm, signed with a debossed mark on the sole, and released as a numbered edition in a single colourway, Sage Green. <em>Once the edition is gone, it is not remade.</em></p>
+      <p class="product-caption">A mother carries her child &mdash; Fola&#8217;s figurative language lifted off the canvas and into the round. Cast in soft vinyl at 280 mm, signed with a debossed mark on the sole, and released as a numbered edition in a single colourway: matte black, with her earrings, necklace, bangles and ring picked out in gold. <em>Once the edition is gone, it is not remade.</em></p>
 
       <section class="preorder-terms" aria-labelledby="termsTitle">
         <h2 id="termsTitle">How the pre-order works</h2>
@@ -396,7 +396,7 @@
         <dt>Signature</dt>
         <dd>Fola Adeleke&reg; mark debossed into the sole</dd>
         <dt>Packaging</dt>
-        <dd>White rigid box with a pencil drawing of the figure in Sage Green, 300 &times; 150 &times; 135 mm</dd>
+        <dd>White rigid box with a pencil drawing of the figure in Black &amp; Gold, 300 &times; 150 &times; 135 mm</dd>
         <dt>Images</dt>
         <dd>Pre-production renders. The finished figure may differ slightly.</dd>
         <dt>Certificate</dt>
@@ -418,7 +418,7 @@
       </details>
       <details>
         <summary>How does the numbering work?</summary>
-        <p>Mama Comfort is a single edition of <span data-preorder="edition-count">20</span> in Sage Green. Numbers are assigned in order of purchase and recorded on your certificate of authenticity. When the edition sells out it is closed for good.</p>
+        <p>Mama Comfort is a single edition of <span data-preorder="edition-count">20</span> in Black &amp; Gold. Numbers are assigned in order of purchase and recorded on your certificate of authenticity. When the edition sells out it is closed for good.</p>
       </details>
       <details>
         <summary>Do you ship outside the UK?</summary>
@@ -477,22 +477,20 @@
       opens: '2026-10-12T21:18:00Z',   // pre-orders open
       closes: null,                    // open until the edition sells out
       colourways: [
-        // Sage Green only (Terracotta C01 and Sand C03 are not being produced).
+        // Black & Gold only (it replaced Sage Green C02; C01/C03 were dropped earlier).
         // Each colourway is its own Shopify product. remaining: null hides the count.
-        { code: 'C02', name: 'Sage Green', hex: '#8A9E8A', url: 'https://shop.folaadeleke.com/products/mama-comfort-sage-green', remaining: null, soldOut: false }
+        // `hex` is any CSS background, so a two-tone swatch can be a gradient.
+        { code: 'C04', name: 'Black & Gold', hex: 'linear-gradient(135deg, #1C1C1C 62%, #D4A85A 62%)', url: 'https://shop.folaadeleke.com/products/mama-comfort-black-gold', remaining: null, soldOut: false }
       ],
-      defaultColourway: 'C02',
+      defaultColourway: 'C04',
       // One slide per product_shots.py set. `src` is a path, or a map of
       // colourway code -> path for single-figure shots; '' = placeholder.
-      // Pre-production renders, exported by scripts/relief/export_web_shots.py.
+      // Pre-production renders. C04 shots are cut from the Black & Gold concept
+      // render; re-export from scripts/relief/export_web_shots.py once it is rendered.
       // Paths are written out in full so check-site.mjs can verify each one.
       shots: [
-        { name: 'Front',            src: { C02: '/images/mama-comfort/front-c02.jpg' } },
-        { name: 'Boxed',            src: { C02: '/images/mama-comfort/boxed-c02.jpg' } },
-        { name: 'Back',             src: { C02: '/images/mama-comfort/back-c02.jpg' } },
-        { name: 'Side',             src: { C02: '/images/mama-comfort/side-c02.jpg' } },
-        { name: 'Signed Sole',      src: { C02: '/images/mama-comfort/sole-c02.jpg' } },
-        { name: 'Detail',           src: { C02: '/images/mama-comfort/detail-c02.jpg' } }
+        { name: 'Front',            src: { C04: '/images/mama-comfort/front-c04.jpg' } },
+        { name: 'Detail',           src: { C04: '/images/mama-comfort/detail-c04.jpg' } }
       ]
     };
 
