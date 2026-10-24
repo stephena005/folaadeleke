@@ -79,13 +79,20 @@
   var panX = 0, panTarget = 0;
   if (R.pan === 'mouse' && !touch) {
     stage.style.overflowX = 'hidden';
+    var lastMove = 0;
     window.addEventListener('mousemove', function (e) {
-      var max = scene.offsetWidth - stage.clientWidth; if (max <= 0) return;
+      var max = scene.offsetWidth - stage.clientWidth; if (max <= 0 || active) return;   // hold still while an item is lit
       var t = Math.min(1, Math.max(0, (e.clientX / window.innerWidth - .5) * 1.25 + .5));
-      panTarget = t * max;
+      panTarget = t * max; lastMove = Date.now();
     });
     (function loop() {
-      panX += (panTarget - panX) * (still ? 1 : .06);
+      // cursor resting (or never moved): wander slowly end to end so nothing at the edges stays hidden
+      var max = scene.offsetWidth - stage.clientWidth;
+      if (!still && !active && max > 0 && Date.now() - lastMove > 2500) {
+        panTarget = (0.5 - 0.5 * Math.cos(Date.now() / 26000 * 2 * Math.PI - Math.PI / 2 + Math.PI)) * max;
+      }
+      if (active) panTarget = panX;
+      panX += (panTarget - panX) * (still ? 1 : (Date.now() - lastMove > 2500 ? .02 : .06));
       if (Math.abs(panTarget - panX) > .3) { stage.scrollLeft = panX; if (active) placeTag(active); }
       requestAnimationFrame(loop);
     })();

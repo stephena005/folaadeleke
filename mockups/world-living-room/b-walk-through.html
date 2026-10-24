@@ -10,7 +10,7 @@
 <link rel="preload" as="image" href="/images/world/room-b.jpg" />
 <style>
   /* Mockup B — "Walk-through": a 21:9 panorama wider than the screen.
-     The view drifts toward the cursor (swipe on touch), sunlight slowly
+     The view drifts toward the cursor, and wanders on its own when the cursor rests (swipe on touch), sunlight slowly
      sweeps across the wall and dust turns in the window light. All CSS
      and canvas — no video to download. */
   .sun {
@@ -65,14 +65,14 @@
   <script>
     // Boxes are plate pixels (2688 × 1152).
     window.ROOM = {
-      w: 2688, h: 1152, pan: 'mouse', startX: .35,
+      w: 2688, h: 1152, pan: 'mouse', startX: .5,
       spots: [
-        { id: 'mummys-boy',         box: [482, 118, 732, 452],   lift: '/images/world/room-b-mummys-boy.jpg' },
-        { id: 'loud-cloth',         box: [762, 118, 1018, 452],  lift: '/images/world/room-b-loud-cloth.jpg' },
-        { id: 'mother-of-a-nation', box: [1050, 118, 1298, 452], lift: '/images/world/room-b-mother-of-a-nation.jpg' },
-        { id: 'mama-comfort',       box: [1252, 328, 1382, 600], lift: '/images/world/room-b-figure.png', dotY: 420 },
-        { id: 'phone',              box: [2072, 783, 2226, 845], lift: '/images/world/room-b-phone.png' },
-        { id: 'cards',              box: [2369, 695, 2461, 859], lift: '/images/world/room-b-cards.png' }
+        { id: 'mummys-boy',         box: [485, 150, 720, 444],   lift: '/images/world/room-b-mummys-boy.jpg' },
+        { id: 'loud-cloth',         box: [746, 150, 978, 444],   lift: '/images/world/room-b-loud-cloth.jpg' },
+        { id: 'mother-of-a-nation', box: [1006, 152, 1238, 444], lift: '/images/world/room-b-mother-of-a-nation.jpg' },
+        { id: 'mama-comfort',       box: [1200, 340, 1306, 582], lift: '/images/world/room-b-figure.png', dotY: 430 },
+        { id: 'phone',              box: [1944, 716, 2062, 760], lift: '/images/world/room-b-phone.png' },
+        { id: 'cards',              box: [2393, 626, 2451, 718], lift: '/images/world/room-b-cards.png' }
       ]
     };
   </script>
