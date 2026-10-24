@@ -43,21 +43,29 @@
   <aside class="qv" id="qv" role="dialog" aria-modal="true" aria-labelledby="qvTitle" aria-hidden="true"></aside>
 
   <script>
-    // Boxes are plate pixels (2688 × 1520). Prints: frame outline; figure: alpha cutout.
+    // Plate pixels (2688 × 1520). Wall frames: outline box + art quad, each with a curated set to rehang;
+    // rack: the leaning stack, holding the prints that aren't on the wall.
     window.ROOM = {
       w: 2688, h: 1520,
-      fixed: [
-        { src: '/images/world/room-a-mummys-boy.jpg',         box: [715, 100, 1103, 602] },
-        { src: '/images/world/room-a-loud-cloth.jpg',         box: [1168, 100, 1562, 602] },
-        { src: '/images/world/room-a-mother-of-a-nation.jpg', box: [1627, 100, 2020, 602] }
+      wall: [
+        { box: [715, 100, 1103, 602], quad: [[748, 128], [1072, 128], [1072, 572], [748, 572]],
+          lift: '/images/world/room-a-mummys-boy.jpg', light: '/images/world/room-a-light-1.jpg',
+          set: ['mummys-boy', 'i-do', 'girl-dad', 'papas-girl', 'the-crown-she-carries'] },
+        { box: [1168, 100, 1562, 602], quad: [[1200, 128], [1532, 128], [1532, 572], [1200, 572]],
+          lift: '/images/world/room-a-loud-cloth.jpg', light: '/images/world/room-a-light-2.jpg',
+          set: ['loud-cloth', 'attention-seeker', 'centre-of-the-stage', 'on-point', 'state-of-the-union'] },
+        { box: [1627, 100, 2020, 602], quad: [[1658, 130], [1988, 130], [1988, 570], [1658, 570]],
+          lift: '/images/world/room-a-mother-of-a-nation.jpg', light: '/images/world/room-a-light-3.jpg',
+          set: ['mother-of-a-nation', 'sisterhood', 'unapologetic', 'one-vow', 'yemaya'] }
       ],
+      rack: { box: [923, 936, 1482, 1274], quad: [[978, 991], [1396, 989], [1394, 1244], [968, 1236]], dotY: 1105,
+        patch: { src: '/images/world/room-a-rack-patch.png', box: [885, 908, 1520, 1312] },
+        lift: '/images/world/room-a-rack.png', light: '/images/world/room-a-light-rack.jpg',
+        set: ['black-excellence', 'elders-guidance', 'saturday-function', 'we-give-thanks', 'life-of-a-masquerade', 'family-council', 'drowned-taiwo', 'drowned-kehinde', 'kingdom-we-carry', 'my-sons-father', 'husband-and-wife', 'iykyk'] },
       spots: [
-        { id: 'mummys-boy',         box: [715, 100, 1103, 602],   lift: '/images/world/room-a-mummys-boy.jpg' },
-        { id: 'loud-cloth',         box: [1168, 100, 1562, 602],  lift: '/images/world/room-a-loud-cloth.jpg' },
-        { id: 'mother-of-a-nation', box: [1627, 100, 2020, 602],  lift: '/images/world/room-a-mother-of-a-nation.jpg' },
-        { id: 'mama-comfort',       box: [1705, 595, 1840, 887],  lift: '/images/world/room-a-figure.png', dotY: 700 },
-        { id: 'cards',              box: [528, 1086, 653, 1260],  lift: '/images/world/room-a-cards.png' },
-        { id: 'phone',              box: [2135, 1325, 2343, 1403], lift: '/images/world/room-a-phone.png' }
+        { id: 'mama-comfort', box: [1705, 595, 1840, 887],  lift: '/images/world/room-a-figure.png', dotY: 700 },
+        { id: 'cards',       box: [528, 1086, 653, 1260],  lift: '/images/world/room-a-cards.png' },
+        { id: 'phone',       box: [2135, 1325, 2343, 1403], lift: '/images/world/room-a-phone.png' }
       ]
     };
   </script>

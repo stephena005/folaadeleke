@@ -11,6 +11,8 @@
   body { margin: 0; background: #fff; color: #000; font-family: var(--mono); }
   header { padding: 28px 32px 20px; border-bottom: 1px solid #000; }
   h1 { margin: 0 0 8px; font-size: 14px; font-weight: normal; letter-spacing: .28em; text-transform: uppercase; }
+  .sub b { font-weight: normal; color: #000; }
+  .sub + .sub { margin-top: 12px; }
   .sub { margin: 0; font-size: 12px; letter-spacing: .04em; color: var(--soft); line-height: 1.7; max-width: 86ch; }
   .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 28px; padding: 28px 32px 60px; }
   .cap { margin: 0 0 4px; font-size: 11px; letter-spacing: .24em; text-transform: uppercase; }
@@ -25,10 +27,14 @@
 <header>
   <h1>World — The Living Room · two options</h1>
   <p class="sub">A shoppable room. Hover anything we sell: the room dims, the object lifts out in white and a price tag appears.
-    Figure, cards and wallpapers open a quick view, with a link through to the full product page. The three prints go
-    straight to /prints. On touch, pulsing dots mark each item: tap for the tag, tap again to open. "Shop this room" lists
-    everything for keyboard users, screen readers and search. The real print files are composited into the frames; the room
-    itself is AI-generated (Higgsfield), so the figure and card box shown in the room are approximations.</p>
+    Figure, cards and wallpapers open a quick view, with a link through to the full product page. On touch, pulsing dots mark
+    each item: tap for the tag, tap again to open. "Shop this room" lists everything for keyboard users, screen readers and search.</p>
+  <p class="sub"><b>More prints, two ways (in both mockups).</b> 1 — Rehang the wall: each frame holds a curated set of five prints.
+    Hover a frame and use ‹ › to swap it; when nobody is touching the room, one frame quietly changes every few seconds.
+    2 — The print rack: a stack of frames leaning against the credenza holds the twelve prints that aren't on the wall,
+    including every landscape print. Click it to flip through them with sizes and a Buy button; the frame in the room follows.
+    That puts 27 prints in one room. The real print files are mapped into the photo's frames and lit by the room's own light;
+    the room itself is AI-generated (Higgsfield), so the figure and card box are approximations.</p>
 </header>
 <div class="grid">
   <section>

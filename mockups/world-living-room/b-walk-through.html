@@ -63,16 +63,28 @@
   <aside class="qv" id="qv" role="dialog" aria-modal="true" aria-labelledby="qvTitle" aria-hidden="true"></aside>
 
   <script>
-    // Boxes are plate pixels (2688 × 1152).
+    // Plate pixels (2688 × 1152). Wall frames rehang from curated sets; the rack holds the rest.
     window.ROOM = {
       w: 2688, h: 1152, pan: 'mouse', startX: .5,
+      wall: [
+        { box: [485, 150, 720, 444], quad: [[506, 168], [698, 168], [698, 421], [506, 421]],
+          lift: '/images/world/room-b-mummys-boy.jpg', light: '/images/world/room-b-light-1.jpg',
+          set: ['mummys-boy', 'i-do', 'girl-dad', 'papas-girl', 'the-crown-she-carries'] },
+        { box: [746, 150, 978, 444], quad: [[766, 168], [956, 168], [956, 427], [766, 427]],
+          lift: '/images/world/room-b-loud-cloth.jpg', light: '/images/world/room-b-light-2.jpg',
+          set: ['loud-cloth', 'attention-seeker', 'centre-of-the-stage', 'on-point', 'state-of-the-union'] },
+        { box: [1006, 152, 1238, 444], quad: [[1026, 170], [1218, 170], [1218, 428], [1026, 428]],
+          lift: '/images/world/room-b-mother-of-a-nation.jpg', light: '/images/world/room-b-light-3.jpg',
+          set: ['mother-of-a-nation', 'sisterhood', 'unapologetic', 'one-vow', 'yemaya'] }
+      ],
+      rack: { box: [288, 604, 654, 835], quad: [[360, 640], [609, 639], [620, 802], [370, 810]], dotY: 719,
+        patch: { src: '/images/world/room-b-rack-patch.png', box: [250, 576, 692, 873] },
+        lift: '/images/world/room-b-rack.png', light: '/images/world/room-b-light-rack.jpg',
+        set: ['black-excellence', 'elders-guidance', 'saturday-function', 'we-give-thanks', 'life-of-a-masquerade', 'family-council', 'drowned-taiwo', 'drowned-kehinde', 'kingdom-we-carry', 'my-sons-father', 'husband-and-wife', 'iykyk'] },
       spots: [
-        { id: 'mummys-boy',         box: [485, 150, 720, 444],   lift: '/images/world/room-b-mummys-boy.jpg' },
-        { id: 'loud-cloth',         box: [746, 150, 978, 444],   lift: '/images/world/room-b-loud-cloth.jpg' },
-        { id: 'mother-of-a-nation', box: [1006, 152, 1238, 444], lift: '/images/world/room-b-mother-of-a-nation.jpg' },
-        { id: 'mama-comfort',       box: [1200, 340, 1306, 582], lift: '/images/world/room-b-figure.png', dotY: 430 },
-        { id: 'phone',              box: [1944, 716, 2062, 760], lift: '/images/world/room-b-phone.png' },
-        { id: 'cards',              box: [2393, 626, 2451, 718], lift: '/images/world/room-b-cards.png' }
+        { id: 'mama-comfort', box: [1200, 340, 1306, 582], lift: '/images/world/room-b-figure.png', dotY: 430 },
+        { id: 'phone',       box: [1944, 716, 2062, 760], lift: '/images/world/room-b-phone.png' },
+        { id: 'cards',       box: [2393, 626, 2451, 718], lift: '/images/world/room-b-cards.png' }
       ]
     };
   </script>
