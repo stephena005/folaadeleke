@@ -55,7 +55,7 @@
         "type": "textarea",
         "id": "swatch_map",
         "label": "Swatch colours",
-        "default": "C01 Terracotta:#CD6F5E\nC02 Sage Green:#8A9E8A\nC03 Sand:#C9A064",
+        "default": "C01 Terracotta:#CD6F5E\nC02 Sage Green:#8A9E8A\nC03 Sand:#C9A064\nC04 Black & Gold:linear-gradient(135deg, #1C1C1C 62%, #D4A85A 62%)",
         "info": "One per line, CODE Name:#HEX. Matched on the code at the start of a colourway value, the name in a product title, or the name in a product handle (e.g. mama-comfort-sand). Shopify's own option swatches, when set, take priority."
       }
     ]
