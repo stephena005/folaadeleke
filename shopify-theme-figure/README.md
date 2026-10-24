@@ -34,7 +34,8 @@ Also fixes two things broken in the prints theme: `collection.css` and
    product-list metafield. Swatch colours come from a `custom.swatch`
    colour metafield if set, else *Theme settings → Colourways*, matched on
    the handle (`…-terracotta` → `#CD6F5E`, `…-sage-green` → `#8A9E8A`,
-   `…-sand` → `#C9A064`). The swatch label is `custom.colourway`, else
+   `…-sand` → `#C9A064`, `…-black-gold` → a black/gold gradient; any CSS
+   `background` value works as long as it has no `:`). The swatch label is `custom.colourway`, else
    the title after " — ".
    *Alternative*: one product with a `Colourway` option — values like
    `C02 Sage Green` — also works; variant images switch the gallery.
