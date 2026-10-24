@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="robots" content="noindex" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<title>World — The Living Room (B) — Fola Adeleke®</title>
+<link rel="stylesheet" href="world.css" />
+<link rel="preload" as="image" href="/images/world/room-b.jpg" />
+<style>
+  /* Mockup B — "Walk-through": a 21:9 panorama wider than the screen.
+     The view drifts toward the cursor (swipe on touch), sunlight slowly
+     sweeps across the wall and dust turns in the window light. All CSS
+     and canvas — no video to download. */
+  .sun {
+    position: absolute; inset: 0; z-index: 2; pointer-events: none; mix-blend-mode: soft-light;
+    background:
+      linear-gradient(104deg, transparent 0 18%, rgba(255,214,150,.55) 24%, transparent 31%, transparent 36%, rgba(255,214,150,.4) 41%, transparent 47%),
+      radial-gradient(70% 90% at 4% 40%, rgba(255,200,120,.55), transparent 60%);
+    background-size: 160% 100%, 100% 100%;
+    animation: sweep 18s ease-in-out infinite alternate;
+  }
+  @keyframes sweep { from { background-position: 0% 0, 0 0; opacity: .75; } to { background-position: 60% 0, 0 0; opacity: 1; } }
+  .dust { position: absolute; inset: 0; z-index: 2; width: 100%; height: 100%; pointer-events: none; }
+  body.looking .sun { opacity: .3; }
+  .pan-hint {
+    position: fixed; right: 24px; bottom: 22px; z-index: 30; background: var(--white); border: 1px solid var(--black);
+    padding: 10px 14px; font-size: 9px; letter-spacing: .26em; text-transform: uppercase; color: var(--grey-mid);
+  }
+  @media (max-width: 760px) { .pan-hint { display: none; } }
+  @media (prefers-reduced-motion: reduce) { .sun { animation: none; } .dust { display: none; } }
+</style>
+</head>
+<body>
+  <nav class="nav">
+    <div><a class="brand" href="/">Fola Adeleke®</a><span class="crumb">World / Living Room</span></div>
+    <ul>
+      <li><a href="/prints">Prints</a></li>
+      <li><a href="/products">Products</a></li>
+      <li><a href="/products" aria-current="page">World</a></li>
+    </ul>
+  </nav>
+
+  <main class="stage" id="stage">
+    <div class="scene" id="scene">
+      <img class="plate" src="/images/world/room-b.jpg" alt="A sunlit living room in panorama: three Fola Adeleke prints above an ebony credenza with the Mama Comfort figure, a fiddle-leaf fig, a slate-blue sofa with adire and aso-oke cushions, and a rattan table with a deck of Fola Adeleke playing cards." />
+      <div class="sun"></div>
+      <canvas class="dust" id="dust" aria-hidden="true"></canvas>
+      <div class="dim"></div>
+    </div>
+  </main>
+
+  <div class="tag" id="tag" aria-hidden="true"></div>
+  <div class="caption">
+    <p><small>World · Room 01</small>The Living Room</p>
+    <button type="button" id="listBtn" aria-expanded="false" aria-controls="list">Shop this room</button>
+  </div>
+  <p class="pan-hint">Move to look around</p>
+  <div class="list" id="list"></div>
+
+  <div class="qv-scrim" id="qvScrim"></div>
+  <aside class="qv" id="qv" role="dialog" aria-modal="true" aria-labelledby="qvTitle" aria-hidden="true"></aside>
+
+  <script>
+    // Boxes are plate pixels (2688 × 1152).
+    window.ROOM = {
+      w: 2688, h: 1152, pan: 'mouse', startX: .35,
+      spots: [
+        { id: 'mummys-boy',         box: [482, 118, 732, 452],   lift: '/images/world/room-b-mummys-boy.jpg' },
+        { id: 'loud-cloth',         box: [762, 118, 1018, 452],  lift: '/images/world/room-b-loud-cloth.jpg' },
+        { id: 'mother-of-a-nation', box: [1050, 118, 1298, 452], lift: '/images/world/room-b-mother-of-a-nation.jpg' },
+        { id: 'mama-comfort',       box: [1252, 328, 1382, 600], lift: '/images/world/room-b-figure.png', dotY: 420 },
+        { id: 'phone',              box: [2072, 783, 2226, 845], lift: '/images/world/room-b-phone.png' },
+        { id: 'cards',              box: [2369, 695, 2461, 859], lift: '/images/world/room-b-cards.png' }
+      ]
+    };
+  </script>
+  <script src="world.js"></script>
+  <script>
+    // Dust in the window light: a few hundred slow motes, densest by the window.
+    (function () {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      var c = document.getElementById('dust'), x = c.getContext('2d'), motes = [], W, H;
+      function size() { W = c.width = c.offsetWidth; H = c.height = c.offsetHeight; }
+      function mote() {
+        var near = Math.random() < .7;
+        return { x: (near ? Math.random() * .45 : Math.random()) * W, y: Math.random() * H, r: .5 + Math.random() * 1.6,
+                 vx: .05 + Math.random() * .18, vy: -.06 + Math.random() * .12, a: .15 + Math.random() * .45, t: Math.random() * 6.28 };
+      }
+      size(); for (var i = 0; i < 220; i++) motes.push(mote());
+      new ResizeObserver(size).observe(c);
+      (function draw() {
+        x.clearRect(0, 0, W, H);
+        for (var i = 0; i < motes.length; i++) {
+          var m = motes[i]; m.t += .01; m.x += m.vx; m.y += m.vy + Math.sin(m.t) * .08;
+          if (m.x > W * .75 || m.y < 0 || m.y > H) { motes[i] = mote(); motes[i].x = Math.random() * W * .1; continue; }
+          var fade = 1 - m.x / (W * .75);
+          x.beginPath(); x.arc(m.x, m.y, m.r, 0, 6.283);
+          x.fillStyle = 'rgba(255,236,200,' + (m.a * fade) + ')'; x.fill();
+        }
+        requestAnimationFrame(draw);
+      })();
+    })();
+  </script>
+</body>
+</html>

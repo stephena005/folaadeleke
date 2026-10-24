@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="robots" content="noindex" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<title>World — The Living Room (A) — Fola Adeleke®</title>
+<link rel="stylesheet" href="world.css" />
+<link rel="preload" as="image" href="/images/world/room-a.jpg" />
+</head>
+<body>
+  <!-- Mockup A — "Still life": front-on room, a locked-off video loop
+       (curtains, candle flames, fig leaves, passing light) under the
+       real print files. The camera never moves; the room breathes. -->
+  <nav class="nav">
+    <div><a class="brand" href="/">Fola Adeleke®</a><span class="crumb">World / Living Room</span></div>
+    <ul>
+      <li><a href="/prints">Prints</a></li>
+      <li><a href="/products">Products</a></li>
+      <li><a href="/products" aria-current="page">World</a></li>
+    </ul>
+  </nav>
+
+  <main class="stage" id="stage">
+    <div class="scene" id="scene">
+      <img class="plate" src="/images/world/room-a.jpg" alt="A sunlit living room: three Fola Adeleke prints above an ebony credenza with the Mama Comfort figure, a slate-blue sofa with adire and aso-oke cushions, and a rattan table with a deck of Fola Adeleke playing cards." />
+      <video autoplay muted loop playsinline preload="auto" poster="/images/world/room-a.jpg" aria-hidden="true">
+        <source src="/images/world/room-a-loop.mp4" type="video/mp4" />
+      </video>
+      <div class="dim"></div>
+    </div>
+  </main>
+
+  <div class="tag" id="tag" aria-hidden="true"></div>
+  <div class="caption">
+    <p><small>World · Room 01</small>The Living Room</p>
+    <button type="button" id="listBtn" aria-expanded="false" aria-controls="list">Shop this room</button>
+  </div>
+  <div class="list" id="list"></div>
+
+  <div class="qv-scrim" id="qvScrim"></div>
+  <aside class="qv" id="qv" role="dialog" aria-modal="true" aria-labelledby="qvTitle" aria-hidden="true"></aside>
+
+  <script>
+    // Boxes are plate pixels (2688 × 1520). Prints: frame outline; figure: alpha cutout.
+    window.ROOM = {
+      w: 2688, h: 1520,
+      fixed: [
+        { src: '/images/world/room-a-mummys-boy.jpg',         box: [715, 100, 1103, 602] },
+        { src: '/images/world/room-a-loud-cloth.jpg',         box: [1168, 100, 1562, 602] },
+        { src: '/images/world/room-a-mother-of-a-nation.jpg', box: [1627, 100, 2020, 602] }
+      ],
+      spots: [
+        { id: 'mummys-boy',         box: [715, 100, 1103, 602],   lift: '/images/world/room-a-mummys-boy.jpg' },
+        { id: 'loud-cloth',         box: [1168, 100, 1562, 602],  lift: '/images/world/room-a-loud-cloth.jpg' },
+        { id: 'mother-of-a-nation', box: [1627, 100, 2020, 602],  lift: '/images/world/room-a-mother-of-a-nation.jpg' },
+        { id: 'mama-comfort',       box: [1705, 595, 1840, 887],  lift: '/images/world/room-a-figure.png', dotY: 700 },
+        { id: 'cards',              box: [528, 1086, 653, 1260],  lift: '/images/world/room-a-cards.png' },
+        { id: 'phone',              box: [2135, 1325, 2343, 1403], lift: '/images/world/room-a-phone.png' }
+      ]
+    };
+  </script>
+  <script src="world.js"></script>
+</body>
+</html>
