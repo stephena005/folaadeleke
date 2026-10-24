@@ -38,7 +38,7 @@
   <meta property="og:title" content="Mama Comfort — Pre-order — Fola Adeleke®" />
   <meta property="og:description" content="A 280 mm soft vinyl collectible figure in matte black with gold jewellery. Numbered limited edition, available to pre-order." />
   <meta property="og:url" content="https://folaadeleke.com/products/mama-comfort" />
-  <meta property="og:image" content="https://folaadeleke.com/images/mama-comfort/og-mama-comfort-black-gold.jpg" />
+  <meta property="og:image" content="https://folaadeleke.com/images/mama-comfort/og-mama-comfort-c04.jpg" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:image:alt" content="Mama Comfort soft vinyl figure by Fola Adeleke in black with gold jewellery" />
@@ -46,7 +46,7 @@
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Mama Comfort — Pre-order — Fola Adeleke®" />
   <meta name="twitter:description" content="A 280 mm soft vinyl collectible figure in matte black with gold jewellery. Numbered limited edition, available to pre-order." />
-  <meta name="twitter:image" content="https://folaadeleke.com/images/mama-comfort/og-mama-comfort-black-gold.jpg" />
+  <meta name="twitter:image" content="https://folaadeleke.com/images/mama-comfort/og-mama-comfort-c04.jpg" />
 
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -485,11 +485,14 @@
       defaultColourway: 'C04',
       // One slide per product_shots.py set. `src` is a path, or a map of
       // colourway code -> path for single-figure shots; '' = placeholder.
-      // Pre-production renders. C04 shots are cut from the Black & Gold concept
-      // render; re-export from scripts/relief/export_web_shots.py once it is rendered.
+      // Pre-production renders at 1400 px; Detail is a crop of the front render.
       // Paths are written out in full so check-site.mjs can verify each one.
       shots: [
         { name: 'Front',            src: { C04: '/images/mama-comfort/front-c04.jpg' } },
+        { name: 'Boxed',            src: { C04: '/images/mama-comfort/boxed-c04.jpg' } },
+        { name: 'Back',             src: { C04: '/images/mama-comfort/back-c04.jpg' } },
+        { name: 'Side',             src: { C04: '/images/mama-comfort/side-c04.jpg' } },
+        { name: 'Signed Sole',      src: { C04: '/images/mama-comfort/sole-c04.jpg' } },
         { name: 'Detail',           src: { C04: '/images/mama-comfort/detail-c04.jpg' } }
       ]
     };
