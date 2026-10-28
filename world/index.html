@@ -1,209 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Google tag (gtag.js) — consent mode: analytics denied until accepted -->
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('consent', 'default', {
-      ad_storage: 'denied',
-      ad_user_data: 'denied',
-      ad_personalization: 'denied',
-      analytics_storage: 'denied',
-      wait_for_update: 500
-    });
-    try {
-      if (localStorage.getItem('fa_consent') === 'granted') {
-        gtag('consent', 'update', { analytics_storage: 'granted' });
-      }
-    } catch (e) {}
-    gtag('js', new Date());
-    gtag('config', 'G-K7ZCQ4YEN6');
-  </script>
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7ZCQ4YEN6"></script>
-  <script defer src="/js/consent.js"></script>
-  <script defer src="/js/analytics.js"></script>
-  <script defer src="/js/newsletter-popup.js"></script>
+  <!-- /world moved to /living-room (October 2026). GitHub Pages has no
+       server redirects, so this page forwards visitors and keeps any
+       #hash or ?query they arrived with. The canonical tells search
+       engines the new address is the real one. Keep it: /world was in the
+       menu, the sitemap and shared links. -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>The Living Room — Fola Adeleke®</title>
+  <meta name="robots" content="noindex, follow" />
+  <link rel="canonical" href="https://folaadeleke.com/living-room" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-  <title>World — Fola Adeleke®</title>
-  <meta name="description" content="Step into the Living Room: Fola Adeleke prints on the wall and in the rack, the Mama Comfort figure and more, styled in a sunlit West African home. Hover to explore, click to shop." />
-  <link rel="canonical" href="https://folaadeleke.com/world" />
-  <!-- Open Graph / social preview -->
-  <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="Fola Adeleke®" />
-  <meta property="og:title" content="World — The Living Room — Fola Adeleke®" />
-  <meta property="og:description" content="Step into the Living Room: Fola Adeleke prints on the wall and in the rack, the Mama Comfort figure and more, styled in a sunlit West African home. Hover to explore, click to shop." />
-  <meta property="og:url" content="https://folaadeleke.com/world" />
-  <meta property="og:image" content="https://folaadeleke.com/images/world/og-world.jpg" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="A sunlit living room with three Fola Adeleke prints above an ebony credenza, a stack of framed prints leaning against it and the Mama Comfort figure" />
-  <meta property="og:locale" content="en_GB" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="World — The Living Room — Fola Adeleke®" />
-  <meta name="twitter:description" content="Step into the Living Room: Fola Adeleke prints on the wall and in the rack, the Mama Comfort figure and more, styled in a sunlit West African home. Hover to explore, click to shop." />
-  <meta name="twitter:image" content="https://folaadeleke.com/images/world/og-world.jpg" />
-  <link rel="stylesheet" href="/world/world.css" />
-  <link rel="preload" as="image" href="/images/world/room-b.jpg" />
+  <script>location.replace('/living-room' + location.search + location.hash);</script>
+  <meta http-equiv="refresh" content="0; url=/living-room" />
+  <style>
+    body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #fff; color: #000;
+           font: 13px/1.8 'Courier New', Courier, monospace; letter-spacing: 0.1em; text-align: center; padding: 0 16px; }
+    a { color: #000; }
+  </style>
 </head>
 <body>
-  <!-- WORLD — "The Living Room". A 21:9 photographed room you shop by
-       looking around it; see design.md §12. The view drifts toward the
-       cursor and wanders when it rests (swipe on touch). Wall frames
-       rehang from curated sets; the leaning rack holds the rest. -->
-  <nav class="site">
-    <div class="nav-left">
-      <button class="hamburger" aria-label="Open menu" onclick="openDrawer()">&#9776;</button>
-    </div>
-    <a class="nav-brand" href="/">Fola Adeleke®</a>
-    <div class="nav-right">
-      <a class="nav-contact" href="/contact">Contact</a>
-    </div>
-  </nav>
-
-  <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
-  <div class="drawer" id="drawer" aria-label="Navigation drawer">
-    <button class="drawer-close" onclick="closeDrawer()" aria-label="Close menu">&#x2715;</button>
-    <a href="/">Home</a>
-    <div class="drawer-group open" id="productsDrawerGroup">
-      <button class="drawer-group-toggle" onclick="toggleDrawerGroup()" aria-expanded="true">Products <span class="drawer-caret">▼</span></button>
-      <div class="drawer-submenu">
-        <a href="/prints">Prints</a>
-        <a href="/world" aria-current="page">World</a>
-        <a href="/products">All products</a>
-      </div>
-    </div>
-    <a href="/concepts/ferm-living">Concepts</a>
-    <a href="/artist">Artist</a>
-    <a href="/press">Press</a>
-    <a href="/contact">Contact</a>
-  </div>
-
-  <h1 class="visually-hidden">World — The Living Room</h1>
-  <main class="stage" id="stage">
-    <div class="scene" id="scene">
-      <img class="plate" src="/images/world/room-b.jpg" alt="A sunlit living room: three Fola Adeleke prints above an ebony credenza with the Mama Comfort figure and a stack of framed prints leaning against it, a fiddle-leaf fig, a slate-blue sofa with adire and aso-oke cushions, and a rattan side table with a deck of Fola Adeleke playing cards." />
-      <div class="sun"></div>
-      <canvas class="dust" id="dust" aria-hidden="true"></canvas>
-      <div class="dim"></div>
-    </div>
-  </main>
-
-  <div class="tag" id="tag" aria-hidden="true"></div>
-  <div class="caption">
-    <p><small>World · Room 01</small>The Living Room</p>
-    <button type="button" id="listBtn" aria-expanded="false" aria-controls="list">Shop this room</button>
-  </div>
-  <p class="pan-hint">Move to look around</p>
-  <!-- Rebuilt by world.js when opened; the static links are for no-script and search. -->
-  <div class="list" id="list">
-    <h3>In this room</h3>
-      <a href="/prints#mummys-boy">Mummy’s Boy</a>
-      <a href="/prints#i-do">I Do</a>
-      <a href="/prints#girl-dad">Girl Dad</a>
-      <a href="/prints#papas-girl">Papa’s Girl</a>
-      <a href="/prints#the-crown-she-carries">The Crown She Carries</a>
-      <a href="/prints#loud-cloth">Loud Cloth</a>
-      <a href="/prints#attention-seeker">Attention Seeker</a>
-      <a href="/prints#centre-of-the-stage">Centre of the Stage</a>
-      <a href="/prints#on-point">On Point</a>
-      <a href="/prints#state-of-the-union">State of the Union</a>
-      <a href="/prints#mother-of-a-nation">Mother of a Nation</a>
-      <a href="/prints#sisterhood">Sisterhood</a>
-      <a href="/prints#unapologetic">Unapologetic</a>
-      <a href="/prints#one-vow">One Vow</a>
-      <a href="/prints#yemaya">Yemaya</a>
-      <a href="/prints#black-excellence">Black Excellence</a>
-      <a href="/prints#elders-guidance">Elders Guidance</a>
-      <a href="/prints#saturday-function">Saturday Function</a>
-      <a href="/prints#we-give-thanks">We Give Thanks</a>
-      <a href="/prints#life-of-a-masquerade">Life of a Masquerade</a>
-      <a href="/prints#family-council">Family Council</a>
-      <a href="/prints#drowned-taiwo">Drowned in Native Cloth — Taiwo</a>
-      <a href="/prints#drowned-kehinde">Drowned in Native Cloth — Kehinde</a>
-      <a href="/prints#kingdom-we-carry">The Kingdom We Carry</a>
-      <a href="/prints#my-sons-father">My Son’s Father Was Fatherless</a>
-      <a href="/prints#husband-and-wife">Husband &amp; Wife</a>
-      <a href="/prints#iykyk">If You Know, You Know, Sha</a>
-      <a href="/products/mama-comfort">Mama Comfort</a>
-      <a href="/products/propeller-wallpaper-pack">Propeller Wallpaper Collection</a>
-      <a href="https://shop.folaadeleke.com/products/playing-cards">Fola Adeleke Playing Cards</a>
-      <a class="all" href="/products">All products &rarr;</a>
-  </div>
-
-  <div class="qv-scrim" id="qvScrim"></div>
-  <aside class="qv" id="qv" role="dialog" aria-modal="true" aria-labelledby="qvTitle" aria-hidden="true"></aside>
-
-  <script>
-    function openDrawer() {
-      document.getElementById('drawer').classList.add('open');
-      document.getElementById('drawerOverlay').classList.add('open');
-    }
-    function closeDrawer() {
-      document.getElementById('drawer').classList.remove('open');
-      document.getElementById('drawerOverlay').classList.remove('open');
-    }
-    function toggleDrawerGroup() {
-      var group = document.getElementById('productsDrawerGroup');
-      var isOpen = group.classList.toggle('open');
-      group.querySelector('.drawer-group-toggle').setAttribute('aria-expanded', isOpen);
-    }
-  </script>
-  <script>
-    // Plate pixels (2688 × 1152). Wall frames rehang from curated sets; the rack holds the rest.
-    window.ROOM = {
-      w: 2688, h: 1152, pan: 'mouse', startX: .5,
-      wall: [
-        { box: [485, 150, 720, 444], quad: [[506, 168], [698, 168], [698, 421], [506, 421]],
-          lift: '/images/world/room-b-mummys-boy.jpg', light: '/images/world/room-b-light-1.jpg',
-          set: ['mummys-boy', 'i-do', 'girl-dad', 'papas-girl', 'the-crown-she-carries'] },
-        { box: [746, 150, 978, 444], quad: [[766, 168], [956, 168], [956, 427], [766, 427]],
-          lift: '/images/world/room-b-loud-cloth.jpg', light: '/images/world/room-b-light-2.jpg',
-          set: ['loud-cloth', 'attention-seeker', 'centre-of-the-stage', 'on-point', 'state-of-the-union'] },
-        { box: [1006, 152, 1238, 444], quad: [[1026, 170], [1218, 170], [1218, 428], [1026, 428]],
-          lift: '/images/world/room-b-mother-of-a-nation.jpg', light: '/images/world/room-b-light-3.jpg',
-          set: ['mother-of-a-nation', 'sisterhood', 'unapologetic', 'one-vow', 'yemaya'] }
-      ],
-      rack: { box: [288, 604, 654, 835], quad: [[360, 640], [609, 639], [620, 802], [370, 810]], dotY: 719,
-        patch: { src: '/images/world/room-b-rack-patch.webp', box: [250, 576, 692, 873] },
-        lift: '/images/world/room-b-rack.webp', light: '/images/world/room-b-light-rack.jpg',
-        set: ['black-excellence', 'elders-guidance', 'saturday-function', 'we-give-thanks', 'life-of-a-masquerade', 'family-council', 'drowned-taiwo', 'drowned-kehinde', 'kingdom-we-carry', 'my-sons-father', 'husband-and-wife', 'iykyk'] },
-      spots: [
-        { id: 'mama-comfort', box: [1200, 340, 1306, 582], lift: '/images/world/room-b-figure.webp', dotY: 430 },
-        { id: 'phone',       box: [1944, 716, 2062, 760], lift: '/images/world/room-b-phone.webp' },
-        { id: 'cards',       box: [2393, 626, 2451, 718], lift: '/images/world/room-b-cards.webp' }
-      ]
-    };
-  </script>
-  <script src="/world/world.js"></script>
-  <script>
-    // Dust in the window light: a few hundred slow motes, densest by the window.
-    (function () {
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-      var c = document.getElementById('dust'), x = c.getContext('2d'), motes = [], W, H;
-      function size() { W = c.width = c.offsetWidth; H = c.height = c.offsetHeight; }
-      function mote() {
-        var near = Math.random() < .7;
-        return { x: (near ? Math.random() * .45 : Math.random()) * W, y: Math.random() * H, r: .5 + Math.random() * 1.6,
-                 vx: .05 + Math.random() * .18, vy: -.06 + Math.random() * .12, a: .15 + Math.random() * .45, t: Math.random() * 6.28 };
-      }
-      size(); for (var i = 0; i < 220; i++) motes.push(mote());
-      new ResizeObserver(size).observe(c);
-      (function draw() {
-        x.clearRect(0, 0, W, H);
-        for (var i = 0; i < motes.length; i++) {
-          var m = motes[i]; m.t += .01; m.x += m.vx; m.y += m.vy + Math.sin(m.t) * .08;
-          if (m.x > W * .75 || m.y < 0 || m.y > H) { motes[i] = mote(); motes[i].x = Math.random() * W * .1; continue; }
-          var fade = 1 - m.x / (W * .75);
-          x.beginPath(); x.arc(m.x, m.y, m.r, 0, 6.283);
-          x.fillStyle = 'rgba(255,236,200,' + (m.a * fade) + ')'; x.fill();
-        }
-        requestAnimationFrame(draw);
-      })();
-    })();
-  </script>
+  <p>The Living Room has moved to <a href="/living-room">folaadeleke.com/living-room</a>.</p>
 </body>
 </html>

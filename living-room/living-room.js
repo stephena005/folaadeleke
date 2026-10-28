@@ -1,4 +1,4 @@
-/* World — The Living Room (/world). The page sets window.ROOM (plate
+/* The Living Room (/living-room). The page sets window.ROOM (plate
    size, wall frames, print rack, product hotspots, all in plate pixels)
    before this script runs. Product copy and prices mirror /products and
    /prints — change a price there, change it here. See design.md §12.
@@ -297,7 +297,7 @@
         '<p class="qv-desc">' + esc(p.desc) + '</p>' +
         '<a class="qv-buy" href="' + p.href + '">' + esc(p.cta) + ' &rarr;</a>' +
         '<button class="qv-room" type="button">Back to the room</button>' +
-        '<p class="qv-note">Seen in the Living Room · Fola Adeleke® World</p>' +
+        '<p class="qv-note">Seen in the Living Room · Fola Adeleke®</p>' +
       '</div>', from);
     track('view_item', { item_list_name: 'world_living_room', items: [{ item_id: id, item_name: p.title, currency: 'GBP' }] });
     var main = qv.querySelector('.main img');
