@@ -56,8 +56,8 @@
       thumb: '/images/mama-comfort/card-black-gold.jpg'
     },
     'cards': {
-      kicker: 'Playing Cards', flag: 'New', title: 'Fola Adeleke Playing Cards', price: 'In the shop',
-      priceNote: 'Sold on the Fola Adeleke shop',
+      kicker: 'Playing Cards', flag: 'New', title: 'Fola Adeleke Playing Cards', price: '£25',
+      priceNote: '52 cards in a tuck-end box',
       desc: 'A full 52-card deck dressed in zebra. Kings, queens and jacks are photographic portraits in zebra-print agbada and gowns with gold jewellery; every card shares one back. Tuck-end box, 64 × 102 × 23 mm.',
       href: 'https://shop.folaadeleke.com/products/playing-cards', cta: 'Buy in the shop',
       imgs: ['/images/world/cards/box-front.jpg', '/images/world/cards/kh.jpg', '/images/world/cards/qs.jpg', '/images/world/cards/card-back.jpg'],
