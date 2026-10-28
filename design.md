@@ -413,7 +413,50 @@ can be opened on request via `window.faNewsletter.open()` — see
 gradients. The quick view mounts the print on a white mat on black, as
 the prints page does. The music widget sits above the dock.
 
-## 12. Applying This System
+## 12. World — "The Living Room"
+
+`/world` (October 2026) is a photographed room you shop by looking
+around it, so a visitor sees Fola's work as things that live in a home
+rather than items in a grid. It is the "World" entry in the drawer;
+`/products` stays as the plain list ("All products").
+
+**The room is one image, everything you buy is a layer.** The plate
+(`images/world/room-b.jpg`, 2688 × 1152, an AI render) is the backdrop.
+On top of it sit the real print files, mapped into each frame with a
+CSS `matrix3d` and multiplied by a light map cut from the render
+(`room-b-light-*.jpg`), so a swapped print takes on the room's sunlight.
+The figure, phone and card box are alpha cut-outs of the render, used
+for the hover lift. The leaning rack is a feathered patch from an edited
+render (`room-b-rack-patch.webp`). All coordinates are plate pixels in
+`window.ROOM` in `world/index.html`; the engine is `world/world.js`.
+
+**Hover is the only colour the UI adds, and it isn't colour.** Hovering
+dims the room to 52% black and lifts the object with a white glow plus a
+white tag in the house style (Courier, hairline border, no radius). The
+glow is white on purpose: gold was considered and rejected so the UI
+stays monochrome (§2), and the room photo is the only thing in colour.
+
+**More prints than frames.** Each wall frame holds a curated set of five
+portrait prints (‹ › on hover; one frame changes every ~5s when nobody is
+touching it and leaves alone a frame the visitor just chose). The rack
+holds the twelve that aren't on the wall, including every landscape
+print, and opens a flip-through with sizes and Buy. Wall prints link to
+`/prints#slug`; products open a quick view that links to the full page.
+
+**Motion.** The 21:9 room is wider than the screen: it drifts toward
+the cursor, wanders end to end when the cursor rests, and holds still
+while something is lit. Sunlight sweeps the wall (CSS) and dust turns in
+the window light (canvas). On touch the room pans by swipe, pulsing dots
+mark what's for sale, the first tap shows the tag and the second opens
+it. `prefers-reduced-motion` stops the drift, sweep, dust and rehanging.
+
+**Keeping it true.** Prices and copy in `world/world.js` mirror
+`/prints` and `/products` and are not generated, so change both. A new
+room is a new plate, its light maps and cut-outs, and a new `ROOM`
+block; the engine does not change. The concept work, including the
+front-on option A, is in `mockups/world-living-room/`.
+
+## 13. Applying This System
 
 When designing something new for Fola Adeleke (a page, email, product
 graphic, or social asset), check it against this list:

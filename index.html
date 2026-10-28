@@ -125,7 +125,7 @@
     .drawer-caret { font-size: 9px; transition: transform .2s ease; }
     .drawer-group.open .drawer-caret { transform: rotate(180deg); }
     .drawer-submenu { max-height: 0; overflow: hidden; transition: max-height .3s ease; }
-    .drawer-group.open .drawer-submenu { max-height: 120px; }
+    .drawer-group.open .drawer-submenu { max-height: 160px; }
     .drawer-submenu a { display: block; padding: 10px 0 10px 16px; font-size: 11px; letter-spacing: var(--spacing); text-transform: uppercase; text-decoration: none; color: var(--grey-mid); }
     .drawer-foot { margin-top: auto; padding-top: 28px; display: flex; flex-direction: column; gap: 10px; font-size: 10px; letter-spacing: .12em; color: var(--grey-mid); }
     .drawer-foot div { display: flex; gap: 16px; text-transform: uppercase; }
@@ -341,7 +341,8 @@
       <button class="drawer-group-toggle" onclick="toggleDrawerGroup()" aria-expanded="false">Products <span class="drawer-caret">▼</span></button>
       <div class="drawer-submenu">
         <a href="/prints">Prints</a>
-        <a href="/products">World</a>
+        <a href="/world">World</a>
+        <a href="/products">All products</a>
       </div>
     </div>
     <a href="/artist">Artist</a>
