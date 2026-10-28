@@ -73,7 +73,7 @@
 
           <!-- View Print -->
           {%- if product.available -%}
-            <a href="{{ product.url }}" class="btn-cart">{% if product.template_suffix == 'figure' %}View{% else %}View Print{% endif %}</a>
+            <a href="{{ product.url }}" class="btn-cart">{% if product.template_suffix == 'figure' or product.template_suffix == 'cards' %}View{% else %}View Print{% endif %}</a>
           {%- else -%}
             <a href="{{ product.url }}" class="btn-cart btn-cart--sold-out">Sold Out</a>
           {%- endif -%}
