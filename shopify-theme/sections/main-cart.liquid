@@ -42,7 +42,7 @@
             <div class="cart-item-details">
               <a href="{{ item.url }}" class="cart-item-title">{{ item.product.title }}</a>
               {%- assign size_val = item.variant.title -%}
-              {%- if item.product.template_suffix == 'figure' -%}
+              {%- if item.product.template_suffix == 'figure' or item.product.template_suffix == 'cards' -%}
                 {%- unless item.product.has_only_default_variant -%}
                   <span class="cart-item-spec">{{ size_val }}</span>
                 {%- endunless -%}

@@ -1,0 +1,33 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product-figure",
+      "settings": {
+        "subtitle": "Pre-order · 52-card deck",
+        "height_mm": 102,
+        "width_mm": 64,
+        "depth_mm": 23,
+        "material": "310gsm linen-finish card, 58 × 90 mm",
+        "figure_weight": "",
+        "edition": "",
+        "signature": "",
+        "packaging": "Zebra-print tuck box with thumb notch, Fola Adeleke® mark in gold ink",
+        "certificate": "",
+        "image_note": "Pre-production renders. The finished deck may differ slightly.",
+        "in_the_box": "52 playing cards\nZebra-print tuck box",
+        "swatch_map": "",
+        "max_per_order": 0,
+        "low_stock_threshold": 0,
+        "dispatch_estimate": "January 2027",
+        "preorder_terms": "<ul><li>You pay in full today and your deck is reserved at checkout.</li><li>Estimated dispatch: [dispatch]. We email you when the printer's proof is approved and again when your deck ships.</li><li>Cancel any time before dispatch for a full refund. Your 14-day right to cancel after delivery still applies.</li><li>If dispatch slips more than 30 days past the estimate, we tell you and you can cancel for a full refund.</li></ul>",
+        "age_warning": "",
+        "care": "<p>Keep the deck in its tuck box, away from damp and direct heat. Wipe a card with a soft, dry cloth if it needs it.</p>",
+        "shipping": "<p>Shipped from the UK in its tuck box, tracked. Shipping options and costs are shown at checkout. Orders outside the UK may be subject to import duties and taxes on delivery, which are the buyer's responsibility.</p>",
+        "returns": "<p>Pre-orders can be cancelled any time before dispatch for a full refund. After delivery, tell us within 14 days and return the deck in its tuck box within 14 days of telling us; we refund the item and standard delivery. Return postage is at your cost, and we may reduce the refund if it has been handled more than needed to inspect it. If it arrives damaged or faulty, contact us as soon as you can (ideally within 7 days) with photos and we'll replace or refund it at our cost. None of this affects your statutory rights.</p>"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}
