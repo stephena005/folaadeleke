@@ -51,7 +51,7 @@ const SITE_HOST = 'folaadeleke.com';
 const PUBLIC_DIRS = new Set([
   '.github', '.githooks',
   'artist', 'claim', 'concepts', 'contact', 'enquiry', 'events', 'find', 'guess',
-  'images', 'internship', 'interview', 'js', 'match', 'mockups', 'press', 'prints',
+  'images', 'internship', 'interview', 'js', 'living-room', 'match', 'mockups', 'press', 'prints',
   'privacy', 'products', 'rearrange', 'scripts', 'shopify-theme', 'shopify-theme-figure', 'terms',
   'trade', 'verify', 'worker', 'world',
 ]);

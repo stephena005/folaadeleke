@@ -238,7 +238,7 @@ Motion is subtle, fast, and functional — never decorative:
   sentence or two, e.g. "First access to every drop. Studio updates. Direct
   from Fola.").
 - Primary navigation is intentionally small: **Home, Products (Prints,
-  World), Artist, Press, Contact** — resist adding more top-level items;
+  Living Room), Artist, Press, Contact** — resist adding more top-level items;
   nest anything new under an existing group where possible.
 - Footer is minimal: social links (Instagram, TikTok) + a single copyright
   line, muted grey, tiny type.
@@ -413,12 +413,19 @@ can be opened on request via `window.faNewsletter.open()` — see
 gradients. The quick view mounts the print on a white mat on black, as
 the prints page does. The music widget sits above the dock.
 
-## 12. World — "The Living Room"
+## 12. The Living Room
 
-`/world` (October 2026) is a photographed room you shop by looking
+`/living-room` (October 2026) is a photographed room you shop by looking
 around it, so a visitor sees Fola's work as things that live in a home
-rather than items in a grid. It is the "World" entry in the drawer;
+rather than items in a grid. It is the "Living Room" entry in the drawer;
 `/products` stays as the plain list ("All products").
+
+It launched as "World" at `/world` and was renamed in October 2026.
+`world/index.html` is now a forwarding page (GitHub Pages has no server
+redirects): it sends visitors to `/living-room` with any `#hash` or
+`?query` kept, and its canonical points there. Keep it, because `/world`
+was in the menu, the sitemap and shared links. The images stayed in
+`images/world/`, including the share image `og-world.jpg`.
 
 **The room is one image, everything you buy is a layer.** The plate
 (`images/world/room-b.jpg`, 2688 × 1152, an AI render) is the backdrop.
@@ -428,7 +435,8 @@ CSS `matrix3d` and multiplied by a light map cut from the render
 The figure, phone and card box are alpha cut-outs of the render, used
 for the hover lift. The leaning rack is a feathered patch from an edited
 render (`room-b-rack-patch.webp`). All coordinates are plate pixels in
-`window.ROOM` in `world/index.html`; the engine is `world/world.js`.
+`window.ROOM` in `living-room/index.html`; the engine is
+`living-room/living-room.js`.
 
 **Hover is the only colour the UI adds, and it isn't colour.** Hovering
 dims the room to 52% black and lifts the object with a white glow plus a
@@ -450,7 +458,7 @@ the window light (canvas). On touch the room pans by swipe, pulsing dots
 mark what's for sale, the first tap shows the tag and the second opens
 it. `prefers-reduced-motion` stops the drift, sweep, dust and rehanging.
 
-**Keeping it true.** Prices and copy in `world/world.js` mirror
+**Keeping it true.** Prices and copy in `living-room/living-room.js` mirror
 `/prints` and `/products` and are not generated, so change both. A new
 room is a new plate, its light maps and cut-outs, and a new `ROOM`
 block; the engine does not change. The concept work, including the
