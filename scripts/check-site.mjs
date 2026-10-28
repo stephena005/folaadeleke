@@ -53,7 +53,7 @@ const PUBLIC_DIRS = new Set([
   'artist', 'claim', 'concepts', 'contact', 'enquiry', 'events', 'find', 'guess',
   'images', 'internship', 'interview', 'js', 'match', 'mockups', 'press', 'prints',
   'privacy', 'products', 'rearrange', 'scripts', 'shopify-theme', 'shopify-theme-figure', 'terms',
-  'trade', 'verify', 'worker',
+  'trade', 'verify', 'worker', 'world',
 ]);
 
 const PRIVATE_PATHS = [
