@@ -311,6 +311,45 @@ A time-boxed offer must state its **real** deadline: if the landing
 page enforces a fixed end instant, saying "24 hours" tells a late
 opener they have longer than they do.
 
+**The certificate email.** `coa-email.html` is the delivery email for
+a certificate of authenticity, built on the newsletter template and
+rendered by `scripts/render-coa-email.mjs` from the certificate HTML
+itself — never hand-filled, and never committed once rendered, because
+it carries the buyer's name against their edition. The template's
+header comment is the full spec; this is the shape:
+
+- Header with a `Certificate` label, full-bleed hero of the work with
+  a caption bar, headline and intro, a bordered **certificate panel**
+  that repeats the printed COA's hierarchy (numeral, rule, label/value
+  grid), the one inverted band carrying the verify button, two short
+  notes, `— Fola`, footer.
+- The button goes to `folaadeleke.com/verify/<token>/`, the same URL
+  the QR code on the print encodes. The renderer finds the token by
+  matching work and edition against `verify/`, so the button cannot
+  point at another buyer's certificate.
+
+**Several certificates, one email.** A buyer who takes two or three
+prints gets one email, not one per print. Pass `--certificate` once
+per certificate, in the order the works should appear. The renderer
+refuses different buyers, a repeated edition, or a fourth certificate.
+What changes in the layout:
+
+| Element | One certificate | Two or three |
+|---|---|---|
+| Header label | `Certificate` | `Certificates` |
+| Hero | Full-bleed work, caption bar | One row of tiles, percentage widths, a caption per tile (`2026 · 5/15`) |
+| Panel | One | One per certificate, 36px above the first, 24px between |
+| Inverted band | One button, `View certificate` | Still one band; a button per certificate, labelled with the work |
+| Copy | Singular | Plural: intro, shipping note, sign-off, footer line |
+
+The template stays one file for both shapes. Copy that has to read
+differently sits in `<!-- ONE:START -->` / `<!-- MANY:START -->`
+pairs, and the tile, panel and button are marked `TILE`, `PANEL` and
+`BUTTON` blocks the renderer repeats. When editing, keep each pair
+together so neither shape drifts, and check a dark work still reads
+in the 3-up row — 109px on a phone. The one-inverted-band rule holds
+in both shapes and the renderer asserts it.
+
 ## 10. The prints page — "The Hang"
 
 `prints/index.html` was rebuilt in September 2026 as one long gallery
