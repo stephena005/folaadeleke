@@ -30,7 +30,8 @@
 //      carry its DISCOUNT_CODE (run scripts/close-drop.mjs), and the home
 //      banner's timer must agree with the page it links to.
 //   7. Sitemap dates — every <lastmod> must match git (scripts/update-sitemap.mjs);
-//      skipped on a shallow clone, where git has no history to compare.
+//      a shallow clone fails outright, because git has no history to compare
+//      and a quiet skip once let stale dates through to CI.
 //   8. Home wall — the cards on index.html must match the prints on
 //      prints/index.html (scripts/build-home-wall.mjs), so a print added,
 //      re-priced, flagged New or sold out on the wall is never stale on home.
@@ -261,7 +262,9 @@ if (trackedSet.has('index.html')) {
 }
 
 // ── 7: sitemap dates ─────────────────────────────────────────────────────
-if (trackedSet.has('sitemap.xml') && git('rev-parse', '--is-shallow-repository').trim() !== 'true') {
+if (trackedSet.has('sitemap.xml') && git('rev-parse', '--is-shallow-repository').trim() === 'true') {
+  fail('sitemap.xml', 'cannot check lastmod dates on a shallow clone — run: git fetch --unshallow');
+} else if (trackedSet.has('sitemap.xml')) {
   const { changes } = computeSitemap(contents('sitemap.xml'));
   for (const c of changes) fail('sitemap.xml', `lastmod for ${c.loc} is ${c.from} but git says ${c.to} — run: node scripts/update-sitemap.mjs (the pre-commit hook does this)`);
 }
