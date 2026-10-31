@@ -208,9 +208,16 @@ if (dryRun) {
 writeFileSync(PRINTS, prints);
 writeFileSync(HOME, home);
 writeFileSync(DESIGN, design);
-const touched = ['prints/index.html', 'index.html', 'design.md', webRel, thumbRel]; // sitemap dates follow at commit, via the hook
+const touched = ['prints/index.html', 'index.html', 'design.md', webRel, thumbRel];
 execFileSync('git', ['add', '--', ...touched], { cwd: repoRoot });
-console.log(`staged  ${touched.join(', ')}`);
+// Sitemap dates move here too, not only in the pre-commit hook, so a commit
+// made without the hook (agent sessions, --no-verify) still passes CI.
+const sm = spawnSync('node', [resolve(scriptDir, 'update-sitemap.mjs')], { cwd: repoRoot, encoding: 'utf8' });
+process.stdout.write(sm.stdout);
+process.stderr.write(sm.stderr);
+if (sm.status !== 0) die('update-sitemap failed');
+execFileSync('git', ['add', '--', 'sitemap.xml'], { cwd: repoRoot });
+console.log(`staged  ${[...touched, 'sitemap.xml'].join(', ')}`);
 
 const check = spawnSync('node', [resolve(scriptDir, 'check-site.mjs')], { cwd: repoRoot, encoding: 'utf8' });
 process.stdout.write(check.stdout);
