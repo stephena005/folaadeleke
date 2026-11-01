@@ -19,7 +19,8 @@
 //   3. Sold-out on the wall matches availability in the shop, both ways.
 //      Reported, never fixed: a sold-out edition can be a deliberate
 //      call even while Shopify shows stock.
-//   4. The wallpaper pack's price on the products pages.
+//   4. Each product card on the World page (/products) and its product
+//      page quote the shop price.
 //   5. The retail column on the trade page (the trade column is a
 //      proposal derived from it, so it is checked as 75% of retail).
 //   6. Shop products the site never links — informational.
@@ -40,10 +41,11 @@ const SHOP = 'https://shop.folaadeleke.com';
 const fix = process.argv.includes('--fix');
 const SIZES = ['A1', 'A2', 'A3'];
 
-// Works Stephen has said are NOT for sale (2026-09-16: Loud Celebration).
+// Works Stephen has said are NOT for sale (none now: Loud Celebration,
+// listed 2026-09-16, went back on sale 2026-11-01).
 // The wall shows them sold out; anything that still sells them — the shop
 // itself, or a live email template — is the thing that is wrong.
-const NOT_FOR_SALE = new Map([['loud-celebration', 'Loud Celebration']]);
+const NOT_FOR_SALE = new Map();
 
 const problems = [];
 const notes = [];
@@ -161,14 +163,24 @@ for (const h of hangs) {
 }
 if (fix && fixed) { writeFileSync(prints, wall); console.log(`check-shop: rewrote ${fixed} price string${fixed === 1 ? '' : 's'} in prints/index.html — review the diff and commit`); }
 
-// 4. wallpaper pack
-const pack = products.get('propeller-wallpaper-pack');
-if (pack) {
-  const price = Object.values(pack.variants)[0];
-  for (const file of ['products/index.html', 'products/propeller-wallpaper-pack/index.html']) {
-    const text = readFileSync(resolve(repoRoot, file), 'utf8');
-    const m = /class="(?:card|product)-price">(?:&#163;|£)([\d.]+)</.exec(text);
-    if (m && parseMoney(m[1]) !== price) fail(file, `shows £${m[1]} but the shop sells the wallpaper pack at ${money(price)}`);
+// 4. World page: each product card on /products, and the page it opens.
+// A card's shop product shares its slug (the wallpaper pack), or, for a
+// product sold as several shop products (Mama Comfort's colourways), it
+// is every shop link on its page, which must then share one price.
+const PRICE = /class="(?:card|product)-price"[^>]*>(?:&#163;|£)([\d.]+)</;
+for (const [, slug, card] of contents('products/index.html').matchAll(/<a class="product-card" href="\/products\/([\w-]+)">([\s\S]*?)<\/a>/g)) {
+  const pageFile = `products/${slug}/index.html`;
+  const page = contents(pageFile);
+  const handles = products.has(slug) ? [slug]
+    : [...new Set([...page.matchAll(/shop\.folaadeleke\.com\/products\/([\w-]+)/g)].map((m) => m[1]))].filter((h) => products.has(h));
+  const prices = new Set(handles.map((h) => Object.values(products.get(h).variants)[0]));
+  if (prices.size === 0) { fail('products/index.html', `the ${slug} card has no product in the shop`); continue; }
+  if (prices.size > 1) { fail(pageFile, `the shop sells ${handles.join(', ')} at different prices (${[...prices].map(money).join(', ')}) — which one does the site quote?`); continue; }
+  const [price] = prices;
+  for (const [file, text] of [['products/index.html', card], [pageFile, page]]) {
+    const m = PRICE.exec(text);
+    if (!m) fail(file, `no price found for ${slug}`);
+    else if (parseMoney(m[1]) !== price) fail(file, `shows £${m[1]} for ${slug} but the shop sells it at ${money(price)}`);
   }
 }
 
