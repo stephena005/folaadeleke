@@ -20,6 +20,7 @@
           <span class="cart-col-remove"></span>
         </div>
 
+        {%- assign square_handles = 'loud-celebration,drowned-in-cloth,drowned-in-cloth-kehinde,drowned-in-native,if-you-know-you-know-sha,spotlight,kingdom-we-carry,family-council,my-sons-father' | split: ',' -%}
         {%- for item in cart.items -%}
           <div class="cart-item" data-key="{{ item.key }}">
 
@@ -46,6 +47,12 @@
                 {%- unless item.product.has_only_default_variant -%}
                   <span class="cart-item-spec">{{ size_val }}</span>
                 {%- endunless -%}
+              {%- elsif square_handles contains item.product.handle and size_val == 'A2' -%}
+                <span class="cart-item-spec">A2 — 420 × 420 mm</span>
+              {%- elsif square_handles contains item.product.handle and size_val == 'A3' -%}
+                <span class="cart-item-spec">A3 — 297 × 297 mm</span>
+              {%- elsif square_handles contains item.product.handle -%}
+                <span class="cart-item-spec">A1 — 594 × 594 mm</span>
               {%- elsif size_val == 'A1' -%}
                 <span class="cart-item-spec">A1 — 594 × 841 mm</span>
               {%- elsif size_val == 'A2' -%}
