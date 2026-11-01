@@ -366,6 +366,17 @@ and dimension lines, 1 SVG unit = 1 mm. Square works are fitted inside
 A-series paper with white borders; if a work is printed square, add a
 sheet size to `WALL.SHEETS` rather than faking it.
 
+**Grid view.** A Wall / Grid switch (in the floor-plan bar, and in the
+grid's own bar) shows the same works as a catalogue: one section per
+room under its wall text, every print uncropped on a 4:5 mat from its
+`images/prints/thumbs/` thumbnail, tombstone and "From £" beneath, Buy
+on hover. Room filter chips and L / M / S density (3 / 4 / 6 across;
+2 across on phones). It is built by the script from the `.hang`
+blocks, so `hang-print.mjs` needs nothing extra. A tile opens the same
+detail view; `/prints?view=grid` opens the grid and combines with the
+deep link (`/prints?view=grid#anniversary`). Switching keeps your
+place in both directions. The wall stays the default.
+
 **Reference objects are hairline grey (`#8f8f8f`), the print is black.**
 That is the only hierarchy in the elevation; do not add colour or tone.
 

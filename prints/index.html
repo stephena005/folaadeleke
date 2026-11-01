@@ -225,6 +225,52 @@
     .detail-pair small { display: block; color: var(--muted); letter-spacing: .25em; margin-bottom: 4px; }
     .detail-pair:hover span { text-decoration: underline; }
 
+    /* ── GRID VIEW — the same works as a catalogue, room by room ── */
+    .view-switch { display: flex; }
+    .view-switch .chip + .chip { border-left: 0; }
+    .grid-view { display: none; position: fixed; top: var(--nav-height); left: 0; right: 0; bottom: 0; overflow-y: auto; background: var(--white); }
+    body.is-grid .grid-view { display: block; }
+    body.is-grid .wall, body.is-grid .plan { display: none; }
+    .g-bar { position: sticky; top: 0; z-index: 5; height: 52px; background: var(--white); border-bottom: 1px solid var(--divider); display: flex; align-items: center; gap: 20px; padding: 0 32px; }
+    .g-rooms { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; flex: 1; min-width: 0; }
+    .g-rooms::-webkit-scrollbar { display: none; }
+    .g-rooms .chip { border-color: var(--hair); }
+    .g-rooms .chip[aria-pressed="true"] { border-color: var(--black); }
+    .g-tools { display: flex; align-items: center; gap: 10px; margin-left: auto; }
+    .g-count { font-size: 9px; letter-spacing: .25em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+    .g-density { display: flex; }
+    .g-density .chip + .chip { border-left: 0; }
+    .g-body { padding: 0 32px 96px; }
+    .g-room { padding-top: 48px; scroll-margin-top: 52px; }
+    .g-room[hidden] { display: none; }
+    .g-head { display: grid; grid-template-columns: 220px 1fr; gap: 32px; align-items: baseline; padding-bottom: 20px; border-bottom: 1px solid var(--black); margin-bottom: 28px; }
+    .g-numeral { font-size: 9px; letter-spacing: .3em; text-transform: uppercase; color: var(--muted); }
+    .g-head h2 { font-size: 13px; font-weight: normal; letter-spacing: .24em; text-transform: uppercase; margin-top: 8px; }
+    .g-head p { font-size: 11px; font-style: italic; color: var(--muted); line-height: 1.8; letter-spacing: .04em; }
+    .g-head p span { font-style: normal; font-size: 9px; letter-spacing: .25em; text-transform: uppercase; margin-left: 12px; white-space: nowrap; }
+    .g-grid { display: grid; grid-template-columns: repeat(var(--cols, 4), minmax(0, 1fr)); gap: 40px 28px; }
+    .g-cell { position: relative; container-type: inline-size; }
+    .g-tile { display: block; position: relative; text-decoration: none; color: inherit; }
+    /* Every work uncropped on the same 4:5 mat, so rows line up */
+    .g-mat { display: flex; align-items: center; justify-content: center; aspect-ratio: 4 / 5; border: 1px solid var(--hair); padding: 9%; transition: border-color .15s; }
+    .g-mat img { max-width: 100%; max-height: 100%; width: auto; height: auto; background: var(--floor); }
+    .g-tile:hover .g-mat, .g-tile:focus-visible .g-mat { border-color: var(--black); }
+    .g-tile.sold img { opacity: .5; }
+    .g-flag { position: absolute; top: -9px; right: -1px; z-index: 1; font-size: 8px; letter-spacing: .3em; text-transform: uppercase; padding: 3px 6px; background: var(--black); color: var(--white); }
+    .g-meta { display: flex; justify-content: space-between; gap: 12px; margin-top: 12px; }
+    .g-meta b { display: block; font-weight: normal; font-size: 10px; letter-spacing: .2em; text-transform: uppercase; margin-bottom: 4px; }
+    .g-meta small { font-size: 9px; letter-spacing: .1em; color: var(--muted); }
+    .g-meta .g-no { letter-spacing: .2em; white-space: nowrap; }
+    /* Buy sits in the mat's bottom margin, clear of the art
+       (125cqw = the mat's 4:5 height, 9cqw = its padding) */
+    .g-buy { position: absolute; left: 50%; top: calc(120.5cqw - 11px); transform: translate(-50%, 4px); opacity: 0; background: var(--black); color: var(--white); border: 1px solid var(--black); padding: 5px 12px; font-size: 9px; letter-spacing: .2em; text-transform: uppercase; text-decoration: none; white-space: nowrap; transition: opacity .15s, transform .15s; }
+    .g-cell:hover .g-buy, .g-buy:focus-visible { opacity: 1; transform: translate(-50%, 0); }
+    .g-body.dense .g-grid { gap: 24px 16px; }
+    .g-body.dense .g-meta small { display: none; }
+    body.is-grid #music-node { bottom: 24px; }
+    body.is-grid #fa-consent { bottom: 0 !important; }
+    @media (hover: none) { .g-buy { display: none; } }
+
     /* ── MUSIC ── */
     #music-node { position: fixed; bottom: calc(var(--plan-height) + 16px); right: 24px; z-index: 60; display: flex; align-items: center; gap: 10px; }
     #music-pill { display: flex; align-items: center; gap: 8px; font-family: 'Courier New', Courier, monospace; font-size: 10px; letter-spacing: 0.18em; color: #6f6f6f; white-space: nowrap; background: #fff; border: 1px solid #e0e0e0; border-radius: 24px; padding: 6px 12px; opacity: 0; transform: translateX(8px); transition: opacity 0.3s ease, transform 0.3s ease; pointer-events: none; }
@@ -266,6 +312,16 @@
       .detail-modes { flex-wrap: wrap; gap: 8px; padding: 0 12px; }
       .detail-info { border-left: 0; border-top: 1px solid var(--divider); padding: 28px 24px 40px; }
       #music-node { right: 16px; }
+      .plan .view-switch [data-view="wall"] { display: none; }   /* room for ← → beside it; the grid bar carries both */
+      .g-bar { gap: 12px; padding: 0 16px; }
+      .g-tools { display: none; }
+      .g-body { padding: 0 16px 96px; }
+      .g-room { padding-top: 36px; }
+      .g-head { grid-template-columns: 1fr; gap: 10px; margin-bottom: 20px; }
+      .g-grid, .g-body.dense .g-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 14px; }
+      .g-meta { flex-direction: column; gap: 2px; }
+      .g-meta b { font-size: 9px; letter-spacing: .15em; }
+      .g-meta .g-no { display: none; }
     }
     /* Short screens: smaller frames so the tombstone and Buy stay above the floor */
     @media (max-height: 760px) { .hang.tall { --h: 38vh; } .hang.mid { --h: 30vh; } .hang.wide { --h: 24vh; } }
@@ -683,6 +739,10 @@
     <div class="plan-where"><b id="whereRoom">Entrance</b><span id="whereCount">01 / 41</span></div>
     <div class="plan-map" id="map"><div class="plan-you" id="you"></div></div>
     <div class="plan-tools">
+      <div class="view-switch" role="group" aria-label="View">
+        <button class="chip" data-view="wall" aria-pressed="true">Wall</button><button class="chip" data-view="grid" aria-pressed="false">Grid</button>
+      </div>
+      <span class="plan-gap"></span>
       <button class="chip" id="trueBtn" aria-pressed="false">True scale</button>
       <div class="plan-sizes" role="group" aria-label="Paper size">
         <button class="chip" data-size="A1" aria-pressed="false">A1</button>
@@ -693,6 +753,23 @@
       <button class="chip" id="prevBtn" aria-label="Previous print">&#8592;</button>
       <button class="chip" id="nextBtn" aria-label="Next print">&#8594;</button>
     </div>
+  </div>
+
+  <!-- ── GRID VIEW — built by the script from the wall above ── -->
+  <div class="grid-view" id="gridView" aria-label="The prints as a grid">
+    <div class="g-bar">
+      <div class="view-switch" role="group" aria-label="View">
+        <button class="chip" data-view="wall" aria-pressed="true">Wall</button><button class="chip" data-view="grid" aria-pressed="false">Grid</button>
+      </div>
+      <div class="g-rooms" id="gridRooms" role="group" aria-label="Room"></div>
+      <div class="g-tools">
+        <span class="g-count" id="gridCount"></span>
+        <div class="g-density" id="gridDensity" role="group" aria-label="Density">
+          <button class="chip" data-cols="3" aria-pressed="false" aria-label="Large">L</button><button class="chip" data-cols="4" aria-pressed="true" aria-label="Medium">M</button><button class="chip" data-cols="6" aria-pressed="false" aria-label="Small">S</button>
+        </div>
+      </div>
+    </div>
+    <div class="g-body" id="gridBody"></div>
   </div>
 
   <!-- ── DETAIL ── -->
@@ -959,7 +1036,7 @@
         renderWall(p);
         if (history.replaceState) history.replaceState(null, '', '#' + p.slug);
       }
-      function go(n) { if (n < 0 || n >= order.length) return; idx = n; render(); centreOn(byslug[order[idx]].el); }
+      function go(n) { if (n < 0 || n >= order.length) return; idx = n; render(); if (!isGrid) centreOn(byslug[order[idx]].el); }
       function openDetail(slug) {
         idx = Math.max(0, order.indexOf(slug)); lastFocus = document.activeElement;
         render(); el.classList.add('open'); q('close').focus();
@@ -967,7 +1044,10 @@
       function closeDetail() {
         el.classList.remove('open');
         if (history.replaceState) history.replaceState(null, '', location.pathname + location.search);
-        if (lastFocus && lastFocus.focus) lastFocus.focus();
+        // In the grid, land on the tile of the work last shown, not the one first clicked
+        var back = isGrid ? tiles[order[idx]] : lastFocus;
+        if (isGrid && back) back.scrollIntoView({ block: 'nearest' });
+        if (back && back.focus) back.focus();
       }
       hangs.forEach(function (h) { h.addEventListener('click', function (e) { e.preventDefault(); openDetail(h.id); }); });
       el.addEventListener('click', function (e) {
@@ -984,18 +1064,91 @@
         if (document.getElementById('drawer').classList.contains('open')) { if (e.key === 'Escape') closeDrawer(); return; }
         var open = el.classList.contains('open');
         if (e.key === 'Escape' && open) closeDetail();
+        if (isGrid && !open) return;
         if (e.key === 'ArrowLeft') { open ? go(idx - 1) : step(-1); e.preventDefault(); }
         if (e.key === 'ArrowRight') { open ? go(idx + 1) : step(1); e.preventDefault(); }
       });
 
-      // Deep links: /prints#anniversary opens that print
+      // ── Grid view ──
+      // The same works as a catalogue: one section per room, every print on
+      // a 4:5 mat from its 640px home-wall thumbnail. Built from the wall, so
+      // a print hung with scripts/hang-print.mjs appears here too. A tile
+      // opens the same detail view; ?view=grid keeps the choice in the URL.
+      var gridBody = document.getElementById('gridBody'), gridRooms = document.getElementById('gridRooms');
+      var isGrid = false, tiles = {};
+      function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;'); }
+      function cell(p) {
+        var w = p.el.querySelector('img').getAttribute('width');
+        return '<div class="g-cell"><a class="g-tile' + (p.sold ? ' sold' : '') + '" href="#' + p.slug + '" data-slug="' + p.slug + '">' +
+          (p.isNew ? '<span class="g-flag">New</span>' : '') +
+          '<span class="g-mat"><img src="/images/prints/thumbs/' + p.slug + '.jpg" srcset="/images/prints/thumbs/' + p.slug + '.jpg 640w, ' + p.img + ' ' + w + 'w" sizes="(max-width: 900px) 45vw, 30vw" alt="' + esc(p.title) + ' — fine art print by Fola Adeleke" loading="lazy" decoding="async" /></span>' +
+          '<span class="g-meta"><span><b>' + esc(p.title) + '</b><small>' + esc(tombText(p)) + '</small></span><small class="g-no">No. ' + String(p.n).padStart(2, '0') + '</small></span></a>' +
+          (p.sold ? '' : '<a class="g-buy" href="' + esc(p.shop) + '" aria-label="Buy ' + esc(p.title) + (p.from ? ', from ' + p.from : '') + '">Buy</a>') + '</div>';
+      }
+      gridBody.innerHTML = rooms.map(function (r) {
+        var t = r.querySelector('.wall-text');
+        return '<section class="g-room" data-room="' + r.dataset.room + '" aria-label="' + esc(r.getAttribute('aria-label')) + '">' +
+          '<div class="g-head"><div><div class="g-numeral">' + esc(t.querySelector('.numeral').textContent) + '</div><h2>' + esc(t.querySelector('h2').textContent) + '</h2></div>' +
+          '<p>' + esc(t.querySelector('p').textContent) + '<span>' + esc(t.querySelector('.n').textContent) + '</span></p></div>' +
+          '<div class="g-grid">' + PRINTS.filter(function (p) { return p.room === r.dataset.room; }).map(cell).join('') + '</div></section>';
+      }).join('');
+      gridBody.querySelectorAll('.g-tile').forEach(function (a) {
+        tiles[a.dataset.slug] = a;
+        a.addEventListener('click', function (e) { e.preventDefault(); openDetail(a.dataset.slug); });
+      });
+      document.getElementById('gridCount').textContent = PRINTS.length + ' works';
+
+      gridRooms.innerHTML = '<button class="chip" data-room="" aria-pressed="true">All</button>' +
+        rooms.map(function (r) { return '<button class="chip" data-room="' + r.dataset.room + '" aria-pressed="false">' + esc(r.dataset.name) + '</button>'; }).join('');
+      gridRooms.addEventListener('click', function (e) {
+        var b = e.target.closest('[data-room]'); if (!b) return;
+        gridRooms.querySelectorAll('.chip').forEach(function (c) { c.setAttribute('aria-pressed', c === b); });
+        gridBody.querySelectorAll('.g-room').forEach(function (s) { s.hidden = !!b.dataset.room && s.dataset.room !== b.dataset.room; });
+        document.getElementById('gridView').scrollTop = 0;
+      });
+      document.getElementById('gridDensity').addEventListener('click', function (e) {
+        var b = e.target.closest('[data-cols]'); if (!b) return;
+        this.querySelectorAll('.chip').forEach(function (c) { c.setAttribute('aria-pressed', c === b); });
+        gridBody.style.setProperty('--cols', b.dataset.cols);
+        gridBody.classList.toggle('dense', b.dataset.cols === '6');
+      });
+
+      // Switching keeps your place: the wall centres on the first work in
+      // view in the grid, and the grid opens scrolled to the work you were at.
+      function setView(grid) {
+        if (grid === isGrid) return;
+        if (grid) update();
+        var here = grid ? PRINTS[cur] : PRINTS.filter(function (p) { var t = tiles[p.slug]; return t.offsetParent && t.getBoundingClientRect().bottom > 120; })[0];
+        isGrid = grid; document.body.classList.toggle('is-grid', grid);
+        document.querySelectorAll('[data-view]').forEach(function (b) { b.setAttribute('aria-pressed', (b.dataset.view === 'grid') === grid); });
+        el.querySelector('.detail-back .long').textContent = grid ? 'Back to the grid' : 'Back to the wall';
+        el.querySelector('.detail-back .short').textContent = grid ? 'Grid' : 'Wall';
+        if (history.replaceState) {
+          var url = new URL(location.href);
+          if (grid) url.searchParams.set('view', 'grid'); else url.searchParams.delete('view');
+          history.replaceState(null, '', url);
+        }
+        if (grid) { if (here && tiles[here.slug].offsetParent) tiles[here.slug].scrollIntoView({ block: 'center' }); }
+        else {
+          if (trueScale) applyScale(); else { sizePlan(); placeBuy(); }
+          if (here) wall.scrollLeft = here.el.offsetLeft + here.el.offsetWidth / 2 - wall.clientWidth / 2;
+          update();
+        }
+      }
+      document.addEventListener('click', function (e) {
+        var b = e.target.closest('[data-view]'); if (b) setView(b.dataset.view === 'grid');
+      });
+
+      // Deep links: /prints#anniversary opens that print; /prints?view=grid opens the grid
       function boot() {
         sizePlan(); update(); placeBuy();
         var slug = location.hash.replace('#', '');
-        if (slug && byslug[slug]) { wall.scrollLeft = byslug[slug].el.offsetLeft + byslug[slug].el.offsetWidth / 2 - wall.clientWidth / 2; update(); openDetail(slug); }
+        if (slug && byslug[slug]) { wall.scrollLeft = byslug[slug].el.offsetLeft + byslug[slug].el.offsetWidth / 2 - wall.clientWidth / 2; update(); }
+        if (new URLSearchParams(location.search).get('view') === 'grid') setView(true);
+        if (slug && byslug[slug]) openDetail(slug);
       }
-      window.addEventListener('resize', function () { if (trueScale) applyScale(); else { sizePlan(); update(); placeBuy(); } });
-      window.addEventListener('load', function () { sizePlan(); update(); placeBuy(); });
+      window.addEventListener('resize', function () { if (isGrid) return; if (trueScale) applyScale(); else { sizePlan(); update(); placeBuy(); } });
+      window.addEventListener('load', function () { if (isGrid) return; sizePlan(); update(); placeBuy(); });
       if (document.fonts && document.fonts.ready) document.fonts.ready.then(placeBuy);
       boot();
     })();
