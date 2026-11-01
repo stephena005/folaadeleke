@@ -12,6 +12,10 @@
 // that changes it. The pre-commit hook runs this and re-stages the
 // sitemap, so a page's date moves in the same commit as the page.
 //
+// On a shallow clone git's history is truncated, so `git log` can return
+// the wrong date for an unstaged page; there only staged pages are set
+// (to today) and every other date is left as it is.
+//
 // The <loc> list itself is still curated by hand: unlisted pages (drops,
 // the trade programme, verify pages) are unlisted on purpose.
 
@@ -49,12 +53,15 @@ export function computeSitemap(xml) {
   const trackedSet = new Set(git('ls-files', '-z').split('\0').filter(Boolean));
   const staged = new Set(git('diff', '--cached', '--name-only', '-z').split('\0').filter(Boolean));
   const today = localToday();
+  const shallow = git('rev-parse', '--is-shallow-repository') === 'true';
   const changes = [];
   const missing = [];
   const out = xml.replace(/(<loc>\s*)([^<\s]+)(\s*<\/loc>\s*<lastmod>)([^<]*)(<\/lastmod>)/g, (m, a, loc, b, from, c) => {
     const file = pageFile(loc, trackedSet);
     if (!file) { missing.push(loc); return m; }
-    const to = staged.has(file) ? today : (git('log', '-1', '--format=%cs', '--', file) || from);
+    const to = staged.has(file) ? today
+      : shallow ? from
+      : (git('log', '-1', '--format=%cs', '--', file) || from);
     if (to !== from) changes.push({ loc, from, to });
     return `${a}${loc}${b}${to}${c}`;
   });
