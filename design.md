@@ -415,6 +415,17 @@ Thumbnails are `images/prints/thumbs/<slug>.jpg`, 640px long edge
 (`scripts/export-print-thumb.py`), because the wall shows ~20 prints at
 once.
 
+**Products ride the wall too.** Mama Comfort and the Propeller
+wallpapers sit just after `WALL:END` as hand-written `.card--product`
+cards (`data-product="1"`), outside the generated block, so the build
+script and the check leave them alone. They go to the top of the middle
+columns ahead of the New works, wear a white mat, a black flag
+(Pre-order / Digital) and a white one-line spec, and link straight to
+their product page instead of opening the quick view; hovering one puts
+its `data-cta` in the dock. Their images are 512×640 crops in
+`images/home/`. To feature another product, add a card there; to retire
+one, delete it.
+
 **The newsletter card** waits 8s after the curtain (or exit intent) on
 the home page, holds while a print is open (`html.fa-hold-popup`), and
 can be opened on request via `window.faNewsletter.open()` — see
