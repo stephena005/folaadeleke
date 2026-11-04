@@ -9,7 +9,7 @@
    taken from the render, so a swapped print sits in the same sunlight. */
 (function () {
   var R = window.ROOM;
-  var SPEC = 'Archival pigment print · Signed &amp; numbered · Certificate of authenticity';
+  var SPEC = 'Archival pigment print · Signed &amp; numbered · Digital certificate of authenticity';
   var SIZES = [{ id: 'A3', price: 100 }, { id: 'A2', price: 150 }, { id: 'A1', price: 200 }];
   var SHOP = 'https://shop.folaadeleke.com/products/';
 

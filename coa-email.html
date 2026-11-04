@@ -11,13 +11,13 @@
 
   WHERE THE BUTTON GOES
   ─────────────────────
-  To the same URL the QR code on the printed certificate encodes:
+  To the same URL the QR code on the digital certificate encodes:
 
       https://folaadeleke.com/verify/<token>/
 
   Those pages live in verify/ in this repository, one directory per
-  certificate, and they render the certificate in full. The print,
-  the email and the page therefore cannot drift apart — there is
+  certificate, and they render the certificate in full. The
+  certificate, the email and the page therefore cannot drift apart — there is
   one address for a certificate, not three.
 
   The renderer finds the token itself by matching the work, the
@@ -233,7 +233,7 @@
 <body id="body" style="margin:0; padding:0; background-color:#faf9f7;">
 
   <div style="display:none; font-size:1px; color:#faf9f7; line-height:1px; max-height:0; max-width:0; opacity:0; overflow:hidden;">
-    <!-- ONE:START -->Edition [EDITION NO] of [EDITION TOTAL], signed and recorded in your name. Your certificate is inside.<!-- ONE:END --><!-- MANY:START -->[COUNT WORD CAP] editions, signed and recorded in your name. Every certificate is inside.<!-- MANY:END -->
+    <!-- ONE:START -->Edition [EDITION NO] of [EDITION TOTAL], signed and recorded in your name. Your digital certificate is inside.<!-- ONE:END --><!-- MANY:START -->[COUNT WORD CAP] editions, signed and recorded in your name. Every digital certificate is inside.<!-- MANY:END -->
   </div>
 
   <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color:#faf9f7;">
@@ -317,7 +317,7 @@
           <tr>
             <td class="mobile-padding" style="padding:40px 32px 0;">
               <h1 class="mobile-heading" style="margin:0; font-family:'Courier New',Courier,monospace; font-size:34px; font-weight:normal; letter-spacing:0.16em; text-transform:uppercase; color:#000000; line-height:1.2;">
-                <!-- ONE:START -->Your certificate<!-- ONE:END --><!-- MANY:START -->Your certificates<!-- MANY:END -->
+                <!-- ONE:START -->Your digital certificate<!-- ONE:END --><!-- MANY:START -->Your digital certificates<!-- MANY:END -->
               </h1>
             </td>
           </tr>
@@ -325,30 +325,30 @@
             <td class="mobile-padding" style="padding:22px 32px 0;">
               <!-- ONE:START -->
               <p style="margin:0 0 16px; font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:1.65; color:#111111;">
-                [FIRST NAME] &mdash; your print has been signed, numbered and entered in the edition register. Everything below is the certificate of authenticity that travels with the work.
+                [FIRST NAME] &mdash; your print has been signed, numbered and entered in the edition register. Everything below is your digital certificate of authenticity &mdash; it travels with the work.
               </p>
               <p style="margin:0; font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:1.65; color:#4f4f4f;">
-                Keep it with the print. If the piece ever changes hands, the certificate goes with it &mdash; that is what makes the edition traceable.
+                Keep this email safe. If the piece ever changes hands, the certificate goes with it &mdash; that is what makes the edition traceable.
               </p>
               <!-- ONE:END -->
               <!-- MANY:START -->
               <p style="margin:0 0 16px; font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:1.65; color:#111111;">
-                [FIRST NAME] &mdash; [BOTH OR ALL] prints have been signed, numbered and entered in their edition registers. Everything below is the certificate of authenticity that travels with each work.
+                [FIRST NAME] &mdash; [BOTH OR ALL] prints have been signed, numbered and entered in their edition registers. Everything below is the digital certificate of authenticity for each work &mdash; each one travels with its print.
               </p>
               <p style="margin:0; font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:1.65; color:#4f4f4f;">
-                Keep each one with its print. If a piece ever changes hands, its certificate goes with it &mdash; that is what makes the edition traceable.
+                Keep this email safe. If a piece ever changes hands, its certificate goes with it &mdash; that is what makes the edition traceable.
               </p>
               <!-- MANY:END -->
               <!-- ATTACHED:START — kept with --attached, when the PDF goes with the email -->
               <p style="margin:16px 0 0; font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:1.65; color:#4f4f4f;">
-                <!-- ONE:START -->A PDF copy of the certificate is attached to this email. Save it with your records, alongside the printed original.<!-- ONE:END --><!-- MANY:START -->A PDF copy of each certificate is attached to this email. Save them with your records, alongside the printed originals.<!-- MANY:END -->
+                <!-- ONE:START -->Your digital certificate is also attached to this email as a PDF. Save it with your records.<!-- ONE:END --><!-- MANY:START -->Each digital certificate is also attached to this email as a PDF. Save them with your records.<!-- MANY:END -->
               </p>
               <!-- ATTACHED:END -->
             </td>
           </tr>
 
           <!-- ══ THE CERTIFICATE PANEL ══
-               A bordered repeat of the printed COA's hierarchy:
+               A bordered repeat of the COA's hierarchy:
                numeral, rule, label/value grid. One per certificate. ══ -->
           <!-- PANEL:START -->
           <tr>
@@ -454,7 +454,7 @@
                       View your<br /><!-- ONE:START -->certificate<!-- ONE:END --><!-- MANY:START -->certificates<!-- MANY:END -->
                     </p>
                     <p style="margin:0 0 30px; font-family:Helvetica,Arial,sans-serif; font-size:15px; line-height:1.65; color:#c9c9c9;">
-                      <!-- ONE:START -->This is the page the QR code on your certificate opens: the work, the edition and the date it was signed, held on record. Bookmark it &mdash; it stays valid for as long as the print exists.<!-- ONE:END --><!-- MANY:START -->Each opens the page the QR code on that certificate opens: the work, the edition and the date it was signed, held on record. Bookmark them &mdash; they stay valid for as long as the prints exist.<!-- MANY:END -->
+                      <!-- ONE:START -->This is your digital certificate&rsquo;s page: the work, the edition and the date it was signed, held on record. Bookmark it &mdash; it stays valid for as long as the print exists.<!-- ONE:END --><!-- MANY:START -->Each button opens one digital certificate&rsquo;s page: the work, the edition and the date it was signed, held on record. Bookmark them &mdash; they stay valid for as long as the prints exist.<!-- MANY:END -->
                     </p>
                     <!-- BUTTON:START — one per certificate; the gap below separates them -->
                     <!--[if mso]>
@@ -491,24 +491,24 @@
                 01 &nbsp;&middot;&nbsp; Finding it online
               </p>
               <p style="margin:0 0 18px; font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:1.65; color:#111111;">
-                <!-- ONE:START -->Your certificate has a permanent page of its own on folaadeleke.com. To open it from the printed certificate:<!-- ONE:END --><!-- MANY:START -->Each certificate has a permanent page of its own on folaadeleke.com. To open one from its printed certificate:<!-- MANY:END -->
+                <!-- ONE:START -->Your certificate is digital, with a permanent page of its own on folaadeleke.com. To open it:<!-- ONE:END --><!-- MANY:START -->Each certificate is digital, with a permanent page of its own on folaadeleke.com. To open one:<!-- MANY:END -->
               </p>
               <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
                 <tr>
                   <td width="34" valign="top" style="padding:0 0 12px; font-family:'Courier New',Courier,monospace; font-size:14px; line-height:1.65; color:#6f6f6f;">1.</td>
-                  <td valign="top" style="padding:0 0 12px; font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:1.65; color:#111111;">Open your phone&rsquo;s camera and point it at the QR code in the bottom corner of the certificate.</td>
+                  <td valign="top" style="padding:0 0 12px; font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:1.65; color:#111111;">Tap the button above. It opens the certificate&rsquo;s page &mdash; no app or account needed.</td>
                 </tr>
                 <tr>
                   <td width="34" valign="top" style="padding:0 0 12px; font-family:'Courier New',Courier,monospace; font-size:14px; line-height:1.65; color:#6f6f6f;">2.</td>
-                  <td valign="top" style="padding:0 0 12px; font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:1.65; color:#111111;">Tap the link that appears. It opens the certificate&rsquo;s page &mdash; no app or account needed.</td>
+                  <td valign="top" style="padding:0 0 12px; font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:1.65; color:#111111;">The QR code in the corner of the certificate opens the same page. Point your phone&rsquo;s camera at it wherever the certificate is on screen.</td>
                 </tr>
                 <tr>
                   <td width="34" valign="top" style="padding:0 0 18px; font-family:'Courier New',Courier,monospace; font-size:14px; line-height:1.65; color:#6f6f6f;">3.</td>
-                  <td valign="top" style="padding:0 0 18px; font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:1.65; color:#111111;"><!-- ONE:START -->Away from the print, the button above opens the same page.<!-- ONE:END --><!-- MANY:START -->Away from the prints, the buttons above open the same pages.<!-- MANY:END --></td>
+                  <td valign="top" style="padding:0 0 18px; font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:1.65; color:#111111;"><!-- ONE:START -->Bookmark the page, or keep this email, so you can show it whenever you need to.<!-- ONE:END --><!-- MANY:START -->Bookmark the pages, or keep this email, so you can show them whenever you need to.<!-- MANY:END --></td>
                 </tr>
               </table>
               <p style="margin:0; font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:1.65; color:#4f4f4f;">
-                <!-- ONE:START -->The page is the public record of your edition: the work, its number, the medium, the size and the date it was signed. Anyone you show it to can confirm the print is genuine. To protect your privacy it reads &ldquo;Private collection&rdquo; where the owner&rsquo;s name would be &mdash; your name appears only on the printed certificate and in this email.<!-- ONE:END --><!-- MANY:START -->Each page is the public record of that edition: the work, its number, the medium, the size and the date it was signed. Anyone you show it to can confirm the print is genuine. To protect your privacy it reads &ldquo;Private collection&rdquo; where the owner&rsquo;s name would be &mdash; your name appears only on the printed certificates and in this email.<!-- MANY:END -->
+                <!-- ONE:START -->The page is the public record of your edition: the work, its number, the medium, the size and the date it was signed. Anyone you show it to can confirm the print is genuine. To protect your privacy it reads &ldquo;Private collection&rdquo; where the owner&rsquo;s name would be &mdash; your name appears only on your digital certificate and in this email.<!-- ONE:END --><!-- MANY:START -->Each page is the public record of that edition: the work, its number, the medium, the size and the date it was signed. Anyone you show it to can confirm the print is genuine. To protect your privacy it reads &ldquo;Private collection&rdquo; where the owner&rsquo;s name would be &mdash; your name appears only on your digital certificates and in this email.<!-- MANY:END -->
               </p>
             </td>
           </tr>
@@ -538,12 +538,12 @@
               </p>
               <!-- ONE:START -->
               <p style="margin:0 0 18px; font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:1.65; color:#111111;">
-                Sell it, gift it or leave it to someone &mdash; the certificate transfers with the print. Tell me who now holds it and the register is updated in the new name.
+                Sell it, gift it or leave it to someone &mdash; the digital certificate transfers with the print. Tell me who now holds it and the register is updated in the new name.
               </p>
               <!-- ONE:END -->
               <!-- MANY:START -->
               <p style="margin:0 0 18px; font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:1.65; color:#111111;">
-                Sell one, gift it or leave it to someone &mdash; its certificate transfers with the print. Tell me who now holds it and the register is updated in the new name.
+                Sell one, gift it or leave it to someone &mdash; its digital certificate transfers with the print. Tell me who now holds it and the register is updated in the new name.
               </p>
               <!-- MANY:END -->
               <p style="margin:0; font-family:'Courier New',Courier,monospace; font-size:12px; letter-spacing:0.14em; text-transform:uppercase;">
