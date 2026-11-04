@@ -257,6 +257,13 @@ if (!args.certificate.length && !args.data.length) {
 }
 if (args.certificate.length && args.data.length) fail('pass --certificate or --data, not both');
 
+const status = args.status;
+if (status !== 'shipped' && status !== 'pending') {
+  fail('pass --status shipped or --status pending — whether the print has left\n'
+    + '  the studio decides what the email says about delivery, and there is no\n'
+    + '  safe default for that.');
+}
+
 // The hero row is one row of tiles. Four would be 109px each on a phone
 // before the caption, which is below what any dark work survives.
 const MAX_CERTIFICATES = 3;
@@ -442,6 +449,15 @@ html = html.replace(/<!--\n {2}═+\n {2}FOLA ADELEKE® — DIGITAL CERTIFICATE[
 // One shape or the other, never both.
 html = keepBlock(html, 'ONE', !many);
 html = keepBlock(html, 'MANY', many);
+
+// Delivery copy: an order that has shipped must not be told it "ships
+// rolled in a rigid tube", and one that hasn't must not be told it has
+// arrived. Neither is a safe default, so the flag is required.
+html = keepBlock(html, 'SHIPPED', status === 'shipped');
+html = keepBlock(html, 'PENDING', status === 'pending');
+
+// The PDF line, only when the PDF is actually going with the email.
+html = keepBlock(html, 'ATTACHED', args.flags.has('attached'));
 
 // The button gap sits between buttons, so it is taken out and used as a joiner.
 const gap = takeBlock(html, 'BUTTON GAP');

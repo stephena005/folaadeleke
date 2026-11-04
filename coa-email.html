@@ -59,6 +59,10 @@
       <!-- TILE:START --> … <!-- TILE:END -->   the hero row, one per work
       <!-- PANEL:START --> … <!-- PANEL:END --> the certificate panel, one per work
       <!-- BUTTON:START --> … <!-- BUTTON:END --> the verify button, one per work
+      SHIPPED / PENDING blocks   delivery copy; the renderer keeps one,
+                                 chosen by --status shipped|pending
+      ATTACHED block             the line saying the PDF is attached;
+                                 kept only with --attached
 
   Everything else — header, band, notes, sign-off, footer — appears
   once. Where a sentence has to read differently for two prints, it
@@ -335,6 +339,11 @@
                 Keep each one with its print. If a piece ever changes hands, its certificate goes with it &mdash; that is what makes the edition traceable.
               </p>
               <!-- MANY:END -->
+              <!-- ATTACHED:START — kept with --attached, when the PDF goes with the email -->
+              <p style="margin:16px 0 0; font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:1.65; color:#4f4f4f;">
+                <!-- ONE:START -->A PDF copy of the certificate is attached to this email. Save it with your records, alongside the printed original.<!-- ONE:END --><!-- MANY:START -->A PDF copy of each certificate is attached to this email. Save them with your records, alongside the printed originals.<!-- MANY:END -->
+              </p>
+              <!-- ATTACHED:END -->
             </td>
           </tr>
 
@@ -475,28 +484,57 @@
             </td>
           </tr>
 
-          <!-- ══ WHAT HAPPENS NEXT ══ -->
+          <!-- ══ FINDING IT ONLINE ══ -->
           <tr>
             <td class="mobile-padding" style="padding:40px 32px 0;">
               <p style="margin:0 0 20px; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.3em; text-transform:uppercase; color:#6f6f6f; border-bottom:1px solid #111111; padding-bottom:12px;">
-                01 &nbsp;&middot;&nbsp; The print itself
+                01 &nbsp;&middot;&nbsp; Finding it online
               </p>
-              <!-- ONE:START -->
+              <p style="margin:0 0 18px; font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:1.65; color:#111111;">
+                <!-- ONE:START -->Your certificate has a permanent page of its own on folaadeleke.com. To open it from the printed certificate:<!-- ONE:END --><!-- MANY:START -->Each certificate has a permanent page of its own on folaadeleke.com. To open one from its printed certificate:<!-- MANY:END -->
+              </p>
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tr>
+                  <td width="34" valign="top" style="padding:0 0 12px; font-family:'Courier New',Courier,monospace; font-size:14px; line-height:1.65; color:#6f6f6f;">1.</td>
+                  <td valign="top" style="padding:0 0 12px; font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:1.65; color:#111111;">Open your phone&rsquo;s camera and point it at the QR code in the bottom corner of the certificate.</td>
+                </tr>
+                <tr>
+                  <td width="34" valign="top" style="padding:0 0 12px; font-family:'Courier New',Courier,monospace; font-size:14px; line-height:1.65; color:#6f6f6f;">2.</td>
+                  <td valign="top" style="padding:0 0 12px; font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:1.65; color:#111111;">Tap the link that appears. It opens the certificate&rsquo;s page &mdash; no app or account needed.</td>
+                </tr>
+                <tr>
+                  <td width="34" valign="top" style="padding:0 0 18px; font-family:'Courier New',Courier,monospace; font-size:14px; line-height:1.65; color:#6f6f6f;">3.</td>
+                  <td valign="top" style="padding:0 0 18px; font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:1.65; color:#111111;"><!-- ONE:START -->Away from the print, the button above opens the same page.<!-- ONE:END --><!-- MANY:START -->Away from the prints, the buttons above open the same pages.<!-- MANY:END --></td>
+                </tr>
+              </table>
+              <p style="margin:0; font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:1.65; color:#4f4f4f;">
+                <!-- ONE:START -->The page is the public record of your edition: the work, its number, the medium, the size and the date it was signed. Anyone you show it to can confirm the print is genuine. To protect your privacy it reads &ldquo;Private collection&rdquo; where the owner&rsquo;s name would be &mdash; your name appears only on the printed certificate and in this email.<!-- ONE:END --><!-- MANY:START -->Each page is the public record of that edition: the work, its number, the medium, the size and the date it was signed. Anyone you show it to can confirm the print is genuine. To protect your privacy it reads &ldquo;Private collection&rdquo; where the owner&rsquo;s name would be &mdash; your name appears only on the printed certificates and in this email.<!-- MANY:END -->
+              </p>
+            </td>
+          </tr>
+
+          <!-- ══ THE PRINT ITSELF — SHIPPED or PENDING, chosen by --status ══ -->
+          <tr>
+            <td class="mobile-padding" style="padding:40px 32px 0;">
+              <p style="margin:0 0 20px; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.3em; text-transform:uppercase; color:#6f6f6f; border-bottom:1px solid #111111; padding-bottom:12px;">
+                02 &nbsp;&middot;&nbsp; The print itself
+              </p>
+              <!-- PENDING:START -->
               <p style="margin:0; font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:1.65; color:#111111;">
-                It ships rolled in a rigid tube within three working days, with the signature and edition number pencilled below the image. Let it rest flat for a day before framing, and keep it out of direct sun once it is up.
+                <!-- ONE:START -->It ships rolled in a rigid tube, with the signature and edition number pencilled below the image, and you&rsquo;ll have tracking as soon as it is on its way. When it arrives, let it rest flat for a day before framing, and keep it out of direct sun once it is up.<!-- ONE:END --><!-- MANY:START -->They ship rolled in a rigid tube, with the signature and edition number pencilled below each image, and you&rsquo;ll have tracking as soon as they are on their way. When they arrive, let them rest flat for a day before framing, and keep them out of direct sun once they are up.<!-- MANY:END -->
               </p>
-              <!-- ONE:END -->
-              <!-- MANY:START -->
+              <!-- PENDING:END -->
+              <!-- SHIPPED:START -->
               <p style="margin:0; font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:1.65; color:#111111;">
-                They ship rolled in a rigid tube within three working days, with the signature and edition number pencilled below each image. Let them rest flat for a day before framing, and keep them out of direct sun once they are up.
+                <!-- ONE:START -->Your print is already with you, with the signature and edition number pencilled below the image. If it isn&rsquo;t framed yet, let it rest flat for a day first, and wherever it hangs, keep it out of direct sun.<!-- ONE:END --><!-- MANY:START -->Your prints are already with you, with the signature and edition number pencilled below each image. If they aren&rsquo;t framed yet, let them rest flat for a day first, and wherever they hang, keep them out of direct sun.<!-- MANY:END -->
               </p>
-              <!-- MANY:END -->
+              <!-- SHIPPED:END -->
             </td>
           </tr>
           <tr>
             <td class="mobile-padding" style="padding:40px 32px 0;">
               <p style="margin:0 0 20px; font-family:'Courier New',Courier,monospace; font-size:11px; letter-spacing:0.3em; text-transform:uppercase; color:#6f6f6f; border-bottom:1px solid #111111; padding-bottom:12px;">
-                02 &nbsp;&middot;&nbsp; If <!-- ONE:START -->it<!-- ONE:END --><!-- MANY:START -->one<!-- MANY:END --> ever moves on
+                03 &nbsp;&middot;&nbsp; If <!-- ONE:START -->it<!-- ONE:END --><!-- MANY:START -->one<!-- MANY:END --> ever moves on
               </p>
               <!-- ONE:START -->
               <p style="margin:0 0 18px; font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:1.65; color:#111111;">
