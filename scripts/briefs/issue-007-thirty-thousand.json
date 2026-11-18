@@ -1,0 +1,36 @@
+{
+  "number": 7,
+  "subject": "30,000 of you",
+  "preheader": "Thirty thousand followers, a new role at Nosakhari, the last days of Girls, and code THIRTYK for 25% off for 30 hours.",
+  "headline": "30,000 of you",
+  "intro": "We have just reached 30,000 followers. When I started sharing this work, I did not imagine that many people would stop, look, and stay. Thank you for every share, every message and every print that now hangs in a home somewhere.",
+  "intro2": "To say thank you, there is a code for you below. You will also find two pieces of news from the studio.",
+  "items": [
+    {
+      "label": "New role",
+      "headline": "Art Director, Nosakhari",
+      "copy": "I am now Art Director for Nosakhari, the London leather goods house in Hackney whose idea is simple: celebrate your difference. Their bags and briefcases are made to stand out, and I will be shaping how the brand looks and speaks from here. I can't wait to show you what we are making.",
+      "link": "https://www.instagram.com/p/DfQBOjcobav/",
+      "linkText": "See it on Instagram",
+      "image": "images/newsletter/thirty-thousand/nosakhari-moodboard.jpg",
+      "alt": "Travel Well moodboard for Nosakhari",
+      "_note": "The 2-up of nosakhari-sketches.jpg and nosakhari-sketchbook.jpg was added by hand in newsletter-issue-007.html; the scaffold has no 2-up block."
+    },
+    {
+      "label": "Final days",
+      "headline": "Girls closes Saturday",
+      "copy": "The poster I designed for Girls, Theresa Ikoko's award-winning play directed by Ewa Dina, has been up at the Young Vic since October. The run ends this Saturday, 21 November, in the Maria Theatre. If you haven't seen it yet, this is your last chance.",
+      "link": "https://www.youngvic.org/whats-on/girls/",
+      "linkText": "Book tickets",
+      "image": "images/newsletter/nigerian-edition/girls-young-vic.jpg",
+      "alt": "Fola Adeleke's poster for Girls at the Young Vic"
+    }
+  ],
+  "band": {
+    "label": "30,000 thank-yous",
+    "headline": "25% off with THIRTYK",
+    "copy": "Use code THIRTYK at checkout for 25% off every print, for the next 30 hours. The same code is going out to our Instagram followers too.",
+    "link": "https://folaadeleke.com",
+    "button": "Shop the prints"
+  }
+}
