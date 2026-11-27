@@ -159,6 +159,20 @@
     .puzzle-banner-eyebrow { font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--grey-mid); }
     .puzzle-banner-title { font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--black); }
 
+    /* ─── OFFER BANNER (hidden outside an offer window) ───
+       Same look as the drop banner, but for a shop-wide offer that has no
+       puzzle page — kept separate so the drop guardrails in
+       scripts/check-site.mjs don't apply to it. */
+    .offer-banner {
+      position: fixed; top: var(--nav-height); left: 0; right: 0; z-index: 95;
+      flex-direction: column; align-items: center; gap: 6px;
+      padding: 14px 20px; text-align: center; text-decoration: none;
+      background: var(--white); border-bottom: 1px solid var(--black);
+    }
+    .offer-banner:hover .offer-banner-title { text-decoration: underline; }
+    .offer-banner-eyebrow { font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--grey-mid); }
+    .offer-banner-title { font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--black); }
+
     /* ─── THE WALL ───
        Without script: a plain grid of every print that scrolls.
        With script (html.js): fixed columns between nav and dock. */
@@ -392,6 +406,35 @@
           }
           var next = now < BANNER_START ? BANNER_START - now
                    : now < BANNER_END   ? BANNER_END - now
+                   : null;
+          if (next !== null && next <= MAX_DELAY) setTimeout(apply, next + 500);
+        }
+        apply();
+      })();
+    </script>
+
+    <!-- ── OFFER BANNER: THE COLLECTOR'S TRIO ──
+         Buy any three prints, the lowest-priced is free (Shopify automatic
+         Buy X Get Y discount). Shows from OFFER_START to OFFER_END and hides
+         itself after; OFFER_END must match the discount's end date in
+         Shopify Admin and the date in /terms#collectors-trio. -->
+    <a class="offer-banner" href="/prints" id="offerBanner" style="display:none;">
+      <span class="offer-banner-eyebrow">The Collector&rsquo;s Trio &middot; Until Mon 30&nbsp;Nov, 23:59</span>
+      <span class="offer-banner-title">Choose three prints &mdash; the third is on us &rarr;</span>
+    </a>
+    <script>
+      (function () {
+        var OFFER_START = new Date('2026-11-27T00:00:00Z').getTime(); // 00:00 GMT Fri 27 Nov
+        var OFFER_END   = new Date('2026-11-30T23:59:00Z').getTime(); // 23:59 GMT Mon 30 Nov
+        var el = document.getElementById('offerBanner');
+        if (!el) return;
+        var MAX_DELAY = 2147483647;
+
+        function apply() {
+          var now = Date.now();
+          el.style.display = (now >= OFFER_START && now < OFFER_END) ? 'flex' : 'none';
+          var next = now < OFFER_START ? OFFER_START - now
+                   : now < OFFER_END   ? OFFER_END - now
                    : null;
           if (next !== null && next <= MAX_DELAY) setTimeout(apply, next + 500);
         }
