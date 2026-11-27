@@ -172,6 +172,9 @@
     .offer-banner:hover .offer-banner-title { text-decoration: underline; }
     .offer-banner-eyebrow { font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--grey-mid); }
     .offer-banner-title { font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--black); }
+    /* While the offer runs, the first-order 25% prompts step aside so the
+       two offers are never shown (or stacked) together. */
+    .fa-offer-live .btn.offer, .fa-offer-live .qv-offer { display: none !important; }
 
     /* ─── THE WALL ───
        Without script: a plain grid of every print that scrolls.
@@ -417,7 +420,9 @@
          Buy any three prints, the lowest-priced is free (Shopify automatic
          Buy X Get Y discount). Shows from OFFER_START to OFFER_END and hides
          itself after; OFFER_END must match the discount's end date in
-         Shopify Admin and the date in /terms#collectors-trio. -->
+         Shopify Admin, the date in /terms#collectors-trio and OFFER_PAUSE
+         in js/newsletter-popup.js. While live it also hides the 25%
+         first-order button and quick-view line (.fa-offer-live). -->
     <a class="offer-banner" href="/prints" id="offerBanner" style="display:none;">
       <span class="offer-banner-eyebrow">The Collector&rsquo;s Trio &middot; Until Mon 30&nbsp;Nov, 23:59</span>
       <span class="offer-banner-title">Choose three prints &mdash; the third is on us &rarr;</span>
@@ -432,7 +437,9 @@
 
         function apply() {
           var now = Date.now();
-          el.style.display = (now >= OFFER_START && now < OFFER_END) ? 'flex' : 'none';
+          var live = now >= OFFER_START && now < OFFER_END;
+          el.style.display = live ? 'flex' : 'none';
+          document.documentElement.classList.toggle('fa-offer-live', live);
           var next = now < OFFER_START ? OFFER_START - now
                    : now < OFFER_END   ? OFFER_END - now
                    : null;

@@ -103,9 +103,20 @@
     if (card && !get(STRIP_SEEN)) set(STRIP_SEEN, card);
   }
 
+  // A shop-wide offer is running: the 25% first-order prompt pauses so the
+  // two offers are never shown together. Keep in step with OFFER_START /
+  // OFFER_END in index.html. The prompt returns by itself after the end.
+  var OFFER_PAUSE = [Date.parse('2026-11-27T00:00:00Z'), Date.parse('2026-11-30T23:59:00Z')]; // The Collector's Trio
+
+  function offerPaused() {
+    var now = Date.now();
+    return now >= OFFER_PAUSE[0] && now < OFFER_PAUSE[1];
+  }
+
   function shouldRun(views) {
     if (blocked()) return false;                  // the blocklist always wins
     if (forced()) return true;
+    if (offerPaused()) return false;
 
     if (get(SUBBED) === '1') return false;
     if (get(DISMISSED, sessionStorage)) return false;   // they said no this visit
